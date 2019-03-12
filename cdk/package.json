@@ -1,0 +1,30 @@
+{
+  "name": "spaceinvaders.cdk",
+  "version": "0.1.0",
+  "bin": {
+    "spaceinvaders.cdk": "bin/spaceinvaders.cdk.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/node": "^8.10.43",
+    "aws-cdk": "^0.25.2",
+    "typescript": "^3.1.2"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-apigateway": "^0.25.2",
+    "@aws-cdk/aws-cloudformation": "^0.25.2",
+    "@aws-cdk/aws-cloudfront": "^0.25.2",
+    "@aws-cdk/aws-cognito": "^0.25.2",
+    "@aws-cdk/aws-dynamodb": "^0.25.2",
+    "@aws-cdk/aws-iam": "^0.25.2",
+    "@aws-cdk/aws-kinesis": "^0.25.2",
+    "@aws-cdk/aws-kinesisfirehose": "^0.25.2",
+    "@aws-cdk/aws-lambda-event-sources": "^0.25.2",
+    "@aws-cdk/aws-ssm": "^0.25.2",
+    "@aws-cdk/cdk": "^0.25.2"
+  }
+}
