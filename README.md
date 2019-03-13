@@ -57,7 +57,7 @@ You can clone it at your Cloud9 environment, but for having a better experience,
  git clone https://github.com/fabianmartins/spaceinvaders.app.git
 ~~~
 
-**IMPORTANT:** The frond-end DOES NOT WORK YET on mobile devices, and some versions of Windows, especially those with touch screen.
+**IMPORTANT:** The frond-end DOES NOT WORK YET on mobile devices, and some in versions of Windows, especially those with touch screen.
 
 
 #### STEP 4 - Update the environment
