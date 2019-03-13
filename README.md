@@ -19,27 +19,27 @@ We hope that your skills may help us with the challenge of MAKING THE APPLICATIO
 
 ## Preparing the environment
 
-### ACTIVITY 1 - Cloud9 - Prepare your environment
+### prepACTIVITY 1 - Cloud9 - Prepare your environment
 
 ##### STEP 1 - Access your account
 1. Login to your account
-2. Select a region (take note of the region) - We recommend us-east-1 (Virginia) or us-east-2 (Oregon).
+2. Select a region (take note of the region) - We recommend us-east-1 (Virginia) or us-east-2 (Ohio)
 
 **IMPORTANT:** Be sure that you have permissions to create resources on your account. For the purpose of this workshop, having administrative privileges is the best option.
 
 ##### STEP 2 - Launch your Cloud9 environment
 1. On the AWS console, go to Cloud9. 
-2. Launch Cloud9:
-2.1. Go to the Cloud9 section of the console
-2.2. Select `Create environment`
-2.3. Give a name to your environment. **Important:** If you are sharing the same account and region with a colleague, be sure to take note of the identification of your environment, and be careful to not destroy your colleague environment.
-2.4. For the "environment settings":
-2.4.1. For "Environment type" choose `Create a new instance for environment (EC2)`
-2.4.2. For "Instance type" choose `t2.micro (1 GiB RAM + 1 vCPU)*`
-2.4.4. Leave the other configuration settings at their default values and click **Next step** and then **Create environment**
-2.4.5. In a few seconds your environment will be available. You can clouse the Welcome tab.
+	* Go to the Cloud9 section of the console
+	* Select **Create environment**
+	* Give a name to your environment. **Important:** If you are sharing the same account and region with a colleague, be sure to take note of the identification of your environment, and be careful to not to destroy your colleague environment.
+	* For the "environment settings":
+		* For "Environment type" choose `Create a new instance for environment (EC2)`
+		* For "Instance type" choose `t2.micro (1 GiB RAM + 1 vCPU)*`
+		* Leave the other configuration settings at their default values and click **Next step**, and then **Create environment**
 
-### ACTIVITY 2 - CDK - Deploy the back end
+In a few seconds your environment will be available. You can close the Welcome tab.
+
+### prepACTIVITY 2 - CDK - Deploy the back end
 
 Clone the following repository, and follow the steps on it for the deployment.
 
@@ -92,7 +92,7 @@ As you will need to run application after fixing it (or now, just to check if it
 
 As it is not running, let's try to fix it using the following instructions.
 
-### FIX ACTIVITY 1 - Application - Fix the application configuration
+### fixACTIVITY 1 - Application - Fix the application configuration
 
 We got a tip from one of the developers that remained at the company that a config file is an important part of the application, and without being properly configured, the application will not run.
 
@@ -127,7 +127,7 @@ Here is how to do it:
 * Save the file!
 
 
-### FIX ACTIVITY 2 - Systems Manager - Create the parameter that is missing
+### fixACTIVITY 2 - Systems Manager - Create the missing parameter
 
 One of the System Administrators took a look at the environment, and said that a parameter missing on the back-end. He said that we need to fix Systems ManagerGo to the Systems Manager console, and create the parameter as specified below.
 
@@ -149,10 +149,15 @@ It seems that a *'session'* parameter is missing, and making the application to 
 
 If everything went well, you will get the message *Create parameter request succeeded*. Check if the parameter exists on the list of parameters.
 
-#%%FIX THIS TIP%%
-**Cheat tip**: If you want to skip this activity, just go to your CDK project, search for *MISSING PARAMETER* on all .ts files, and follow the guidance to adjust the code. Save everything and run `cdk diff` at the terminal.
+**-- FastFix --**  
+If you want to skip this activity: 
 
-### FIX ACTIVITY 3 - Kinesis Streams/Lambda Integration - Integrate Lambda to Kinesis
+1. Go your CDK project, search for *MISSING PARAMETER* on all .ts files, and follow the guidances to adjust the code.
+2. Save everything and run **`cdk diff -c envname=<appName> -c suffix=<suffix>`** at the terminal. This will show you what will be changed on your environment
+3. If you agree with the changes, run **`cdk deploy -c envname=<appName> -c suffix=<suffix>`** to deploy the changes
+
+
+### fixACTIVITY 3 - Kinesis Streams/Lambda Integration - Integrate Lambda to Kinesis
 
 The people from the monitoring team said that they identified failure in getting the scoreboard computed and stored on DynamoDb. Our SysAdmin is friend of one of the rebels, and he send this message *"Check if the Lambda Function with the name Scoreboard is integrated to Kinesis. If there is no trigger configured for the lambda function, that's the issue"*.
 
@@ -176,11 +181,15 @@ We need to connect the Lambda function to Kinesis.
    * Click on the button **Add** at the right.
    * On the top, click on the button **Save**.
 
-#%%FIX THIS TIP%%
-**Cheat tip**: If you want to skip this activity, just go to your CDK project, search for *MISSING PARAMETER* on all .ts files, and follow the guidance to adjust the code. Save everything and run `cdk diff` at the terminal.
+**-- FastFix --**  
+If you want to skip this activity: 
+
+1. Go your CDK project, search for *MISSING KINESIS INTEGRATION* on all .ts files, and follow the guidances to adjust the code.
+2. Save everything and run **`cdk diff -c envname=<appName> -c suffix=<suffix>`** at the terminal. This will show you what will be changed on your environment
+3. If you agree with the changes, run **`cdk deploy -c envname=<appName> -c suffix=<suffix>`** to deploy the changes
 
 
-### FIX ACTIVITY 4 - Kinesis Firehose - Create the missing Kinesis Firehose
+### fixACTIVITY 4 - Kinesis Firehose - Create the missing Kinesis Firehose
 
 The analytics team complained that no data is going to their datalake staging area. They said that Kinesis Streams drops the data to a Kinesis Firehose, and then Kinesis Firehose moves the data to a S3 bucket named with the suffix "raw" (you can check if the bucket exists).
 
@@ -223,11 +232,15 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
 
 If everything went well, you will see that the delivery stream was created.
 
-#%%FIX THIS TIP%%
-**Cheat tip**: If you want to skip this activity, just go to your CDK project, search for *MISSING PARAMETER* on all .ts files, and follow the guidance to adjust the code. Save everything and run `cdk diff` at the terminal.
+**-- FastFix --**  
+If you want to skip this activity: 
+
+1. Go your CDK project, search for *MISSING KINESIS FIREHOSE* on all .ts files, and follow the guidances to adjust the code.
+2. Save everything and run **`cdk diff -c envname=<appName> -c suffix=<suffix>`** at the terminal. This will show you what will be changed on your environment
+3. If you agree with the changes, run **`cdk deploy -c envname=<appName> -c suffix=<suffix>`** to deploy the changes
 
 
-### FIX ACTIVITY 5 - Congito - Fix the permissions on the groups for RBAC
+### fixACTIVITY 5 - Congito - Fix the permissions on the groups for RBAC
 
 The people from the Security Team that joined our taskforce to solve the issues said that is essential that RBAC (Role-Based Access Control) is properly configured on the system. They also said that the current version of the CDK doesn't allow us to solve that by code, unless we create a Custom Resource as it was done for the creation of the User Pool. Nobody on the team knows how to do it, but one of the SysAdmins said that he has a playbook for that, and send us the guidance. Let's try to leverage it.
 
@@ -256,7 +269,10 @@ The Identity Pool configuration is missing the configuration of the roles for ea
 10. **Role resolution**: Select **`Deny`**
 11. Leave everything else as it is and click on **`Save changes`**
 
-### FIXING ACTIVITY 6 - Test the registration process
+**-- FastFix --**  
+Sorry. There's no fast fix for this issue.
+
+### # fixACTIVITY 6 - Test the registration process
 
 If all the steps were executed properly, the application must be running. Let's try to create an user.
 
@@ -273,7 +289,7 @@ If all the steps were executed properly, the application must be running. Let's 
 	* Click on the button **Register**
 6. If everything went well, you will receive a confirmation on your email. Open the email and click on the link.
 
-### FIXING ACTIVITY 7 - Test the login process
+### fixACTIVITY 7 - Test the login process
 
 1. Get back to the application, and now choose **Login**
 2. Enter your credentials, and click on **Login**
@@ -281,21 +297,21 @@ If all the steps were executed properly, the application must be running. Let's 
 4. If you get to a page where the indicating status is WAITING and you have a counting down from 10 to 0 that keeps restarting, everything is ok.
 5. Close the window, to be sure that the cookies were deleted, so we can proceed with the test.
 
-### FIXING ACTIVITY 8 - Test the manager console
+### fixACTIVITY 8 - Test the manager console
 
 The manager console is where the manager creates a session, and starts the game so other participants can join it.
 
 We've been said that this applications is needing a face lifting. However, let's leave the cosmetics for another opportunity.
 
-1 Open a privacy/incognito page for your browser. This will guarantee that you will have the cookies cleared after use.
+1. Open a privacy/incognito page for your browser. This will guarantee that you will have the cookies cleared after use.
 2. Open this file that is on your application deployment: `./scoreboard/index.html`
 3. The page will show some fields for you to enter the username and password that you defined earlier. Do it
 4. If the application indicates `AccessDeniedException`, then we have an access problem. If that's the case, go to the next activity.
 
 
-### FIXING ACTIVITY 9 - Cognito - Configure yourself as a manager
+### fixACTIVITY 9 - Cognito - Configure yourself as a manager
 
-We found some notes at the desk of the solution architect. There is a piece of paper where is written *`use AWS CLI to make yourself an application admin`*. The following steps are on that paper. Hopefully they will help you to solve the issue.
+We found some notes at the desk of the solution architect. There is a piece of paper where is written *"use AWS CLI to make yourself an application admin"*. The following steps are were found that paper. Hopefully they will help you to solve the issue.
 
 **Task 1.** Take note of the USER POOL ID  
 
@@ -318,7 +334,7 @@ $ aws cognito-idp admin-add-user-to-group --user-pool-id <userpoolid> --username
 **IMPORTANT**: This is another action that we DON'T WANT to be executed by hand. How to fix this? How to make the deployment of the environment to create an admin user automatically? Think about it. We will need it in another fixing workshop.
 
 
-### FIXING ACTIVITY 10 - Create a session for the game
+### fixACTIVITY 10 - Create a session for the game
 
 If the previous activity went well, you have the management console ready to have a session configured. Follow the steps below to create a gaming session.
 
@@ -328,10 +344,38 @@ If the previous activity went well, you have the management console ready to hav
 4. If the page updates with a table containing a header with the words `Nickname`, `Score`, `Shots`, `Level`, `Lives`, then we are good.
 5. Open a second browser window, and execute again the steps to login into the game. For a better experience, leave the windows opened side by side. This time, if everything went well, you will see a button labeled **JOIN session**. Click on it 
 
+If you are able to play, **you fixed it!**
 
-### ACTIVITY X - Cleaning up your environment
 
-If we are aligned, considering every tasks executed, and we agreed in the standard names for the 
+## Cleaning up the environment
+
+### cleanACTIVITY 1 - Destroy the deployed environment
+
+Go to the the terminal on your environment and type the following command. Be sure to be at your cdk folder 
+
+```
+$ cdk destroy -c envname=<appNamesuffix>
+```
+
+If everything went well, you will receive a message like the following one: 
+
+```
+✅  NRTA<appNamesuffix>: destroyed
+```
+
+### cleanACTIVITY 2 - Cleaning up resources created by hand
+
+Everything that was created by CloudFormation was deleted. However, the resources that you created directly on the console were not deleted. Let's fix this.
+
+1. Go to Systems Manager, then Parameter Store, and delete the parameter `<appNamesuffix>/session`
+2. Go to Kinesis, then Kinesis Firehose, and delete the resource that you created by hand. The resource will already be deleted, but you will be fixing the configurations at the console.
+3. Go to IAM, and search for `<appNamesuffix>`. Delete any resource configured like that. For sure the only resource will be `<appNamesuffix>FirehoseRole`.
+
+## Final activity
+
+Celebrate! You deserve it!
+
+
 
 
 

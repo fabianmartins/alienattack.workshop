@@ -36,7 +36,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
         });
 
         /**
-         * MISSING CONFIGURATION FOR KINESIS STREAMS/LAMBDA INTEGRATION
+         * MISSING KINESIS INTEGRATION
          * Uncomment the following lines to solve it
          */
         /*
