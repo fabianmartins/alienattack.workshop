@@ -32,7 +32,7 @@ export class MainLayer extends ResourceAwareStack  {
     ssmProperties.set("UserpoolId", securityLayer.getUserPoolId());
     ssmProperties.set("UserPoolURL", securityLayer.getUserPoolUrl());
     ssmProperties.set("IdentityPoolId", securityLayer.getIdentityPoolId());
-    // MISSING PARAMETER
+    // MISSING PARAMETER - Uncomment the next line to create the parameter
     // ssmProperties.set("Session", "null");
     configLayerProps.addParameter('ssmParameters',ssmProperties);
     // MISSING PARAMETER  - side effect - uncomment the next line to fix it

@@ -258,14 +258,13 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
         });
 
 
+    
 
         /**
          * SESSION resource /session
          * GET {no parameter} - returns session data from ssm.parameter /ssm/session
          * 
          */
-
-        /* 
         let session = new APIGTW.CfnResource(this, props.getAppRefName() + "APIv1session", {
             parentId: v1.resourceId
             , pathPart: 'session'
@@ -354,8 +353,6 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                 }
             ]
         });
-
-        */
 
         /**
          * CONFIG 
@@ -896,9 +893,8 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             , stageName: 'prod'
             , description: 'Production deployment'
         });
-        /* MISSING API METHOD - Side effects - Uncomment the next two lines to solve it */
-        // deployment.addDependsOn(sessionGetMethod);
-        // deployment.addDependsOn(sessionOptionsMethod);
+        deployment.addDependsOn(sessionGetMethod);
+        deployment.addDependsOn(sessionOptionsMethod);
         deployment.addDependsOn(configGetMethod);
         deployment.addDependsOn(configOptionsMethod);
         deployment.addDependsOn(allocatePostMethod);

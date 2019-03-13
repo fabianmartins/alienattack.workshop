@@ -43,6 +43,16 @@ We hope that your skills may help us with the challenge of MAKING THE APPLICATIO
 
 Clone the following repository, and follow the steps on it for the deployment.
 
+~~~
+cdk synth -c envname=<appName> -c suffix=<suffix>
+~~~
+
+~~~
+cdk deploy -c envname=<appName> -c suffix=<suffix>
+~~~
+
+
+
 Take note of the names that you used for *'appName'* and *'suffix'* that you used to deploy the application. These are going to be needed later.
 
 To avoid naming collisions, especially with S3 which has global namespace for buckets, we recommend choosing options that will avoid that. For instance, if you are running the deployment in a region without sharing the account with anyone else, pick your initials for *appName* and nothing for suffix. But, if you're sharing the account with someone - even in a different region - and by any reason you are using the same value for *appName*
@@ -139,20 +149,84 @@ It seems that a *'session'* parameter is missing, and making the application to 
 
 If everything went well, you will get the message *Create parameter request succeeded*. Check if the parameter exists on the list of parameters.
 
-**Cheat tip**: If you want to skip this activity, just go to your CDK project, visit 
-### ACTIVITY 2 - Kinesis Firehose - Create the missing Kinesis Firehose
+#%%FIX THIS TIP%%
+**Cheat tip**: If you want to skip this activity, just go to your CDK project, search for *MISSING PARAMETER* on all .ts files, and follow the guidance to adjust the code. Save everything and run `cdk diff` at the terminal.
 
-If you want to skip this activity, just go to the CDK Database Layer, and uncomment the code marked as MISSING TABLE and run CDK Deploy.
+### FIX ACTIVITY 3 - Kinesis Streams/Lambda Integration - Integrate Lambda to Kinesis
+
+The people from the monitoring team said that they identified failure in getting the scoreboard computed and stored on DynamoDb. Our SysAdmin is friend of one of the rebels, and he send this message *"Check if the Lambda Function with the name Scoreboard is integrated to Kinesis. If there is no trigger configured for the lambda function, that's the issue"*.
+
+##### [Problem] 
+The game data is ingested to the Kinesis Streams.Then, Lambda (the service) triggers a Lambda function at each second, to make it consume the data from the Kinesis Streams. What is done with the consumed records depends on what is coded on the Lambda function.
+
+We need to connect the Lambda function to Kinesis.
+
+##### [Solution guidance]
+1. Go to your AWS Console, and visit the Lambda service page.
+2. Search for a function named **<appNamesuffix>ScoreboardFn**.  
+3. Click on the name of the function. You will be taken to the configuration of the lambda function.
+4. Check if the information sent from the rebel is correct. On the section named *Designer* if you see a message *"Add triggers from the list on the left"*, then the rebel is right. The trigger is missing. Let's create it.
+5. On the left, on the section 'Add triggers', click on **Kinesis**. A section named *Configure triggers* will appear below.
+6. Configure the fields:
+   * **Kinesis stream**: Select the Kinesis Data Stream attached to your environment. The name must be in the form `<appNamesuffix>_InputStream`
+   * **Consumer**: select *No consumer*
+   * **Batch size**: insert the value *700*.
+   * **Starting position**: select *Latest*.
+   * Check box **Enable trigger**: leave it marked for now.
+   * Click on the button **Add** at the right.
+   * On the top, click on the button **Save**.
+
+#%%FIX THIS TIP%%
+**Cheat tip**: If you want to skip this activity, just go to your CDK project, search for *MISSING PARAMETER* on all .ts files, and follow the guidance to adjust the code. Save everything and run `cdk diff` at the terminal.
 
 
-### ACTIVITY 3 - Kinesis Streams/Lambda Integration - Integrate Lambda to Kinesis
+### FIX ACTIVITY 4 - Kinesis Firehose - Create the missing Kinesis Firehose
+
+The analytics team complained that no data is going to their datalake staging area. They said that Kinesis Streams drops the data to a Kinesis Firehose, and then Kinesis Firehose moves the data to a S3 bucket named with the suffix "raw" (you can check if the bucket exists).
+
+They said *"This is pretty simple! It is just to connect the Kinesis Firehose to the Kinesis Streams. If the Kinesis Firehose doesn't exists, create one! Give us access and we can help. Or, call us if you need"*.
+
+So, follow the tip, and if you need help, call them.
+
+##### [Problem] 
+Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point to the S3 bucket. Fix it, or create it properly.
+
+##### [Solution guidance]
+1. Go to your AWS Console, and visit the page of Kinesis (don't confuse it with Kinesis Video).
+2. On the service page you are expected to see the Kinesis Streams on the left, and a missing Kinesis Firehose for the application. Let's create it.
+3. Under the section *'Kinesis Firehose Delivery Streams*', or by clicking on *'Data Firehose*' at the left hand side, click on the button **Create Delivery Stream**.
+4. On the section *New delivery stream*, configure the fields as follows:
+   * **Delivery stream name**: `<appNamesuffix>Firehose`.
+   * **Source**: Select the radio button *'Kinesis stream'*. 
+   * Drop-down **Choose Kinesis stream**: select the stream attached to your deployment (the same one we connected to the Lambda function).
+   * Click **Next**.
+   * **Record transformation**: Select *'Disabled'*.
+   * **Record format conversion**: Select *'Disabled'*.
+   * Click **Next**.
+   * **Destination**: Click S3, even if it's already selected.
+   * **S3 bucket**: Select the bucket attached to your application. The name will have the form `<appNamesuffix>.raw`.
+   * **S3 prefix**: Leave it blank
+   * **S3 error prefix**: Leave it blank
+   * Click **Next**
+   * **Buffer size**: input the value *1*
+   * **Buffer interval**: input the value *300*
+   * **S3 compression**: Select *GZIP*
+   * **S3 encryption**: Select *Disabled*
+   * **Error logging**: Select *Enabled*
+   * **IAM Role**: Click on the button *Create new or choose*. An IAM configuration page will open.
+   		* *IAMRole*: Leave the option *Create a new IAM Role* selected.
+   		* *Role Name*: `<appNamesuffix>FirehoseRole`
+   		* Click on the button **Allow**. You will be taken to the previous page.
+   	* Click **Next**.
+   	* Check the presented configuration.
+   	* Click on **Create delivery stream**.
+
+If everything went well, you will see that the delivery stream was created.
+
+#%%FIX THIS TIP%%
+**Cheat tip**: If you want to skip this activity, just go to your CDK project, search for *MISSING PARAMETER* on all .ts files, and follow the guidance to adjust the code. Save everything and run `cdk diff` at the terminal.
 
 
-
-
-### ACTIVITY 4 - APIGateway - Fix the broken configuration on API Gateway to allow the application to consume the parameters
-
-If you want to skip this activity, just go to the CDK Database Layer, and uncomment the code marked as MISSING METHOD and run CDK Deploy.
 
 ### ACTIVITY X - IAM - Fix the permissions of the Managers Cognito User group
 
