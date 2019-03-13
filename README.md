@@ -434,7 +434,7 @@ If you are able to play, **you fixed it!**
 Go to the the terminal on your environment and type the following command. Be sure to be at your cdk folder 
 
 ```
-$ cdk destroy -c envname=<envNamesuffix>
+$ cdk destroy -c envname=<envName> -c suffix=<suffix>
 ```
 
 If everything went well, you will receive a message like the following one: 
