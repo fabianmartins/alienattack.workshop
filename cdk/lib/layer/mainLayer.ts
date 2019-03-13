@@ -32,10 +32,11 @@ export class MainLayer extends ResourceAwareStack  {
     ssmProperties.set("UserpoolId", securityLayer.getUserPoolId());
     ssmProperties.set("UserPoolURL", securityLayer.getUserPoolUrl());
     ssmProperties.set("IdentityPoolId", securityLayer.getIdentityPoolId());
-    ssmProperties.set("Session", "null");
+    // MISSING PARAMETER
+    // ssmProperties.set("Session", "null");
     configLayerProps.addParameter('ssmParameters',ssmProperties);
-
-    let configLayer =
+    // MISSING PARAMETER  - side effect - uncomment the next line to fix it
+   // let configLayer =
       new ConfigurationLayer(this, 'ConfigurationLayer', configLayerProps);
 
     // storage layer
@@ -43,7 +44,7 @@ export class MainLayer extends ResourceAwareStack  {
       new StorageLayer(this, 'StorageStorage', this.properties);
 
 
-    //content Delivery Layer
+    // UNCOMMENT the following section if you want to have the CDN created. It will take 20 minutes to build/destroy
     /*
     let cdnLayerProps = new ParameterAwareProps(this.properties);
     cdnLayerProps.addParameter('appbucket',storageLayer.getResource('appbucket'));
@@ -57,7 +58,8 @@ export class MainLayer extends ResourceAwareStack  {
     
     // processing layer
     let processingLayerProps = new ParameterAwareProps(this.properties);
-      processingLayerProps.addParameter('parameter.session', configLayer.getResource('parameter.session'));
+    // MISSING PARAMETER - side effect - uncomment the next line
+    // processingLayerProps.addParameter('parameter.session', configLayer.getResource('parameter.session'));
       processingLayerProps.addParameter('table.sessionControl', databaseLayer.getResource('table.sessionControl'));
       processingLayerProps.addParameter('table.sessionTopX', databaseLayer.getResource('table.sessionTopX'));
       processingLayerProps.addParameter('table.session', databaseLayer.getResource('table.session'));

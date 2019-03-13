@@ -63,56 +63,6 @@ export class StorageLayer extends ResourceAwareConstruct {
         return bucket;
     }
 
-/*
-    private createCfnBucket(bucketName: string, isWeb: boolean, alreadyExists: boolean) : CfnBucket | IBucket {
-
-        let bucket : CfnBucket | IBucket;
-        if (alreadyExists) {
-            console.log('>>> IMPORTING BUCKET:',bucketName);
-            bucket = s3.Bucket.import(this, bucketName, {
-                bucketArn : 'arn:aws:s3:::'+bucketName
-            })
-        } else {
-            if (isWeb) {
-                console.log('>>> CREATING WEB BUCKET:',bucketName);
-                bucket = new CfnBucket(this,bucketName, {
-                    bucketName : bucketName
-                   ,accessControl : "Private"
-                   ,corsConfiguration : {
-                       corsRules : [
-                           { 
-                             allowedOrigins : ["*"]
-                            ,allowedHeaders : ["*"]
-                            ,allowedMethods : ["GET","PUT","POST","DELETE"]
-                           }
-                       ]
-                   }
-                   ,websiteConfiguration : {
-                        indexDocument : 'index.html'
-                       ,errorDocument : 'error.html'
-                   }
-                   ,versioningConfiguration : {
-                        status : 'Suspended'
-                   }
-               })
-            } else {
-                console.log('>>> CREATING BUCKET:',bucketName); 
-                bucket = new CfnBucket(this,bucketName, {
-                     bucketName : bucketName
-                    ,accessControl : "Private"
-                    ,versioningConfiguration : {
-                         status : 'Suspended'
-                    }
-                })
-            }
-        }
-        return bucket;
-    }
-
-*/
-
-
-
     createBuckets() {
         let appBucketName = this.properties.getAppRefName().toLowerCase() + '.app';
         let rawDataBucketName = this.properties.getAppRefName().toLowerCase() + '.raw';

@@ -35,14 +35,24 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             shardCount: 1
         });
 
+        /**
+         * MISSING CONFIGURATION FOR KINESIS STREAMS/LAMBDA INTEGRATION
+         * Uncomment the following lines to solve it
+         */
+        /*
         (<Lambda.Function> props.getParameter('lambda.scoreboard')).addEventSource(
-
                new KinesisEventSource(this.kinesisStreams, {
                 batchSize : 700,
                 startingPosition : Lambda.StartingPosition.Latest
                })
         );
+        */
 
+        /**
+         * MISSING KINESIS FIREHOSE
+         * Uncomment the following section to solve it
+         */
+/*
         let firehoseLogGroup = '/aws/kinesisfirehose/' + ((props.getAppRefName() + 'firehose').toLowerCase());
         let self = this;
         let firehoseRole = new IAM.Role(this, props.getAppRefName() + 'FirehoseToStreamsRole', {
@@ -70,22 +80,6 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                         .addAction('kinesis:GetRecords')
                         .addResource(this.kinesisStreams.streamArn)
                     )
-                /*,
-                // if s3 encryption is configured
-                'DecryptionPermissions': new PolicyDocument()
-                    .addStatement(new IAM.PolicyStatement()
-                        .allow()
-                        .addAction('kms:Decrypt')
-                        .addAction('kms:GenerateDataKey')
-                        .addResource('arn:aws:kms:'+props.region+':'+props.accountId+':key/aws/s3')
-                        .addCondition('StringEquals', {
-                            'kms:ViaService': 'kinesis.' + props.region + '.amazonaws.com'
-                        })
-                        .addCondition('StringLike',{
-                            'kms:EncryptionContext:aws:s3:arn' : 'arn:aws:s3:::'+props.s3BucketRawDataArn+'/*'
-                        })
-                    )
-                    */
                 ,
                 'GluePermissions': new PolicyDocument()
                     .addStatement(new IAM.PolicyStatement()
@@ -101,16 +95,6 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                         .addResource('arn:aws:logs:' + props.region + ':' + props.accountId + ':log-group:' + firehoseLogGroup + ':*:*')
                         .addResource('arn:aws:logs:' + props.region + ':' + props.accountId + ':log-group:' + firehoseLogGroup)
                     )
-                /* ,
-                  // if record transformation is selected
-                 'InternalLambdaInvocationPermissions' : new PolicyDocument()
-                     .addStatement( new IAM.PolicyStatement()
-                         .allow()
-                         .addAction('lambda:InvokeFunction')
-                         .addAction('lambda:GetFunctionConfiguration')
-                         .addResource('arn:aws:lambda:'+props.region+':'+props.accountId+':function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%')
-                 )
-                         */
             }
         });
 
@@ -136,8 +120,9 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                 }
             }
         })
+        */
+    
     }
-
 
     createAPIGateway(props: IParameterAwareProps) {
 
@@ -280,6 +265,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
          * 
          */
 
+        /* 
         let session = new APIGTW.CfnResource(this, props.getAppRefName() + "APIv1session", {
             parentId: v1.resourceId
             , pathPart: 'session'
@@ -351,11 +337,6 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                             'method.response.header.Access-Control-Allow-Headers' : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
                             ,'method.response.header.Access-Control-Allow-Methods' : "'*'"
                             ,'method.response.header.Access-Control-Allow-Origin' : "'*'"
-                            /*
-                              'method.response.header.Access-Control-Allow-Origin': "'*'"
-                            , 'method.response.header.Access-Control-Allow-Methods': "'GET,OPTIONS'"
-                            , 'method.response.header.Access-Control-Allow-Headers': "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
-                            */
                         }
                     }]
             }
@@ -373,6 +354,8 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                 }
             ]
         });
+
+        */
 
         /**
          * CONFIG 
@@ -913,8 +896,9 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             , stageName: 'prod'
             , description: 'Production deployment'
         });
-        deployment.addDependsOn(sessionGetMethod);
-        deployment.addDependsOn(sessionOptionsMethod);
+        /* MISSING API METHOD - Side effects - Uncomment the next two lines to solve it */
+        // deployment.addDependsOn(sessionGetMethod);
+        // deployment.addDependsOn(sessionOptionsMethod);
         deployment.addDependsOn(configGetMethod);
         deployment.addDependsOn(configOptionsMethod);
         deployment.addDependsOn(allocatePostMethod);
@@ -933,18 +917,6 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
         let baseArn = 'arn:aws:apigateway:' + props.region + ':'+props.accountId+':' + this.api.restApiId + '/prod/*/';
         let baseExecArn = 'arn:aws:execute-api:' + props.region + ':'+props.accountId+':' + this.api.restApiId + '/prod/';
         let playerRole = (<IAM.Role>props.getParameter('security.playersrole'));
-
-        /*
-        playerRole.addToPolicy(
-            new IAM.PolicyStatement()
-                .describe('APIGatewayPermissions')
-                .allow()
-                .addAction('execute-api:Invoke')
-                .addResources(
-                    baseArn
-                )
-        );
-        */
 
         playerRole.addToPolicy(
             new IAM.PolicyStatement()
@@ -1034,17 +1006,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                 this.kinesisStreams.streamArn
             )
         );
-        /*
-        managerRole.addToPolicy(
-            new IAM.PolicyStatement()
-                .describe('APIGatewayPermissions')
-                .allow()
-                .addAction('execute-api:Invoke')
-                .addResources(
-                    baseArn
-                )
-        );
-                */
+
         managerRole.addToPolicy(
             new IAM.PolicyStatement()
                 .describe('APIGatewayPermissions')

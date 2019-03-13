@@ -6,6 +6,7 @@ import Cognito = require('@aws-cdk/aws-cognito');
 import IAM = require('@aws-cdk/aws-iam');
 import Lambda = require('@aws-cdk/aws-lambda');
 import Cfn = require('@aws-cdk/aws-cloudformation');
+const uuidv3 = require('uuid/v3');
 
 const lambdasLocation = './lambdas/';
 
@@ -79,9 +80,13 @@ export class SecurityLayer extends ResourceAwareConstruct {
 
     private createUserPool() {
 
-        const generatingFunction = new Lambda.SingletonFunction(this, 'SimpleUserPoolGenFn', {
-                uuid : '81066468-403f-11e9-b210-d663bd873d93'
-               ,code : new Lambda.AssetCode(lambdasLocation + 'simpleUserPool')
+        const CDKNAMESPACE = 'aa596cee-451b-11e9-b210-d663bd873d93';
+        let genFunctionId = this.properties.getAppRefName()+'SimpleUserPoolGenFn';
+        const generatingFunction = new Lambda.SingletonFunction(this, genFunctionId, {
+                 // To avoid having a UUID function generated at every run, we will use
+                 // uuidv3 to stick to some 'aleatory' uuid related to the genFunctionId
+                 uuid : uuidv3(genFunctionId,CDKNAMESPACE)
+                ,code : new Lambda.AssetCode(lambdasLocation + 'simpleUserPool')
                ,description : "Generates the UserPool using configuration not available on CDK"
                ,handler : 'index.handler'
                ,timeout : 300
@@ -100,7 +105,7 @@ export class SecurityLayer extends ResourceAwareConstruct {
                .addAllResources()
            );
    
-           this.simpleUserPool = new Cfn.CustomResource(this, 'SimpleUserPoolCustomResource',{
+           this.simpleUserPool = new Cfn.CustomResource(this, this.properties.getAppRefName()+'SimpleUserPoolCustomResource',{
                 lambdaProvider : generatingFunction
                , properties : {
                    AppName : this.properties.getAppRefName(),

@@ -1,0 +1,12 @@
+.DS_STORE
+cdk/bin/*.js
+cdk/lib/*.js
+cdk/lib/constructs/*.js
+cdk/lib/layer/*.js
+cdk/lib/util/*.js
+cdk/*.js
+*.d.ts
+*.yaml
+node_modules
+output
+policies

@@ -1,10 +1,10 @@
->>>> envname: 
+>>>> envname: MYAPP
 >>>> providedSuffix: 
-The following buckets are NOT being created because already exists:  [ 'nrta.raw', 'nrta.app' ]
->>> IMPORTING BUCKET: nrta.app
->>> IMPORTING BUCKET: nrta.raw
+The following buckets are NOT being created because already exists:  [ 'myapp.raw', 'myapp.app' ]
+>>> IMPORTING BUCKET: myapp.app
+>>> IMPORTING BUCKET: myapp.raw
 Resources:
-  SecurityLayerNRTAPostRegistrationFnRole9003A492:
+  SecurityLayerMYAPPPostRegistrationFnRole8EDEE3FA:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -16,15 +16,15 @@ Resources:
         Version: "2012-10-17"
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-      RoleName: NRTAPostRegistrationFn_Role
+      RoleName: MYAPPPostRegistrationFn_Role
     Metadata:
-      aws:cdk:path: NRTA/SecurityLayer/NRTAPostRegistrationFn_Role/Resource
-  SecurityLayerNRTAPostRegistration25347C59:
+      aws:cdk:path: NRTAMYAPP/SecurityLayer/MYAPPPostRegistrationFn_Role/Resource
+  SecurityLayerMYAPPPostRegistrationEE4E787E:
     Type: AWS::Lambda::Function
     Properties:
       Code:
         S3Bucket:
-          Ref: SecurityLayerNRTAPostRegistrationCodeS3Bucket98FFF5D8
+          Ref: SecurityLayerMYAPPPostRegistrationCodeS3Bucket01653BF8
         S3Key:
           Fn::Join:
             - ""
@@ -32,44 +32,57 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: SecurityLayerNRTAPostRegistrationCodeS3VersionKeyF3A720B2
+                      - Ref: SecurityLayerMYAPPPostRegistrationCodeS3VersionKey7FB20BBD
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: SecurityLayerNRTAPostRegistrationCodeS3VersionKeyF3A720B2
+                      - Ref: SecurityLayerMYAPPPostRegistrationCodeS3VersionKey7FB20BBD
       Handler: index.handler
       Role:
         Fn::GetAtt:
-          - SecurityLayerNRTAPostRegistrationFnRole9003A492
+          - SecurityLayerMYAPPPostRegistrationFnRole8EDEE3FA
           - Arn
       Runtime: nodejs8.10
-      Description: This function computes the scoreboard
-      FunctionName: NRTAPostRegistrationFn
+      Description: This function adds an user to the Players group after confirmation
+      FunctionName: MYAPPPostRegistrationFn
       MemorySize: 128
       Timeout: 60
     DependsOn:
-      - SecurityLayerNRTAPostRegistrationFnRole9003A492
+      - SecurityLayerMYAPPPostRegistrationFnRole8EDEE3FA
     Metadata:
-      aws:cdk:path: NRTA/SecurityLayer/NRTAPostRegistration/Resource
-      aws:asset:path: /Users/fabisilv/Documents/Documents/aws-projects/spaceinvaders.cdk/lambdas/postregistration
+      aws:cdk:path: NRTAMYAPP/SecurityLayer/MYAPPPostRegistration/Resource
+      aws:asset:path: /Users/fabisilv/Documents/Documents/aws-bootcamp/spaceinvaders/spaceinvaders.workshop/cdk/lambdas/postregistration
       aws:asset:property: Code
-  SecurityLayerNRTAUserPoolSimpleUserPoolCustomResource67956947:
+  SecurityLayerMYAPPSimpleUserPoolCustomResource5A2C53A7:
     Type: AWS::CloudFormation::CustomResource
     Properties:
       ServiceToken:
         Fn::GetAtt:
-          - SingletonLambda81066468403f11e9b210d663bd873d93CE657865
+          - SingletonLambda25e1b2cf6b7c3d33ab40194be919261176CAC5E4
           - Arn
-      AppName: NRTA
-      UserPoolName: NRTA
+      AppName: MYAPP
+      UserPoolName: MYAPP
       PostConfirmationLambdaArn:
         Fn::GetAtt:
-          - SecurityLayerNRTAPostRegistration25347C59
+          - SecurityLayerMYAPPPostRegistrationEE4E787E
           - Arn
     Metadata:
-      aws:cdk:path: NRTA/SecurityLayer/NRTAUserPool/SimpleUserPoolCustomResource
-  SecurityLayerNRTATriggerFunctionPolicyC6A01156:
+      aws:cdk:path: NRTAMYAPP/SecurityLayer/MYAPPSimpleUserPoolCustomResource
+  SecurityLayerMYAPPUserPoolPerm8D3694B2:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:invokeFunction
+      FunctionName:
+        Ref: SecurityLayerMYAPPPostRegistrationEE4E787E
+      Principal: cognito-idp.amazonaws.com
+      SourceArn:
+        Fn::GetAtt:
+          - SecurityLayerMYAPPSimpleUserPoolCustomResource5A2C53A7
+          - UserPoolArn
+    Metadata:
+      aws:cdk:path: NRTAMYAPP/SecurityLayer/MYAPPUserPoolPerm
+  SecurityLayerMYAPPTriggerFunctionPolicy44F8903A:
     Type: AWS::IAM::Policy
     Properties:
       PolicyDocument:
@@ -78,65 +91,64 @@ Resources:
             Effect: Allow
             Resource:
               Fn::GetAtt:
-                - SecurityLayerNRTAUserPoolSimpleUserPoolCustomResource67956947
+                - SecurityLayerMYAPPSimpleUserPoolCustomResource5A2C53A7
                 - UserPoolArn
         Version: "2012-10-17"
       PolicyName: AllowAddUserToGroup
       Roles:
-        - Ref: SecurityLayerNRTAPostRegistrationFnRole9003A492
+        - Ref: SecurityLayerMYAPPPostRegistrationFnRole8EDEE3FA
     Metadata:
-      aws:cdk:path: NRTA/SecurityLayer/NRTATriggerFunctionPolicy/Resource
-  SecurityLayerNRTAApp43A6D761:
+      aws:cdk:path: NRTAMYAPP/SecurityLayer/MYAPPTriggerFunctionPolicy/Resource
+  SecurityLayerMYAPPApp606F2E23:
     Type: AWS::Cognito::UserPoolClient
     Properties:
       UserPoolId:
         Fn::GetAtt:
-          - SecurityLayerNRTAUserPoolSimpleUserPoolCustomResource67956947
+          - SecurityLayerMYAPPSimpleUserPoolCustomResource5A2C53A7
           - UserPoolId
-      ClientName: NRTAWebsite
+      ClientName: MYAPPWebsite
+      ExplicitAuthFlows:
+        - USER_PASSWORD_AUTH
       GenerateSecret: false
     Metadata:
-      aws:cdk:path: NRTA/SecurityLayer/NRTAApp
-  SecurityLayerNRTAIdentityPool20BCEACF:
+      aws:cdk:path: NRTAMYAPP/SecurityLayer/MYAPPApp
+  SecurityLayerMYAPPIdentityPool0B5BBC0F:
     Type: AWS::Cognito::IdentityPool
     Properties:
       AllowUnauthenticatedIdentities: false
       CognitoIdentityProviders:
         - ClientId:
-            Ref: SecurityLayerNRTAApp43A6D761
+            Ref: SecurityLayerMYAPPApp606F2E23
           ProviderName:
-            Fn::Join:
-              - ""
-              - - cognito-idp..amazonaws.com/
-                - Fn::GetAtt:
-                    - SecurityLayerNRTAUserPoolSimpleUserPoolCustomResource67956947
-                    - UserPoolId
+            Fn::GetAtt:
+              - SecurityLayerMYAPPSimpleUserPoolCustomResource5A2C53A7
+              - UserPoolProviderName
           ServerSideTokenCheck: false
-      IdentityPoolName: NRTA
+      IdentityPoolName: MYAPP
     DependsOn:
-      - SecurityLayerNRTAUserPoolSimpleUserPoolCustomResource67956947
+      - SecurityLayerMYAPPSimpleUserPoolCustomResource5A2C53A7
     Metadata:
-      aws:cdk:path: NRTA/SecurityLayer/NRTAIdentityPool
-  SecurityLayerNRTAPlayersRoleC04E926F:
+      aws:cdk:path: NRTAMYAPP/SecurityLayer/MYAPPIdentityPool
+  SecurityLayerMYAPPPlayersRoleC8E35B15:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
         Statement:
-          - Action: sts:AssumeRole
+          - Action: sts:AssumeRoleWithWebIdentity
             Condition:
               StringEquals:
                 cognito-identity.amazonaws.com:aud:
-                  Ref: SecurityLayerNRTAIdentityPool20BCEACF
+                  Ref: SecurityLayerMYAPPIdentityPool0B5BBC0F
               ForAnyValue:StringLike:
                 cognito-identity.amazonaws.com:amr: authenticated
             Effect: Allow
             Principal:
               Federated: cognito-identity.amazonaws.com
         Version: "2012-10-17"
-      RoleName: NRTAPlayersRole
+      RoleName: MYAPPPlayersRole
     Metadata:
-      aws:cdk:path: NRTA/SecurityLayer/NRTAPlayersRole/Resource
-  SecurityLayerNRTAPlayersRoleDefaultPolicyE289FC33:
+      aws:cdk:path: NRTAMYAPP/SecurityLayer/MYAPPPlayersRole/Resource
+  SecurityLayerMYAPPPlayersRoleDefaultPolicyE66108D0:
     Type: AWS::IAM::Policy
     Properties:
       PolicyDocument:
@@ -147,48 +159,174 @@ Resources:
               - cognito-identity:*
             Effect: Allow
             Resource: "*"
+          - Action: apigateway:GET
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:apigateway:"
+                    - Ref: AWS::Region
+                    - ":"
+                    - Ref: AWS::AccountId
+                    - ":"
+                    - Ref: IngestionConsumptionLayerMYAPPAPIECC63685
+                    - /prod/*/config
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:apigateway:"
+                    - Ref: AWS::Region
+                    - ":"
+                    - Ref: AWS::AccountId
+                    - ":"
+                    - Ref: IngestionConsumptionLayerMYAPPAPIECC63685
+                    - /prod/*/session
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:apigateway:"
+                    - Ref: AWS::Region
+                    - ":"
+                    - Ref: AWS::AccountId
+                    - ":"
+                    - Ref: IngestionConsumptionLayerMYAPPAPIECC63685
+                    - /prod/*/scoreboard
+            Sid: APIGatewayGETPermissions
+          - Action: execute-api:Invoke
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:execute-api:"
+                    - Ref: AWS::Region
+                    - ":"
+                    - Ref: AWS::AccountId
+                    - ":"
+                    - Ref: IngestionConsumptionLayerMYAPPAPIECC63685
+                    - /prod/GET/config
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:execute-api:"
+                    - Ref: AWS::Region
+                    - ":"
+                    - Ref: AWS::AccountId
+                    - ":"
+                    - Ref: IngestionConsumptionLayerMYAPPAPIECC63685
+                    - /prod/GET/session
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:execute-api:"
+                    - Ref: AWS::Region
+                    - ":"
+                    - Ref: AWS::AccountId
+                    - ":"
+                    - Ref: IngestionConsumptionLayerMYAPPAPIECC63685
+                    - /prod/GET/scoreboard
+            Sid: APIGatewayEXECGETPermissions
+          - Action: apigateway:POST
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:apigateway:"
+                    - Ref: AWS::Region
+                    - ":"
+                    - Ref: AWS::AccountId
+                    - ":"
+                    - Ref: IngestionConsumptionLayerMYAPPAPIECC63685
+                    - /prod/*/updatestatus
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:apigateway:"
+                    - Ref: AWS::Region
+                    - ":"
+                    - Ref: AWS::AccountId
+                    - ":"
+                    - Ref: IngestionConsumptionLayerMYAPPAPIECC63685
+                    - /prod/*/allocate
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:apigateway:"
+                    - Ref: AWS::Region
+                    - ":"
+                    - Ref: AWS::AccountId
+                    - ":"
+                    - Ref: IngestionConsumptionLayerMYAPPAPIECC63685
+                    - /prod/*/deallocate
+            Sid: APIGatewayPOSTPermissions
+          - Action: execute-api:Invoke
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:execute-api:"
+                    - Ref: AWS::Region
+                    - ":"
+                    - Ref: AWS::AccountId
+                    - ":"
+                    - Ref: IngestionConsumptionLayerMYAPPAPIECC63685
+                    - /prod/POST/updatestatus
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:execute-api:"
+                    - Ref: AWS::Region
+                    - ":"
+                    - Ref: AWS::AccountId
+                    - ":"
+                    - Ref: IngestionConsumptionLayerMYAPPAPIECC63685
+                    - /prod/POST/allocate
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:execute-api:"
+                    - Ref: AWS::Region
+                    - ":"
+                    - Ref: AWS::AccountId
+                    - ":"
+                    - Ref: IngestionConsumptionLayerMYAPPAPIECC63685
+                    - /prod/POST/deallocate
+            Sid: APIGatewayEXECPOSTPermissions
         Version: "2012-10-17"
-      PolicyName: SecurityLayerNRTAPlayersRoleDefaultPolicyE289FC33
+      PolicyName: SecurityLayerMYAPPPlayersRoleDefaultPolicyE66108D0
       Roles:
-        - Ref: SecurityLayerNRTAPlayersRoleC04E926F
+        - Ref: SecurityLayerMYAPPPlayersRoleC8E35B15
     Metadata:
-      aws:cdk:path: NRTA/SecurityLayer/NRTAPlayersRole/DefaultPolicy/Resource
-  SecurityLayerNRTAPlayersE064E933:
+      aws:cdk:path: NRTAMYAPP/SecurityLayer/MYAPPPlayersRole/DefaultPolicy/Resource
+  SecurityLayerMYAPPPlayersC841061C:
     Type: AWS::Cognito::UserPoolGroup
     Properties:
       UserPoolId:
         Fn::GetAtt:
-          - SecurityLayerNRTAUserPoolSimpleUserPoolCustomResource67956947
+          - SecurityLayerMYAPPSimpleUserPoolCustomResource5A2C53A7
           - UserPoolId
       Description: Players of the game.
       GroupName: Players
       Precedence: 9999
       RoleArn:
         Fn::GetAtt:
-          - SecurityLayerNRTAPlayersRoleC04E926F
+          - SecurityLayerMYAPPPlayersRoleC8E35B15
           - Arn
     Metadata:
-      aws:cdk:path: NRTA/SecurityLayer/NRTAPlayers
-  SecurityLayerNRTAManagersRoleC9D62876:
+      aws:cdk:path: NRTAMYAPP/SecurityLayer/MYAPPPlayers
+  SecurityLayerMYAPPManagersRole2AC10C22:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
         Statement:
-          - Action: sts:AssumeRole
+          - Action: sts:AssumeRoleWithWebIdentity
             Condition:
               StringEquals:
                 cognito-identity.amazonaws.com:aud:
-                  Ref: SecurityLayerNRTAIdentityPool20BCEACF
+                  Ref: SecurityLayerMYAPPIdentityPool0B5BBC0F
               ForAnyValue:StringLike:
                 cognito-identity.amazonaws.com:amr: authenticated
             Effect: Allow
             Principal:
               Federated: cognito-identity.amazonaws.com
         Version: "2012-10-17"
-      RoleName: NRTAManagersRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonCognitoPowerUser
+      RoleName: MYAPPManagersRole
     Metadata:
-      aws:cdk:path: NRTA/SecurityLayer/NRTAManagersRole/Resource
-  SecurityLayerNRTAManagersRoleDefaultPolicy33A45F1F:
+      aws:cdk:path: NRTAMYAPP/SecurityLayer/MYAPPManagersRole/Resource
+  SecurityLayerMYAPPManagersRoleDefaultPolicyF562C7FC:
     Type: AWS::IAM::Policy
     Properties:
       PolicyDocument:
@@ -199,29 +337,85 @@ Resources:
               - cognito-identity:*
             Effect: Allow
             Resource: "*"
+          - Action:
+              - dynamodb:BatchGetItem
+              - dynamodb:BatchWriteItem
+              - dynamodb:PutItem
+              - dynamodb:Scan
+              - dynamodb:Query
+              - dynamodb:GetItem
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:dynamodb:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - :table/MYAPP*
+            Sid: DynamoDBPermissions
+          - Action:
+              - ssm:GetParameters
+              - ssm:GetParameter
+              - ssm:DeleteParameters
+              - ssm:PutParameter
+              - ssm:DeleteParameter
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:ssm:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - :parameter/myapp/*
+            Sid: SystemsManagerPermissions
+          - Action:
+              - kinesis:GetShardIterator
+              - kinesis:DescribeStream
+              - kinesis:GetRecords
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - IngestionConsumptionLayerMYAPPInputStreamC8F1BC5F
+                - Arn
+            Sid: KinesisPermissions
+          - Action: apigateway:*
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:apigateway:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":"
+                  - Ref: IngestionConsumptionLayerMYAPPAPIECC63685
+                  - /prod/*/*
+            Sid: APIGatewayPermissions
         Version: "2012-10-17"
-      PolicyName: SecurityLayerNRTAManagersRoleDefaultPolicy33A45F1F
+      PolicyName: SecurityLayerMYAPPManagersRoleDefaultPolicyF562C7FC
       Roles:
-        - Ref: SecurityLayerNRTAManagersRoleC9D62876
+        - Ref: SecurityLayerMYAPPManagersRole2AC10C22
     Metadata:
-      aws:cdk:path: NRTA/SecurityLayer/NRTAManagersRole/DefaultPolicy/Resource
-  SecurityLayerNRTAManagers3C6C4CB6:
+      aws:cdk:path: NRTAMYAPP/SecurityLayer/MYAPPManagersRole/DefaultPolicy/Resource
+  SecurityLayerMYAPPManagersC123F198:
     Type: AWS::Cognito::UserPoolGroup
     Properties:
       UserPoolId:
         Fn::GetAtt:
-          - SecurityLayerNRTAUserPoolSimpleUserPoolCustomResource67956947
+          - SecurityLayerMYAPPSimpleUserPoolCustomResource5A2C53A7
           - UserPoolId
       Description: Managers of the game.
       GroupName: Managers
       Precedence: 0
       RoleArn:
         Fn::GetAtt:
-          - SecurityLayerNRTAManagersRoleC9D62876
+          - SecurityLayerMYAPPManagersRole2AC10C22
           - Arn
     Metadata:
-      aws:cdk:path: NRTA/SecurityLayer/NRTAManagers
-  SecurityLayerNRTAUnauthRoleC358FD97:
+      aws:cdk:path: NRTAMYAPP/SecurityLayer/MYAPPManagers
+  SecurityLayerMYAPPUnauthRole8EA7CECE:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -230,17 +424,17 @@ Resources:
             Condition:
               StringEquals:
                 cognito-identity.amazonaws.com:aud:
-                  Ref: SecurityLayerNRTAIdentityPool20BCEACF
+                  Ref: SecurityLayerMYAPPIdentityPool0B5BBC0F
               ForAnyValue:StringLike:
                 cognito-identity.amazonaws.com:amr: unauthenticated
             Effect: Allow
             Principal:
               Federated: cognito-identity.amazonaws.com
         Version: "2012-10-17"
-      RoleName: NRTAUnauthRole
+      RoleName: MYAPPUnauthRole
     Metadata:
-      aws:cdk:path: NRTA/SecurityLayer/NRTAUnauthRole/Resource
-  SecurityLayerNRTAUnauthRoleDefaultPolicyC6196214:
+      aws:cdk:path: NRTAMYAPP/SecurityLayer/MYAPPUnauthRole/Resource
+  SecurityLayerMYAPPUnauthRoleDefaultPolicy36B588EC:
     Type: AWS::IAM::Policy
     Properties:
       PolicyDocument:
@@ -252,28 +446,28 @@ Resources:
             Effect: Allow
             Resource: "*"
         Version: "2012-10-17"
-      PolicyName: SecurityLayerNRTAUnauthRoleDefaultPolicyC6196214
+      PolicyName: SecurityLayerMYAPPUnauthRoleDefaultPolicy36B588EC
       Roles:
-        - Ref: SecurityLayerNRTAUnauthRoleC358FD97
+        - Ref: SecurityLayerMYAPPUnauthRole8EA7CECE
     Metadata:
-      aws:cdk:path: NRTA/SecurityLayer/NRTAUnauthRole/DefaultPolicy/Resource
-  SecurityLayerNRTAIDPRolesA0CBD763:
+      aws:cdk:path: NRTAMYAPP/SecurityLayer/MYAPPUnauthRole/DefaultPolicy/Resource
+  SecurityLayerMYAPPIDPRoles67CAC5F0:
     Type: AWS::Cognito::IdentityPoolRoleAttachment
     Properties:
       IdentityPoolId:
-        Ref: SecurityLayerNRTAIdentityPool20BCEACF
+        Ref: SecurityLayerMYAPPIdentityPool0B5BBC0F
       Roles:
         authenticated:
           Fn::GetAtt:
-            - SecurityLayerNRTAPlayersRoleC04E926F
+            - SecurityLayerMYAPPPlayersRoleC8E35B15
             - Arn
         unauthenticated:
           Fn::GetAtt:
-            - SecurityLayerNRTAUnauthRoleC358FD97
+            - SecurityLayerMYAPPUnauthRole8EA7CECE
             - Arn
     Metadata:
-      aws:cdk:path: NRTA/SecurityLayer/NRTAIDPRoles
-  SingletonLambda81066468403f11e9b210d663bd873d93ServiceRoleFB671C0F:
+      aws:cdk:path: NRTAMYAPP/SecurityLayer/MYAPPIDPRoles
+  SingletonLambda25e1b2cf6b7c3d33ab40194be9192611ServiceRoleF8BA39D0:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -290,30 +484,32 @@ Resources:
               - Ref: AWS::Partition
               - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
     Metadata:
-      aws:cdk:path: NRTA/SingletonLambda81066468403f11e9b210d663bd873d93/ServiceRole/Resource
-  SingletonLambda81066468403f11e9b210d663bd873d93ServiceRoleDefaultPolicyB91C26F5:
+      aws:cdk:path: NRTAMYAPP/SingletonLambda25e1b2cf6b7c3d33ab40194be9192611/ServiceRole/Resource
+  SingletonLambda25e1b2cf6b7c3d33ab40194be9192611ServiceRoleDefaultPolicy8E8D4C85:
     Type: AWS::IAM::Policy
     Properties:
       PolicyDocument:
         Statement:
           - Action:
-              - cognito-idp:CreateUserPool
               - cognito-idp:DeleteUserPool
+              - cognito-idp:CreateUserPool
               - cognito-idp:UpdateUserPool
+              - cognito-idp:CreateUserPoolDomain
+              - cognito-idp:DeleteUserPoolDomain
             Effect: Allow
             Resource: "*"
         Version: "2012-10-17"
-      PolicyName: SingletonLambda81066468403f11e9b210d663bd873d93ServiceRoleDefaultPolicyB91C26F5
+      PolicyName: SingletonLambda25e1b2cf6b7c3d33ab40194be9192611ServiceRoleDefaultPolicy8E8D4C85
       Roles:
-        - Ref: SingletonLambda81066468403f11e9b210d663bd873d93ServiceRoleFB671C0F
+        - Ref: SingletonLambda25e1b2cf6b7c3d33ab40194be9192611ServiceRoleF8BA39D0
     Metadata:
-      aws:cdk:path: NRTA/SingletonLambda81066468403f11e9b210d663bd873d93/ServiceRole/DefaultPolicy/Resource
-  SingletonLambda81066468403f11e9b210d663bd873d93CE657865:
+      aws:cdk:path: NRTAMYAPP/SingletonLambda25e1b2cf6b7c3d33ab40194be9192611/ServiceRole/DefaultPolicy/Resource
+  SingletonLambda25e1b2cf6b7c3d33ab40194be919261176CAC5E4:
     Type: AWS::Lambda::Function
     Properties:
       Code:
         S3Bucket:
-          Ref: SingletonLambda81066468403f11e9b210d663bd873d93CodeS3Bucket2459B994
+          Ref: SingletonLambda25e1b2cf6b7c3d33ab40194be9192611CodeS3BucketDF6114A4
         S3Key:
           Fn::Join:
             - ""
@@ -321,57 +517,57 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: SingletonLambda81066468403f11e9b210d663bd873d93CodeS3VersionKeyFAA77C6F
+                      - Ref: SingletonLambda25e1b2cf6b7c3d33ab40194be9192611CodeS3VersionKey0D249EF6
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: SingletonLambda81066468403f11e9b210d663bd873d93CodeS3VersionKeyFAA77C6F
+                      - Ref: SingletonLambda25e1b2cf6b7c3d33ab40194be9192611CodeS3VersionKey0D249EF6
       Handler: index.handler
       Role:
         Fn::GetAtt:
-          - SingletonLambda81066468403f11e9b210d663bd873d93ServiceRoleFB671C0F
+          - SingletonLambda25e1b2cf6b7c3d33ab40194be9192611ServiceRoleF8BA39D0
           - Arn
       Runtime: nodejs6.10
       Description: Generates the UserPool using configuration not available on CDK
       Timeout: 300
     DependsOn:
-      - SingletonLambda81066468403f11e9b210d663bd873d93ServiceRoleFB671C0F
-      - SingletonLambda81066468403f11e9b210d663bd873d93ServiceRoleDefaultPolicyB91C26F5
+      - SingletonLambda25e1b2cf6b7c3d33ab40194be9192611ServiceRoleDefaultPolicy8E8D4C85
+      - SingletonLambda25e1b2cf6b7c3d33ab40194be9192611ServiceRoleF8BA39D0
     Metadata:
-      aws:cdk:path: NRTA/SingletonLambda81066468403f11e9b210d663bd873d93/Resource
-      aws:asset:path: /Users/fabisilv/Documents/Documents/aws-projects/spaceinvaders.cdk/lambdas/simpleUserPool
+      aws:cdk:path: NRTAMYAPP/SingletonLambda25e1b2cf6b7c3d33ab40194be9192611/Resource
+      aws:asset:path: /Users/fabisilv/Documents/Documents/aws-bootcamp/spaceinvaders/spaceinvaders.workshop/cdk/lambdas/simpleUserPool
       aws:asset:property: Code
-  ConfigurationLayerSSMParameterNRTARegion175956D9:
+  ConfigurationLayerSSMParameterMYAPPRegion692100D1:
     Type: AWS::SSM::Parameter
     Properties:
       Type: String
       Value:
         Ref: AWS::Region
-      Name: /nrta/region
+      Name: /myapp/region
     Metadata:
-      aws:cdk:path: NRTA/ConfigurationLayer/SSMParameterNRTARegion
-  ConfigurationLayerSSMParameterNRTAClientIdC5F9E00B:
+      aws:cdk:path: NRTAMYAPP/ConfigurationLayer/SSMParameterMYAPPRegion
+  ConfigurationLayerSSMParameterMYAPPClientId3D918970:
     Type: AWS::SSM::Parameter
     Properties:
       Type: String
       Value:
-        Ref: SecurityLayerNRTAApp43A6D761
-      Name: /nrta/clientid
+        Ref: SecurityLayerMYAPPApp606F2E23
+      Name: /myapp/clientid
     Metadata:
-      aws:cdk:path: NRTA/ConfigurationLayer/SSMParameterNRTAClientId
-  ConfigurationLayerSSMParameterNRTAUserpoolIdE4FAE675:
+      aws:cdk:path: NRTAMYAPP/ConfigurationLayer/SSMParameterMYAPPClientId
+  ConfigurationLayerSSMParameterMYAPPUserpoolId0569302A:
     Type: AWS::SSM::Parameter
     Properties:
       Type: String
       Value:
         Fn::GetAtt:
-          - SecurityLayerNRTAUserPoolSimpleUserPoolCustomResource67956947
+          - SecurityLayerMYAPPSimpleUserPoolCustomResource5A2C53A7
           - UserPoolId
-      Name: /nrta/userpoolid
+      Name: /myapp/userpoolid
     Metadata:
-      aws:cdk:path: NRTA/ConfigurationLayer/SSMParameterNRTAUserpoolId
-  ConfigurationLayerSSMParameterNRTAUserPoolURLCA862AF4:
+      aws:cdk:path: NRTAMYAPP/ConfigurationLayer/SSMParameterMYAPPUserpoolId
+  ConfigurationLayerSSMParameterMYAPPUserPoolURL76E355DC:
     Type: AWS::SSM::Parameter
     Properties:
       Type: String
@@ -382,39 +578,31 @@ Resources:
             - Ref: AWS::Region
             - .amazonaws.com/
             - Fn::GetAtt:
-                - SecurityLayerNRTAUserPoolSimpleUserPoolCustomResource67956947
+                - SecurityLayerMYAPPSimpleUserPoolCustomResource5A2C53A7
                 - UserPoolId
-      Name: /nrta/userpoolurl
+      Name: /myapp/userpoolurl
     Metadata:
-      aws:cdk:path: NRTA/ConfigurationLayer/SSMParameterNRTAUserPoolURL
-  ConfigurationLayerSSMParameterNRTAIdentityPoolId9FF29B7B:
+      aws:cdk:path: NRTAMYAPP/ConfigurationLayer/SSMParameterMYAPPUserPoolURL
+  ConfigurationLayerSSMParameterMYAPPIdentityPoolId7428792E:
     Type: AWS::SSM::Parameter
     Properties:
       Type: String
       Value:
-        Ref: SecurityLayerNRTAIdentityPool20BCEACF
-      Name: /nrta/identitypoolid
+        Ref: SecurityLayerMYAPPIdentityPool0B5BBC0F
+      Name: /myapp/identitypoolid
     Metadata:
-      aws:cdk:path: NRTA/ConfigurationLayer/SSMParameterNRTAIdentityPoolId
-  ConfigurationLayerSSMParameterNRTASession5F705231:
-    Type: AWS::SSM::Parameter
-    Properties:
-      Type: String
-      Value: "null"
-      Name: /nrta/session
-    Metadata:
-      aws:cdk:path: NRTA/ConfigurationLayer/SSMParameterNRTASession
-  StorageStorageNRTACDNAccessId06D777BC:
+      aws:cdk:path: NRTAMYAPP/ConfigurationLayer/SSMParameterMYAPPIdentityPoolId
+  StorageStorageMYAPPCDNAccessId76217007:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
       CloudFrontOriginAccessIdentityConfig:
-        Comment: NRTACDNAccessId
+        Comment: MYAPPCDNAccessId
     Metadata:
-      aws:cdk:path: NRTA/StorageStorage/NRTACDNAccessId
-  StorageStorageNRTAAppBucketPolicyB246BE62:
+      aws:cdk:path: NRTAMYAPP/StorageStorage/MYAPPCDNAccessId
+  StorageStorageMYAPPAppBucketPolicyFA34A2A8:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: nrta.app
+      Bucket: myapp.app
       PolicyDocument:
         Statement:
           - Action: s3:GetObject
@@ -425,12 +613,12 @@ Resources:
                   - ""
                   - - "arn:aws:iam::cloudfront:user/CloudFront Origin Access
                       Identity "
-                    - Ref: StorageStorageNRTACDNAccessId06D777BC
-            Resource: arn:aws:s3:::nrta.app/*
+                    - Ref: StorageStorageMYAPPCDNAccessId76217007
+            Resource: arn:aws:s3:::myapp.app/*
         Version: "2012-10-17"
     Metadata:
-      aws:cdk:path: NRTA/StorageStorage/NRTAAppBucketPolicy
-  DatabaseLayerNRTASession42A9E041:
+      aws:cdk:path: NRTAMYAPP/StorageStorage/MYAPPAppBucketPolicy
+  DatabaseLayerMYAPPSession2F6DFA72:
     Type: AWS::DynamoDB::Table
     Properties:
       KeySchema:
@@ -440,10 +628,10 @@ Resources:
         - AttributeName: SessionId
           AttributeType: S
       BillingMode: PAY_PER_REQUEST
-      TableName: NRTASession
+      TableName: MYAPPSession
     Metadata:
-      aws:cdk:path: NRTA/DatabaseLayer/NRTASession/Resource
-  DatabaseLayerNRTASessionControlC06F7C3F:
+      aws:cdk:path: NRTAMYAPP/DatabaseLayer/MYAPPSession/Resource
+  DatabaseLayerMYAPPSessionControlDDFD11FC:
     Type: AWS::DynamoDB::Table
     Properties:
       KeySchema:
@@ -453,10 +641,10 @@ Resources:
         - AttributeName: SessionId
           AttributeType: S
       BillingMode: PAY_PER_REQUEST
-      TableName: NRTASessionControl
+      TableName: MYAPPSessionControl
     Metadata:
-      aws:cdk:path: NRTA/DatabaseLayer/NRTASessionControl/Resource
-  DatabaseLayerNRTASessionTopX085BC486:
+      aws:cdk:path: NRTAMYAPP/DatabaseLayer/MYAPPSessionControl/Resource
+  DatabaseLayerMYAPPSessionTopX31665A5B:
     Type: AWS::DynamoDB::Table
     Properties:
       KeySchema:
@@ -466,10 +654,10 @@ Resources:
         - AttributeName: SessionId
           AttributeType: S
       BillingMode: PAY_PER_REQUEST
-      TableName: NRTASessionTopX
+      TableName: MYAPPSessionTopX
     Metadata:
-      aws:cdk:path: NRTA/DatabaseLayer/NRTASessionTopX/Resource
-  ProcessingLayerNRTAAllocateGamerFnRole4D96FE4D:
+      aws:cdk:path: NRTAMYAPP/DatabaseLayer/MYAPPSessionTopX/Resource
+  ProcessingLayerMYAPPAllocateGamerFnRole17769B2A:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -492,7 +680,7 @@ Resources:
                 Effect: Allow
                 Resource:
                   Fn::GetAtt:
-                    - DatabaseLayerNRTASessionControlC06F7C3F
+                    - DatabaseLayerMYAPPSessionControlDDFD11FC
                     - Arn
             Version: "2012-10-17"
           PolicyName: DynamoDBPermissions
@@ -500,7 +688,7 @@ Resources:
             Statement:
               - Action:
                   - ssm:GetParameter
-                  - ssm:GetParameter
+                  - ssm:GetParameters
                 Effect: Allow
                 Resource:
                   Fn::Join:
@@ -509,19 +697,18 @@ Resources:
                       - Ref: AWS::Region
                       - ":"
                       - Ref: AWS::AccountId
-                      - :parameter/
-                      - Ref: ConfigurationLayerSSMParameterNRTASession5F705231
+                      - :parametersession
             Version: "2012-10-17"
           PolicyName: SystemsManagerPermissions
-      RoleName: NRTAAllocateGamerFn_Role
+      RoleName: MYAPPAllocateGamerFn_Role
     Metadata:
-      aws:cdk:path: NRTA/ProcessingLayer/NRTAAllocateGamerFn_Role/Resource
-  ProcessingLayerNRTAAllocateGamerFn46E908A2:
+      aws:cdk:path: NRTAMYAPP/ProcessingLayer/MYAPPAllocateGamerFn_Role/Resource
+  ProcessingLayerMYAPPAllocateGamerFnA6EB55E5:
     Type: AWS::Lambda::Function
     Properties:
       Code:
         S3Bucket:
-          Ref: ProcessingLayerNRTAAllocateGamerFnCodeS3Bucket4CC043B7
+          Ref: ProcessingLayerMYAPPAllocateGamerFnCodeS3BucketCD78C621
         S3Key:
           Fn::Join:
             - ""
@@ -529,35 +716,34 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: ProcessingLayerNRTAAllocateGamerFnCodeS3VersionKey413760C5
+                      - Ref: ProcessingLayerMYAPPAllocateGamerFnCodeS3VersionKey9DC87F76
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: ProcessingLayerNRTAAllocateGamerFnCodeS3VersionKey413760C5
+                      - Ref: ProcessingLayerMYAPPAllocateGamerFnCodeS3VersionKey9DC87F76
       Handler: index.handler
       Role:
         Fn::GetAtt:
-          - ProcessingLayerNRTAAllocateGamerFnRole4D96FE4D
+          - ProcessingLayerMYAPPAllocateGamerFnRole17769B2A
           - Arn
       Runtime: nodejs6.10
       Description: This function supports the allocation of gamers when the game is to start
       Environment:
         Variables:
           SESSION_CONTROL_TABLENAME:
-            Ref: DatabaseLayerNRTASessionControlC06F7C3F
-          SESSION_PARAMETER:
-            Ref: ConfigurationLayerSSMParameterNRTASession5F705231
-      FunctionName: NRTAAllocateGamerFn
+            Ref: DatabaseLayerMYAPPSessionControlDDFD11FC
+          SESSION_PARAMETER: session
+      FunctionName: MYAPPAllocateGamerFn
       MemorySize: 128
       Timeout: 60
     DependsOn:
-      - ProcessingLayerNRTAAllocateGamerFnRole4D96FE4D
+      - ProcessingLayerMYAPPAllocateGamerFnRole17769B2A
     Metadata:
-      aws:cdk:path: NRTA/ProcessingLayer/NRTAAllocateGamerFn/Resource
-      aws:asset:path: /Users/fabisilv/Documents/Documents/aws-projects/spaceinvaders.cdk/lambdas/allocateGamer
+      aws:cdk:path: NRTAMYAPP/ProcessingLayer/MYAPPAllocateGamerFn/Resource
+      aws:asset:path: /Users/fabisilv/Documents/Documents/aws-bootcamp/spaceinvaders/spaceinvaders.workshop/cdk/lambdas/allocateGamer
       aws:asset:property: Code
-  ProcessingLayerNRTADeallocateGamerFnRole7FCBF86C:
+  ProcessingLayerMYAPPDeallocateGamerFnRoleF660C8C0:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -580,7 +766,7 @@ Resources:
                 Effect: Allow
                 Resource:
                   Fn::GetAtt:
-                    - DatabaseLayerNRTASessionControlC06F7C3F
+                    - DatabaseLayerMYAPPSessionControlDDFD11FC
                     - Arn
             Version: "2012-10-17"
           PolicyName: DynamoDBPermissions
@@ -588,7 +774,7 @@ Resources:
             Statement:
               - Action:
                   - ssm:GetParameter
-                  - ssm:GetParameter
+                  - ssm:GetParameters
                 Effect: Allow
                 Resource:
                   Fn::Join:
@@ -597,19 +783,18 @@ Resources:
                       - Ref: AWS::Region
                       - ":"
                       - Ref: AWS::AccountId
-                      - :parameter/
-                      - Ref: ConfigurationLayerSSMParameterNRTASession5F705231
+                      - :parametersession
             Version: "2012-10-17"
           PolicyName: SystemsManagerPermissions
-      RoleName: NRTADeallocateGamerFn_Role
+      RoleName: MYAPPDeallocateGamerFn_Role
     Metadata:
-      aws:cdk:path: NRTA/ProcessingLayer/NRTADeallocateGamerFn_Role/Resource
-  ProcessingLayerNRTADeallocateGamerFn8B660381:
+      aws:cdk:path: NRTAMYAPP/ProcessingLayer/MYAPPDeallocateGamerFn_Role/Resource
+  ProcessingLayerMYAPPDeallocateGamerFn748824E9:
     Type: AWS::Lambda::Function
     Properties:
       Code:
         S3Bucket:
-          Ref: ProcessingLayerNRTADeallocateGamerFnCodeS3Bucket5120763F
+          Ref: ProcessingLayerMYAPPDeallocateGamerFnCodeS3Bucket42319B11
         S3Key:
           Fn::Join:
             - ""
@@ -617,16 +802,16 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: ProcessingLayerNRTADeallocateGamerFnCodeS3VersionKey91A650D4
+                      - Ref: ProcessingLayerMYAPPDeallocateGamerFnCodeS3VersionKey071C8B8D
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: ProcessingLayerNRTADeallocateGamerFnCodeS3VersionKey91A650D4
+                      - Ref: ProcessingLayerMYAPPDeallocateGamerFnCodeS3VersionKey071C8B8D
       Handler: index.handler
       Role:
         Fn::GetAtt:
-          - ProcessingLayerNRTADeallocateGamerFnRole7FCBF86C
+          - ProcessingLayerMYAPPDeallocateGamerFnRoleF660C8C0
           - Arn
       Runtime: nodejs6.10
       Description: This function deallocates the gamer when a relevant event is identified
@@ -634,27 +819,24 @@ Resources:
       Environment:
         Variables:
           SESSION_CONTROL_TABLENAME:
-            Fn::GetAtt:
-              - DatabaseLayerNRTASessionControlC06F7C3F
-              - Arn
-          SESSION_PARAMETER:
-            Ref: ConfigurationLayerSSMParameterNRTASession5F705231
-      FunctionName: NRTADeallocateGamerFn
+            Ref: DatabaseLayerMYAPPSessionControlDDFD11FC
+          SESSION_PARAMETER: session
+      FunctionName: MYAPPDeallocateGamerFn
       MemorySize: 128
       Timeout: 60
     DependsOn:
-      - ProcessingLayerNRTADeallocateGamerFnRole7FCBF86C
+      - ProcessingLayerMYAPPDeallocateGamerFnRoleF660C8C0
     Metadata:
-      aws:cdk:path: NRTA/ProcessingLayer/NRTADeallocateGamerFn/Resource
-      aws:asset:path: /Users/fabisilv/Documents/Documents/aws-projects/spaceinvaders.cdk/lambdas/deallocateGamer
+      aws:cdk:path: NRTAMYAPP/ProcessingLayer/MYAPPDeallocateGamerFn/Resource
+      aws:asset:path: /Users/fabisilv/Documents/Documents/aws-bootcamp/spaceinvaders/spaceinvaders.workshop/cdk/lambdas/deallocateGamer
       aws:asset:property: Code
-  ProcessingLayerNRTADLQ804E52E4:
+  ProcessingLayerMYAPPDLQ69D7F656:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: NRTADLQ
+      QueueName: MYAPPDLQ
     Metadata:
-      aws:cdk:path: NRTA/ProcessingLayer/NRTADLQ/Resource
-  ProcessingLayerNRTAScoreboardFnRole702FB09B:
+      aws:cdk:path: NRTAMYAPP/ProcessingLayer/MYAPPDLQ/Resource
+  ProcessingLayerMYAPPScoreboardFnRole3915AE6E:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -685,7 +867,7 @@ Resources:
                       - Ref: AWS::Region
                       - ":"
                       - Ref: AWS::AccountId
-                      - :table/NRTA*
+                      - :table/MYAPP*
             Version: "2012-10-17"
           PolicyName: DynamoDBPermissions
         - PolicyDocument:
@@ -698,32 +880,43 @@ Resources:
                 Resource:
                   Fn::Join:
                     - ""
-                    - - "arn:aws:dynamodb:"
+                    - - "arn:aws:ssm:"
                       - Ref: AWS::Region
                       - ":"
                       - Ref: AWS::AccountId
-                      - :parameter/nrta*
+                      - :parameter/myapp*
             Version: "2012-10-17"
           PolicyName: SystemsManagerPermissions
         - PolicyDocument:
             Statement:
-              - Action: ssm:SendMessage
+              - Action: sqs:SendMessage
                 Effect: Allow
                 Resource:
                   Fn::GetAtt:
-                    - ProcessingLayerNRTADLQ804E52E4
+                    - ProcessingLayerMYAPPDLQ69D7F656
                     - Arn
             Version: "2012-10-17"
           PolicyName: SQSPermissions
-      RoleName: NRTAScoreboardFn_Role
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - kinesis:SubscribeToShard
+                  - kinesis:GetShardIterator
+                  - kinesis:GetRecords
+                  - kinesis:DescribeStream
+                Effect: Allow
+                Resource: "*"
+            Version: "2012-10-17"
+          PolicyName: KinesisPermissions
+      RoleName: MYAPPScoreboardFn_Role
     Metadata:
-      aws:cdk:path: NRTA/ProcessingLayer/NRTAScoreboardFn_Role/Resource
-  ProcessingLayerNRTAScoreboardFnFD61FF7C:
+      aws:cdk:path: NRTAMYAPP/ProcessingLayer/MYAPPScoreboardFn_Role/Resource
+  ProcessingLayerMYAPPScoreboardFn67E7F597:
     Type: AWS::Lambda::Function
     Properties:
       Code:
         S3Bucket:
-          Ref: ProcessingLayerNRTAScoreboardFnCodeS3Bucket9367B0BA
+          Ref: ProcessingLayerMYAPPScoreboardFnCodeS3Bucket9C18B480
         S3Key:
           Fn::Join:
             - ""
@@ -731,156 +924,49 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: ProcessingLayerNRTAScoreboardFnCodeS3VersionKeyFDC6DC64
+                      - Ref: ProcessingLayerMYAPPScoreboardFnCodeS3VersionKey5992470D
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: ProcessingLayerNRTAScoreboardFnCodeS3VersionKeyFDC6DC64
+                      - Ref: ProcessingLayerMYAPPScoreboardFnCodeS3VersionKey5992470D
       Handler: index.handler
       Role:
         Fn::GetAtt:
-          - ProcessingLayerNRTAScoreboardFnRole702FB09B
+          - ProcessingLayerMYAPPScoreboardFnRole3915AE6E
           - Arn
       Runtime: nodejs6.10
       Description: This function computes the scoreboard
       Environment:
         Variables:
           DLQ_URL:
-            Ref: ProcessingLayerNRTADLQ804E52E4
-          SESSION_PARAMETER:
-            Ref: ConfigurationLayerSSMParameterNRTASession5F705231
+            Ref: ProcessingLayerMYAPPDLQ69D7F656
+          SESSION_PARAMETER: session
           SESSION_TABLENAME:
-            Fn::GetAtt:
-              - DatabaseLayerNRTASession42A9E041
-              - Arn
+            Ref: DatabaseLayerMYAPPSession2F6DFA72
           SESSION_CONTROL_TABLENAME:
-            Fn::GetAtt:
-              - DatabaseLayerNRTASessionControlC06F7C3F
-              - Arn
+            Ref: DatabaseLayerMYAPPSessionControlDDFD11FC
           SESSION_TOPX_TABLENAME:
-            Fn::GetAtt:
-              - DatabaseLayerNRTASessionTopX085BC486
-              - Arn
+            Ref: DatabaseLayerMYAPPSessionTopX31665A5B
           TopXValue: "10"
-      FunctionName: NRTAScoreboardFn
+      FunctionName: MYAPPScoreboardFn
       MemorySize: 128
       Timeout: 60
     DependsOn:
-      - ProcessingLayerNRTAScoreboardFnRole702FB09B
+      - ProcessingLayerMYAPPScoreboardFnRole3915AE6E
     Metadata:
-      aws:cdk:path: NRTA/ProcessingLayer/NRTAScoreboardFn/Resource
-      aws:asset:path: /Users/fabisilv/Documents/Documents/aws-projects/spaceinvaders.cdk/lambdas/scoreboard
+      aws:cdk:path: NRTAMYAPP/ProcessingLayer/MYAPPScoreboardFn/Resource
+      aws:asset:path: /Users/fabisilv/Documents/Documents/aws-bootcamp/spaceinvaders/spaceinvaders.workshop/cdk/lambdas/scoreboard
       aws:asset:property: Code
-  IngestionConsumptionLayerNRTAInputStream03E4C245:
+  IngestionConsumptionLayerMYAPPInputStreamC8F1BC5F:
     Type: AWS::Kinesis::Stream
     Properties:
       ShardCount: 1
-      Name: NRTADataStream
+      Name: MYAPP_InputStream
       RetentionPeriodHours: 24
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAInputStream/Resource
-  IngestionConsumptionLayerNRTAFirehoseToStreamsRole067E7B36:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Statement:
-          - Action: sts:AssumeRole
-            Effect: Allow
-            Principal:
-              Service: firehose.amazonaws.com
-        Version: "2012-10-17"
-      Policies:
-        - PolicyDocument:
-            Statement:
-              - Action:
-                  - s3:AbortMultipartUpload
-                  - s3:GetBucketLocation
-                  - s3:GetObject
-                  - s3:ListBucket
-                  - s3:ListBucketMultipartUploads
-                  - s3:PutObject
-                Effect: Allow
-                Resource:
-                  - arn:aws:s3:::nrta.raw
-                  - arn:aws:s3:::nrta.raw/*
-            Version: "2012-10-17"
-          PolicyName: S3RawDataPermission
-        - PolicyDocument:
-            Statement:
-              - Action:
-                  - kinesis:DescribeStream
-                  - kinesis:GetShardIterator
-                  - kinesis:GetRecords
-                Effect: Allow
-                Resource:
-                  Fn::GetAtt:
-                    - IngestionConsumptionLayerNRTAInputStream03E4C245
-                    - Arn
-            Version: "2012-10-17"
-          PolicyName: InputStreamReadPermissions
-        - PolicyDocument:
-            Statement:
-              - Action: glue:GetTableVersions
-                Effect: Allow
-                Resource: "*"
-            Version: "2012-10-17"
-          PolicyName: GluePermissions
-        - PolicyDocument:
-            Statement:
-              - Action: logs:PutLogEvents
-                Effect: Allow
-                Resource:
-                  - Fn::Join:
-                      - ""
-                      - - "arn:aws:logs:"
-                        - Ref: AWS::Region
-                        - ":"
-                        - Ref: AWS::AccountId
-                        - :log-group:/aws/kinesisfirehose/nrtafirehose:*:*
-                  - Fn::Join:
-                      - ""
-                      - - "arn:aws:logs:"
-                        - Ref: AWS::Region
-                        - ":"
-                        - Ref: AWS::AccountId
-                        - :log-group:/aws/kinesisfirehose/nrtafirehose
-            Version: "2012-10-17"
-          PolicyName: CloudWatchLogsPermissions
-      RoleName: NRTAFirehoseToStreamsRole
-    Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAFirehoseToStreamsRole/Resource
-  IngestionConsumptionLayerNRTARawData1DACF9FD:
-    Type: AWS::KinesisFirehose::DeliveryStream
-    Properties:
-      DeliveryStreamName: NRTAFirehose
-      DeliveryStreamType: KinesisStreamAsSource
-      KinesisStreamSourceConfiguration:
-        KinesisStreamARN:
-          Fn::GetAtt:
-            - IngestionConsumptionLayerNRTAInputStream03E4C245
-            - Arn
-        RoleARN:
-          Fn::GetAtt:
-            - IngestionConsumptionLayerNRTAFirehoseToStreamsRole067E7B36
-            - Arn
-      S3DestinationConfiguration:
-        BucketARN: arn:aws:s3:::nrta.raw
-        BufferingHints:
-          IntervalInSeconds: 900
-          SizeInMBs: 10
-        CloudWatchLoggingOptions:
-          Enabled: true
-          LogGroupName: /aws/kinesisfirehose/nrtafirehose
-          LogStreamName: /aws/kinesisfirehose/nrtafirehose
-        CompressionFormat: GZIP
-        RoleARN:
-          Fn::GetAtt:
-            - IngestionConsumptionLayerNRTAFirehoseToStreamsRole067E7B36
-            - Arn
-    Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTARawData
-  IngestionConsumptionLayerNRTAAPIRole8E9A4F62:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPInputStream/Resource
+  IngestionConsumptionLayerMYAPPAPIRole0837BC25:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -890,6 +976,8 @@ Resources:
             Principal:
               Service: apigateway.amazonaws.com
         Version: "2012-10-17"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
       Policies:
         - PolicyDocument:
             Statement:
@@ -904,7 +992,7 @@ Resources:
                       - Ref: AWS::Region
                       - ":"
                       - Ref: AWS::AccountId
-                      - :function:NRTA*
+                      - :function:MYAPP*
             Version: "2012-10-17"
           PolicyName: LambdaPermissions
         - PolicyDocument:
@@ -922,7 +1010,7 @@ Resources:
                       - Ref: AWS::Region
                       - ":"
                       - Ref: AWS::AccountId
-                      - :parameter/nrta/*
+                      - :parameter/myapp/*
             Version: "2012-10-17"
           PolicyName: SSMPermissions
         - PolicyDocument:
@@ -930,9 +1018,12 @@ Resources:
               - Action: dynamodb:GetItem
                 Effect: Allow
                 Resource:
-                  Fn::GetAtt:
-                    - DatabaseLayerNRTASession42A9E041
-                    - Arn
+                  - Fn::GetAtt:
+                      - DatabaseLayerMYAPPSession2F6DFA72
+                      - Arn
+                  - Fn::GetAtt:
+                      - DatabaseLayerMYAPPSessionTopX31665A5B
+                      - Arn
             Version: "2012-10-17"
           PolicyName: DynamoDBPermissions
         - PolicyDocument:
@@ -943,39 +1034,56 @@ Resources:
                 Effect: Allow
                 Resource:
                   Fn::GetAtt:
-                    - IngestionConsumptionLayerNRTAInputStream03E4C245
+                    - IngestionConsumptionLayerMYAPPInputStreamC8F1BC5F
                     - Arn
             Version: "2012-10-17"
           PolicyName: KinesisPermissions
-      RoleName: NRTAAPI
+      RoleName: MYAPPAPI
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIRole/Resource
-  IngestionConsumptionLayerNRTAAPIE72464F2:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIRole/Resource
+  IngestionConsumptionLayerMYAPPAPIECC63685:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Description: API supporting the application NRTA
-      Name: nrta
+      Description: API supporting the application MYAPP
+      Name: myapp
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPI
-  IngestionConsumptionLayerNRTAAuthorizerF32C2C7D:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPI
+  IngestionConsumptionLayerMYAPPGTWResponse5DF18D1E:
+    Type: AWS::ApiGateway::GatewayResponse
+    Properties:
+      ResponseType: DEFAULT_4XX
+      RestApiId:
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
+      ResponseParameters:
+        gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Toke\
+          n'"
+        gatewayresponse.header.Access-Control-Allow-Methods: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+      ResponseTemplates:
+        application/json: '{"message":$context.error.messageString}'
+    DependsOn:
+      - IngestionConsumptionLayerMYAPPAPIECC63685
+    Metadata:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPGTWResponse
+  IngestionConsumptionLayerMYAPPAuthorizerBDECB093:
     Type: AWS::ApiGateway::Authorizer
     Properties:
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
-      IdentitySource: method.request.header.Authentication
-      Name: nrtaAuthorizer
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
+      Type: COGNITO_USER_POOLS
+      IdentitySource: method.request.header.Authorization
+      Name: myappAuthorizer
       ProviderARNs:
         - Fn::GetAtt:
-            - SecurityLayerNRTAUserPoolSimpleUserPoolCustomResource67956947
+            - SecurityLayerMYAPPSimpleUserPoolCustomResource5A2C53A7
             - UserPoolArn
-      Type: COGNITO_USER_POOLS
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAuthorizer
-  IngestionConsumptionLayerNRTAAPIModelScoreboardResponseModel6BA46ED5:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAuthorizer
+  IngestionConsumptionLayerMYAPPAPIModelScoreboardResponseModelDE6F6B61:
     Type: AWS::ApiGateway::Model
     Properties:
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
       ContentType: application/json
       Description: Scoreboard response model (for /scoreboard/GET)
       Name: ScoreboardResponseModel
@@ -1005,12 +1113,12 @@ Resources:
               Lives:
                 type: integer
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIModelScoreboardResponseModel
-  IngestionConsumptionLayerNRTAAPIModelGetParametersRequestCD55B29A:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIModelScoreboardResponseModel
+  IngestionConsumptionLayerMYAPPAPIModelGetParametersRequest6F196264:
     Type: AWS::ApiGateway::Model
     Properties:
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
       ContentType: application/json
       Description: Model to request SSM:GetParameters
       Name: GetParametersRequest
@@ -1022,129 +1130,42 @@ Resources:
           names:
             type: array
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIModelGetParametersRequest
-  IngestionConsumptionLayerNRTAAPIv1FCC5BB3E:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIModelGetParametersRequest
+  IngestionConsumptionLayerMYAPPAPIv1D6D68E4C:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId:
         Fn::GetAtt:
-          - IngestionConsumptionLayerNRTAAPIE72464F2
+          - IngestionConsumptionLayerMYAPPAPIECC63685
           - RootResourceId
       PathPart: v1
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1
-  IngestionConsumptionLayerNRTAAPIv1session60B773D4:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIv1
+  IngestionConsumptionLayerMYAPPAPIv1configF0E018F0:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1FCC5BB3E
-      PathPart: session
-      RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
-    Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1session
-  IngestionConsumptionLayerNRTAAPIv1sessionGET7A90A298:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      HttpMethod: GET
-      ResourceId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1session60B773D4
-      RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
-      AuthorizationType: COGNITO_USER_POOLS
-      AuthorizerId:
-        Ref: IngestionConsumptionLayerNRTAAuthorizerF32C2C7D
-      Integration:
-        Credentials:
-          Fn::GetAtt:
-            - IngestionConsumptionLayerNRTAAPIRole8E9A4F62
-            - Arn
-        IntegrationHttpMethod: POST
-        IntegrationResponses:
-          - ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-            ResponseTemplates:
-              application/json: "\"$util.escapeJavaScript(\"$input.path('$').GetParameterRespon\
-                se.GetParameterResult.Parameter.Value\").replaceAll(\"'\",'\"')\
-                \""
-            StatusCode: "200"
-        PassthroughBehavior: when_no_match
-        RequestParameters:
-          integration.request.querystring.Name: "'/nrta/session'"
-          integration.request.header.Authentication: method.request.header.Authentication
-        Type: AWS
-        Uri:
-          Fn::Join:
-            - ""
-            - - "arn:aws:apigateway:"
-              - Ref: AWS::Region
-              - :ssm:action/GetParameter
-      MethodResponses:
-        - ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: true
-          StatusCode: "200"
-      RequestParameters:
-        method.request.querystring.Name: true
-        method.request.header.Authentication: true
-    Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1sessionGET
-  IngestionConsumptionLayerNRTAAPIv1sessionOPTIONS079F3748:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      HttpMethod: OPTIONS
-      ResourceId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1session60B773D4
-      RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
-      AuthorizationType: NONE
-      Integration:
-        IntegrationResponses:
-          - ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Allow-Methods: "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Securit\
-                y-Token'"
-            StatusCode: "200"
-        PassthroughBehavior: when_no_match
-        RequestTemplates:
-          application/json: |-
-            {
-             "statusCode": "200"
-            }
-        Type: MOCK
-      MethodResponses:
-        - ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: true
-            method.response.header.Access-Control-Allow-Methods: true
-            method.response.header.Access-Control-Allow-Headers: true
-          StatusCode: "200"
-    Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1sessionOPTIONS
-  IngestionConsumptionLayerNRTAAPIv1configBB2E0A6D:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      ParentId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1FCC5BB3E
+        Ref: IngestionConsumptionLayerMYAPPAPIv1D6D68E4C
       PathPart: config
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1config
-  IngestionConsumptionLayerNRTAAPIv1configGET3F733D28:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIv1config
+  IngestionConsumptionLayerMYAPPAPIv1configGETF5837604:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: GET
       ResourceId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1configBB2E0A6D
+        Ref: IngestionConsumptionLayerMYAPPAPIv1configF0E018F0
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
       AuthorizationType: NONE
       Integration:
         Credentials:
           Fn::GetAtt:
-            - IngestionConsumptionLayerNRTAAPIRole8E9A4F62
+            - IngestionConsumptionLayerMYAPPAPIRole0837BC25
             - Arn
         IntegrationHttpMethod: POST
         IntegrationResponses:
@@ -1172,7 +1193,7 @@ Resources:
           integration.request.header.X-Amz-Target: "'AmazonSSM.GetParameters'"
         RequestTemplates:
           application/json: '{"Names" :
-            ["/nrta/userpoolid","/nrta/userpoolurl","/nrta/clientid","/nrta/identitypoolid"]}'
+            ["/myapp/userpoolid","/myapp/userpoolurl","/myapp/clientid","/myapp/identitypoolid"]}'
         Type: AWS
         Uri:
           Fn::Join:
@@ -1181,78 +1202,78 @@ Resources:
               - Ref: AWS::Region
               - :ssm:path//
       MethodResponses:
-        - ResponseParameters:
+        - ResponseModels:
+            application/json: Empty
+          ResponseParameters:
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: "200"
       RequestModels:
         application/json:
-          Ref: IngestionConsumptionLayerNRTAAPIModelGetParametersRequestCD55B29A
+          Ref: IngestionConsumptionLayerMYAPPAPIModelGetParametersRequest6F196264
       RequestParameters:
         method.request.header.Content-Type: true
         method.request.header.X-Amz-Target: true
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1configGET
-  IngestionConsumptionLayerNRTAAPIv1configOPTIONSE820ADCB:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIv1configGET
+  IngestionConsumptionLayerMYAPPAPIv1configOPTIONS8B734AD5:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: OPTIONS
       ResourceId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1configBB2E0A6D
+        Ref: IngestionConsumptionLayerMYAPPAPIv1configF0E018F0
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
       AuthorizationType: NONE
       Integration:
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Allow-Methods: "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Securit\
                 y-Token'"
             StatusCode: "200"
         PassthroughBehavior: when_no_match
         RequestTemplates:
-          application/json: |-
-            {
-             "statusCode": "200"
-            }
+          application/json: '{"statusCode": 200}'
         Type: MOCK
       MethodResponses:
-        - ResponseParameters:
+        - ResponseModels:
+            application/json: Empty
+          ResponseParameters:
             method.response.header.Access-Control-Allow-Origin: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Headers: true
           StatusCode: "200"
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1configOPTIONS
-  IngestionConsumptionLayerNRTAAPIv1allocate278D468C:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIv1configOPTIONS
+  IngestionConsumptionLayerMYAPPAPIv1allocate9B95CAE7:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1FCC5BB3E
+        Ref: IngestionConsumptionLayerMYAPPAPIv1D6D68E4C
       PathPart: allocate
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1allocate
-  IngestionConsumptionLayerNRTAAPIv1allocatePOSTE0BCCAA5:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIv1allocate
+  IngestionConsumptionLayerMYAPPAPIv1allocatePOSTDD7CC880:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: POST
       ResourceId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1allocate278D468C
+        Ref: IngestionConsumptionLayerMYAPPAPIv1allocate9B95CAE7
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
       AuthorizationType: COGNITO_USER_POOLS
       AuthorizerId:
-        Ref: IngestionConsumptionLayerNRTAAuthorizerF32C2C7D
+        Ref: IngestionConsumptionLayerMYAPPAuthorizerBDECB093
       Integration:
-        ContentHandling: CONVERT_TO_TEXT
         Credentials:
           Fn::GetAtt:
-            - IngestionConsumptionLayerNRTAAPIRole8E9A4F62
+            - IngestionConsumptionLayerMYAPPAPIRole0837BC25
             - Arn
         IntegrationHttpMethod: POST
-        PassthroughBehavior: when_no_match
+        PassthroughBehavior: WHEN_NO_MATCH
         Type: AWS_PROXY
         Uri:
           Fn::Join:
@@ -1261,71 +1282,70 @@ Resources:
               - Ref: AWS::Region
               - :lambda:path/2015-03-31/functions/
               - Fn::GetAtt:
-                  - ProcessingLayerNRTAAllocateGamerFn46E908A2
+                  - ProcessingLayerMYAPPAllocateGamerFnA6EB55E5
                   - Arn
               - /invocations
       MethodResponses:
         - StatusCode: "200"
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1allocatePOST
-  IngestionConsumptionLayerNRTAAPIv1allocateOPTIONS568EB6A8:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIv1allocatePOST
+  IngestionConsumptionLayerMYAPPAPIv1allocateOPTIONS3EC585D0:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: OPTIONS
       ResourceId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1allocate278D468C
+        Ref: IngestionConsumptionLayerMYAPPAPIv1allocate9B95CAE7
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
       AuthorizationType: NONE
       Integration:
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Allow-Methods: "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Securit\
                 y-Token'"
             StatusCode: "200"
-        PassthroughBehavior: when_no_match
+        PassthroughBehavior: WHEN_NO_MATCH
         RequestTemplates:
-          application/json: |-
-            {
-             "statusCode": "200"
-            }
+          application/json: '{"statusCode": 200}'
         Type: MOCK
       MethodResponses:
-        - ResponseParameters:
+        - ResponseModels:
+            application/json: Empty
+          ResponseParameters:
             method.response.header.Access-Control-Allow-Origin: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Headers: true
           StatusCode: "200"
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1allocateOPTIONS
-  IngestionConsumptionLayerNRTAAPIv1deallocate904DFB84:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIv1allocateOPTIONS
+  IngestionConsumptionLayerMYAPPAPIv1deallocate466FEA0E:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1FCC5BB3E
+        Ref: IngestionConsumptionLayerMYAPPAPIv1D6D68E4C
       PathPart: deallocate
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1deallocate
-  IngestionConsumptionLayerNRTAAPIv1deallocatePOST7C16C425:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIv1deallocate
+  IngestionConsumptionLayerMYAPPAPIv1deallocatePOST49CCDDAA:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: POST
       ResourceId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1deallocate904DFB84
+        Ref: IngestionConsumptionLayerMYAPPAPIv1deallocate466FEA0E
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
       AuthorizationType: COGNITO_USER_POOLS
       AuthorizerId:
-        Ref: IngestionConsumptionLayerNRTAAuthorizerF32C2C7D
+        Ref: IngestionConsumptionLayerMYAPPAuthorizerBDECB093
       Integration:
         ContentHandling: CONVERT_TO_TEXT
         Credentials:
           Fn::GetAtt:
-            - IngestionConsumptionLayerNRTAAPIRole8E9A4F62
+            - IngestionConsumptionLayerMYAPPAPIRole0837BC25
             - Arn
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
@@ -1336,70 +1356,69 @@ Resources:
               - Ref: AWS::Region
               - :lambda:path/2015-03-31/functions/
               - Fn::GetAtt:
-                  - ProcessingLayerNRTADeallocateGamerFn8B660381
+                  - ProcessingLayerMYAPPDeallocateGamerFn748824E9
                   - Arn
               - /invocations
       MethodResponses:
         - StatusCode: "200"
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1deallocatePOST
-  IngestionConsumptionLayerNRTAAPIv1deallocateOPTIONSB3D19170:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIv1deallocatePOST
+  IngestionConsumptionLayerMYAPPAPIv1deallocateOPTIONSB1E111DE:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: OPTIONS
       ResourceId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1deallocate904DFB84
+        Ref: IngestionConsumptionLayerMYAPPAPIv1deallocate466FEA0E
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
       AuthorizationType: NONE
       Integration:
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Allow-Methods: "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Securit\
                 y-Token'"
             StatusCode: "200"
         PassthroughBehavior: when_no_match
         RequestTemplates:
-          application/json: |-
-            {
-             "statusCode": "200"
-            }
+          application/json: '{"statusCode": 200}'
         Type: MOCK
       MethodResponses:
-        - ResponseParameters:
+        - ResponseModels:
+            application/json: Empty
+          ResponseParameters:
             method.response.header.Access-Control-Allow-Origin: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Headers: true
           StatusCode: "200"
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1deallocateOPTIONS
-  IngestionConsumptionLayerNRTAAPIv1scoreboard8CADB383:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIv1deallocateOPTIONS
+  IngestionConsumptionLayerMYAPPAPIv1scoreboard629C3946:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1FCC5BB3E
+        Ref: IngestionConsumptionLayerMYAPPAPIv1D6D68E4C
       PathPart: scoreboard
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1scoreboard
-  IngestionConsumptionLayerNRTAAPIv1scoreboardPOST521B9079:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIv1scoreboard
+  IngestionConsumptionLayerMYAPPAPIv1scoreboardPOST62D46889:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: GET
       ResourceId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1scoreboard8CADB383
+        Ref: IngestionConsumptionLayerMYAPPAPIv1scoreboard629C3946
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
       AuthorizationType: COGNITO_USER_POOLS
       AuthorizerId:
-        Ref: IngestionConsumptionLayerNRTAAuthorizerF32C2C7D
+        Ref: IngestionConsumptionLayerMYAPPAuthorizerBDECB093
       Integration:
         Credentials:
           Fn::GetAtt:
-            - IngestionConsumptionLayerNRTAAPIRole8E9A4F62
+            - IngestionConsumptionLayerMYAPPAPIRole0837BC25
             - Arn
         IntegrationHttpMethod: POST
         IntegrationResponses:
@@ -1433,7 +1452,7 @@ Resources:
               - - |-
                   {
                                           "TableName" : "
-                - Ref: DatabaseLayerNRTASessionTopX085BC486
+                - Ref: DatabaseLayerMYAPPSessionTopX31665A5B
                 - >-
                   ",
                                           "Key" : {
@@ -1452,71 +1471,70 @@ Resources:
       MethodResponses:
         - ResponseModels:
             application/json:
-              Ref: IngestionConsumptionLayerNRTAAPIModelScoreboardResponseModel6BA46ED5
+              Ref: IngestionConsumptionLayerMYAPPAPIModelScoreboardResponseModelDE6F6B61
           ResponseParameters:
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: "200"
       RequestParameters:
         method.request.querystring.sessionId: true
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1scoreboardPOST
-  IngestionConsumptionLayerNRTAAPIv1scoreboardOPTIONS6B5530A2:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIv1scoreboardPOST
+  IngestionConsumptionLayerMYAPPAPIv1scoreboardOPTIONS94801D0E:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: OPTIONS
       ResourceId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1scoreboard8CADB383
+        Ref: IngestionConsumptionLayerMYAPPAPIv1scoreboard629C3946
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
       AuthorizationType: NONE
       Integration:
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Allow-Methods: "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Securit\
                 y-Token'"
             StatusCode: "200"
         PassthroughBehavior: when_no_match
         RequestTemplates:
-          application/json: |-
-            {
-             "statusCode": "200"
-            }
+          application/json: '{"statusCode": 200}'
         Type: MOCK
       MethodResponses:
-        - ResponseParameters:
+        - ResponseModels:
+            application/json: Empty
+          ResponseParameters:
             method.response.header.Access-Control-Allow-Origin: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Headers: true
           StatusCode: "200"
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1scoreboardOPTIONS
-  IngestionConsumptionLayerNRTAAPIv1updatestatus3139CA51:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIv1scoreboardOPTIONS
+  IngestionConsumptionLayerMYAPPAPIv1updatestatus1F47A77D:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1FCC5BB3E
+        Ref: IngestionConsumptionLayerMYAPPAPIv1D6D68E4C
       PathPart: updatestatus
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1updatestatus
-  IngestionConsumptionLayerNRTAAPIv1updatestatusPOST720F9D73:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIv1updatestatus
+  IngestionConsumptionLayerMYAPPAPIv1updatestatusPOSTCABBDCA0:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: POST
       ResourceId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1updatestatus3139CA51
+        Ref: IngestionConsumptionLayerMYAPPAPIv1updatestatus1F47A77D
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
       AuthorizationType: COGNITO_USER_POOLS
       AuthorizerId:
-        Ref: IngestionConsumptionLayerNRTAAuthorizerF32C2C7D
+        Ref: IngestionConsumptionLayerMYAPPAuthorizerBDECB093
       Integration:
         Credentials:
           Fn::GetAtt:
-            - IngestionConsumptionLayerNRTAAPIRole8E9A4F62
+            - IngestionConsumptionLayerMYAPPAPIRole0837BC25
             - Arn
         IntegrationHttpMethod: POST
         IntegrationResponses:
@@ -1534,7 +1552,7 @@ Resources:
                                               "Data" : "$util.base64Encode("$input.json('$')")",
                                               "PartitionKey" : $input.json('$.SessionId'),
                                               "StreamName" : "
-                - Ref: IngestionConsumptionLayerNRTAInputStream03E4C245
+                - Ref: IngestionConsumptionLayerMYAPPInputStreamC8F1BC5F
                 - |-
                   "
                                           }
@@ -1547,104 +1565,103 @@ Resources:
               - :kinesis:action/PutRecord
       MethodResponses:
         - ResponseModels:
-            application/json:
-              Ref: IngestionConsumptionLayerNRTAAPIModelScoreboardResponseModel6BA46ED5
+            application/json: Empty
           ResponseParameters:
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: "200"
       RequestParameters:
         method.request.header.Authentication: true
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1updatestatusPOST
-  IngestionConsumptionLayerNRTAAPIv1updateStatusOPTIONS38EB935A:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIv1updatestatusPOST
+  IngestionConsumptionLayerMYAPPAPIv1updateStatusOPTIONSD8531113:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: OPTIONS
       ResourceId:
-        Ref: IngestionConsumptionLayerNRTAAPIv1updatestatus3139CA51
+        Ref: IngestionConsumptionLayerMYAPPAPIv1updatestatus1F47A77D
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
       AuthorizationType: NONE
       Integration:
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Allow-Methods: "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Securit\
                 y-Token'"
             StatusCode: "200"
         PassthroughBehavior: when_no_match
         RequestTemplates:
-          application/json: |-
-            {
-             "statusCode": "200"
-            }
+          application/json: '{"statusCode": 200}'
         Type: MOCK
       MethodResponses:
-        - ResponseParameters:
+        - ResponseModels:
+            application/json: Empty
+          ResponseParameters:
             method.response.header.Access-Control-Allow-Origin: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Headers: true
           StatusCode: "200"
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIv1updateStatusOPTIONS
-  IngestionConsumptionLayerNRTAAPIDeployment1107B200:
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIv1updateStatusOPTIONS
+  IngestionConsumptionLayerMYAPPAPIDeployment6D5E1BD0:
     Type: AWS::ApiGateway::Deployment
     Properties:
       RestApiId:
-        Ref: IngestionConsumptionLayerNRTAAPIE72464F2
+        Ref: IngestionConsumptionLayerMYAPPAPIECC63685
       Description: Production deployment
       StageName: prod
     DependsOn:
-      - IngestionConsumptionLayerNRTAAPIv1sessionGET7A90A298
-      - IngestionConsumptionLayerNRTAAPIv1sessionOPTIONS079F3748
-      - IngestionConsumptionLayerNRTAAPIv1configGET3F733D28
-      - IngestionConsumptionLayerNRTAAPIv1configOPTIONSE820ADCB
-      - IngestionConsumptionLayerNRTAAPIv1allocatePOSTE0BCCAA5
-      - IngestionConsumptionLayerNRTAAPIv1allocateOPTIONS568EB6A8
-      - IngestionConsumptionLayerNRTAAPIv1deallocatePOST7C16C425
-      - IngestionConsumptionLayerNRTAAPIv1deallocateOPTIONSB3D19170
-      - IngestionConsumptionLayerNRTAAPIv1scoreboardPOST521B9079
-      - IngestionConsumptionLayerNRTAAPIv1scoreboardOPTIONS6B5530A2
-      - IngestionConsumptionLayerNRTAAPIv1updatestatusPOST720F9D73
-      - IngestionConsumptionLayerNRTAAPIv1updateStatusOPTIONS38EB935A
+      - IngestionConsumptionLayerMYAPPAPIv1allocateOPTIONS3EC585D0
+      - IngestionConsumptionLayerMYAPPAPIv1allocatePOSTDD7CC880
+      - IngestionConsumptionLayerMYAPPAPIv1configGETF5837604
+      - IngestionConsumptionLayerMYAPPAPIv1configOPTIONS8B734AD5
+      - IngestionConsumptionLayerMYAPPAPIv1deallocateOPTIONSB1E111DE
+      - IngestionConsumptionLayerMYAPPAPIv1deallocatePOST49CCDDAA
+      - IngestionConsumptionLayerMYAPPAPIv1scoreboardOPTIONS94801D0E
+      - IngestionConsumptionLayerMYAPPAPIv1scoreboardPOST62D46889
+      - IngestionConsumptionLayerMYAPPAPIv1updateStatusOPTIONSD8531113
+      - IngestionConsumptionLayerMYAPPAPIv1updatestatusPOSTCABBDCA0
     Metadata:
-      aws:cdk:path: NRTA/IngestionConsumptionLayer/NRTAAPIDeployment
+      aws:cdk:path: NRTAMYAPP/IngestionConsumptionLayer/MYAPPAPIDeployment
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Modules: aws-cdk=0.22.0,@aws-cdk/assets=0.22.0,@aws-cdk/aws-apigateway=0.22.0,@aws-cdk/aws-applicationautoscaling=0.22.0,@aws-cdk/aws-autoscaling-common=0.22.0,@aws-cdk/aws-cloudformation=0.22.0,@aws-cdk/aws-cloudfront=0.22.0,@aws-cdk/aws-cloudwatch=0.22.0,@aws-cdk/aws-codepipeline-api=0.22.0,@aws-cdk/aws-cognito=0.22.0,@aws-cdk/aws-dynamodb=0.22.0,@aws-cdk/aws-ec2=0.22.0,@aws-cdk/aws-events=0.22.0,@aws-cdk/aws-iam=0.22.0,@aws-cdk/aws-kinesis=0.22.0,@aws-cdk/aws-kinesisfirehose=0.22.0,@aws-cdk/aws-kms=0.22.0,@aws-cdk/aws-lambda=0.22.0,@aws-cdk/aws-logs=0.22.0,@aws-cdk/aws-s3=0.22.0,@aws-cdk/aws-s3-notifications=0.22.0,@aws-cdk/aws-sqs=0.22.0,@aws-cdk/aws-ssm=0.22.0,@aws-cdk/cdk=0.22.0,@aws-cdk/cx-api=0.22.0,jsii-runtime=node.js/v11.6.0
+      Modules: aws-cdk=0.22.0,@aws-cdk/assets=0.25.2,@aws-cdk/aws-apigateway=0.25.2,@aws-cdk/aws-applicationautoscaling=0.25.2,@aws-cdk/aws-autoscaling-common=0.25.2,@aws-cdk/aws-cloudformation=0.25.2,@aws-cdk/aws-cloudfront=0.25.2,@aws-cdk/aws-cloudwatch=0.25.2,@aws-cdk/aws-codepipeline-api=0.25.2,@aws-cdk/aws-cognito=0.25.2,@aws-cdk/aws-dynamodb=0.25.2,@aws-cdk/aws-ec2=0.25.2,@aws-cdk/aws-events=0.25.2,@aws-cdk/aws-iam=0.25.2,@aws-cdk/aws-kinesis=0.25.2,@aws-cdk/aws-kms=0.25.2,@aws-cdk/aws-lambda=0.25.2,@aws-cdk/aws-logs=0.25.2,@aws-cdk/aws-s3=0.25.2,@aws-cdk/aws-s3-notifications=0.25.2,@aws-cdk/aws-sqs=0.25.2,@aws-cdk/aws-ssm=0.25.2,@aws-cdk/cdk=0.25.2,@aws-cdk/cx-api=0.25.2,jsii-runtime=node.js/v11.6.0
 Parameters:
-  SecurityLayerNRTAPostRegistrationCodeS3Bucket98FFF5D8:
+  SecurityLayerMYAPPPostRegistrationCodeS3Bucket01653BF8:
     Type: String
-    Description: S3 bucket for asset "NRTA/SecurityLayer/NRTAPostRegistration/Code"
-  SecurityLayerNRTAPostRegistrationCodeS3VersionKeyF3A720B2:
-    Type: String
-    Description: S3 key for asset version "NRTA/SecurityLayer/NRTAPostRegistration/Code"
-  SingletonLambda81066468403f11e9b210d663bd873d93CodeS3Bucket2459B994:
-    Type: String
-    Description: S3 bucket for asset
-      "NRTA/SingletonLambda81066468403f11e9b210d663bd873d93/Code"
-  SingletonLambda81066468403f11e9b210d663bd873d93CodeS3VersionKeyFAA77C6F:
+    Description: S3 bucket for asset "NRTAMYAPP/SecurityLayer/MYAPPPostRegistration/Code"
+  SecurityLayerMYAPPPostRegistrationCodeS3VersionKey7FB20BBD:
     Type: String
     Description: S3 key for asset version
-      "NRTA/SingletonLambda81066468403f11e9b210d663bd873d93/Code"
-  ProcessingLayerNRTAAllocateGamerFnCodeS3Bucket4CC043B7:
+      "NRTAMYAPP/SecurityLayer/MYAPPPostRegistration/Code"
+  SingletonLambda25e1b2cf6b7c3d33ab40194be9192611CodeS3BucketDF6114A4:
     Type: String
-    Description: S3 bucket for asset "NRTA/ProcessingLayer/NRTAAllocateGamerFn/Code"
-  ProcessingLayerNRTAAllocateGamerFnCodeS3VersionKey413760C5:
+    Description: S3 bucket for asset
+      "NRTAMYAPP/SingletonLambda25e1b2cf6b7c3d33ab40194be9192611/Code"
+  SingletonLambda25e1b2cf6b7c3d33ab40194be9192611CodeS3VersionKey0D249EF6:
     Type: String
-    Description: S3 key for asset version "NRTA/ProcessingLayer/NRTAAllocateGamerFn/Code"
-  ProcessingLayerNRTADeallocateGamerFnCodeS3Bucket5120763F:
+    Description: S3 key for asset version
+      "NRTAMYAPP/SingletonLambda25e1b2cf6b7c3d33ab40194be9192611/Code"
+  ProcessingLayerMYAPPAllocateGamerFnCodeS3BucketCD78C621:
     Type: String
-    Description: S3 bucket for asset "NRTA/ProcessingLayer/NRTADeallocateGamerFn/Code"
-  ProcessingLayerNRTADeallocateGamerFnCodeS3VersionKey91A650D4:
+    Description: S3 bucket for asset "NRTAMYAPP/ProcessingLayer/MYAPPAllocateGamerFn/Code"
+  ProcessingLayerMYAPPAllocateGamerFnCodeS3VersionKey9DC87F76:
     Type: String
-    Description: S3 key for asset version "NRTA/ProcessingLayer/NRTADeallocateGamerFn/Code"
-  ProcessingLayerNRTAScoreboardFnCodeS3Bucket9367B0BA:
+    Description: S3 key for asset version
+      "NRTAMYAPP/ProcessingLayer/MYAPPAllocateGamerFn/Code"
+  ProcessingLayerMYAPPDeallocateGamerFnCodeS3Bucket42319B11:
     Type: String
-    Description: S3 bucket for asset "NRTA/ProcessingLayer/NRTAScoreboardFn/Code"
-  ProcessingLayerNRTAScoreboardFnCodeS3VersionKeyFDC6DC64:
+    Description: S3 bucket for asset "NRTAMYAPP/ProcessingLayer/MYAPPDeallocateGamerFn/Code"
+  ProcessingLayerMYAPPDeallocateGamerFnCodeS3VersionKey071C8B8D:
     Type: String
-    Description: S3 key for asset version "NRTA/ProcessingLayer/NRTAScoreboardFn/Code"
+    Description: S3 key for asset version
+      "NRTAMYAPP/ProcessingLayer/MYAPPDeallocateGamerFn/Code"
+  ProcessingLayerMYAPPScoreboardFnCodeS3Bucket9C18B480:
+    Type: String
+    Description: S3 bucket for asset "NRTAMYAPP/ProcessingLayer/MYAPPScoreboardFn/Code"
+  ProcessingLayerMYAPPScoreboardFnCodeS3VersionKey5992470D:
+    Type: String
+    Description: S3 key for asset version "NRTAMYAPP/ProcessingLayer/MYAPPScoreboardFn/Code"
 

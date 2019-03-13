@@ -21,7 +21,7 @@ Utils.checkforExistingBuckets(initProps.getBucketNames())
         if (listOfExistingBuckets && listOfExistingBuckets.length > 0)
             console.log("The following buckets are NOT being created because already exists: ", listOfExistingBuckets);
         initProps.addParameter('existingbuckets', listOfExistingBuckets);
-        new MainLayer(app, 'NRTA'+providedsuffix, initProps);
+        new MainLayer(app, 'NRTA'+envname+providedsuffix, initProps);
         app.run();
 })
     .catch((errorList) => {

@@ -1,19 +1,23 @@
 # AWS Space Invaders Workshop
 
-Welcome to the AWS Space Invaders workshop.
+Welcome to the AWS Space Invaders workshop (beta version).
 
 ### Background story
 
 *UnicornGames* is a company focused in designing games for entertainment and in implementing gamefication strategies for companies over different contexts, like sales tracking, investment performance tracking, and more.
 
-We just bought the Space Invaders Unit from UnicornGames. Space Invaders seems to be only a simple game, but under the hood it is a near-real time processing engine that computes scores from a incoming stream of data, and we want to leverage for other purposes. The senior engineer at UnicornGames is not happy by being acquired, and so he left the company, leaving us with with a broken code that we need to fix. 
+We just bought the Space Invaders Unit from UnicornGames. Space Invaders seems to be only a simple game, but under the hood it is a near-real time processing engine that computes scores from a incoming stream of data, and we want to leverage for other purposes. 
+
+The Chief Development Engineer at UnicornGames is not happy by being acquired. He was expecting to become a VP and to buy part of the company. With our acquisition, he mutinied and left the company, taking some of the lead SDEs with him and leaving us with with broken code that we need to fix. 
 
 We were able to recover some instructions that we believe will help us to deploy the broken environment, and fix it. 
 
 We hope that your skills may help us with the challenge of MAKING THE APPLICATION TO WORK.
 
 
-## Instructions
+# Instructions
+
+## Preparing the environment
 
 ### ACTIVITY 1 - Cloud9 - Prepare your environment
 
@@ -41,6 +45,20 @@ Clone the following repository, and follow the steps on it for the deployment.
 
 Take note of the names that you used for *'appName'* and *'suffix'* that you used to deploy the application. These are going to be needed later.
 
+To avoid naming collisions, especially with S3 which has global namespace for buckets, we recommend choosing options that will avoid that. For instance, if you are running the deployment in a region without sharing the account with anyone else, pick your initials for *appName* and nothing for suffix. But, if you're sharing the account with someone - even in a different region - and by any reason you are using the same value for *appName*
+
+Let's suppose that you selected appName=r2, and suffix=d2. Then, if the deployment is successful, at the end something like this will appear
+
+***
+
+ ✅  NRTAR2D2
+
+Stack ARN:
+arn:aws:cloudformation:<region>:<account>:stack/NRTAR2D2/bc543b91-451f-33f9-442a-02e473ddfb1a
+
+if the deployment WAS NOT SUCCESSFUL, then almost surely you had a S3 bucket name collision. Call the support team to help you with that.
+
+***
 
 
 ### ACTIVITY X -  Deploy the application locally
@@ -49,36 +67,30 @@ If we're going to deploy the application appropriately, we need to test it local
 
 We know that the application will not be working until we're be able to fix it. But, let's deploy it and save it for later.
 
+## Fix the application
 
-### ACTIVITY X - Systems Manager - Create the parameters that are missing
+Here is where we start fixing the environment.
 
-There are parameters missing on the environment. Go to the Systems Manager console, and create the parameters as specified below.
+The system is comprised of two applications: the Game, and the Scoreboard.
 
-Systems Manager provides you mechanisms to store parameters for your applications,  encrypted parameters for sensitive data, and more. Using the Parameter Store is free, and depending on the requirements more efficient than use a database to that. Know more here:
+We know that the system is not running properly because we tried to run each one of the applications, and while with the console open on the browser, we could see a lot of errors, and it's clear that the application is broken.
 
-* Step 1 - On your console, visit the following services, and take note of the following data
+As you will need to run application after fixing it (or now, just to check if it's really broken), here is the guidance for opening each one of the applications
 
-Cognito
-Identification of the user pool
-Identification of the identity pool
+* **Manager console**: using your browser, visit the folder where you installed the application, and open **`./scoreboard/index.html`**.
+* **Game console**: using your browser, visit the folder where you installed the application, and open **`./game/index.html`**.
 
-### ACTIVITY X - DynamoDB - Create the missing table TopX
+As it is not running, let's try to fix it using the following instructions.
 
-If you want to skip this activity, just go to the CDK Database Layer, and uncomment the code marked as MISSING TABLE and run CDK Deploy.
+### FIX ACTIVITY 1 - Application - Fix the application configuration
 
-### ACTIVITY X - APIGateway - Fix the broken configuration on API Gateway to allow the application to consume the parameters
+We got a tip from one of the developers that remained at the company that a config file is an important part of the application, and without being properly configured, the application will not run.
 
-If you want to skip this activity, just go to the CDK Database Layer, and uncomment the code marked as MISSING METHOD and run CDK Deploy.
+##### [Problem] 
+The config file on the folder where the application was downloaded is invalid.
 
-### ACTIVITY X - IAM - Fix the permissions of the Managers Cognito User group
-
-If you want to skip this activity, just go to the CDK Database Layer, and uncomment the code marked as MISSING METHOD and run CDK Deploy.
-
-### ACTIVITY X - Kinesis - Create the Kinesis Data Firehose to drop the incoming data into the raw data S3 bucket
-
-### ACTIVITY X - Application - Fix the application configuration
-
-On the folder where the application was downloaded, go to the folder `resources/config` and change it to have the following format
+##### [Solution guidance]
+Open the file `resources/js/awsconfig.js` and change it to have the following format
 
 ~~~
 const DEBUG = true;
@@ -89,12 +101,62 @@ const AWS_CONFIG = {
 }
 ~~~
 
-Tips:
+Here is how to do it:
 
-* To find the region is easy. Probably you already remember it. Optionally, you can go to your console and check the URL. It will be like `https://<region>.console.aws.amazon.com`. Another option
+1. **region**: To find the region is easy. Probably you already remember it. Optionally, you can go to your console and check the URL. It will be like `https://<region>.console.aws.amazon.com`. 
+2. **API_ENDPOINT**
+  * Go to the AWS console, in the region that you deployed the environment, and then go to the service *API Gateway*. You will find an API with the name beginning with the name that you provided at the time of the deployment. Click on it.
+  * Click on **stages**.
+  * Click on **prod**.
+  * At the top of the screen, on the right, you will see the **INVOKE URL**. It has the format `https://<API Id>.execute-api.<region>.amazonaws.com/prod`. When copying it to the required field in the awsconfig.js, don't forget to add the */v1/* at the end.
+3. **APPNAME**: This one is easy. Just copy the values that you selected for *appName* and *suffix*. So, for instance, if you selected *r2* for appName, and *d2* for suffix, then the value for this field will be **R2D2**. For the sake of simplicity, from now and on we will use *appNamesuffix* to refer to this combination.
 
-* https://78os8zlis9.execute-api.us-east-2.amazonaws.com/prod
+**IMPORTANT**  
 
+* Don't forget to maintain the quotes that are on those fields.
+* Save the file!
+
+
+### FIX ACTIVITY 2 - Systems Manager - Create the parameter that is missing
+
+One of the System Administrators took a look at the environment, and said that a parameter missing on the back-end. He said that we need to fix Systems ManagerGo to the Systems Manager console, and create the parameter as specified below.
+
+**Systems Manager** provides you mechanisms to store parameters for your applications,  encrypted parameters for sensitive data, and more. Parameter Store is free and depending on the requirements, is cheaper and more efficient than using a database to store non-sensitive configuration data. Know more about the service [here](https://docs.aws.amazon.com/systems-manager/index.html), and specifically for parameter store [here](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html).
+
+##### [Problem] 
+It seems that a *'session'* parameter is missing, and making the application to break. This parameter holds the game session configuration, every time when the Manager creates a new session. The parameter must to exist on the back-end. We need to create it.
+
+##### [Solution guidance]
+1. On the AWS Console, go to Systems Manager.
+2. Scroll down to the section *Shared Resources*, and click on `Parameter Store`. You will see some parameters starting with `/<appNamesuffix>/`, but there is no parameter `/<appNamesuffix>/session`. Let's create it.
+3. On the top right of the page, click on **Create parameter**
+4. On the section *Parameter details*, enter the following values:  
+  * Name: `/<appNameSuffix>/session`
+  * Description: `Existing session (opened or closed)`
+  * Type: `string`
+  * Value:  `null` (insert the word *null*).
+5. Scroll down and click on **Create parameter**
+
+If everything went well, you will get the message *Create parameter request succeeded*. Check if the parameter exists on the list of parameters.
+
+**Cheat tip**: If you want to skip this activity, just go to your CDK project, visit 
+### ACTIVITY 2 - Kinesis Firehose - Create the missing Kinesis Firehose
+
+If you want to skip this activity, just go to the CDK Database Layer, and uncomment the code marked as MISSING TABLE and run CDK Deploy.
+
+
+### ACTIVITY 3 - Kinesis Streams/Lambda Integration - Integrate Lambda to Kinesis
+
+
+
+
+### ACTIVITY 4 - APIGateway - Fix the broken configuration on API Gateway to allow the application to consume the parameters
+
+If you want to skip this activity, just go to the CDK Database Layer, and uncomment the code marked as MISSING METHOD and run CDK Deploy.
+
+### ACTIVITY X - IAM - Fix the permissions of the Managers Cognito User group
+
+If you want to skip this activity, just go to the CDK Database Layer, and uncomment the code marked as MISSING METHOD and run CDK Deploy.
 
 
 ### ACTIVITY X - Congito - Configure yourself as a manager
