@@ -41,7 +41,9 @@ In a few seconds your environment will be available. You can close the Welcome t
 
 ### prepACTIVITY 2 - CDK - Deploy the back end
 
-Clone the following repository, and follow the steps on it for the deployment.
+Down on your Cloud9 console, a terminal is available. Go to the terminal and clone this repository:
+
+~/environment $ 
 
 ~~~
 cdk synth -c envname=<appName> -c suffix=<suffix>
