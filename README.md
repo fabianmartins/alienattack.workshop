@@ -47,6 +47,18 @@ Down on your Cloud9 console, a terminal is available. Go to the terminal and clo
 ~/environment $ git clone <this repository URL>
 ~~~
 
+##### STEP 4 - Update the environment
+
+Get into the project folder
+
+~~~
+~/environment $ cd spaceinvaders.workshop/
+~/environment/spaceinvaders.workshop (master) $ 
+~~~
+
+Make
+
+
 ### prepACTIVITY 2 - CDK - Deploy the back end
 
 Down on your Cloud9 console, a terminal is available. Go to the terminal and clone this repository:
