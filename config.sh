@@ -13,5 +13,6 @@ echo Installing Typescript
 npm install -g typescript
 echo --
 echo Installing dependencies
+cd cdk
 npm install
 echo ### DONE

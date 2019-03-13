@@ -56,7 +56,12 @@ Get into the project folder
 ~/environment/spaceinvaders.workshop (master) $ 
 ~~~
 
-Make
+Run `config.sh`
+
+~~~
+~/environment/spaceinvaders.workshop (master) $ ./config.sh
+~~~
+
 
 
 ### prepACTIVITY 2 - CDK - Deploy the back end
