@@ -41,11 +41,24 @@ In a few seconds your environment will be available. You can close the Welcome t
 
 #### STEP 3 - Clone this repository
 
-Down on your Cloud9 console, a terminal is available. Go to the terminal and clone this repository
+Down on your Cloud9 console, a terminal is available. Go to the terminal and clone this repository. This repository contains the back-end.
 
 ~~~
 ~/environment $ git clone <this repository URL>
 ~~~
+
+#### STEP 4 - Clone the application repository - ON YOUR COMPUTER
+
+This is the repository with the Space Invaders front end.
+
+You can clone it at your Cloud9 environment, but for having a better experience, using your favorite browser, clone it in your own computer.
+
+~~~
+ git clone https://github.com/fabianmartins/spaceinvaders.app.git
+~~~
+
+**IMPORTANT:** The frond-end DOES NOT WORK YET on mobile devices, and some versions of Windows, especially those with touch screen.
+
 
 #### STEP 4 - Update the environment
 
@@ -96,7 +109,7 @@ Lets configure it.
 ~~~  
 
 
-### prepACTIVITY 2 - CDK - Explore the CDK commands
+#### STEP 6 - Synthetize the cloudformation for your environment
 
 Go to the other available terminal and be sure of being at the CDK folder
 
@@ -104,13 +117,13 @@ Go to the other available terminal and be sure of being at the CDK folder
 ~/environment/spaceinvaders.workshop/cdk (master) $
 ~~~
 
-You will need to decide for an **"Application name"**  and, optionally, for a **"suffix"**. These values will be used to configure your environment.
+You will need to decide for an **"Environment name"** and, optionally, for a **"suffix"**. These values will be used to configure your environment.
 
 If you are running your environment exclusively in one account **AND** region, then you can skip the suffix. The configuration was designed like this for the case when different individuals are sharing the same account (due their company's requirement) and sharing the same region (due the need of specific features of the AWS services, only available in such regions). 
 
-Yet, the values chosen for **appName** and **suffix** are used to create the buckets required by the application, so chose them in a way that most likely will avoid collision for S3 bucket names (which are global).
+Yet, the values chosen for **"envname"** and **"suffix"** are used to create the buckets required by the application, so chose them in a way that most likely will avoid collision for S3 bucket names (which are global).
 
-Let's suppose that you selected appName=r2, and suffix=d2. Then, if the deployment is successful, at the end something like this will appear
+Let's suppose that you selected envname=r2, and suffix=d2. Then, if the deployment is successful, at the end something like this will appear
 
 ***
 
@@ -123,16 +136,26 @@ if the deployment WAS NOT SUCCESSFUL, then almost surely you had a S3 bucket nam
 
 ***
 
-#### Task 1 - Synthetizing the cloudformation
 
-1. 
+Being inside the cdk folder as shown below, ask CDK to synthetize the Cloudformation specification for your environment
+
+~~~
+~/environment/spaceinvaders.workshop/cdk (master) $ cdk synth -c envname=<envname> --suffix=<suffix>
+~~~
 
 
-### ACTIVITY X -  Deploy the application locally
+## Deploy your backend
 
-If we're going to deploy the application appropriately, we need to test it locally first. Because of that, the environment is not deploying the CloudFront distribution. You can uncomment the section CLOUDFRONT DISTRIBUTION on the CDK and deploy it later.
+Being at your cdk folder, and having decided for an *envname* and a *suffix*, run the following command:
 
-We know that the application will not be working until we're be able to fix it. But, let's deploy it and save it for later.
+~~~
+~/environment/spaceinvaders.workshop/cdk (master) $ cdk deploy -c envname=<envname> --suffix=<suffix>
+~~~
+
+CDK will show you first what changes will be applied to the environment. After that, it will ask if you really want to deploy.
+
+Answer with **y**.
+
 
 ## Fix the application
 
@@ -195,10 +218,10 @@ It seems that a *'session'* parameter is missing, and making the application to 
 
 ##### [Solution guidance]
 1. On the AWS Console, go to Systems Manager.
-2. Scroll down to the section *Shared Resources*, and click on `Parameter Store`. You will see some parameters starting with `/<appNamesuffix>/`, but there is no parameter `/<appNamesuffix>/session`. Let's create it.
+2. Scroll down to the section *Shared Resources*, and click on `Parameter Store`. You will see some parameters starting with `/<envNamesuffix>/`, but there is no parameter `/<envNamesuffix>/session`. Let's create it.
 3. On the top right of the page, click on **Create parameter**
 4. On the section *Parameter details*, enter the following values:  
-  * Name: `/<appNameSuffix>/session`
+  * Name: `/<envNamesuffix>/session`
   * Description: `Existing session (opened or closed)`
   * Type: `string`
   * Value:  `null` (insert the word *null*).
@@ -225,12 +248,12 @@ We need to connect the Lambda function to Kinesis.
 
 ##### [Solution guidance]
 1. Go to your AWS Console, and visit the Lambda service page.
-2. Search for a function named **<appNamesuffix>ScoreboardFn**.  
+2. Search for a function named **<envNamesuffix>ScoreboardFn**.  
 3. Click on the name of the function. You will be taken to the configuration of the lambda function.
 4. Check if the information sent from the rebel is correct. On the section named *Designer* if you see a message *"Add triggers from the list on the left"*, then the rebel is right. The trigger is missing. Let's create it.
 5. On the left, on the section 'Add triggers', click on **Kinesis**. A section named *Configure triggers* will appear below.
 6. Configure the fields:
-   * **Kinesis stream**: Select the Kinesis Data Stream attached to your environment. The name must be in the form `<appNamesuffix>_InputStream`
+   * **Kinesis stream**: Select the Kinesis Data Stream attached to your environment. The name must be in the form `<envNamesuffix>_InputStream`
    * **Consumer**: select *No consumer*
    * **Batch size**: insert the value *700*.
    * **Starting position**: select *Latest*.
@@ -262,7 +285,7 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
 2. On the service page you are expected to see the Kinesis Streams on the left, and a missing Kinesis Firehose for the application. Let's create it.
 3. Under the section *'Kinesis Firehose Delivery Streams*', or by clicking on *'Data Firehose*' at the left hand side, click on the button **Create Delivery Stream**.
 4. On the section *New delivery stream*, configure the fields as follows:
-   * **Delivery stream name**: `<appNamesuffix>Firehose`.
+   * **Delivery stream name**: `<envNamesuffix>Firehose`.
    * **Source**: Select the radio button *'Kinesis stream'*. 
    * Drop-down **Choose Kinesis stream**: select the stream attached to your deployment (the same one we connected to the Lambda function).
    * Click **Next**.
@@ -270,7 +293,7 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
    * **Record format conversion**: Select *'Disabled'*.
    * Click **Next**.
    * **Destination**: Click S3, even if it's already selected.
-   * **S3 bucket**: Select the bucket attached to your application. The name will have the form `<appNamesuffix>.raw`.
+   * **S3 bucket**: Select the bucket attached to your application. The name will have the form `<envNamesuffix>.raw`.
    * **S3 prefix**: Leave it blank
    * **S3 error prefix**: Leave it blank
    * Click **Next**
@@ -281,7 +304,7 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
    * **Error logging**: Select *Enabled*
    * **IAM Role**: Click on the button *Create new or choose*. An IAM configuration page will open.
    		* *IAMRole*: Leave the option *Create a new IAM Role* selected.
-   		* *Role Name*: `<appNamesuffix>FirehoseRole`
+   		* *Role Name*: `<envNamesuffix>FirehoseRole`
    		* Click on the button **Allow**. You will be taken to the previous page.
    	* Click **Next**.
    	* Check the presented configuration.
@@ -308,7 +331,7 @@ The Identity Pool configuration is missing the configuration of the roles for ea
 
 1. On your AWS Console, visit the Cognito service page.
 2. If you got to the landing page of the service, you will click on the button **Manage Identity Pools**.
-3. You will see an Identity Pool named as `<appNamesuffix>`. Click on it.
+3. You will see an Identity Pool named as `<envNamesuffix>`. Click on it.
 4. On the top right, there is a very discreet label entitled `Edit Identity Pool`. Click on it.
 5. Open the section `Authentication Providers`
 6. Click on the tab `Cognito` just to be sure that you have it selected
@@ -411,22 +434,23 @@ If you are able to play, **you fixed it!**
 Go to the the terminal on your environment and type the following command. Be sure to be at your cdk folder 
 
 ```
-$ cdk destroy -c envname=<appNamesuffix>
+$ cdk destroy -c envname=<envNamesuffix>
 ```
 
 If everything went well, you will receive a message like the following one: 
 
 ```
-✅  NRTA<appNamesuffix>: destroyed
+✅  NRTA<envNamesuffix>: destroyed
 ```
 
 ### cleanACTIVITY 2 - Cleaning up resources created by hand
 
 Everything that was created by CloudFormation was deleted. However, the resources that you created directly on the console were not deleted. Let's fix this.
 
-1. Go to Systems Manager, then Parameter Store, and delete the parameter `<appNamesuffix>/session`
+1. Go to Systems Manager, then Parameter Store, and delete the parameter `<envNamesuffix>/session`
 2. Go to Kinesis, then Kinesis Firehose, and delete the resource that you created by hand. The resource will already be deleted, but you will be fixing the configurations at the console.
-3. Go to IAM, and search for `<appNamesuffix>`. Delete any resource configured like that. For sure the only resource will be `<appNamesuffix>FirehoseRole`.
+3. Go to IAM, and search for `<envNamesuffix>`. Delete any resource configured like that. For sure the only resource will be `<envNamesuffix>FirehoseRole`.
+4. Delete the S3 buckets `<envNamesuffix>`.app and `<envNamesuffix>.raw`
 
 ## Final activity
 
