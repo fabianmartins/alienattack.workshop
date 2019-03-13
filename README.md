@@ -19,7 +19,7 @@ We hope that your skills may help us with the challenge of MAKING THE APPLICATIO
 
 ## Preparing the environment
 
-### prepACTIVITY 1 - Cloud9 - Prepare your environment
+### prepACTIVITY 1 - Cloud9 - Create your environment
 
 ##### STEP 1 - Access your account
 1. Login to your account
@@ -38,6 +38,14 @@ We hope that your skills may help us with the challenge of MAKING THE APPLICATIO
 		* Leave the other configuration settings at their default values and click **Next step**, and then **Create environment**
 
 In a few seconds your environment will be available. You can close the Welcome tab.
+
+##### STEP 3 - Clone this repository
+
+Down on your Cloud9 console, a terminal is available. Go to the terminal and clone this repository
+
+~~~
+~/environment $ git clone <this repository URL>
+~~~
 
 ### prepACTIVITY 2 - CDK - Deploy the back end
 
