@@ -140,7 +140,7 @@ if the deployment WAS NOT SUCCESSFUL, then almost surely you had a S3 bucket nam
 Being inside the cdk folder as shown below, ask CDK to synthetize the Cloudformation specification for your environment
 
 ~~~
-~/environment/spaceinvaders.workshop/cdk (master) $ cdk synth -c envname=<envname> --suffix=<suffix>
+~/environment/spaceinvaders.workshop/cdk (master) $ cdk synth -c envname=<envname> -c suffix=<suffix>
 ~~~
 
 
@@ -149,7 +149,7 @@ Being inside the cdk folder as shown below, ask CDK to synthetize the Cloudforma
 Being at your cdk folder, and having decided for an *envname* and a *suffix*, run the following command:
 
 ~~~
-~/environment/spaceinvaders.workshop/cdk (master) $ cdk deploy -c envname=<envname> --suffix=<suffix>
+~/environment/spaceinvaders.workshop/cdk (master) $ cdk deploy -c envname=<envname> -c suffix=<suffix>
 ~~~
 
 CDK will show you first what changes will be applied to the environment. After that, it will ask if you really want to deploy.

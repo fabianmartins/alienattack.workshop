@@ -11,7 +11,7 @@ import { Table } from '@aws-cdk/aws-dynamodb';
 
 const path = require('path');
 
-const lambdasLocation = path.join(__dirname,'..','..','lambdas');.
+const lambdasLocation = path.join(__dirname,'..','..','lambdas');
 
 export class ProcessingLayer extends ResourceAwareConstruct {
 
