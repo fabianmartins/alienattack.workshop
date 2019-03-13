@@ -6,13 +6,12 @@ echo --
 echo Updating node to the latest version
 source ~/.nvm/nvm.sh
 nvm install --lts
-echo 
-echo --
-echo Installing CDK
-npm install -g aws-cdk
 echo --
 echo Installing Typescript
 npm install -g typescript
+echo --
+echo Installing CDK
+npm install -g aws-cdk
 echo --
 echo Bootstraping CDK
 account=$(aws sts get-caller-identity --output text --query 'Account')

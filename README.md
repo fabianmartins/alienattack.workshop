@@ -39,7 +39,7 @@ We hope that your skills may help us with the challenge of MAKING THE APPLICATIO
 
 In a few seconds your environment will be available. You can close the Welcome tab.
 
-#### STEP 3 - Clone this repository
+#### <a name="config-cloneapprep"></a>STEP 3 - Clone this repository
 
 Down on your Cloud9 console, a terminal is available. Go to the terminal and clone this repository. This repository contains the back-end.
 
@@ -60,24 +60,73 @@ You can clone it at your Cloud9 environment, but for having a better experience,
 **IMPORTANT:** The frond-end DOES NOT WORK YET on mobile devices, and some in versions of Windows, especially those with touch screen.
 
 
-#### STEP 4 - Update the environment
+#### STEP 5 - Update the environment
 
-Get into the project folder with `cd spaceinvaders.workshop/`
-
-~~~
-~/environment $ cd spaceinvaders.workshop/
-~/environment/spaceinvaders.workshop (master) $ 
-~~~
-
-Run the following command:
+1.Update the current machine  
 
 ~~~
-~/environment/spaceinvaders.workshop (master) $ ./config.sh
+sudo yum update -y
 ~~~
 
-Some warnings may appear. Don't worry about it (at least for now. If you have any trouble, call the "support").
+2.Install the latest version of node
 
-#### STEP 5 - Start background compiling for CDK
+~~~
+nvm install --lts
+~~~
+
+3.Installing Typescript
+
+~~~
+ npm install -g typescript
+~~~
+
+4.Installing CDK
+
+~~~
+npm install -g aws-cdk
+~~~
+
+5.Bootstraping CDK
+
+5.1. Get the AWS account associated to this environment 
+
+~~~
+account=$(aws sts get-caller-identity --output text --query 'Account')
+~~~
+
+If you get the message *"Unable to locate credentials. You can configure credentials by running "aws configure"*, configure your AWS profile.  
+
+5.3. Getting the region associated to the current credentials
+
+~~~
+region=$(aws configure get region)
+~~~
+
+5.4. Bootstrapping CDK
+
+~~~
+cdk bootstrap $account/$region
+~~~
+
+The bootstrap process creates in that region a bucket that CDK uses to deploy and run the Cloudformation specification.
+
+
+6.Installing dependencies
+
+Get into the cdk folder (I'm considering that you are at `~/environment $`)
+
+~~~
+cd cdk
+~~~
+
+Install the dependencies
+
+~~~
+npm install
+~~~
+
+
+#### STEP 6 - Start background compiling for CDK
 
 There are two ways of building the environment: *continuously*, and *on demand*. 
 
@@ -109,7 +158,7 @@ Lets configure it.
 ~~~  
 
 
-#### STEP 6 - Synthetize the cloudformation for your environment
+#### STEP 7 - Synthetize the cloudformation for your environment
 
 Go to the other available terminal and be sure of being at the CDK folder
 
@@ -165,7 +214,7 @@ The system is comprised of two applications: the Game, and the Scoreboard.
 
 We know that the system is not running properly because we tried to run each one of the applications, and while with the console open on the browser, we could see a lot of errors, and it's clear that the application is broken.
 
-As you will need to run application after fixing it (or now, just to check if it's really broken), here is the guidance for opening each one of the applications
+As you will need to run application after fixing it (or now, just to check if it's really broken), here is the guidance for opening each one of the applications. For this part, you will use the environment that you cloned **into your local computer** on the step ["Clone the application repository - ON YOUR COMPUTER"](#config-cloneapprep).
 
 * **Manager console**: using your browser, visit the folder where you installed the application, and open **`./scoreboard/index.html`**.
 * **Game console**: using your browser, visit the folder where you installed the application, and open **`./game/index.html`**.
