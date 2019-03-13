@@ -89,10 +89,10 @@ export class SecurityLayer extends ResourceAwareConstruct {
                  // uuid related to the genFunctionId
                  uuid : uuidv3(genFunctionId,CDKNAMESPACE)
                 ,code : new Lambda.AssetCode(path.join(lambdasLocation,'simpleUserPool'))
-               ,description : "Generates the UserPool using configuration not available on CDK"
-               ,handler : 'index.handler'
-               ,timeout : 300
-               ,runtime : Lambda.Runtime.NodeJS610
+                ,description : "Generates the UserPool using configuration not available on CDK"
+                ,handler : 'index.handler'
+                ,timeout : 300
+                ,runtime : Lambda.Runtime.NodeJS610
            });
    
            generatingFunction.addToRolePolicy( new IAM.PolicyStatement()
