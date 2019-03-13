@@ -199,7 +199,7 @@ Here is how to do it:
   * Click on **stages**.
   * Click on **prod**.
   * At the top of the screen, on the right, you will see the **INVOKE URL**. It has the format `https://<API Id>.execute-api.<region>.amazonaws.com/prod`. When copying it to the required field in the awsconfig.js, don't forget to add the */v1/* at the end.
-3. **APPNAME**: This one is easy. Just copy the values that you selected for *appName* and *suffix*. So, for instance, if you selected *r2* for appName, and *d2* for suffix, then the value for this field will be **R2D2**. For the sake of simplicity, from now and on we will use *appNamesuffix* to refer to this combination.
+3. **APPNAME**: This one is easy. Just copy the values that you selected for *envName* and *suffix*. So, for instance, if you selected *r2* for envName, and *d2* for suffix, then the value for this field will be **R2D2**. For the sake of simplicity, from now and on we will use *envNamesuffix* to refer to this combination.
 
 **IMPORTANT**  
 
@@ -233,8 +233,8 @@ If everything went well, you will get the message *Create parameter request succ
 If you want to skip this activity: 
 
 1. Go your CDK project, search for *MISSING PARAMETER* on all .ts files, and follow the guidances to adjust the code.
-2. Save everything and run **`cdk diff -c envname=<appName> -c suffix=<suffix>`** at the terminal. This will show you what will be changed on your environment
-3. If you agree with the changes, run **`cdk deploy -c envname=<appName> -c suffix=<suffix>`** to deploy the changes
+2. Save everything and run **`cdk diff -c envname=<envName> -c suffix=<suffix>`** at the terminal. This will show you what will be changed on your environment
+3. If you agree with the changes, run **`cdk deploy -c envname=<envName> -c suffix=<suffix>`** to deploy the changes
 
 
 ### fixACTIVITY 3 - Kinesis Streams/Lambda Integration - Integrate Lambda to Kinesis
@@ -265,8 +265,8 @@ We need to connect the Lambda function to Kinesis.
 If you want to skip this activity: 
 
 1. Go your CDK project, search for *MISSING KINESIS INTEGRATION* on all .ts files, and follow the guidances to adjust the code.
-2. Save everything and run **`cdk diff -c envname=<appName> -c suffix=<suffix>`** at the terminal. This will show you what will be changed on your environment
-3. If you agree with the changes, run **`cdk deploy -c envname=<appName> -c suffix=<suffix>`** to deploy the changes
+2. Save everything and run **`cdk diff -c envname=<envName> -c suffix=<suffix>`** at the terminal. This will show you what will be changed on your environment
+3. If you agree with the changes, run **`cdk deploy -c envname=<envName> -c suffix=<suffix>`** to deploy the changes
 
 
 ### fixACTIVITY 4 - Kinesis Firehose - Create the missing Kinesis Firehose
@@ -316,8 +316,8 @@ If everything went well, you will see that the delivery stream was created.
 If you want to skip this activity: 
 
 1. Go your CDK project, search for *MISSING KINESIS FIREHOSE* on all .ts files, and follow the guidances to adjust the code.
-2. Save everything and run **`cdk diff -c envname=<appName> -c suffix=<suffix>`** at the terminal. This will show you what will be changed on your environment
-3. If you agree with the changes, run **`cdk deploy -c envname=<appName> -c suffix=<suffix>`** to deploy the changes
+2. Save everything and run **`cdk diff -c envname=<envName> -c suffix=<suffix>`** at the terminal. This will show you what will be changed on your environment
+3. If you agree with the changes, run **`cdk deploy -c envname=<envName> -c suffix=<suffix>`** to deploy the changes
 
 
 ### fixACTIVITY 5 - Congito - Fix the permissions on the groups for RBAC
@@ -339,13 +339,13 @@ The Identity Pool configuration is missing the configuration of the roles for ea
 8. First rule - **MANAGERS**
 	* For the field `Claim`, input the value **cognito:preferred_role**
 	* For the drop down box at the right side of the field, leave the value **Contains** selected
-	* For the input box at the right of the `Contains` box, input the value **`<appNameprefix>ManagersRole`**. Be careful with typos, and respect the uppercase/lowercase.
-	* For the drop down box on the right, select **`<appNameprefix>ManagersRole`**
+	* For the input box at the right of the `Contains` box, input the value **`<envNameprefix>ManagersRole`**. Be careful with typos, and respect the uppercase/lowercase.
+	* For the drop down box on the right, select **`<envNameprefix>ManagersRole`**
 9. Second rule - **PLAYERS**
 	* For the field `Claim`, input the value **cognito:preferred_role**
 	* For the drop down box at the right side of the field, leave the value **Contains** selected
-	* For the input box at the right of the `Contains` box, input the value **`<appNameprefix>PlayersRole`**. Be careful with typos, and respect the uppercase/lowercase.
-	* For the drop down box on the right, select **`<appNameprefix>PlayersRole`**
+	* For the input box at the right of the `Contains` box, input the value **`<envNameprefix>PlayersRole`**. Be careful with typos, and respect the uppercase/lowercase.
+	* For the drop down box on the right, select **`<envNameprefix>PlayersRole`**
 10. **Role resolution**: Select **`Deny`**
 11. Leave everything else as it is and click on **`Save changes`**
 
@@ -397,7 +397,7 @@ We found some notes at the desk of the solution architect. There is a piece of p
 
 1. Visit your AWS console, and go to Cognito
 2. Click on **Manager User Pools**
-3. Click on the user pool that has the same name as the one that you defined for your application (`appNameSuffix`)
+3. Click on the user pool that has the same name as the one that you defined for your application (`envNameSuffix`)
 4. Take note of the *Pool Id* (or copy it to a helper text file)
 
 **Task 2.** Use AWS CLI to include your username into the Managers group  
