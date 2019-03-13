@@ -84,8 +84,9 @@ export class SecurityLayer extends ResourceAwareConstruct {
         const CDKNAMESPACE = 'aa596cee-451b-11e9-b210-d663bd873d93';
         let genFunctionId = this.properties.getAppRefName()+'SimpleUserPoolGenFn';
         const generatingFunction = new Lambda.SingletonFunction(this, genFunctionId, {
-                 // To avoid having a UUID function generated at every run, we will use
-                 // uuidv3 to stick to some 'aleatory' uuid related to the genFunctionId
+                 // To avoid collisions when running the on the same environment
+                 // many times, we're using uuidv3 to stick to some 'aleatory' 
+                 // uuid related to the genFunctionId
                  uuid : uuidv3(genFunctionId,CDKNAMESPACE)
                 ,code : new Lambda.AssetCode(path.join(lambdasLocation,'simpleUserPool'))
                ,description : "Generates the UserPool using configuration not available on CDK"
