@@ -64,7 +64,7 @@ export class ProcessingLayer extends ResourceAwareConstruct {
     *      process.env.SESSION_CONTROL_TABLENAME = getAppRefName+'SessionControl'
     */
         // MISSING PARAMETER - side effect - remove the next line, uncomment the next one.
-        let sessionParameter = { parameterName : 'session'};
+        let sessionParameter = { parameterName : '/'+this.properties.getAppRefName().toLocaleLowerCase()+'/session'};
         //let sessionParameter : CfnParameter = <CfnParameter> this.properties.getParameter('parameter.session');
         let sessionControlTable : Table = <Table> this.properties.getParameter('table.sessioncontrol');
         if (sessionParameter && sessionControlTable) {
@@ -121,7 +121,7 @@ export class ProcessingLayer extends ResourceAwareConstruct {
          *      process.env.SESSION_CONTROL_TABLENAME = getAppRefName+'SessionControl'
          */
         // MISSING PARAMETER - side effect - remove the next line, uncomment the next one.
-        let sessionParameter = { parameterName : 'session'};
+        let sessionParameter = { parameterName : '/'+this.properties.getAppRefName().toLocaleLowerCase()+'/session'};
         //let sessionParameter: CfnParameter = <CfnParameter>  this.properties.getParameter('parameter.session');
         let sessionControlTable: Table | undefined = <Table> this.properties.getParameter('table.sessionControl');
         if (sessionParameter && sessionControlTable) {
@@ -187,7 +187,7 @@ export class ProcessingLayer extends ResourceAwareConstruct {
          *      process.env.SESSIONTOPX_TABLENAME = getAppRefName+'SessionTopX'
          */
         // MISSING PARAMETER - side effect - remove the next line, uncomment the next one.
-        let sessionParameter = { parameterName : 'session'};
+        let sessionParameter = { parameterName : '/'+this.properties.getAppRefName().toLocaleLowerCase()+'/session'};
         //let sessionParameter: CfnParameter | undefined = <CfnParameter> this.properties.getParameter('parameter.session');
         let sessionControlTable: Table | undefined = <Table> this.properties.getParameter('table.sessionControl');
         let sessionTopX: Table | undefined = <Table> this.properties.getParameter('table.sessionTopX');

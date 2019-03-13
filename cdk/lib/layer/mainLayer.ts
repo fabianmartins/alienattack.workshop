@@ -59,7 +59,7 @@ export class MainLayer extends ResourceAwareStack  {
     // processing layer
     let processingLayerProps = new ParameterAwareProps(this.properties);
     // MISSING PARAMETER - side effect - uncomment the next line
-    // processingLayerProps.addParameter('parameter.session', configLayer.getResource('parameter.session'));
+      //processingLayerProps.addParameter('parameter.session', configLayer.getResource('parameter.session'));
       processingLayerProps.addParameter('table.sessionControl', databaseLayer.getResource('table.sessionControl'));
       processingLayerProps.addParameter('table.sessionTopX', databaseLayer.getResource('table.sessionTopX'));
       processingLayerProps.addParameter('table.session', databaseLayer.getResource('table.session'));

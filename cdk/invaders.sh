@@ -186,6 +186,15 @@ function clearAppBucket() {
     echo --- Deleting APP Bucket
     echo Deleting content at $appBucketname
     aws s3 rm s3://$appBucketname --recursive
+
+    #echo Deleting bucket $appBucketname
+    #aws s3 rb s3://$appBucketname
+    #rawBucketname=$(echo $envName$suffix.raw | tr '[A-Z]' '[a-z]')
+    #echo --- Deleting RAW Bucket
+    #echo Deleting content at $rawBucketname
+    #aws s3 rm s3://$rawBucketname --recursive
+    #echo Deleting bucket $rawBucketname
+    #aws s3 rb s3://$appBucketname
 }
 
 function destroy() {
