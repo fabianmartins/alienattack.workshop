@@ -7,7 +7,9 @@ import { StorageLayer } from './storageLayer';
 import { DatabaseLayer } from './databaseLayer';
 import { IngestionConsumptionLayer } from './ingestionConsumptionLayer';
 import { ProcessingLayer } from './processingLayer';
-import { ContentDeliveryLayer } from './contentDeliveryLayer';
+// MISSING CLOUDFRONT DISTRIBUTION - side effect
+// Uncomment the following line if you want to deploy your Cloudfront distribution. It takes 20 mminutes
+//import { ContentDeliveryLayer } from './contentDeliveryLayer';
 
 
 export class MainLayer extends ResourceAwareStack  {
@@ -44,12 +46,13 @@ export class MainLayer extends ResourceAwareStack  {
       new StorageLayer(this, 'StorageStorage', this.properties);
 
 
-    // UNCOMMENT the following section if you want to have the CDN created. It will take 20 minutes to build/destroy
+    // MISSING CLOUDFRONT DISTRIBUTION 
+    // Uncomment the following section if you want to deploy your Cloudfront distribution. It takes 20 mminutes
     /*
     let cdnLayerProps = new ParameterAwareProps(this.properties);
     cdnLayerProps.addParameter('appbucket',storageLayer.getResource('appbucket'));
       new ContentDeliveryLayer(this,'ContentDeliveryLayer',cdnLayerProps);
-      */
+    */
 
 
     // database layer

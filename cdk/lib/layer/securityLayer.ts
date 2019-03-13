@@ -8,8 +8,9 @@ import Lambda = require('@aws-cdk/aws-lambda');
 import Cfn = require('@aws-cdk/aws-cloudformation');
 const uuidv3 = require('uuid/v3');
 
-const lambdasLocation = './lambdas/';
+const path = require('path');
 
+const lambdasLocation = path.join(__dirname,'..','..','lambdas');
 export interface SimpleUserPool {
     userPoolId : string,
     userPoolUrl : string,
@@ -86,7 +87,7 @@ export class SecurityLayer extends ResourceAwareConstruct {
                  // To avoid having a UUID function generated at every run, we will use
                  // uuidv3 to stick to some 'aleatory' uuid related to the genFunctionId
                  uuid : uuidv3(genFunctionId,CDKNAMESPACE)
-                ,code : new Lambda.AssetCode(lambdasLocation + 'simpleUserPool')
+                ,code : new Lambda.AssetCode(path.join(lambdasLocation,'simpleUserPool'))
                ,description : "Generates the UserPool using configuration not available on CDK"
                ,handler : 'index.handler'
                ,timeout : 300
@@ -283,7 +284,7 @@ export class SecurityLayer extends ResourceAwareConstruct {
             new Lambda.Function(this, this.properties.getAppRefName() + 'PostRegistration', {
                 runtime: Lambda.Runtime.NodeJS810,
                 handler: 'index.handler',
-                code: Lambda.Code.asset(lambdasLocation + 'postregistration')
+                code: Lambda.Code.asset(path.join(lambdasLocation,'postRegistration'))
                 , functionName: this.properties.getAppRefName() + 'PostRegistrationFn'
                 , description: 'This function adds an user to the Players group after confirmation'
                 , memorySize: 128

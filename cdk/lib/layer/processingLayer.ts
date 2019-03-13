@@ -5,10 +5,13 @@ import Lambda = require('@aws-cdk/aws-lambda');
 import IAM = require('@aws-cdk/aws-iam');
 
 import SQS = require('@aws-cdk/aws-sqs');
-import { CfnParameter } from '@aws-cdk/aws-ssm';
+// MISSING PARAMETER  - side effect - uncomment the next line to fix it
+// import { CfnParameter } from '@aws-cdk/aws-ssm';
 import { Table } from '@aws-cdk/aws-dynamodb';
 
-const lambdasLocation = './lambdas/';
+const path = require('path');
+
+const lambdasLocation = path.join(__dirname,'..','..','lambdas');.
 
 export class ProcessingLayer extends ResourceAwareConstruct {
 
@@ -46,13 +49,6 @@ export class ProcessingLayer extends ResourceAwareConstruct {
         createdFunction = this.getScoreboardFunction();
         if (createdFunction) this.scoreboardFunction = createdFunction;
         
-        /*
-        new Lambda.Function(this, 'PostregistrationFunction' + props.suffix, {
-            runtime: Lambda.Runtime.NodeJS810,
-            handler: 'index.handler',
-            code: Lambda.Code.asset('./../lambdas/postRegistration')
-        });
-        */
     }
 
     private getAllocateGamerFunction() {
@@ -72,7 +68,7 @@ export class ProcessingLayer extends ResourceAwareConstruct {
                 new Lambda.Function(this, this.properties.getAppRefName() + 'AllocateGamerFn', {
                     runtime: Lambda.Runtime.NodeJS610,
                     handler: 'index.handler',
-                    code: Lambda.Code.asset(lambdasLocation+'allocateGamer'),
+                    code: Lambda.Code.asset(path.join(lambdasLocation,'allocateGamer')),
                     environment: {
                         'SESSION_CONTROL_TABLENAME': sessionControlTable.tableName,
                         'SESSION_PARAMETER': sessionParameter.parameterName
@@ -129,7 +125,7 @@ export class ProcessingLayer extends ResourceAwareConstruct {
                 new Lambda.Function(this, this.properties.getAppRefName() + 'DeallocateGamerFn', {
                     runtime: Lambda.Runtime.NodeJS610,
                     handler: 'index.handler',
-                    code: Lambda.Code.asset(lambdasLocation+'deallocateGamer'),
+                    code: Lambda.Code.asset(path.join(lambdasLocation,'deallocateGamer')),
                     environment: {
                         'SESSION_CONTROL_TABLENAME': sessionControlTable.tableName,
                         'SESSION_PARAMETER': sessionParameter.parameterName
@@ -197,7 +193,7 @@ export class ProcessingLayer extends ResourceAwareConstruct {
                 new Lambda.Function(this, this.properties.getAppRefName() + 'ScoreboardFn', {
                     runtime: Lambda.Runtime.NodeJS610,
                     handler: 'index.handler',
-                    code: Lambda.Code.asset(lambdasLocation+'scoreboard'),
+                    code: Lambda.Code.asset(path.join(lambdasLocation,'scoreboard')),
                     environment: {
                         'DLQ_URL': dlq.queueUrl,
                         'SESSION_PARAMETER': sessionParameter.parameterName,

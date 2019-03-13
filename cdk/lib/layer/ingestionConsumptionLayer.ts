@@ -9,19 +9,31 @@ import APIGTW = require('@aws-cdk/aws-apigateway');
 import { PolicyDocument } from '@aws-cdk/aws-iam';
 import { Table } from '@aws-cdk/aws-dynamodb';
 import Lambda = require('@aws-cdk/aws-lambda');
-import { KinesisEventSource, ApiEventSource } from '@aws-cdk/aws-lambda-event-sources';
+/**
+ * MISSING KINESIS INTEGRATION - side effect
+ * Uncomment the following line to solve it
+ */
+//import { KinesisEventSource, ApiEventSource } from '@aws-cdk/aws-lambda-event-sources';
 
 export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
     kinesisStreams: KDS.Stream;
     kinesisFirehose: KDF.CfnDeliveryStream;
-    private rawbucketarn: string;
+    /**
+     * MISSING KINESIS FIREHOSE - side effect
+     * Uncomment the following section to solve it
+     */
+    //private rawbucketarn: string;
     private userpool: string;
     private api: APIGTW.CfnRestApi;
 
     constructor(parent: Construct, name: string, props: IParameterAwareProps) {
         super(parent, name, props);
-        this.rawbucketarn = props.getParameter('rawbucketarn');
+    /**
+     * MISSING KINESIS FIREHOSE - side effect
+     * Uncomment the following section to solve it
+     */
+        //this.rawbucketarn = props.getParameter('rawbucketarn');
         this.userpool = props.getParameter('userpool');
         this.createKinesis(props);
         this.createAPIGateway(props);

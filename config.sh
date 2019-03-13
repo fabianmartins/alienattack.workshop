@@ -5,6 +5,7 @@ sudo yum update -y
 echo --
 echo Updating node to the latest version
 nvm install --lts
+echo 
 echo --
 echo Installing CDK
 npm install -g aws-cdk

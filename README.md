@@ -21,13 +21,13 @@ We hope that your skills may help us with the challenge of MAKING THE APPLICATIO
 
 ### prepACTIVITY 1 - Cloud9 - Create your environment
 
-##### STEP 1 - Access your account
+#### STEP 1 - Access your account
 1. Login to your account
 2. Select a region (take note of the region) - We recommend us-east-1 (Virginia) or us-east-2 (Ohio)
 
 **IMPORTANT:** Be sure that you have permissions to create resources on your account. For the purpose of this workshop, having administrative privileges is the best option.
 
-##### STEP 2 - Launch your Cloud9 environment
+#### STEP 2 - Launch your Cloud9 environment
 1. On the AWS console, go to Cloud9. 
 	* Go to the Cloud9 section of the console
 	* Select **Create environment**
@@ -39,7 +39,7 @@ We hope that your skills may help us with the challenge of MAKING THE APPLICATIO
 
 In a few seconds your environment will be available. You can close the Welcome tab.
 
-##### STEP 3 - Clone this repository
+#### STEP 3 - Clone this repository
 
 Down on your Cloud9 console, a terminal is available. Go to the terminal and clone this repository
 
@@ -47,42 +47,68 @@ Down on your Cloud9 console, a terminal is available. Go to the terminal and clo
 ~/environment $ git clone <this repository URL>
 ~~~
 
-##### STEP 4 - Update the environment
+#### STEP 4 - Update the environment
 
-Get into the project folder
+Get into the project folder with `cd spaceinvaders.workshop/`
 
 ~~~
 ~/environment $ cd spaceinvaders.workshop/
 ~/environment/spaceinvaders.workshop (master) $ 
 ~~~
 
-Run `config.sh`
+Run the following command:
 
 ~~~
 ~/environment/spaceinvaders.workshop (master) $ ./config.sh
 ~~~
 
+Some warnings may appear. Don't worry about it (at least for now. If you have any trouble, call the "support").
+
+#### STEP 5 - Start background compiling for CDK
+
+There are two ways of building the environment: *continuously*, and *on demand*. 
+
+*On demand* is done by running `npm run build` from inside the cdk folder.
+
+*Contiuous compiling*, the recommended approach, means that the environment will be compiled at every file change, so you can check possible errors right away.
+
+One way of configuring continuous compiling is by having 2 terminals open. One you will be using to issue commands. The other one, you will be using to monitor the progress of the development and compiling.
+
+Lets configure it.
+
+* At the bottom of the page of your Cloud9 IDE, click the **`(+)`** icon, and then `New Terminal` to add a second terminal.
+* Chose one of the terminals, and get into the cdk folder
+
+~~~ 
+~/environment/spaceinvaders.workshop (master) $ cd cdk
+~/environment/spaceinvaders.workshop/cdk (master) $
+~~~ 
+
+* Kick off the continuous compiling of the environment. The output will come out with some errors. If these errors are of the type TS6192 or TS6133, then you're good. This errors appear
+
+~~~ 
+~/environment/spaceinvaders.workshop/cdk (master) $ npm run watch
+
+[0:00:00 AM] Starting compilation in watch mode...
 
 
-### prepACTIVITY 2 - CDK - Deploy the back end
+[0:00:00 AM] Found 0 errors. Watching for file changes.
+~~~  
 
-Down on your Cloud9 console, a terminal is available. Go to the terminal and clone this repository:
 
-~/environment $ 
+### prepACTIVITY 2 - CDK - Explore the CDK commands
+
+Go to the other available terminal and be sure of being at the CDK folder
 
 ~~~
-cdk synth -c envname=<appName> -c suffix=<suffix>
+~/environment/spaceinvaders.workshop/cdk (master) $
 ~~~
 
-~~~
-cdk deploy -c envname=<appName> -c suffix=<suffix>
-~~~
+You will need to decide for an **"Application name"**  and, optionally, for a **"suffix"**. These values will be used to configure your environment.
 
+If you are running your environment exclusively in one account **AND** region, then you can skip the suffix. The configuration was designed like this for the case when different individuals are sharing the same account (due their company's requirement) and sharing the same region (due the need of specific features of the AWS services, only available in such regions). 
 
-
-Take note of the names that you used for *'appName'* and *'suffix'* that you used to deploy the application. These are going to be needed later.
-
-To avoid naming collisions, especially with S3 which has global namespace for buckets, we recommend choosing options that will avoid that. For instance, if you are running the deployment in a region without sharing the account with anyone else, pick your initials for *appName* and nothing for suffix. But, if you're sharing the account with someone - even in a different region - and by any reason you are using the same value for *appName*
+Yet, the values chosen for **appName** and **suffix** are used to create the buckets required by the application, so chose them in a way that most likely will avoid collision for S3 bucket names (which are global).
 
 Let's suppose that you selected appName=r2, and suffix=d2. Then, if the deployment is successful, at the end something like this will appear
 
@@ -96,6 +122,10 @@ arn:aws:cloudformation:<region>:<account>:stack/NRTAR2D2/bc543b91-451f-33f9-442a
 if the deployment WAS NOT SUCCESSFUL, then almost surely you had a S3 bucket name collision. Call the support team to help you with that.
 
 ***
+
+#### Task 1 - Synthetizing the cloudformation
+
+1. 
 
 
 ### ACTIVITY X -  Deploy the application locally
