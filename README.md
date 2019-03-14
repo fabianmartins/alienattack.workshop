@@ -49,15 +49,15 @@ Down on your Cloud9 console, a terminal is available. Go to the terminal and clo
 
 #### STEP 4 - Clone the application repository - ON YOUR COMPUTER
 
-This is the repository with the Space Invaders front end.
+**This is supposed to be done on your local computer**. You can clone it at your Cloud9 environment, but for having a better experience, using your favorite browser, clone it in your own computer.
 
-You can clone it at your Cloud9 environment, but for having a better experience, using your favorite browser, clone it in your own computer.
+This is the repository with the Space Invaders front end.
 
 ~~~
  git clone https://github.com/fabianmartins/spaceinvaders.app.git
 ~~~
 
-**IMPORTANT:** The frond-end DOES NOT WORK YET on mobile devices, and some in versions of Windows, especially those with touch screen.
+**IMPORTANT:** The frond-end DOES NOT WORK YET on mobile devices, and in some versions of Windows, especially those with touch screen.
 
 
 #### STEP 5 - Update the environment
@@ -116,7 +116,7 @@ The bootstrap process creates in that region a bucket that CDK uses to deploy an
 Get into the cdk folder (I'm considering that you are at `~/environment $`)
 
 ~~~
-cd cdk
+cd spaceinvaders.workshop/cdk/
 ~~~
 
 Install the dependencies
@@ -189,7 +189,7 @@ if the deployment WAS NOT SUCCESSFUL, then almost surely you had a S3 bucket nam
 Being inside the cdk folder as shown below, ask CDK to synthetize the Cloudformation specification for your environment
 
 ~~~
-~/environment/spaceinvaders.workshop/cdk (master) $ cdk synth -c envname=<envname> -c suffix=<suffix>
+cdk synth -c envname=<envname> -c suffix=<suffix>
 ~~~
 
 
