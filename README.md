@@ -168,9 +168,14 @@ Go to the other available terminal and be sure of being at the CDK folder
 
 You will need to decide for an **"Environment name"** and, optionally, for a **"suffix"**. These values will be used to configure your environment.
 
-If you are running your environment exclusively in one account **AND** region, then you can skip the suffix. The configuration was designed like this for the case when different individuals are sharing the same account (due their company's requirement) and sharing the same region (due the need of specific features of the AWS services, only available in such regions). 
+**My suggestions for you:**  
+ 
+* **DON'T** use long names like *ThisIsMyEnvironmentName*, or *ThisIsAVeryLongAndUnecessarySuffixName*. Keep it simple.
+* If you're alone in the account/region, pick a small word for envname, like your initials, and *disregard* the suffix. 
 
-Yet, the values chosen for **"envname"** and **"suffix"** are used to create the buckets required by the application, so chose them in a way that most likely will avoid collision for S3 bucket names (which are global).
+The configuration was designed like this - having a name for the environment and a suffix - for the case when different individuals are sharing the same account (due their company's requirements) and sharing the same region (due the need of specific features of the AWS services, only available in such regions).
+
+Yet, the values chosen for **"envname"** and **"suffix"** are used to create the buckets required by the application, so chose them in a way that most likely will avoid collision to S3 bucket names (which are global).
 
 Let's suppose that you selected envname=r2, and suffix=d2. Then, if the deployment is successful, at the end something like this will appear
 
@@ -181,6 +186,8 @@ Let's suppose that you selected envname=r2, and suffix=d2. Then, if the deployme
 Stack ARN:
 arn:aws:cloudformation:<region>:<account>:stack/NRTAR2D2/bc543b91-451f-33f9-442a-02e473ddfb1a
 
+And the deployment will have created the buckets **nrtar2d2.app** and **nrtar2d2.raw**.
+
 if the deployment WAS NOT SUCCESSFUL, then almost surely you had a S3 bucket name collision. Call the support team to help you with that.
 
 ***
@@ -190,8 +197,6 @@ Being inside the cdk folder as shown below, ask CDK to synthetize the Cloudforma
 ~~~
 cdk synth -c envname=<envname> -c suffix=<suffix>
 ~~~
-
-**My suggestion for you:** If you're alone in the account/region, use only envname, and pick a small word for it, like your initials. If you choose that, disregard the suffix from now on.
 
 
 ## Deploy your backend
@@ -402,7 +407,7 @@ The Identity Pool configuration is missing the configuration of the roles for ea
 **-- FastFix --**  
 Sorry. There's no fast fix for this issue.
 
-### # fixACTIVITY 6 - Test the registration process
+### fixACTIVITY 6 - Test the registration process
 
 If all the steps were executed properly, the application must be running. Let's try to create an user.
 
@@ -493,9 +498,11 @@ If everything went well, you will receive a message like the following one:
 ✅  NRTA<envNamesuffix>: destroyed
 ```
 
-### cleanACTIVITY 2 - Cleaning up resources created by hand
+### cleanACTIVITY 2 - Cleaning up the last resources
 
-Everything that was created by CloudFormation was deleted. However, the resources that you created directly on the console were not deleted. Let's fix this.
+Everything that was created by CloudFormation was deleted, with the exception of the buckets. Additionaly, the resources that you created directly on the console were not deleted. 
+
+Let's fix this.
 
 1. Go to Systems Manager, then Parameter Store, and delete the parameter `<envNamesuffix>/session`
 2. Go to Kinesis, then Kinesis Firehose, and delete the resource that you created by hand. The resource will already be deleted, but you will be fixing the configurations at the console.
