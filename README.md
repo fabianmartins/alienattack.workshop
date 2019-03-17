@@ -56,7 +56,7 @@ This is the repository with the Space Invaders front end.
 **IMPORTANT:** Disregard any instructions at that repository.
 
 ~~~
- git clone https://github.com/fabianmartins/spaceinvaders.app.git
+ git clone https://github.com/fabianmartins/spaceinvaders.application.git
 ~~~
 
 **IMPORTANT:** The frond-end DOES NOT WORK YET on mobile devices, and in some versions of Windows, especially those with touch screen.
@@ -64,11 +64,15 @@ This is the repository with the Space Invaders front end.
 
 #### STEP 5 - Update the environment
 
+Back to your Cloud9 environment, let's update it.
+
 1.Update the current machine  
 
 ~~~
 sudo yum update -y
 ~~~
+
+Don't worry about possible warnings.
 
 2.Install the latest version of node
 
@@ -136,15 +140,15 @@ There are two ways of building the environment: *continuously*, and *on demand*.
 
 *Contiuous compiling*, the recommended approach, means that the environment will be compiled at every file change, so you can check possible errors right away.
 
-One way of configuring continuous compiling is by having 2 terminals open. One you will be using to issue commands. The other one, you will be using to monitor the progress of the development and compiling.
+One way of configuring continuous compiling is by having 2 terminals open. One you will be using to issue commands. The other one, you will be using to monitor the progress of the development and corresponding compilation.
 
 Lets configure it.
 
 * At the bottom of the page of your Cloud9 IDE, click the **`(+)`** icon, and then `New Terminal` to add a second terminal.
-* Chose one of the terminals, and get into the cdk folder
+* Chose one of the terminals, and get into the cdk folder. If this is the new one, you will be at `~/environment`. So, from there:
 
 ~~~ 
-~/environment/spaceinvaders.workshop (master) $ cd cdk
+~/environment $ cd cd spaceinvaders.workshop/cdk/
 ~/environment/spaceinvaders.workshop/cdk (master) $
 ~~~ 
 
@@ -156,7 +160,7 @@ Lets configure it.
 [0:00:00 AM] Starting compilation in watch mode...
 
 
-[0:00:00 AM] Found 0 errors. Watching for file changes.
+[0:00:14 AM] Found 0 errors. Watching for file changes.
 ~~~  
 
 
@@ -172,7 +176,7 @@ You will need to decide for an **"Environment name"** and, optionally, for a **"
 
 **My suggestions for you:**  
  
-* **DON'T** use long names like *ThisIsMyEnvironmentName*, or *ThisIsAVeryLongAndUnecessarySuffixName*. Keep it simple.
+* **DON'T** use long names like *ThisIsMyEnvironmentName*, or *ThisIsAVeryLongAndUnecessarySuffixName*. Keep it simple. User something like Env01.
 * If you're alone in the account/region, pick a small word for envname, like your initials, and *disregard* the suffix. 
 
 The configuration was designed like this - having a name for the environment and a suffix - for the case when different individuals are sharing the same account (due their company's requirements) and sharing the same region (due the need of specific features of the AWS services, only available in such regions).
@@ -190,7 +194,35 @@ arn:aws:cloudformation:<region>:<account>:stack/NRTAR2D2/bc543b91-451f-33f9-442a
 
 And the deployment will have created the buckets **nrtar2d2.app** and **nrtar2d2.raw**.
 
-if the deployment WAS NOT SUCCESSFUL, then almost surely you had a S3 bucket name collision. Call the support team to help you with that.
+if the deployment WAS NOT SUCCESSFUL, then almost surely you had a S3 bucket name collision. if the message is similar to the one below, then chose another envname and/or suffix for your deployment. In the example below, the name TEST for the environment provokes a collision:
+
+~~~
+>>>> envname: TEST
+>>>> providedSuffix: 
+[ { Forbidden: null
+      at Request.extractError (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/services/s3.js:565:35)
+      at Request.callListeners (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/sequential_executor.js:106:20)
+      at Request.emit (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/sequential_executor.js:78:10)
+      at Request.emit (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/request.js:683:14)
+      at Request.transition (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/request.js:22:10)
+      at AcceptorStateMachine.runTo (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/state_machine.js:14:12)
+      at /home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/state_machine.js:26:10
+      at Request.<anonymous> (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/request.js:38:9)
+      at Request.<anonymous> (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/request.js:685:12)
+      at Request.callListeners (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/sequential_executor.js:116:18)
+    message: null,
+    code: 'Forbidden',
+    region: 'ap-southeast-1',
+    time: 2018-12-21T18:55:32.875Z,
+    requestId: '99ECF0537A7B2AD1',
+    extendedRequestId:
+     'Qxeu5wF9wSXL6xHGMTLsFNq8Fo4b++6A9+Rh1BrG/qYY9k+w/FIU2fhpc+7hPMDiHgG3bohrUDI=',
+    cfId: undefined,
+    statusCode: 403,
+    retryable: false,
+    retryDelay: 133.93524816013246 } ]
+Unable to find output file /tmp/cdkF6Q2pM/cdk.out; are you calling app.run()?
+~~~
 
 ***
 
@@ -234,7 +266,7 @@ As it is not running, let's try to fix it using the following instructions.
 We got a tip from one of the developers that remained at the company that a config file is an important part of the application, and without being properly configured, the application will not run.
 
 ##### [Problem] 
-The config file on the folder where the application was downloaded is invalid.
+The config file for the downloaded application is invalid.
 
 ##### [Solution guidance]
 Open the file `resources/js/awsconfig.js` and change it to have the following format
@@ -250,10 +282,10 @@ const AWS_CONFIG = {
 
 Here is how to do it:
 
-1. **region**: To find the region is easy. Probably you already remember it. Optionally, you can go to your console and check the URL. It will be like `https://<region>.console.aws.amazon.com`. 
+1. **region**: To find the region is easy. Probably you still remember it, or you can get it from the last message of the CDK deployment. Optionally, you can go to your console and check the URL. It will be like `https://<region>.console.aws.amazon.com`. 
 2. **API_ENDPOINT**
   * Go to the AWS console, in the region that you deployed the environment, and then go to the service *API Gateway*. You will find an API with the name beginning with the name that you provided at the time of the deployment. Click on it.
-  * Click on **stages**.
+  * Click on **Stages**.
   * Click on **prod**.
   * At the top of the screen, on the right, you will see the **INVOKE URL**. It has the format `https://<API Id>.execute-api.<region>.amazonaws.com/prod`. When copying it to the required field in the awsconfig.js, don't forget to add the */v1/* at the end.
 3. **APPNAME**: This one is easy. Just copy the values that you selected for *envName* and *suffix*. So, for instance, if you selected *r2* for envName, and *d2* for suffix, then the value for this field will be **R2D2**. For the sake of simplicity, from now and on we will use *envNamesuffix* to refer to this combination.
@@ -266,12 +298,12 @@ Here is how to do it:
 
 ### fixACTIVITY 2 - Systems Manager - Create the missing parameter
 
-One of the System Administrators took a look at the environment, and said that a parameter missing on the back-end. He said that we need to fix Systems ManagerGo to the Systems Manager console, and create the parameter as specified below.
+One of the System Administrators took a look at the environment, and he said that a parameter missing on the back-end. He said that we need to fix Systems Manager. Go to the Systems Manager console, and create the parameter as specified below.
 
 **Systems Manager** provides you mechanisms to store parameters for your applications,  encrypted parameters for sensitive data, and more. Parameter Store is free and depending on the requirements, is cheaper and more efficient than using a database to store non-sensitive configuration data. Know more about the service [here](https://docs.aws.amazon.com/systems-manager/index.html), and specifically for parameter store [here](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html).
 
 ##### [Problem] 
-It seems that a *'session'* parameter is missing, and making the application to break. This parameter holds the game session configuration, every time when the Manager creates a new session. The parameter must to exist on the back-end. We need to create it.
+It seems that a *'session'* parameter is missing, and making the application to break. This parameter holds the game session configuration, every time when the Manager creates a new session. The parameter must exist on the back-end. We need to create it.
 
 ##### [Solution guidance]
 1. On the AWS Console, go to Systems Manager.
@@ -280,7 +312,7 @@ It seems that a *'session'* parameter is missing, and making the application to 
 4. On the section *Parameter details*, enter the following values:  
   * Name: `/<envNamesuffix>/session`
   * Description: `Existing session (opened or closed)`
-  * Type: `string`
+  * Type: `String`
   * Value:  `null` (insert the word *null*).
 5. Scroll down and click on **Create parameter**
 
@@ -305,7 +337,7 @@ We need to connect the Lambda function to Kinesis.
 
 ##### [Solution guidance]
 1. Go to your AWS Console, and visit the Lambda service page.
-2. Search for a function named **<envNamesuffix>ScoreboardFn**.  
+2. Search for a function named **`<envNamesuffix>ScoreboardFn`**.  
 3. Click on the name of the function. You will be taken to the configuration of the lambda function.
 4. Check if the information sent from the rebel is correct. On the section named *Designer* if you see a message *"Add triggers from the list on the left"*, then the rebel is right. The trigger is missing. Let's create it.
 5. On the left, on the section 'Add triggers', click on **Kinesis**. A section named *Configure triggers* will appear below.
@@ -328,7 +360,7 @@ If you want to skip this activity:
 
 ### fixACTIVITY 4 - Kinesis Firehose - Create the missing Kinesis Firehose
 
-The analytics team complained that no data is going to their datalake staging area. They said that Kinesis Streams drops the data to a Kinesis Firehose, and then Kinesis Firehose moves the data to a S3 bucket named with the suffix "raw" (you can check if the bucket exists).
+The analytics team complained that no data is going to their data lake staging area. They said that Kinesis Streams drops the data to a Kinesis Firehose, and then Kinesis Firehose moves the data to a S3 bucket named with the suffix "raw" (you can check if the bucket exists).
 
 They said *"This is pretty simple! It is just to connect the Kinesis Firehose to the Kinesis Streams. If the Kinesis Firehose doesn't exists, create one! Give us access and we can help. Or, call us if you need"*.
 
@@ -359,7 +391,7 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
    * **S3 compression**: Select *GZIP*
    * **S3 encryption**: Select *Disabled*
    * **Error logging**: Select *Enabled*
-   * **IAM Role**: Click on the button *Create new or choose*. An IAM configuration page will open.
+   * **IAM Role**: Click on the button `Create new or choose`. An IAM configuration page will open.
    		* *IAMRole*: Leave the option *Create a new IAM Role* selected.
    		* *Role Name*: `<envNamesuffix>FirehoseRole`
    		* Click on the button **Allow**. You will be taken to the previous page.
