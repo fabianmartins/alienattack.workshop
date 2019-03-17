@@ -163,6 +163,8 @@ Lets configure it.
 [0:00:14 AM] Found 0 errors. Watching for file changes.
 ~~~  
 
+**IMPORTANT:** If you decide for not using the continuos compiling, you must remember to run `npm run build` every time that a file is saved.
+
 
 #### STEP 7 - Synthetize the cloudformation for your environment
 

@@ -7,10 +7,11 @@ import { Utils } from '../lib/util/utils'
 
 const app = new cdk.App();
 let envname = app.node.getContext('envname');
-envname=envname.toUpperCase();
 if (!envname) envname = "";
+else envname=envname.toUpperCase();
 let providedsuffix = app.node.getContext('suffix');
 if (!providedsuffix) providedsuffix="";
+else providedsuffix=providedsuffix.toUpperCase();
 console.log('>>>> envname:',envname);
 console.log('>>>> providedSuffix:',providedsuffix);
 let initProps = new NRTAProps();
