@@ -53,6 +53,8 @@ Down on your Cloud9 console, a terminal is available. Go to the terminal and clo
 
 This is the repository with the Space Invaders front end.
 
+**IMPORTANT:** Disregard any instructions at that repository.
+
 ~~~
  git clone https://github.com/fabianmartins/spaceinvaders.app.git
 ~~~
