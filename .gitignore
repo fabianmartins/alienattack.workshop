@@ -1,4 +1,4 @@
-.DS_STORE
+.DS_Store
 cdk/bin/*.js
 cdk/lib/*.js
 cdk/lib/constructs/*.js
