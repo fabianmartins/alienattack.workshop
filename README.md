@@ -439,16 +439,22 @@ The Identity Pool configuration is missing the configuration of the roles for ea
 11. Leave everything else as it is and click on **`Save changes`**
 
 **-- FastFix --**  
-Sorry. There's no fast fix for this issue.
+The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixcognito.sh` which is inside the folder `~/environment/spaceinvaders.workshop`. Go to that folder, and run the following command:
+
+~~~
+./fixcognito.sh <envname> <suffix>
+~~~
 
 ### fixACTIVITY 6 - Test the registration process
 
 If all the steps were executed properly, the application must be running. Let's try to create an user.
 
+This steps are going to be executed using the respository that you cloned to your local computer.
+
 1. Confirm that you executed the Fix Activity 1. The file `./resources/js/aws_config.js` must be properly configured.
 2. Open a privacy/incognito page for your browser. This will guarantee that you will have the cookies cleared after use.
 3. Open this file that is on your application deployment: `./game/index.html`
-4. If everything was ok, and the application was able to retrieve the configurations, you will see a page with the buttons `Registration` and `Login`. Choose **Registration**
+4. If everything was ok, and the application was able to retrieve the configurations, you will see a page with the buttons `Register` and `Login`. Choose **Register**
 5. Register yourself filling the fields properly
 	* **Username**: Define a username. Use only lowercase letters and don't use symbols
 	* **e-mail**: You will need a valid and accessible email. Cognito needs to send you a confirmation email and you will need to click on it to confirm
@@ -460,7 +466,7 @@ If all the steps were executed properly, the application must be running. Let's 
 
 ### fixACTIVITY 7 - Test the login process
 
-1. Get back to the application, and now choose **Login**
+1. Get back to the application, and now choose **Login** 
 2. Enter your credentials, and click on **Login**
 3. If you entered your credentials right, you will see a pop-up message `Login successful to user <username>`
 4. If you get to a page where the indicating status is WAITING and you have a counting down from 10 to 0 that keeps restarting, everything is ok.
@@ -470,7 +476,9 @@ If all the steps were executed properly, the application must be running. Let's 
 
 The manager console is where the manager creates a session, and starts the game so other participants can join it.
 
-We've been said that this applications is needing a face lifting. However, let's leave the cosmetics for another opportunity.
+We've been said that these applications is needing a face lifting. However, let's leave the cosmetics for another opportunity.
+
+This steps are going to be executed using the respository that you cloned to your local computer.
 
 1. Open a privacy/incognito page for your browser. This will guarantee that you will have the cookies cleared after use.
 2. Open this file that is on your application deployment: `./scoreboard/index.html`
@@ -505,7 +513,11 @@ $ aws cognito-idp admin-add-user-to-group --user-pool-id <userpoolid> --username
 
 ### fixACTIVITY 10 - Create a session for the game
 
-If the previous activity went well, you have the management console ready to have a session configured. Follow the steps below to create a gaming session.
+If the previous activity went well, you have the management console ready to have a session configured.
+
+Execute again the steps of the **fixAcitivy 8*. You are not going to get a AccessDeniedException. 
+
+Follow the steps below to create a gaming session.
 
 1. On the field `Session Name` input **TEST**
 2. On the section `Game Type`, select **Multiple trials**
@@ -515,12 +527,20 @@ If the previous activity went well, you have the management console ready to hav
 
 If you are able to play, **you fixed it!**
 
+Play a little bit. Check the scoreboard. Check the DynamoDB tables. Check the S3 buckets after some time.
+
+For a full deployment, you will need to install the application at the S3 folder with the suffix.app. You will also need to deploy the CloudFront distribution because the S3 buckets are not public.
+
+To solve this, go to the file `mainLayer.ts` which is on the deployment at Cloud9, search for *MISSING CLOUDFRONT DISTRIBUTION* and uncomment it at that file. The deployment it will take something around 20 minutes. Same time it will be required for the undeployment.
+
 
 ## Cleaning up the environment
 
 ### cleanACTIVITY 1 - Destroy the deployed environment
 
-Go to the the terminal on your environment and type the following command. Be sure to be at your cdk folder 
+Go to the the terminal on your environment and type the following command. Be sure to be at your cdk folder.
+
+**IMPORTANT:** Be sure of using UPPERCASE both for ENVNAME and SUFFIX.
 
 ```
 $ cdk destroy -c envname=<envName> -c suffix=<suffix>
@@ -539,9 +559,10 @@ Everything that was created by CloudFormation was deleted, with the exception of
 Let's fix this.
 
 1. Go to Systems Manager, then Parameter Store, and delete the parameter `<envNamesuffix>/session`
-2. Go to Kinesis, then Kinesis Firehose, and delete the resource that you created by hand. The resource will already be deleted, but you will be fixing the configurations at the console.
-3. Go to IAM, and search for `<envNamesuffix>`. Delete any resource configured like that. For sure the only resource will be `<envNamesuffix>FirehoseRole`.
+2. Go to Kinesis, then Kinesis Firehose, and delete the resource that you created by hand
+3. Go to IAM, and search for `<envNamesuffix>`. Delete any resource configured like that. For sure the only resource will be `<envNamesuffix>FirehoseRole`
 4. Delete the S3 buckets `<envNamesuffix>`.app and `<envNamesuffix>.raw`
+5. Delete your Cloud9 environment if you created it just for this workshop.
 
 ## Final activity
 

@@ -7,6 +7,7 @@ import { Utils } from '../lib/util/utils'
 
 const app = new cdk.App();
 let envname = app.node.getContext('envname');
+envname=envname.toUpperCase();
 if (!envname) envname = "";
 let providedsuffix = app.node.getContext('suffix');
 if (!providedsuffix) providedsuffix="";

@@ -1,4 +1,20 @@
 #!/bin/bash
+##
+# Fixes the configuration for the permissions to the users authenticated by Cognito
+##
+
+_DEBUG="on"
+
+function DEBUG() {
+    [ "$_DEBUG" == "on" ]  && $@
+}
+
+function removeQuotes() {
+    retval=$1
+    retval=${retval#\"}
+    retval=${retval%\"}
+    echo "$retval"
+}
 
 function setRoleMappings() {
     envName=$1
@@ -80,5 +96,6 @@ if [ "$1" == "" ]; then
     echo Usage:
     echo fixcognito <envName>  [ <suffix> ]
 else
-    setRoleMappings $1 $2
+    envname=$(echo $1 | tr 'a-z' 'A-Z')
+    setRoleMappings $envname $2
 fi

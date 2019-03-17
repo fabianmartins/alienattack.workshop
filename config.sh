@@ -1,3 +1,4 @@
+#!/bin/bash
 echo CONFIGURING THE ENVIRONMENT
 echo #############################
 echo Updating the attached instance
