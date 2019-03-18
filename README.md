@@ -180,6 +180,7 @@ You will need to decide for an **"Environment name"** and, optionally, for a **"
  
 * **DON'T** use long names like *ThisIsMyEnvironmentName*, or *ThisIsAVeryLongAndUnecessarySuffixName*. Keep it simple. User something like Env01.
 * If you're alone in the account/region, pick a small word for envname, like your initials, and *disregard* the suffix. 
+* Avoid using words potentially reserved for envname and suffix. Possible reserved words are AWS, S3, and so on.
 
 The configuration was designed like this - having a name for the environment and a suffix - for the case when different individuals are sharing the same account (due their company's requirements) and sharing the same region (due the need of specific features of the AWS services, only available in such regions).
 
