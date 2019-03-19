@@ -152,7 +152,7 @@ Lets configure it.
 ~/environment/spaceinvaders.workshop/cdk (master) $
 ~~~ 
 
-* Kick off the continuous compiling of the environment. The output will come out with some errors. If these errors are of the type TS6192 or TS6133, then you're good. This errors appear
+* Kick off the continuous compiling of the environment. The output will come out with some errors. If these errors are of the type TS6192 or TS6133, then you're good. This errors appear when some classes are imported but not used, like when part of the code is commented. This will not break the code at the running time.
 
 ~~~ 
 ~/environment/spaceinvaders.workshop/cdk (master) $ npm run watch
