@@ -62,7 +62,9 @@ This is the repository with the Space Invaders front end.
 **IMPORTANT:** The frond-end DOES NOT WORK YET on mobile devices, and in some versions of Windows, especially those with touch screen.
 
 
-#### STEP 5 - Update the environment
+#### STEP 5 - Update the environment - at Cloud9
+
+Getting back to your ***Cloud9 environment**, run the following scorpt
 
 Running this script will update your environment. This script changes your bash_profile. So, if your intend to run it on your ow machine, be sure about the side effects.
 
@@ -71,6 +73,27 @@ Running this script will update your environment. This script changes your bash_
 ~/environment/spaceinvaders.workshop/ (master) $ source config.sh
 ~~~
 
+Don't worry if some *warning* meessages appear, especially if it's about python.
+
+To check if everything is ok, you can run the following commands:
+
+~~~
+node --version
+~~~
+This will show you the latest version, which you can compare to the results of  
+
+~~~
+nvm ls-remote --lts | grep Latest
+~~~
+which will give you the list of long-term supported (lts) versions.
+
+And by running 
+
+~~~
+cdk
+~~~
+
+and getting a non-error response, you will be sure that CDK (Cloud Development Kit) is working.
 
 #### STEP 6 - Start background compiling for CDK
 
@@ -82,17 +105,21 @@ There are two ways of building the environment: *continuously*, and *on demand*.
 
 One way of configuring continuous compiling is by having 2 terminals open. One you will be using to issue commands. The other one, you will be using to monitor the progress of the development and corresponding compilation.
 
-Lets configure it.
+*Lets configure it.*
 
 * At the bottom of the page of your Cloud9 IDE, click the **`(+)`** icon, and then `New Terminal` to add a second terminal.
-* Chose one of the terminals, and get into the cdk folder. If this is the new one, you will be at `~/environment`. So, from there:
+* Chose one of the terminals, and get into the cdk folder. If this is the new one, you will be at `~/environment`. So, from there, run `npm run watch`:
 
 ~~~ 
 ~/environment $ cd cd spaceinvaders.workshop/cdk/
-~/environment/spaceinvaders.workshop/cdk (master) $
+~/environment/spaceinvaders.workshop/cdk (master) $ npm run watch
 ~~~ 
 
-* Kick off the continuous compiling of the environment. The output will come out with some errors. If these errors are of the type TS6192 or TS6133, then you're good. This errors appear when some classes are imported but not used, like when part of the code is commented. This will not break the code at the running time.
+This will kick off the continuous compiling of the environment. It may take a few seconds until you get the results. 
+
+The output may come out perfectly with 0 errors, or with some errors. If these errors are of the type TS6192 or TS6133, then you're good. This errors appear when some classes are imported but not used, like when part of the code is commented. This will not break the code at the running time.
+
+A totally successful compilation will be something like the output below:
 
 ~~~ 
 ~/environment/spaceinvaders.workshop/cdk (master) $ npm run watch
@@ -103,12 +130,12 @@ Lets configure it.
 [0:00:14 AM] Found 0 errors. Watching for file changes.
 ~~~  
 
-**IMPORTANT:** If you decide for not using the continuos compiling, you must remember to run `npm run build` every time that a file is saved.
+**IMPORTANT:** If you decide for not using the continuos compiling, you must remember to run `npm run build` every time you save a file.
 
 
 #### STEP 7 - Synthetize the cloudformation for your environment
 
-Go to the other available terminal and be sure of being at the CDK folder
+Go to the other available terminal at your Cloud9 environment and be sure of being at the CDK folder
 
 ~~~
 ~/environment/spaceinvaders.workshop/cdk (master) $
@@ -175,6 +202,8 @@ Being inside the cdk folder as shown below, ask CDK to synthetize the Cloudforma
 cdk synth -c envname=<envname> -c suffix=<suffix>
 ~~~
 
+This will generate an output for the corresponding Cloudformation template. You can save it by redirecting the result to some folder, so you can read it through.
+
 
 ## Deploy your backend
 
@@ -184,9 +213,9 @@ Being at your cdk folder, and having decided for an *envname* and a *suffix*, ru
 cdk deploy -c envname=<envname> -c suffix=<suffix>
 ~~~
 
-CDK will show you first what changes will be applied to the environment. After that, it will ask if you really want to deploy.
+CDK will first to show you what changes will be applied to the environment. After that, it will ask if you really want to deploy.
 
-Answer with **y**.
+Answer with **y**, and wait for environment to be deployed.
 
 
 ## Fix the application
@@ -212,7 +241,7 @@ We got a tip from one of the developers that remained at the company that a conf
 The config file for the downloaded application is invalid.
 
 ##### [Solution guidance]
-Open the file `resources/js/awsconfig.js` and change it to have the following format
+On your **local machine**, where you cloned the application, open the file `resources/js/awsconfig.js` and change it to have the following format
 
 ~~~
 const DEBUG = true;
@@ -228,14 +257,16 @@ Here is how to do it:
 1. **region**: To find the region is easy. Probably you still remember it, or you can get it from the last message of the CDK deployment. Optionally, you can go to your console and check the URL. It will be like `https://<region>.console.aws.amazon.com`. 
 2. **API_ENDPOINT**
   * Go to the AWS console, in the region that you deployed the environment, and then go to the service *API Gateway*. You will find an API with the name beginning with the name that you provided at the time of the deployment. Click on it.
+  		* From Cloud9, to open another window for the AWS console, just go to the meny and click on *AWS CLoud9* --> *Go To Your Dashboard*
   * Click on **Stages**.
   * Click on **prod**.
   * At the top of the screen, on the right, you will see the **INVOKE URL**. It has the format `https://<API Id>.execute-api.<region>.amazonaws.com/prod`. When copying it to the required field in the awsconfig.js, don't forget to add the */v1/* at the end.
-3. **APPNAME**: This one is easy. Just copy the values that you selected for *envName* and *suffix*. So, for instance, if you selected *r2* for envName, and *d2* for suffix, then the value for this field will be **R2D2**. For the sake of simplicity, from now and on we will use *envNamesuffix* to refer to this combination.
+3. **APPNAME**: This one is easy. Just copy the values that you selected for *envName* and *suffix*. So, for instance, if you selected *r2* for envName, and *d2* for suffix, then the value for this field will be  For the sake of simplicity, from now and on we will use *envNamesuffix* to refer to this combination.
 
 **IMPORTANT**  
 
 * Don't forget to maintain the quotes that are on those fields.
+* Be sure of using **uppercase** for the value of the field APPNAME.
 * Save the file!
 
 
@@ -264,7 +295,7 @@ If everything went well, you will get the message *Create parameter request succ
 **-- FastFix --**  
 If you want to skip this activity: 
 
-1. Go your CDK project, search for *MISSING PARAMETER* on all .ts files, and follow the guidances to adjust the code.
+1. Go your CDK project (the one that it's at Cloud9), search for *MISSING PARAMETER* on all .ts (typescript) files, and follow the guidances to adjust the code.
 2. Save everything and run **`cdk diff -c envname=<envName> -c suffix=<suffix>`** at the terminal. This will show you what will be changed on your environment
 3. If you agree with the changes, run **`cdk deploy -c envname=<envName> -c suffix=<suffix>`** to deploy the changes
 
@@ -379,13 +410,14 @@ The Identity Pool configuration is missing the configuration of the roles for ea
 	* For the input box at the right of the `Contains` box, input the value **`<envNameprefix>PlayersRole`**. Be careful with typos, and respect the uppercase/lowercase.
 	* For the drop down box on the right, select **`<envNameprefix>PlayersRole`**
 10. **Role resolution**: Select **`Deny`**
+11. Double check everything for typos, especially the fields *"Claim"* and *"Role"*
 11. Leave everything else as it is and click on **`Save changes`**
 
 **-- FastFix --**  
 The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixcognito.sh` which is inside the folder `~/environment/spaceinvaders.workshop`. Go to that folder, and run the following command:
 
 ~~~
-./fixcognito.sh <envname> <suffix>
+source fixcognito.sh <envname> <suffix>
 ~~~
 
 ### fixACTIVITY 6 - Test the registration process
@@ -431,7 +463,7 @@ This steps are going to be executed using the respository that you cloned to you
 
 ### fixACTIVITY 9 - Cognito - Configure yourself as a manager
 
-We found some notes at the desk of the solution architect. There is a piece of paper where is written *"use AWS CLI to make yourself an application admin"*. The following steps are were found that paper. Hopefully they will help you to solve the issue.
+We found some notes at the desk of the solution architect. There is a piece of paper where is written *"use AWS CLI to make yourself an application admin"*. The following steps were found that paper. Hopefully they will help you to solve the issue.
 
 **Task 1.** Take note of the USER POOL ID  
 
@@ -449,6 +481,8 @@ We found some notes at the desk of the solution architect. There is a piece of p
 ~~~
 $ aws cognito-idp admin-add-user-to-group --user-pool-id <userpoolid> --username <username that you used to register> --group-name Managers --region <region>
 ~~~
+
+There is another way of solving this at the AWS Console. Go to Cognito, visit User Pools, click on `Users and groups`, and check the group Managers. You can add and remove users from there. 
 
 
 **IMPORTANT**: This is another action that we DON'T WANT to be executed by hand. How to fix this? How to make the deployment of the environment to create an admin user automatically? Think about it. We will need it in another fixing workshop.
@@ -472,9 +506,9 @@ If you are able to play, **you fixed it!**
 
 Play a little bit. Check the scoreboard. Check the DynamoDB tables. Check the S3 buckets after some time.
 
-For a full deployment, you will need to install the application at the S3 folder with the suffix.app. You will also need to deploy the CloudFront distribution because the S3 buckets are not public.
+It was said that for a full deployment, we will need to install the application at the S3 folder with the `<appNamesuffix>.app`. We will also need to deploy the CloudFront distribution because the S3 buckets are not public.
 
-To solve this, go to the file `mainLayer.ts` which is on the deployment at Cloud9, search for *MISSING CLOUDFRONT DISTRIBUTION* and uncomment it at that file. The deployment it will take something around 20 minutes. Same time it will be required for the undeployment.
+For this last part, we got intel from the rebels that, to solve this, go to the file `mainLayer.ts` which is on the deployment at Cloud9, search for *MISSING CLOUDFRONT DISTRIBUTION* and uncomment it at that file. The deployment it will take something around 20 minutes. Same time it will be required for the undeployment. But we are not expecting to solve this part today. We at the company believe that it was a big win to have reached to this point. Let's leave other adjustments for another sprints.
 
 
 ## Cleaning up the environment
