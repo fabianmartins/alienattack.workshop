@@ -53,7 +53,7 @@ Down on your Cloud9 console, a terminal is available. Go to the terminal and clo
 
 This is the repository with the Space Invaders front end.
 
-**IMPORTANT:** Disregard any instructions at that repository.
+**IMPORTANT:** Disregard any instructions at that repository (but you can always read the comments).
 
 ~~~
  git clone https://github.com/fabianmartins/spaceinvaders.application.git
@@ -64,71 +64,11 @@ This is the repository with the Space Invaders front end.
 
 #### STEP 5 - Update the environment
 
-Back to your Cloud9 environment, let's update it.
-
-1.Update the current machine  
+Running this script will update your environment. This script changes your bash_profile. So, if your intend to run it on your ow machine, be sure about the side effects.
 
 ~~~
-sudo yum update -y
-~~~
-
-Don't worry about possible warnings.
-
-2.Install the latest version of node
-
-~~~
-nvm install --lts
-~~~
-
-3.Installing Typescript
-
-~~~
- npm install -g typescript
-~~~
-
-4.Installing CDK
-
-~~~
-npm install -g aws-cdk
-~~~
-
-5.Bootstraping CDK
-
-5.1. Get the AWS account associated to this environment 
-
-~~~
-account=$(aws sts get-caller-identity --output text --query 'Account')
-~~~
-
-If you get the message *"Unable to locate credentials. You can configure credentials by running "aws configure"*, configure your AWS profile.  
-
-5.3. Getting the region associated to the current credentials
-
-~~~
-region=$(aws configure get region)
-~~~
-
-5.4. Bootstrapping CDK
-
-~~~
-cdk bootstrap $account/$region
-~~~
-
-The bootstrap process creates in that region a bucket that CDK uses to deploy and run the Cloudformation specification.
-
-
-6.Installing dependencies
-
-Get into the cdk folder (I'm considering that you are at `~/environment $`)
-
-~~~
-cd spaceinvaders.workshop/cdk/
-~~~
-
-Install the dependencies
-
-~~~
-npm install
+~/environment $ cd spaceinvaders.workshop
+~/environment/spaceinvaders.workshop/ (master) $ source config.sh
 ~~~
 
 
