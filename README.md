@@ -64,9 +64,9 @@ This is the repository with the Space Invaders front end.
 
 #### STEP 5 - Update the environment - at Cloud9
 
-Getting back to your ***Cloud9 environment**, run the following scorpt
+Getting back to your **Cloud9 environment**, run the script `config.sh` following the instructions below.
 
-Running this script will update your environment. This script changes your bash_profile. So, if your intend to run it on your ow machine, be sure about the side effects.
+Running this script will update your environment. This script changes your bash_profile. So, if your intend to run it on your own machine, be sure about the side effects of this action.
 
 ~~~
 ~/environment $ cd spaceinvaders.workshop
@@ -99,7 +99,7 @@ and getting a non-error response, you will be sure that CDK (Cloud Development K
 
 There are two ways of building the environment: *continuously*, and *on demand*. 
 
-*On demand* is done by running `npm run build` from inside the cdk folder.
+*On demand* is done by running `npm run build` from inside the cdk folder at each time you change a .ts (typescript) file. This is not very operational, so we will stick to *continuous compiling*.
 
 *Contiuous compiling*, the recommended approach, means that the environment will be compiled at every file change, so you can check possible errors right away.
 
@@ -217,6 +217,8 @@ CDK will first to show you what changes will be applied to the environment. Afte
 
 Answer with **y**, and wait for environment to be deployed.
 
+Wait for the environment finishing deploying.
+
 
 ## Fix the application
 
@@ -257,7 +259,7 @@ Here is how to do it:
 1. **region**: To find the region is easy. Probably you still remember it, or you can get it from the last message of the CDK deployment. Optionally, you can go to your console and check the URL. It will be like `https://<region>.console.aws.amazon.com`. 
 2. **API_ENDPOINT**
   * Go to the AWS console, in the region that you deployed the environment, and then go to the service *API Gateway*. You will find an API with the name beginning with the name that you provided at the time of the deployment. Click on it.
-  		* From Cloud9, to open another window for the AWS console, just go to the meny and click on *AWS CLoud9* --> *Go To Your Dashboard*
+  		* From Cloud9, to open another window for the AWS console, just go to the meny and click on *AWS Cloud9* --> *Go To Your Dashboard*, and then *Services* --> *API Gateway*. You will find your API there.
   * Click on **Stages**.
   * Click on **prod**.
   * At the top of the screen, on the right, you will see the **INVOKE URL**. It has the format `https://<API Id>.execute-api.<region>.amazonaws.com/prod`. When copying it to the required field in the awsconfig.js, don't forget to add the */v1/* at the end.
@@ -269,8 +271,128 @@ Here is how to do it:
 * Be sure of using **uppercase** for the value of the field APPNAME.
 * Save the file!
 
+### fixACTIVITY 2 - Test the registration process
 
-### fixACTIVITY 2 - Systems Manager - Create the missing parameter
+Now, probably the application must be running. Let's try to create an user.
+
+This steps are going to be executed using the respository that you cloned to your local computer.
+
+1. Confirm that you executed the Fix Activity 1. The file `./resources/js/aws_config.js` must be properly configured.
+2. Open a privacy/incognito page for your browser. This will guarantee that you will have the cookies cleared after use.
+3. Open this file that is on your application deployment: `./game/index.html`
+4. If everything was ok, and the application was able to retrieve the configurations, you will see a page with the buttons `Register` and `Login`. Choose **Register**
+5. Register yourself filling the fields properly
+	* **Username**: Define a username. Use only lowercase letters and don't use symbols
+	* **e-mail**: You will need a valid and accessible email. Cognito needs to send you a confirmation email and you will need to click on it to confirm
+	* **Password**: For testing purposes, use a simple password (like `abc123`). This password is managed by Cognito. So, it's not stored on any application database
+	* **Confirm (and memorize) your password**: Repeat your password
+	* **Your company's web domain (ex: aws.amazon.com)**: Input your company domain.
+	* Click on the button **Register**
+6. If everything went well, you will receive a confirmation on your email. Open the email and click on the link.
+
+### fixACTIVITY 3 - Test the login process
+
+1. Get back to the application on your browser (the one that you opened from `./game/index.html`), and now choose **Login** (or skip to step 2 if you already there)
+2. Enter your credentials, and click on **Login**
+3. If you entered your credentials right, you will see a pop-up message `Login successful to user <username>`
+4. If you get to a page where the indicating status is WAITING and a count down stopped at 10, then the login is ok, but something else is wrong (you can check the browser console, if you want).
+5. Close the window, to be sure that the cookies were deleted, so we can proceed with the test.
+
+### fixACTIVITY 4 - Test the manager console
+
+The manager console is where the manager creates a session, and starts the game so other participants can join it.
+
+We've been said that these applications is needing a face lifting. However, let's leave the cosmetics for another opportunity.
+
+These steps are going to be executed using the respository that you cloned to your local computer.
+
+1. Open a privacy/incognito page for your browser. This will guarantee that you will have the cookies cleared after use.
+2. Open this file that is on your application deployment: `./scoreboard/index.html`
+3. The page will show some fields for you to enter the username and password that you defined earlier. Do it
+4. If the application indicates `AccessDeniedException`, then we have an access problem.
+
+Proceed to the next fixActivity to keep on fixing the system.
+
+
+### fixACTIVITY 5 - Cognito - Fix the permissions on the groups for RBAC
+
+The people from the Security Team that joined our taskforce to solve the issues said that is essential that RBAC (Role-Based Access Control) is properly configured on the system. They also said that the current version of the CDK doesn't allow us to solve that by code, unless we create a Custom Resource as it was done for the creation of the User Pool. Nobody on the team knows how to do it, but one of the SysAdmins said that he has a playbook for that, and send us the guidance. Let's try to leverage it.
+
+##### [Problem] 
+The Identity Pool configuration is missing the configuration of the roles for each one of the groups (Managers and Players). We need to attach the proper roles to the user when the user signs in to the application.
+
+##### [Solution guidance 1]
+
+1. On your AWS Console, visit the Cognito service page.
+2. If you got to the landing page of the service, you will click on the button **Manage Identity Pools**.
+3. You will see an Identity Pool named as `<envNamesuffix>`. Click on it.
+4. On the top right, there is a very discreet label entitled `Edit Identity Pool`. Click on it.
+5. Open the section `Authentication Providers`
+6. Click on the tab `Cognito` just to be sure that you have it selected
+7.  On the section `Authenticated role selection` there is a select button labeled as `Use default role`. Click on this button and select **Choose role with rules**. We will create two rules
+8. First rule - **MANAGERS**
+	* For the field `Claim`, input the value **cognito:preferred_role**
+	* For the drop down box at the right side of the field, leave the value **Contains** selected
+	* For the input box at the right of the `Contains` box, input the value **`<envNameprefix>ManagersRole`**. Be careful with typos, and respect the uppercase/lowercase.
+	* For the drop down box on the right, select **`<envNameprefix>ManagersRole`**
+9. Second rule - **PLAYERS**
+	* For the field `Claim`, input the value **cognito:preferred_role**
+	* For the drop down box at the right side of the field, leave the value **Contains** selected
+	* For the input box at the right of the `Contains` box, input the value **`<envNameprefix>PlayersRole`**. Be careful with typos, and respect the uppercase/lowercase.
+	* For the drop down box on the right, select **`<envNameprefix>PlayersRole`**
+10. **Role resolution**: Select **`Deny`**
+11. Double check everything for typos, especially the fields *"Claim"* and *"Role"*
+11. Leave everything else as it is and click on **`Save changes`**
+
+**-- FastFix --**  
+The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixcognito.sh` which is inside the folder `~/environment/spaceinvaders.workshop`. Go to that folder, and run the following command:
+
+~~~
+source fixcognito.sh <envname> <suffix>
+~~~
+
+### fixACTIVITY 6 - Testing the accesses again
+
+#### Step 1 - Testing again the login to the game
+Execute again the ***fixACTIVITY 3***. We've been said that it will still not work. Please confirm that this is the outcome of the test.
+
+#### Step 2 - Testing again the login to the manager console
+Execute again the ***fixACTIVITY 4***. We've been said that we are getting an AccessDeniedException. 
+
+Let's proceed to the next activity and check if we can solve it.
+
+
+### fixACTIVITY 7 - Cognito - Configure yourself as a manager
+
+We found some notes at the desk of the solution architect. There is a piece of paper where is written *"use AWS CLI to make yourself an application admin"*. The following steps were found that paper. Hopefully they will help you to solve the issue.
+
+**Task 1.** Take note of the USER POOL ID  
+
+1. Visit your AWS console, and go to Cognito
+2. Click on **Manager User Pools**
+3. Click on the user pool that has the same name as the one that you defined for your application (`envNameSuffix`)
+4. Take note of the *Pool Id* (or copy it to a helper text file)
+
+**Task 2.** Use AWS CLI to include your username into the Managers group  
+
+1. Go to the terminal of your Cloud9 environment - or on your computer, with AWS CLI credentials properly configured with administrative permissions.
+2. Run the command below. The command will add you to the group *Managers*, which will give you access to the Scoreboard Manager resources
+3. Get back to the manager console, and try access it again
+
+~~~
+$ aws cognito-idp admin-add-user-to-group --user-pool-id <userpoolid> --username <username that you used to register> --group-name Managers --region <region>
+~~~
+
+**-- FastFix --**   
+There is another way of solving this at the AWS Console. Go to Cognito, visit User Pools, click on `Users and groups`, and check the group Managers. You can add and remove users from there. 
+
+
+**IMPORTANT**: This is another action that we DON'T WANT to be executed by hand. How to fix this? How to make the deployment of the environment to create an admin user automatically? Think about it. We will need it in another fixing workshop.
+
+After fixing this, try to login to the manager console again (*fixActivity 4). If you get a **ParameterNotFound: null**, then proceed to the next activity. It will solve it, we believe.
+
+
+### fixACTIVITY 8 - Systems Manager - Create the missing parameter
 
 One of the System Administrators took a look at the environment, and he said that a parameter missing on the back-end. He said that we need to fix Systems Manager. Go to the Systems Manager console, and create the parameter as specified below.
 
@@ -299,8 +421,12 @@ If you want to skip this activity:
 2. Save everything and run **`cdk diff -c envname=<envName> -c suffix=<suffix>`** at the terminal. This will show you what will be changed on your environment
 3. If you agree with the changes, run **`cdk deploy -c envname=<envName> -c suffix=<suffix>`** to deploy the changes
 
+After fixing this, try to login to the manager console again (*fixActivity 4). You will be forwarded to the configuration page. The access seems to be ok. But *DON'T TRY TO PLAY YET*. 
 
-### fixACTIVITY 3 - Kinesis Streams/Lambda Integration - Integrate Lambda to Kinesis
+In accordance to some notes found, there are other pieces to be fixed.
+
+
+### fixACTIVITY 9 - Kinesis Streams/Lambda Integration - Integrate Lambda to Kinesis
 
 The people from the monitoring team said that they identified failure in getting the scoreboard computed and stored on DynamoDb. Our SysAdmin is friend of one of the rebels, and he send this message *"Check if the Lambda Function with the name Scoreboard is integrated to Kinesis. If there is no trigger configured for the lambda function, that's the issue"*.
 
@@ -332,7 +458,7 @@ If you want to skip this activity:
 3. If you agree with the changes, run **`cdk deploy -c envname=<envName> -c suffix=<suffix>`** to deploy the changes
 
 
-### fixACTIVITY 4 - Kinesis Firehose - Create the missing Kinesis Firehose
+### fixACTIVITY 10 - Kinesis Firehose - Create the missing Kinesis Firehose
 
 The analytics team complained that no data is going to their data lake staging area. They said that Kinesis Streams drops the data to a Kinesis Firehose, and then Kinesis Firehose moves the data to a S3 bucket named with the suffix "raw" (you can check if the bucket exists).
 
@@ -383,118 +509,9 @@ If you want to skip this activity:
 3. If you agree with the changes, run **`cdk deploy -c envname=<envName> -c suffix=<suffix>`** to deploy the changes
 
 
-### fixACTIVITY 5 - Congito - Fix the permissions on the groups for RBAC
+### fixACTIVITY 11 - Create a session for the game
 
-The people from the Security Team that joined our taskforce to solve the issues said that is essential that RBAC (Role-Based Access Control) is properly configured on the system. They also said that the current version of the CDK doesn't allow us to solve that by code, unless we create a Custom Resource as it was done for the creation of the User Pool. Nobody on the team knows how to do it, but one of the SysAdmins said that he has a playbook for that, and send us the guidance. Let's try to leverage it.
-
-##### [Problem] 
-The Identity Pool configuration is missing the configuration of the roles for each one of the groups (Managers and Players). We need to attach the proper roles to the user when the user signs in to the application.
-
-##### [Solution guidance 1]
-
-1. On your AWS Console, visit the Cognito service page.
-2. If you got to the landing page of the service, you will click on the button **Manage Identity Pools**.
-3. You will see an Identity Pool named as `<envNamesuffix>`. Click on it.
-4. On the top right, there is a very discreet label entitled `Edit Identity Pool`. Click on it.
-5. Open the section `Authentication Providers`
-6. Click on the tab `Cognito` just to be sure that you have it selected
-7.  On the section `Authenticated role selection` there is a select button labeled as `Use default role`. Click on this button and select **Choose role with rules**. We will create two rules
-8. First rule - **MANAGERS**
-	* For the field `Claim`, input the value **cognito:preferred_role**
-	* For the drop down box at the right side of the field, leave the value **Contains** selected
-	* For the input box at the right of the `Contains` box, input the value **`<envNameprefix>ManagersRole`**. Be careful with typos, and respect the uppercase/lowercase.
-	* For the drop down box on the right, select **`<envNameprefix>ManagersRole`**
-9. Second rule - **PLAYERS**
-	* For the field `Claim`, input the value **cognito:preferred_role**
-	* For the drop down box at the right side of the field, leave the value **Contains** selected
-	* For the input box at the right of the `Contains` box, input the value **`<envNameprefix>PlayersRole`**. Be careful with typos, and respect the uppercase/lowercase.
-	* For the drop down box on the right, select **`<envNameprefix>PlayersRole`**
-10. **Role resolution**: Select **`Deny`**
-11. Double check everything for typos, especially the fields *"Claim"* and *"Role"*
-11. Leave everything else as it is and click on **`Save changes`**
-
-**-- FastFix --**  
-The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixcognito.sh` which is inside the folder `~/environment/spaceinvaders.workshop`. Go to that folder, and run the following command:
-
-~~~
-source fixcognito.sh <envname> <suffix>
-~~~
-
-### fixACTIVITY 6 - Test the registration process
-
-If all the steps were executed properly, the application must be running. Let's try to create an user.
-
-This steps are going to be executed using the respository that you cloned to your local computer.
-
-1. Confirm that you executed the Fix Activity 1. The file `./resources/js/aws_config.js` must be properly configured.
-2. Open a privacy/incognito page for your browser. This will guarantee that you will have the cookies cleared after use.
-3. Open this file that is on your application deployment: `./game/index.html`
-4. If everything was ok, and the application was able to retrieve the configurations, you will see a page with the buttons `Register` and `Login`. Choose **Register**
-5. Register yourself filling the fields properly
-	* **Username**: Define a username. Use only lowercase letters and don't use symbols
-	* **e-mail**: You will need a valid and accessible email. Cognito needs to send you a confirmation email and you will need to click on it to confirm
-	* **Password**: For testing purposes, use a simple password (like `abc123`). This password is managed by Cognito. So, it's not stored on any application database
-	* **Confirm (and memorize) your password**: Repeat your password
-	* **Your company's web domain (ex: aws.amazon.com)**: Input your company domain.
-	* Click on the button **Register**
-6. If everything went well, you will receive a confirmation on your email. Open the email and click on the link.
-
-### fixACTIVITY 7 - Test the login process
-
-1. Get back to the application, and now choose **Login** 
-2. Enter your credentials, and click on **Login**
-3. If you entered your credentials right, you will see a pop-up message `Login successful to user <username>`
-4. If you get to a page where the indicating status is WAITING and you have a counting down from 10 to 0 that keeps restarting, everything is ok.
-5. Close the window, to be sure that the cookies were deleted, so we can proceed with the test.
-
-### fixACTIVITY 8 - Test the manager console
-
-The manager console is where the manager creates a session, and starts the game so other participants can join it.
-
-We've been said that these applications is needing a face lifting. However, let's leave the cosmetics for another opportunity.
-
-This steps are going to be executed using the respository that you cloned to your local computer.
-
-1. Open a privacy/incognito page for your browser. This will guarantee that you will have the cookies cleared after use.
-2. Open this file that is on your application deployment: `./scoreboard/index.html`
-3. The page will show some fields for you to enter the username and password that you defined earlier. Do it
-4. If the application indicates `AccessDeniedException`, then we have an access problem. If that's the case, go to the next activity.
-
-
-### fixACTIVITY 9 - Cognito - Configure yourself as a manager
-
-We found some notes at the desk of the solution architect. There is a piece of paper where is written *"use AWS CLI to make yourself an application admin"*. The following steps were found that paper. Hopefully they will help you to solve the issue.
-
-**Task 1.** Take note of the USER POOL ID  
-
-1. Visit your AWS console, and go to Cognito
-2. Click on **Manager User Pools**
-3. Click on the user pool that has the same name as the one that you defined for your application (`envNameSuffix`)
-4. Take note of the *Pool Id* (or copy it to a helper text file)
-
-**Task 2.** Use AWS CLI to include your username into the Managers group  
-
-1. Go to the terminal of your Cloud9 environment - or on your computer, with AWS CLI credentials properly configured with administrative permissions.
-2. Run the command below. The command will add you to the group *Managers*, which will give you access to the Scoreboard Manager resources
-3. Get back to the manager console, and try access it again
-
-~~~
-$ aws cognito-idp admin-add-user-to-group --user-pool-id <userpoolid> --username <username that you used to register> --group-name Managers --region <region>
-~~~
-
-There is another way of solving this at the AWS Console. Go to Cognito, visit User Pools, click on `Users and groups`, and check the group Managers. You can add and remove users from there. 
-
-
-**IMPORTANT**: This is another action that we DON'T WANT to be executed by hand. How to fix this? How to make the deployment of the environment to create an admin user automatically? Think about it. We will need it in another fixing workshop.
-
-
-### fixACTIVITY 10 - Create a session for the game
-
-If the previous activity went well, you have the management console ready to have a session configured.
-
-Execute again the steps of the **fixAcitivy 8*. You are not going to get a AccessDeniedException. 
-
-Follow the steps below to create a gaming session.
+Get back to the manager console ('scoreboard/index.html' on your local computer), and follow the steps below to create a gaming session.
 
 1. On the field `Session Name` input **TEST**
 2. On the section `Game Type`, select **Multiple trials**
