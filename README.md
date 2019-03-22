@@ -6,13 +6,13 @@ Welcome to the AWS Space Invaders workshop (beta version).
 
 *UnicornGames* is a company focused in designing games for entertainment and in implementing gamefication strategies for companies over different contexts, like sales tracking, investment performance tracking, and more.
 
-We just bought the Space Invaders Unit from UnicornGames. Space Invaders seems to be only a simple game, but under the hood it is a near real-time application (NRTA) that computes scores from a incoming stream of data, and we want to leverage for other purposes. 
+We just bought the Space Invaders Unit from UnicornGames. Space Invaders seems to be only a simple game, but under the hood it is a near real-time application (NRTA) that computes scores from an incoming stream of data, and we want to leverage it for other purposes. 
 
-The Chief Development Engineer at UnicornGames is not happy by being acquired. He was expecting to become a VP and to buy part of the company. With our acquisition, he mutinied and left the company, taking some of the lead SDEs with him and leaving us with with broken code that we need to fix. 
+The Chief Development Engineer at the Space Invaders Unit of UnicornGames is not happy by being acquired. He was expecting to become a VP and to buy part of the company. With our acquisition, he mutinied and left the company, taking some of the lead SDEs with him, and leaving us with with a broken code that we need to fix. 
 
-We were able to recover some instructions that we believe will help us to deploy the broken environment, and fix it. 
+We were able to recover some instructions that we believe will help us to deploy the broken environment, and fix it timely for the C-level demo.
 
-We hope that your skills may help us with the challenge of MAKING THE APPLICATION TO WORK.
+We hope that your skills may help us with the challenge of *MAKING THE APPLICATION TO WORK*.
 
 
 # Instructions
