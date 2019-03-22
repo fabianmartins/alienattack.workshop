@@ -133,7 +133,7 @@ A totally successful compilation will be something like the output below:
 **IMPORTANT:** If you decide for not using the continuos compiling, you must remember to run `npm run build` every time you save a file.
 
 
-#### STEP 7 - Synthetize the cloudformation for your environment
+#### STEP 7 - Synthesize the cloudformation for your environment
 
 Go to the other available terminal at your Cloud9 environment and be sure of being at the CDK folder
 
@@ -196,7 +196,7 @@ Unable to find output file /tmp/cdkF6Q2pM/cdk.out; are you calling app.run()?
 
 ***
 
-Being inside the cdk folder as shown below, ask CDK to synthetize the Cloudformation specification for your environment.
+Being inside the cdk folder as shown below, ask CDK to synthesize the Cloudformation specification for your environment.
 
 ~~~
 cdk synth -c envname=<envname> -c suffix=<suffix>
@@ -228,7 +228,9 @@ The system is comprised of two applications: the Game, and the Scoreboard.
 
 We know that the system is not running properly because we tried to run each one of the applications, and while with the console open on the browser, we could see a lot of errors, and it's clear that the application is broken.
 
-As you will need to run application after fixing it (or now, just to check if it's really broken), here is the guidance for opening each one of the applications. For this part, you will use the environment that you cloned **into your local computer** on the step ["Clone the application repository - ON YOUR COMPUTER"](#config-cloneapprep).
+As you will need to run the application after fixing it (or now, just to check if it's really broken), here is the guidance for opening each one of the applications. 
+
+For this part, you will use the environment that you cloned **into your local computer** on the step ["Clone the application repository - ON YOUR COMPUTER"](#config-cloneapprep).
 
 * **Manager console**: using your browser, visit the folder where you installed the application, and open **`./scoreboard/index.html`**.
 * **Game console**: using your browser, visit the folder where you installed the application, and open **`./game/index.html`**.
@@ -263,7 +265,7 @@ Here is how to do it:
   * Click on **Stages**.
   * Click on **prod**.
   * At the top of the screen, on the right, you will see the **INVOKE URL**. It has the format `https://<API Id>.execute-api.<region>.amazonaws.com/prod`. When copying it to the required field in the awsconfig.js, don't forget to add the */v1/* at the end.
-3. **APPNAME**: This one is easy. Just copy the values that you selected for *envName* and *suffix*. So, for instance, if you selected *r2* for envName, and *d2* for suffix, then the value for this field will be  For the sake of simplicity, from now and on we will use *envNamesuffix* to refer to this combination.
+3. **APPNAME**: This one is easy. Just copy the values that you selected for *envName* and *suffix*, **BUT MAKE SURE TO USE UPPERCASE**. So, for instance, if you selected *r2* for envName, and *d2* for suffix, then the value for this field will be *R2D2*.  For the sake of simplicity, from now and on we will use *envNamesuffix* to refer to this combination.
 
 **IMPORTANT**  
 
@@ -273,7 +275,7 @@ Here is how to do it:
 
 ### fixACTIVITY 2 - Test the registration process
 
-Now, probably the application must be running. Let's try to create an user.
+Now, probably the application must be running, at least in part. Let's try to create an user.
 
 This steps are going to be executed using the respository that you cloned to your local computer.
 
@@ -300,7 +302,7 @@ This steps are going to be executed using the respository that you cloned to you
 
 ### fixACTIVITY 4 - Test the manager console
 
-The manager console is where the manager creates a session, and starts the game so other participants can join it.
+The manager console is where the manager creates a game session, and starts the game so the other participants can join it.
 
 We've been said that these applications is needing a face lifting. However, let's leave the cosmetics for another opportunity.
 
@@ -333,12 +335,12 @@ The Identity Pool configuration is missing the configuration of the roles for ea
 8. First rule - **MANAGERS**
 	* For the field `Claim`, input the value **cognito:preferred_role**
 	* For the drop down box at the right side of the field, leave the value **Contains** selected
-	* For the input box at the right of the `Contains` box, input the value **`<envNameprefix>ManagersRole`**. Be careful with typos, and respect the uppercase/lowercase.
+	* For the input box at the right of the `Contains` box, input the value **`<envNameprefix>ManagersRole`**. Be careful with typos, and use uppercase for the *<envNamePrefix>* part.
 	* For the drop down box on the right, select **`<envNameprefix>ManagersRole`**
 9. Second rule - **PLAYERS**
 	* For the field `Claim`, input the value **cognito:preferred_role**
 	* For the drop down box at the right side of the field, leave the value **Contains** selected
-	* For the input box at the right of the `Contains` box, input the value **`<envNameprefix>PlayersRole`**. Be careful with typos, and respect the uppercase/lowercase.
+	* For the input box at the right of the `Contains` box, input the value **`<envNameprefix>PlayersRole`**. Be careful with typos, and use uppercase for the *<envNamePrefix>* part.
 	* For the drop down box on the right, select **`<envNameprefix>PlayersRole`**
 10. **Role resolution**: Select **`Deny`**
 11. Double check everything for typos, especially the fields *"Claim"* and *"Role"*
@@ -389,7 +391,7 @@ There is another way of solving this at the AWS Console. Go to Cognito, visit Us
 
 **IMPORTANT**: This is another action that we DON'T WANT to be executed by hand. How to fix this? How to make the deployment of the environment to create an admin user automatically? Think about it. We will need it in another fixing workshop.
 
-After fixing this, try to login to the manager console again (*fixActivity 4). If you get a **ParameterNotFound: null**, then proceed to the next activity. It will solve it, we believe.
+After fixing this, try to login to the manager console again (*fixActivity 4*). If you get a **ParameterNotFound: null**, then proceed to the next activity. It will solve it, we believe.
 
 
 ### fixACTIVITY 8 - Systems Manager - Create the missing parameter
@@ -399,7 +401,9 @@ One of the System Administrators took a look at the environment, and he said tha
 **Systems Manager** provides you mechanisms to store parameters for your applications,  encrypted parameters for sensitive data, and more. Parameter Store is free and depending on the requirements, is cheaper and more efficient than using a database to store non-sensitive configuration data. Know more about the service [here](https://docs.aws.amazon.com/systems-manager/index.html), and specifically for parameter store [here](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html).
 
 ##### [Problem] 
-It seems that a *'session'* parameter is missing, and making the application to break. This parameter holds the game session configuration, every time when the Manager creates a new session. The parameter must exist on the back-end. We need to create it.
+It seems that a *'session'* parameter is missing, and this is making the application to break. 
+
+This parameter holds the game session configuration, every time when the Manager creates a new session, or closes it. The parameter must exist on the back-end. We need to create it.
 
 ##### [Solution guidance]
 1. On the AWS Console, go to Systems Manager.
@@ -421,7 +425,9 @@ If you want to skip this activity:
 2. Save everything and run **`cdk diff -c envname=<envName> -c suffix=<suffix>`** at the terminal. This will show you what will be changed on your environment
 3. If you agree with the changes, run **`cdk deploy -c envname=<envName> -c suffix=<suffix>`** to deploy the changes
 
-After fixing this, try to login to the manager console again (*fixActivity 4). You will be forwarded to the configuration page. The access seems to be ok. But *DON'T TRY TO PLAY YET*. 
+After fixing this, try to login to the manager console again (*fixActivity 4). You will be forwarded to the configuration page. The access seems to be ok. 
+
+But, **DON'T TRY TO PLAY YET**. 
 
 In accordance to some notes found, there are other pieces to be fixed.
 
