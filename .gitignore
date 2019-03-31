@@ -3,8 +3,7 @@ cdk/bin/*.js
 cdk/lib/*.js
 cdk/lib/layer/*.js
 cdk/lib/util/*.js
-cdk/node_modules/.bin/
-cdk/node_modules/**
+cdk/node_modules
 cdk/output/**
 *.d.ts
 *.yaml
