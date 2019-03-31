@@ -5,6 +5,7 @@ cdk/lib/layer/*.js
 cdk/lib/util/*.js
 cdk/node_modules/.bin/
 cdk/node_modules/**
+cdk/output/**
 *.d.ts
 *.yaml
 node_modules
