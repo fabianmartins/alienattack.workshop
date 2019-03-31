@@ -1,10 +1,8 @@
 .DS_Store
 cdk/bin/*.js
 cdk/lib/*.js
-cdk/lib/constructs/*.js
 cdk/lib/layer/*.js
 cdk/lib/util/*.js
-cdk/*.js
 cdk/node_modules/.bin/
 cdk/node_modules/**
 *.d.ts
