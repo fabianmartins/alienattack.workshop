@@ -5,6 +5,7 @@ cdk/lib/constructs/*.js
 cdk/lib/layer/*.js
 cdk/lib/util/*.js
 cdk/*.js
+cdk/node_modules/
 *.d.ts
 *.yaml
 node_modules
