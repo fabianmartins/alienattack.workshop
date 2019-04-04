@@ -125,7 +125,7 @@ There are two ways of building the environment: *continuously*, and *on demand*.
 
 *On demand* is done by running `npm run build` from inside the cdk folder at each time you change a .ts (typescript) file. This is not very operational, so we will stick to *continuous compiling*.
 
-*Contiuous compiling*, the recommended approach, means that the environment will be compiled at every file change, so you can check possible errors right away.
+*Continuous compiling*, the recommended approach, means that the environment will be automatically compiled at every file change, so you can check possible errors right away.
 
 One way of configuring continuous compiling is by having 2 terminals open. One you will be using to issue commands. The other one, you will be using to monitor the progress of the development and corresponding compilation.
 
@@ -154,7 +154,7 @@ A totally successful compilation will be something like the output below:
 [0:00:14 AM] Found 0 errors. Watching for file changes.
 ~~~  
 
-**IMPORTANT:** If you decide for not using the continuos compiling, you must remember to run `npm run build` every time you save a file.
+**IMPORTANT:** If you decide for not using the continuous compiling, you must remember to run `npm run build` every time you save a file.
 
 
 #### STEP 7 - Synthesize the cloudformation for your environment
@@ -169,7 +169,8 @@ You will need to decide for an **"Environment name"** that will be used to confi
 
 **My suggestions for you:**  
  
-* **DON'T** use long names like *ThisIsMyEnvironmentName*, or *ThisIsAVeryLongAndUnecessaryName*. Keep it simple. User something like Env01.
+* **DON'T** use long names like *ThisIsMyEnvironmentName*, or *ThisIsAnUnecessaryVeryLongAndName*. Keep it simple. User something like Env01.
+* Also, **DON'T** use very short names, like *fm*. Try to use at least 5 characters to avoid name collisions.
 * If you're alone in the account/region, pick a small word for envname, like your initials, and add the month and day just to avoid collisions (ex: fabi0405)
 * Avoid using potentially reserved words. Possible reserved words are AWS, S3, and so on.
 
@@ -302,7 +303,7 @@ Here is how to do it:
 
 Now, probably the application must be running, at least in part. Let's try to create an user.
 
-This steps are going to be executed using the respository that you cloned **to your local computer**.
+These steps are going to be executed using the respository that you cloned **to your local computer**.
 
 1. Confirm that you executed the Fix Activity 1. The file `./resources/js/aws_config.js` must be properly configured.
 2. Open a privacy/incognito page for your browser. This will guarantee that you will have the cookies cleared after use.
@@ -310,16 +311,16 @@ This steps are going to be executed using the respository that you cloned **to y
 4. If everything was ok, and the application was able to retrieve the configurations, you will see a page with the buttons `Register` and `Login`. Choose **Register**.
 5. Register yourself filling the fields properly
 	* **Username**: Define a username. Use only lowercase letters and don't use symbols.
-	* **e-mail**: You will need a valid and accessible email. Cognito needs to send you a confirmation email and you will need to click on it to confirm.
+	* **e-mail**: You will need a valid and accessible email. Cognito needs to send you a confirmation email and you will need to click on it to confirm. We recommend using a personal email to not get into anti-spam controls.
 	* **Password**: For testing purposes, use a simple password (like `abc123`). This password is managed by Cognito. So, it's not stored on any application database.
-	* **Confirm (and memorize) your password**: Repeat your password.
+	* **Confirm (and memorize, or take note) your password**: Repeat your password.
 	* **Your company's web domain (ex: aws.amazon.com)**: Input your company domain.
 	* Click on the button **Register**.
 6. If everything went well, you will receive a confirmation on your email. Open the email and click on the link.
 
 ### fixACTIVITY 3 - Test the login process
 
-1. Get back to the application on your browser (the one that you opened from `./game/index.html`), and now choose **Login** (or skip to step 2 if you already there).
+1. Get back to the application on your browser (the one that you opened from `./game/index.html`), and now choose **Login** (or skip to step 2 if you're already there).
 2. Enter your credentials, and click on **Login**.
 3. If you entered your credentials right, you will see a pop-up message `Login successful to user <username>`.
 4. If you get to a page where the indicating status is WAITING and a count down stopped at 10, then the login is ok, but something else is wrong (you can check the browser console, if you want).
@@ -329,21 +330,19 @@ This steps are going to be executed using the respository that you cloned **to y
 
 The manager console is where the manager creates a game session, and starts the game so the other participants can join it.
 
-We've been said that these applications is needing a face lifting. However, let's leave the cosmetics for another opportunity.
+We've been said that these applications are needing a face lifting. However, let's leave the cosmetics for another opportunity.
 
 **These steps are going to be executed using the respository that you cloned to your local computer.**
 
 1. Open a privacy/incognito page for your browser. This will guarantee that you will have the cookies cleared after use.
 2. Open this file that is on your application deployment: `./scoreboard/index.html`.
 3. The page will show some fields for you to enter the username and password that you defined earlier. Do it.
-4. If the application indicates `AccessDeniedException`, then we have an access problem.
-
-Proceed to the next fixActivity to keep on fixing the system.
+4. If the application indicates `AccessDeniedException`, then we have an access problem. Proceed to the next fixActivity to keep on fixing the system.
 
 
 ### fixACTIVITY 5 - Cognito - Fix the permissions on the groups for RBAC
 
-The people from the Security Team that joined our task force to solve the issues said that is essential that RBAC (Role-Based Access Control) is properly configured on the system. They also said that the current version of the CDK doesn't allow us to solve that by code, unless we create a Custom Resource as it was done for the creation of the User Pool. Nobody on the team knows how to do it, but one of the SysAdmins said that he has a playbook for that, and send us the guidance. Let's try to leverage it.
+The people from the Security Team that joined our task force to solve the issues said that is essential to have RBAC (Role-Based Access Control) properly configured on the system. They also said that the version of the CDK used here doesn't allow us to solve that by code, unless we create a Custom Resource as it was done for the creation of the User Pool. Nobody on the team knows how to do it, and we're not but one of the SysAdmins said to have the playbook for that, and send us the guidance. Let's try to leverage it.
 
 ##### [Problem] 
 The Identity Pool configuration is missing the configuration of the roles for each one of the groups (Managers and Players). We need to attach the proper roles to the user when the user signs in to the application.
@@ -354,19 +353,19 @@ The Identity Pool configuration is missing the configuration of the roles for ea
 2. If you got to the landing page of the service, you will click on the button **Manage Identity Pools**.
 3. You will see an Identity Pool named as `<envName>`. Click on it.
 4. On the top right, there is a very discreet label entitled `Edit Identity Pool`. Click on it.
-5. Open the section `Authentication Providers`
-6. Click on the tab `Cognito` just to be sure that you have it selected
-7.  On the section `Authenticated role selection` there is a select button labeled as `Use default role`. Click on this button and select **Choose role with rules**. We will create two rules
+5. Open the section `Authentication Providers`.
+6. Click on the tab `Cognito` just to be sure that you have it selected.
+7.  On the section `Authenticated role selection` there is a select button labeled as `Use default role`. Click on this button and select **Choose role with rules**. We will create two rules.
 8. First rule - **MANAGERS**
-	* For the field `Claim`, input the value **cognito:preferred_role**
-	* For the drop down box at the right side of the field, leave the value **Contains** selected
-	* For the input box at the right of the `Contains` box, input the value **`<envNameprefix>ManagersRole`**. Be careful with typos, and use uppercase for the *<envNamePrefix>* part.
-	* For the drop down box on the right, select **`<envNameprefix>ManagersRole`**
+	* For the field `Claim`, input the value **cognito:preferred_role**.
+	* For the drop down box at the right side of the field, leave the value **Contains** selected.
+	* For the input box at the right of the `Contains` box, input the value **`<envName>ManagersRole`**. Be careful with typos, and use uppercase for the *`<envName>`* part.
+	* For the drop down box on the right, select **`<envName>ManagersRole`**.
 9. Second rule - **PLAYERS**
-	* For the field `Claim`, input the value **cognito:preferred_role**
-	* For the drop down box at the right side of the field, leave the value **Contains** selected
-	* For the input box at the right of the `Contains` box, input the value **`<envNameprefix>PlayersRole`**. Be careful with typos, and use uppercase for the *<envNamePrefix>* part.
-	* For the drop down box on the right, select **`<envNameprefix>PlayersRole`**
+	* For the field `Claim`, input the value **cognito:preferred_role**.
+	* For the drop down box at the right side of the field, leave the value **Contains** selected.
+	* For the input box at the right of the `Contains` box, input the value **`<envName>PlayersRole`**. Be careful with typos, and use uppercase for the *`<envName>`* part.
+	* For the drop down box on the right, select **`<envName>PlayersRole`**.
 10. **Role resolution**: Select **`Deny`**
 11. Double check everything for typos, especially the fields *"Claim"* and *"Role"*
 11. Leave everything else as it is and click on **`Save changes`**
@@ -426,7 +425,7 @@ One of the System Administrators took a look at the environment, and he said tha
 ##### [Problem] 
 It seems that a *'session'* parameter is missing, and this is making the application to break. 
 
-This parameter holds the game session configuration, every time when the Manager creates a new session, or closes it. The parameter must exist on the back-end. We need to create it.
+This parameter holds the game session configuration. Every time when the Manager creates a new session, or closes it, it's updated. The parameter must exist on the back-end. We need to create it.
 
 ##### [Solution guidance]
 1. On the AWS Console, go to Systems Manager.
@@ -448,7 +447,7 @@ If you want to skip this activity:
 2. Save everything and run **`cdk diff -c envname=<envName>`** at the terminal. This will show you what will be changed on your environment
 3. If you agree with the changes, run **`cdk deploy -c envname=<envName>`** to deploy the changes
 
-After fixing this, try to login to the manager console again (*fixActivity 4). You will be forwarded to the configuration page. The access seems to be ok. 
+After fixing this, try to login to the manager console again (*fixActivity 4*). You will be forwarded to the configuration page. The access seems to be ok. 
 
 But, **DON'T TRY TO PLAY YET**. 
 
