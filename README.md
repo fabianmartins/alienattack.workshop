@@ -165,34 +165,33 @@ Go to the other available terminal at your Cloud9 environment and be sure of bei
 ~/environment/spaceinvaders.workshop/cdk (master) $
 ~~~
 
-You will need to decide for an **"Environment name"** and, optionally, for a **"suffix"**. These values will be used to configure your environment.
+You will need to decide for an **"Environment name"** that will be used to configure and deploy your environment.
 
 **My suggestions for you:**  
  
-* **DON'T** use long names like *ThisIsMyEnvironmentName*, or *ThisIsAVeryLongAndUnecessarySuffixName*. Keep it simple. User something like Env01.
-* If you're alone in the account/region, pick a small word for envname, like your initials, and *disregard* the suffix. 
-* Avoid using words potentially reserved for envname and suffix. Possible reserved words are AWS, S3, and so on.
+* **DON'T** use long names like *ThisIsMyEnvironmentName*, or *ThisIsAVeryLongAndUnecessaryName*. Keep it simple. User something like Env01.
+* If you're alone in the account/region, pick a small word for envname, like your initials, and add the month and day just to avoid collisions (ex: fabi0405)
+* Avoid using potentially reserved words. Possible reserved words are AWS, S3, and so on.
 
-The configuration was designed like this - having a name for the environment and a suffix - for the case when different individuals are sharing the same account (due their company's requirements) and sharing the same region (due the need of specific features of the AWS services, only available in such regions).
+The configuration was designed like this for the case when different individuals are sharing the same account (due their company's requirements) and sharing the same region (due the need of specific features of the AWS services, only available in such regions).
 
-Yet, the values chosen for **"envname"** and **"suffix"** are used to create the buckets required by the application, so chose them in a way that most likely will avoid collision to S3 bucket names (which are global).
+Yet, the value chosen for **"envname"** is used to create the buckets required by the application, so chose them in a way that most likely will avoid collision to S3 bucket names (which are global).
 
-Let's suppose that you selected envname=r2, and suffix=d2. Then, if the deployment is successful, at the end something like this will appear
+Let's suppose that you selected envname=r2d2. Then, if the deployment is successful, at the end something like this will appear
 
 ***
 
- ✅  NRTAR2D2
+ ✅  R2D2
 
 Stack ARN:
-arn:aws:cloudformation:<region>:<account>:stack/NRTAR2D2/bc543b91-451f-33f9-442a-02e473ddfb1a
+arn:aws:cloudformation:<region>:<account>:stack/R2D2/bc543b91-451f-33f9-442a-02e473ddfb1a
 
-And the deployment will have created the buckets **nrtar2d2.app** and **nrtar2d2.raw**.
+And the deployment will have created the buckets **r2d2.app** and **r2d2.raw**.
 
-if the deployment WAS NOT SUCCESSFUL, then almost surely you had a S3 bucket name collision. if the message is similar to the one below, then chose another envname and/or suffix for your deployment. In the example below, the name TEST for the environment provokes a collision:
+if the deployment WAS NOT SUCCESSFUL, then almost surely you had a S3 bucket name collision. if the message is similar to the one below, then chose another envname for your deployment. In the example below, the name TEST for the environment provokes a collision:
 
 ~~~
->>>> envname: TEST
->>>> providedSuffix: 
+Environment name: TEST
 [ { Forbidden: null
       at Request.extractError (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/services/s3.js:565:35)
       at Request.callListeners (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/sequential_executor.js:106:20)
@@ -223,7 +222,7 @@ Unable to find output file /tmp/cdkF6Q2pM/cdk.out; are you calling app.run()?
 Being inside the cdk folder as shown below, ask CDK to synthesize the Cloudformation specification for your environment.
 
 ~~~
-cdk synth -c envname=<envname> -c suffix=<suffix>
+cdk synth -c envname=<envname>
 ~~~
 
 This will generate an output for the corresponding Cloudformation template. You can save it by redirecting the result to some folder, so you can read it through.
@@ -231,10 +230,10 @@ This will generate an output for the corresponding Cloudformation template. You 
 
 ## Deploy your backend
 
-Being at your cdk folder, and having decided for an *envname* and a *suffix*, run the following command:
+Being at your cdk folder, and having decided for an *envname*, run the following command:
 
 ~~~
-cdk deploy -c envname=<envname> -c suffix=<suffix>
+cdk deploy -c envname=<envname>
 ~~~
 
 CDK will first to show you what changes will be applied to the environment. After that, it will ask if you really want to deploy.
@@ -289,38 +288,40 @@ Here is how to do it:
   * Click on **Stages**.
   * Click on **prod**.
   * At the top of the screen, on the right, you will see the **INVOKE URL**. It has the format `https://<API Id>.execute-api.<region>.amazonaws.com/prod`. When copying it to the required field in the awsconfig.js, don't forget to add the */v1/* at the end.
-3. **APPNAME**: This one is easy. Just copy the values that you selected for *envName* and *suffix*, **BUT MAKE SURE TO USE UPPERCASE**. So, for instance, if you selected *r2* for envName, and *d2* for suffix, then the value for this field will be *R2D2*.  For the sake of simplicity, from now and on we will use *envNamesuffix* to refer to this combination.
+3. **APPNAME**: This one is easy. Just copy the values that you selected for *envName*, **BUT MAKE SURE TO USE UPPERCASE**. So, for instance, if you selected *r2d2* for envName, then the value for this field will be *R2D2*. 
 
 **IMPORTANT**  
 
-* Don't forget to maintain the quotes that are on those fields.
-* Be sure of using **uppercase** for the value of the field APPNAME.
+* Be sure of saving the file using UTF-8 (pure text). Avoid editors that save the files with special characters
+* Don't forget to maintain the quotes that are on those fields. 
+  * For example, if you are in us-east-1, the line for the region will be `"region" : "us-east-1"`. See, the quotes are there
+* Be sure of using **uppercase** for the value of the field APPNAME. So, for example, if your environment name is r2d2, the line for appName will become `"APPNAME" : "R2D2"`. Again, the quotes are there
 * Save the file!
 
 ### fixACTIVITY 2 - Test the registration process
 
 Now, probably the application must be running, at least in part. Let's try to create an user.
 
-This steps are going to be executed using the respository that you cloned to your local computer.
+This steps are going to be executed using the respository that you cloned **to your local computer**.
 
 1. Confirm that you executed the Fix Activity 1. The file `./resources/js/aws_config.js` must be properly configured.
 2. Open a privacy/incognito page for your browser. This will guarantee that you will have the cookies cleared after use.
 3. Open this file that is on your application deployment: `./game/index.html`
-4. If everything was ok, and the application was able to retrieve the configurations, you will see a page with the buttons `Register` and `Login`. Choose **Register**
+4. If everything was ok, and the application was able to retrieve the configurations, you will see a page with the buttons `Register` and `Login`. Choose **Register**.
 5. Register yourself filling the fields properly
-	* **Username**: Define a username. Use only lowercase letters and don't use symbols
-	* **e-mail**: You will need a valid and accessible email. Cognito needs to send you a confirmation email and you will need to click on it to confirm
-	* **Password**: For testing purposes, use a simple password (like `abc123`). This password is managed by Cognito. So, it's not stored on any application database
-	* **Confirm (and memorize) your password**: Repeat your password
+	* **Username**: Define a username. Use only lowercase letters and don't use symbols.
+	* **e-mail**: You will need a valid and accessible email. Cognito needs to send you a confirmation email and you will need to click on it to confirm.
+	* **Password**: For testing purposes, use a simple password (like `abc123`). This password is managed by Cognito. So, it's not stored on any application database.
+	* **Confirm (and memorize) your password**: Repeat your password.
 	* **Your company's web domain (ex: aws.amazon.com)**: Input your company domain.
-	* Click on the button **Register**
+	* Click on the button **Register**.
 6. If everything went well, you will receive a confirmation on your email. Open the email and click on the link.
 
 ### fixACTIVITY 3 - Test the login process
 
-1. Get back to the application on your browser (the one that you opened from `./game/index.html`), and now choose **Login** (or skip to step 2 if you already there)
-2. Enter your credentials, and click on **Login**
-3. If you entered your credentials right, you will see a pop-up message `Login successful to user <username>`
+1. Get back to the application on your browser (the one that you opened from `./game/index.html`), and now choose **Login** (or skip to step 2 if you already there).
+2. Enter your credentials, and click on **Login**.
+3. If you entered your credentials right, you will see a pop-up message `Login successful to user <username>`.
 4. If you get to a page where the indicating status is WAITING and a count down stopped at 10, then the login is ok, but something else is wrong (you can check the browser console, if you want).
 5. Close the window, to be sure that the cookies were deleted, so we can proceed with the test.
 
@@ -330,11 +331,11 @@ The manager console is where the manager creates a game session, and starts the 
 
 We've been said that these applications is needing a face lifting. However, let's leave the cosmetics for another opportunity.
 
-These steps are going to be executed using the respository that you cloned to your local computer.
+**These steps are going to be executed using the respository that you cloned to your local computer.**
 
 1. Open a privacy/incognito page for your browser. This will guarantee that you will have the cookies cleared after use.
-2. Open this file that is on your application deployment: `./scoreboard/index.html`
-3. The page will show some fields for you to enter the username and password that you defined earlier. Do it
+2. Open this file that is on your application deployment: `./scoreboard/index.html`.
+3. The page will show some fields for you to enter the username and password that you defined earlier. Do it.
 4. If the application indicates `AccessDeniedException`, then we have an access problem.
 
 Proceed to the next fixActivity to keep on fixing the system.
@@ -342,16 +343,16 @@ Proceed to the next fixActivity to keep on fixing the system.
 
 ### fixACTIVITY 5 - Cognito - Fix the permissions on the groups for RBAC
 
-The people from the Security Team that joined our taskforce to solve the issues said that is essential that RBAC (Role-Based Access Control) is properly configured on the system. They also said that the current version of the CDK doesn't allow us to solve that by code, unless we create a Custom Resource as it was done for the creation of the User Pool. Nobody on the team knows how to do it, but one of the SysAdmins said that he has a playbook for that, and send us the guidance. Let's try to leverage it.
+The people from the Security Team that joined our task force to solve the issues said that is essential that RBAC (Role-Based Access Control) is properly configured on the system. They also said that the current version of the CDK doesn't allow us to solve that by code, unless we create a Custom Resource as it was done for the creation of the User Pool. Nobody on the team knows how to do it, but one of the SysAdmins said that he has a playbook for that, and send us the guidance. Let's try to leverage it.
 
 ##### [Problem] 
 The Identity Pool configuration is missing the configuration of the roles for each one of the groups (Managers and Players). We need to attach the proper roles to the user when the user signs in to the application.
 
-##### [Solution guidance 1]
+##### [Solution guidance]
 
 1. On your AWS Console, visit the Cognito service page.
 2. If you got to the landing page of the service, you will click on the button **Manage Identity Pools**.
-3. You will see an Identity Pool named as `<envNamesuffix>`. Click on it.
+3. You will see an Identity Pool named as `<envName>`. Click on it.
 4. On the top right, there is a very discreet label entitled `Edit Identity Pool`. Click on it.
 5. Open the section `Authentication Providers`
 6. Click on the tab `Cognito` just to be sure that you have it selected
@@ -374,7 +375,7 @@ The Identity Pool configuration is missing the configuration of the roles for ea
 The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixcognito.sh` which is inside the folder `~/environment/spaceinvaders.workshop`. Go to that folder, and run the following command:
 
 ~~~
-source fixcognito.sh <envname> <suffix>
+source fixcognito.sh <envname>
 ~~~
 
 ### fixACTIVITY 6 - Testing the accesses again
@@ -396,7 +397,7 @@ We found some notes at the desk of the solution architect. There is a piece of p
 
 1. Visit your AWS console, and go to Cognito
 2. Click on **Manager User Pools**
-3. Click on the user pool that has the same name as the one that you defined for your application (`envNameSuffix`)
+3. Click on the user pool that has the same name as the one that you defined for your application (`envName`)
 4. Take note of the *Pool Id* (or copy it to a helper text file)
 
 **Task 2.** Use AWS CLI to include your username into the Managers group  
@@ -422,8 +423,6 @@ After fixing this, try to login to the manager console again (*fixActivity 4*). 
 
 One of the System Administrators took a look at the environment, and he said that a parameter missing on the back-end. He said that we need to fix Systems Manager. Go to the Systems Manager console, and create the parameter as specified below.
 
-**Systems Manager** provides you mechanisms to store parameters for your applications,  encrypted parameters for sensitive data, and more. Parameter Store is free and depending on the requirements, is cheaper and more efficient than using a database to store non-sensitive configuration data. Know more about the service [here](https://docs.aws.amazon.com/systems-manager/index.html), and specifically for parameter store [here](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html).
-
 ##### [Problem] 
 It seems that a *'session'* parameter is missing, and this is making the application to break. 
 
@@ -431,10 +430,10 @@ This parameter holds the game session configuration, every time when the Manager
 
 ##### [Solution guidance]
 1. On the AWS Console, go to Systems Manager.
-2. Scroll down to the section *Shared Resources*, and click on `Parameter Store`. You will see some parameters starting with `/<envNamesuffix>/`, but there is no parameter `/<envNamesuffix>/session`. Let's create it.
+2. Scroll down to the section *Shared Resources*, and click on `Parameter Store`. You will see some parameters starting with `/<envName>/`, but there is no parameter `/<envName>/session`. Let's create it.
 3. On the top right of the page, click on **Create parameter**
 4. On the section *Parameter details*, enter the following values:  
-  * Name: `/<envNamesuffix>/session`
+  * Name: `/<envName>/session`
   * Description: `Existing session (opened or closed)`
   * Type: `String`
   * Value:  `null` (insert the word *null*).
@@ -446,8 +445,8 @@ If everything went well, you will get the message *Create parameter request succ
 If you want to skip this activity: 
 
 1. Go your CDK project (the one that it's at Cloud9), search for *MISSING PARAMETER* on all .ts (typescript) files, and follow the guidances to adjust the code.
-2. Save everything and run **`cdk diff -c envname=<envName> -c suffix=<suffix>`** at the terminal. This will show you what will be changed on your environment
-3. If you agree with the changes, run **`cdk deploy -c envname=<envName> -c suffix=<suffix>`** to deploy the changes
+2. Save everything and run **`cdk diff -c envname=<envName>`** at the terminal. This will show you what will be changed on your environment
+3. If you agree with the changes, run **`cdk deploy -c envname=<envName>`** to deploy the changes
 
 After fixing this, try to login to the manager console again (*fixActivity 4). You will be forwarded to the configuration page. The access seems to be ok. 
 
@@ -467,12 +466,12 @@ We need to connect the Lambda function to Kinesis.
 
 ##### [Solution guidance]
 1. Go to your AWS Console, and visit the Lambda service page.
-2. Search for a function named **`<envNamesuffix>ScoreboardFn`**.  
+2. Search for a function named **`<envName>ScoreboardFn`**.  
 3. Click on the name of the function. You will be taken to the configuration of the lambda function.
 4. Check if the information sent from the rebel is correct. On the section named *Designer* if you see a message *"Add triggers from the list on the left"*, then the rebel is right. The trigger is missing. Let's create it.
 5. On the left, on the section 'Add triggers', click on **Kinesis**. A section named *Configure triggers* will appear below.
 6. Configure the fields:
-   * **Kinesis stream**: Select the Kinesis Data Stream attached to your environment. The name must be in the form `<envNamesuffix>_InputStream`
+   * **Kinesis stream**: Select the Kinesis Data Stream attached to your environment. The name must be in the form `<envName>_InputStream`
    * **Consumer**: select *No consumer*
    * **Batch size**: insert the value *700*.
    * **Starting position**: select *Latest*.
@@ -484,8 +483,8 @@ We need to connect the Lambda function to Kinesis.
 If you want to skip this activity: 
 
 1. Go your CDK project, search for *MISSING KINESIS INTEGRATION* on all .ts files, and follow the guidances to adjust the code.
-2. Save everything and run **`cdk diff -c envname=<envName> -c suffix=<suffix>`** at the terminal. This will show you what will be changed on your environment
-3. If you agree with the changes, run **`cdk deploy -c envname=<envName> -c suffix=<suffix>`** to deploy the changes
+2. Save everything and run **`cdk diff -c envname=<envName>`** at the terminal. This will show you what will be changed on your environment
+3. If you agree with the changes, run **`cdk deploy -c envname=<envName>`** to deploy the changes
 
 
 ### fixACTIVITY 10 - Kinesis Firehose - Create the missing Kinesis Firehose
@@ -504,7 +503,7 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
 2. On the service page you are expected to see the Kinesis Streams on the left, and a missing Kinesis Firehose for the application. Let's create it.
 3. Under the section *'Kinesis Firehose Delivery Streams*', or by clicking on *'Data Firehose*' at the left hand side, click on the button **Create Delivery Stream**.
 4. On the section *New delivery stream*, configure the fields as follows:
-   * **Delivery stream name**: `<envNamesuffix>Firehose`.
+   * **Delivery stream name**: `<envName>Firehose`.
    * **Source**: Select the radio button *'Kinesis stream'*. 
    * Drop-down **Choose Kinesis stream**: select the stream attached to your deployment (the same one we connected to the Lambda function).
    * Click **Next**.
@@ -512,7 +511,7 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
    * **Record format conversion**: Select *'Disabled'*.
    * Click **Next**.
    * **Destination**: Click S3, even if it's already selected.
-   * **S3 bucket**: Select the bucket attached to your application. The name will have the form `<envNamesuffix>.raw`.
+   * **S3 bucket**: Select the bucket attached to your application. The name will have the form `<envName>.raw`.
    * **S3 prefix**: Leave it blank
    * **S3 error prefix**: Leave it blank
    * Click **Next**
@@ -523,7 +522,7 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
    * **Error logging**: Select *Enabled*
    * **IAM Role**: Click on the button `Create new or choose`. An IAM configuration page will open.
    		* *IAMRole*: Leave the option *Create a new IAM Role* selected.
-   		* *Role Name*: `<envNamesuffix>FirehoseRole`
+   		* *Role Name*: `<envName>FirehoseRole`
    		* Click on the button **Allow**. You will be taken to the previous page.
    	* Click **Next**.
    	* Check the presented configuration.
@@ -535,8 +534,8 @@ If everything went well, you will see that the delivery stream was created.
 If you want to skip this activity: 
 
 1. Go your CDK project, search for *MISSING KINESIS FIREHOSE* on all .ts files, and follow the guidances to adjust the code.
-2. Save everything and run **`cdk diff -c envname=<envName> -c suffix=<suffix>`** at the terminal. This will show you what will be changed on your environment
-3. If you agree with the changes, run **`cdk deploy -c envname=<envName> -c suffix=<suffix>`** to deploy the changes
+2. Save everything and run **`cdk diff -c envname=<envName>`** at the terminal. This will show you what will be changed on your environment
+3. If you agree with the changes, run **`cdk deploy -c envname=<envName>`** to deploy the changes
 
 
 ### fixACTIVITY 11 - Create a session for the game
@@ -553,7 +552,7 @@ If you are able to play, **you fixed it!**
 
 Play a little bit. Check the scoreboard. Check the DynamoDB tables. Check the S3 buckets after some time.
 
-It was said that for a full deployment, we will need to install the application at the S3 folder with the `<appNamesuffix>.app`. We will also need to deploy the CloudFront distribution because the S3 buckets are not public.
+It was said that for a full deployment, we will need to install the application at the S3 folder with the `<appNames>.app`. We will also need to deploy the CloudFront distribution because the S3 buckets are not public.
 
 For this last part, we got intel from the rebels that, to solve this, go to the file `mainLayer.ts` which is on the deployment at Cloud9, search for *MISSING CLOUDFRONT DISTRIBUTION* and uncomment it at that file. The deployment it will take something around 20 minutes. Same time it will be required for the undeployment. But we are not expecting to solve this part today. We at the company believe that it was a big win to have reached to this point. Let's leave other adjustments for another sprints.
 
@@ -564,16 +563,14 @@ For this last part, we got intel from the rebels that, to solve this, go to the 
 
 Go to the the terminal on your environment and type the following command. Be sure to be at your cdk folder.
 
-**IMPORTANT:** Be sure of using UPPERCASE both for ENVNAME and SUFFIX.
-
 ```
-$ cdk destroy -c envname=<envName> -c suffix=<suffix>
+$ cdk destroy -c envname=<envName>
 ```
 
 If everything went well, you will receive a message like the following one: 
 
 ```
-✅  NRTA<envNamesuffix>: destroyed
+✅  <envName>: destroyed
 ```
 
 ### cleanACTIVITY 2 - Cleaning up the last resources
@@ -582,10 +579,10 @@ Everything that was created by CloudFormation was deleted, with the exception of
 
 Let's fix this.
 
-1. Go to Systems Manager, then Parameter Store, and delete the parameter `<envNamesuffix>/session`
+1. Go to Systems Manager, then Parameter Store, and delete the parameter `<envName>/session`
 2. Go to Kinesis, then Kinesis Firehose, and delete the resource that you created by hand
-3. Go to IAM, and search for `<envNamesuffix>`. Delete any resource configured like that. For sure the only resource will be `<envNamesuffix>FirehoseRole`
-4. Delete the S3 buckets `<envNamesuffix>`.app and `<envNamesuffix>.raw`
+3. Go to IAM, and search for `<envName>`. Delete any resource configured like that. For sure the only resource will be `<envName>FirehoseRole`
+4. Delete the S3 buckets `<envName>`.app and `<envName>.raw`
 5. Delete your Cloud9 environment if you created it just for this workshop.
 
 ## Final activity

@@ -42,8 +42,8 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
     createKinesis(props: IParameterAwareProps) {
 
-        this.kinesisStreams = new KDS.Stream(this, props.getAppRefName() + 'InputStream', {
-            streamName: props.getAppRefName() + '_InputStream',
+        this.kinesisStreams = new KDS.Stream(this, props.getApplicationName() + 'InputStream', {
+            streamName: props.getApplicationName() + '_InputStream',
             shardCount: 1
         });
 
@@ -138,8 +138,8 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
     createAPIGateway(props: IParameterAwareProps) {
 
-        let apirole = new IAM.Role(this, props.getAppRefName() + 'APIRole', {
-            roleName: props.getAppRefName() + 'API'
+        let apirole = new IAM.Role(this, props.getApplicationName() + 'APIRole', {
+            roleName: props.getApplicationName() + 'API'
             , assumedBy: new IAM.ServicePrincipal('apigateway.amazonaws.com')
             , inlinePolicies: {
                 'LambdaPermissions':
@@ -149,7 +149,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                                 .allow()
                                 .addAction('lambda:InvokeFunction')
                                 .addAction('lambda:InvokeAsync')
-                                .addResource('arn:aws:lambda:' + props.region + ':' + props.accountId + ':function:' + props.getAppRefName() + '*')
+                                .addResource('arn:aws:lambda:' + props.region + ':' + props.accountId + ':function:' + props.getApplicationName() + '*')
                         ),
                 'SSMPermissions':
                     new PolicyDocument()
@@ -160,7 +160,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                                 .addAction("ssm:GetParametersByPath")
                                 .addAction("ssm:GetParameters")
                                 .addAction("ssm:GetParameter")
-                                .addResource('arn:aws:ssm:'.concat(props.region!, ':', props.accountId!, ':parameter/', props.getAppRefName().toLowerCase(), '/*'))
+                                .addResource('arn:aws:ssm:'.concat(props.region!, ':', props.accountId!, ':parameter/', props.getApplicationName().toLowerCase(), '/*'))
                         ),
                 'DynamoDBPermissions':
                     new PolicyDocument()
@@ -185,13 +185,13 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
         });
         apirole.attachManagedPolicy('arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs');
 
-        this.api = new APIGTW.CfnRestApi(this, props.getAppRefName() + "API", {
-              name: props.getAppRefName().toLowerCase()
-            , description: 'API supporting the application ' + props.getAppRefName()
+        this.api = new APIGTW.CfnRestApi(this, props.getApplicationName() + "API", {
+              name: props.getApplicationName().toLowerCase()
+            , description: 'API supporting the application ' + props.getApplicationName()
 
         });
 
-        new APIGTW.CfnGatewayResponse(this,props.getAppRefName()+'GTWResponse', {
+        new APIGTW.CfnGatewayResponse(this,props.getApplicationName()+'GTWResponse', {
             restApiId : this.api.restApiId
             ,responseType : 'DEFAULT_4XX'
             ,responseParameters : {
@@ -204,8 +204,8 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             }
         }).addDependsOn(this.api);
 
-        let authorizer = new APIGTW.CfnAuthorizer(this, props.getAppRefName() + "Authorizer", {
-            name: props.getAppRefName().toLowerCase() + 'Authorizer'
+        let authorizer = new APIGTW.CfnAuthorizer(this, props.getApplicationName() + "Authorizer", {
+            name: props.getApplicationName().toLowerCase() + 'Authorizer'
             , restApiId: this.api.restApiId
             , type: 'COGNITO_USER_POOLS'
             , identitySource: 'method.request.header.Authorization'
@@ -214,7 +214,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             ]
         });
 
-        let apiModelScoreboardResponse = new APIGTW.CfnModel(this, props.getAppRefName() + 'APIModelScoreboardResponseModel', {
+        let apiModelScoreboardResponse = new APIGTW.CfnModel(this, props.getApplicationName() + 'APIModelScoreboardResponseModel', {
             contentType: 'application/json'
             , description: 'Scoreboard response model (for /scoreboard/GET)'
             , name: 'ScoreboardResponseModel'
@@ -247,7 +247,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             }
         });
 
-        let apiModelGetParametersRequest = new APIGTW.CfnModel(this, props.getAppRefName() + 'APIModelGetParametersRequest', {
+        let apiModelGetParametersRequest = new APIGTW.CfnModel(this, props.getApplicationName() + 'APIModelGetParametersRequest', {
             contentType: 'application/json'
             , description: 'Model to request SSM:GetParameters'
             , name: 'GetParametersRequest'
@@ -263,7 +263,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
         });
 
         //Version 1 of the API
-        let v1 = new APIGTW.CfnResource(this, props.getAppRefName() + "APIv1", {
+        let v1 = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1", {
             parentId: this.api.restApiRootResourceId
             , pathPart: 'v1'
             , restApiId: this.api.restApiId
@@ -277,13 +277,13 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
          * GET {no parameter} - returns session data from ssm.parameter /ssm/session
          * 
          */
-        let session = new APIGTW.CfnResource(this, props.getAppRefName() + "APIv1session", {
+        let session = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1session", {
             parentId: v1.resourceId
             , pathPart: 'session'
             , restApiId: this.api.restApiId
         });
 
-        let sessionGetMethod = new APIGTW.CfnMethod(this, props.getAppRefName() + "APIv1sessionGET", {
+        let sessionGetMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1sessionGET", {
             restApiId: this.api.restApiId
             , resourceId: session.resourceId
             , authorizationType: APIGTW.AuthorizationType.Cognito
@@ -301,7 +301,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                 , uri: 'arn:aws:apigateway:' + props.region + ':ssm:action/GetParameter'
                 , credentials: apirole.roleArn
                 , requestParameters: {
-                      'integration.request.querystring.Name': "'/" + props.getAppRefName().toLowerCase() + "/session'"
+                      'integration.request.querystring.Name': "'/" + props.getApplicationName().toLowerCase() + "/session'"
                     , 'integration.request.header.Authentication': 'method.request.header.Authentication'
                 }
                 , requestTemplates : undefined
@@ -330,7 +330,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
         });
 
         // OPTIONS
-        let sessionOptionsMethod = new APIGTW.CfnMethod(this, props.getAppRefName() + "APIv1sessionOPTIONS", {
+        let sessionOptionsMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1sessionOPTIONS", {
             restApiId: this.api.restApiId
             , resourceId: session.resourceId
             , authorizationType: APIGTW.AuthorizationType.None
@@ -393,14 +393,14 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             ]
             }
          */
-        let config = new APIGTW.CfnResource(this, props.getAppRefName() + "APIv1config", {
+        let config = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1config", {
             parentId: v1.resourceId
             , pathPart: 'config'
             , restApiId: this.api.restApiId
         });
 
         // GET
-        let configGetMethod = new APIGTW.CfnMethod(this, props.getAppRefName() + "APIv1configGET", {
+        let configGetMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1configGET", {
             restApiId: this.api.restApiId
             , resourceId: config.resourceId
             , authorizationType: APIGTW.AuthorizationType.None
@@ -423,10 +423,10 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                 }
                 , requestTemplates: {
                     'application/json': '{"Names" : [' +
-                        '"/' + props.getAppRefName().toLowerCase() + '/userpoolid",' +
-                        '"/' + props.getAppRefName().toLowerCase() + '/userpoolurl",' +
-                        '"/' + props.getAppRefName().toLowerCase() + '/clientid",' +
-                        '"/' + props.getAppRefName().toLowerCase() + '/identitypoolid"' +
+                        '"/' + props.getApplicationName().toLowerCase() + '/userpoolid",' +
+                        '"/' + props.getApplicationName().toLowerCase() + '/userpoolurl",' +
+                        '"/' + props.getApplicationName().toLowerCase() + '/clientid",' +
+                        '"/' + props.getApplicationName().toLowerCase() + '/identitypoolid"' +
                         ']}'
                 }
                 , passthroughBehavior: 'WHEN_NO_TEMPLATES'
@@ -468,7 +468,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
 
         // OPTIONS
-        let configOptionsMethod = new APIGTW.CfnMethod(this, props.getAppRefName() + "APIv1configOPTIONS", {
+        let configOptionsMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1configOPTIONS", {
             restApiId: this.api.restApiId
             , resourceId: config.resourceId
             , authorizationType: APIGTW.AuthorizationType.None
@@ -510,7 +510,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
          * Method: POST
          * Request format: { 'Username' : '<the user name>'}
          */
-        let allocate = new APIGTW.CfnResource(this, props.getAppRefName() + "APIv1allocate", {
+        let allocate = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1allocate", {
             parentId: v1.resourceId
             , pathPart: 'allocate'
             , restApiId: this.api.restApiId
@@ -520,7 +520,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
         let lambdaAllocate = (<Lambda.Function> props.getParameter('lambda.allocate'));
 
         // POST
-        let allocatePostMethod = new APIGTW.CfnMethod(this, props.getAppRefName() + "APIv1allocatePOST", {
+        let allocatePostMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1allocatePOST", {
             restApiId: this.api.restApiId
             , resourceId: allocate.resourceId
             , authorizationType: APIGTW.AuthorizationType.Cognito
@@ -551,7 +551,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 */
 
         // OPTIONS
-        let allocateOptionsMethod = new APIGTW.CfnMethod(this, props.getAppRefName() + "APIv1allocateOPTIONS", {
+        let allocateOptionsMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1allocateOPTIONS", {
             restApiId: this.api.restApiId
             , resourceId: allocate.resourceId
             , authorizationType: APIGTW.AuthorizationType.None
@@ -594,14 +594,14 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
          * Method: POST
          * Request format: { 'Username' : '<the user name>'}
          */
-        let deallocate = new APIGTW.CfnResource(this, props.getAppRefName() + "APIv1deallocate", {
+        let deallocate = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1deallocate", {
             parentId: v1.resourceId
             , pathPart: 'deallocate'
             , restApiId: this.api.restApiId
         });
 
         // POST
-        let deallocatePostMethod = new APIGTW.CfnMethod(this, props.getAppRefName() + "APIv1deallocatePOST", {
+        let deallocatePostMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1deallocatePOST", {
               restApiId: this.api.restApiId
             , resourceId: deallocate.resourceId
             , authorizationType: APIGTW.AuthorizationType.Cognito
@@ -623,7 +623,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
 
         // OPTIONS
-        let deallocateOptionsMethod = new APIGTW.CfnMethod(this, props.getAppRefName() + "APIv1deallocateOPTIONS", {
+        let deallocateOptionsMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1deallocateOPTIONS", {
             restApiId: this.api.restApiId
             , resourceId: deallocate.resourceId
             , authorizationType: APIGTW.AuthorizationType.None
@@ -680,14 +680,14 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                 ]
             }
          */
-        let scoreboard = new APIGTW.CfnResource(this, props.getAppRefName() + "APIv1scoreboard", {
+        let scoreboard = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1scoreboard", {
             parentId: v1.resourceId
             , pathPart: 'scoreboard'
             , restApiId: this.api.restApiId
         });
 
         // POST
-        let scoreboardPostMethod = new APIGTW.CfnMethod(this, props.getAppRefName() + "APIv1scoreboardPOST", {
+        let scoreboardPostMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1scoreboardPOST", {
             restApiId: this.api.restApiId
             , resourceId: scoreboard.resourceId
             , authorizationType: APIGTW.AuthorizationType.Cognito
@@ -757,7 +757,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
 
         // OPTIONS
-        let scoreboardOptionsMethod = new APIGTW.CfnMethod(this, props.getAppRefName() + "APIv1scoreboardOPTIONS", {
+        let scoreboardOptionsMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1scoreboardOPTIONS", {
             restApiId: this.api.restApiId
             , resourceId: scoreboard.resourceId
             , authorizationType: APIGTW.AuthorizationType.None
@@ -809,14 +809,14 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
          *       "Timestamp": "2018-10-10T23:57:26.137Z"
          *       }
          */
-        let updateStatus = new APIGTW.CfnResource(this, props.getAppRefName() + "APIv1updatestatus", {
+        let updateStatus = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1updatestatus", {
             parentId: v1.resourceId
             , pathPart: 'updatestatus'
             , restApiId: this.api.restApiId
         });
 
         // POST
-        let updatestatusPostMethod = new APIGTW.CfnMethod(this, props.getAppRefName() + "APIv1updatestatusPOST", {
+        let updatestatusPostMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1updatestatusPOST", {
             restApiId: this.api.restApiId
             , resourceId: updateStatus.resourceId
             , authorizationType: APIGTW.AuthorizationType.Cognito
@@ -863,7 +863,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
 
         // OPTIONS
-        let updatestatusOptionsMethod = new APIGTW.CfnMethod(this, props.getAppRefName() + "APIv1updateStatusOPTIONS", {
+        let updatestatusOptionsMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1updateStatusOPTIONS", {
             restApiId: this.api.restApiId
             , resourceId: updateStatus.resourceId
             , authorizationType: APIGTW.AuthorizationType.None
@@ -900,7 +900,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
         });
 
 
-        let deployment = new APIGTW.CfnDeployment(this, props.getAppRefName() + "APIDeployment", {
+        let deployment = new APIGTW.CfnDeployment(this, props.getApplicationName() + "APIDeployment", {
             restApiId: this.api.restApiId
             , stageName: 'prod'
             , description: 'Production deployment'
@@ -985,7 +985,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                     "dynamodb:GetItem"                  
                 )
                 .addResource(
-                    "arn:aws:dynamodb:"+props.region+":"+props.accountId+":table/"+props.getAppRefName()+"*"
+                    "arn:aws:dynamodb:"+props.region+":"+props.accountId+":table/"+props.getApplicationName()+"*"
                 )
         );
         managerRole.addToPolicy(
@@ -999,7 +999,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                     "ssm:DeleteParameter"
                 )
                 .addResource(
-                    "arn:aws:ssm:"+props.region+":"+props.accountId+":parameter/"+props.getAppRefName().toLowerCase()+"/*"
+                    "arn:aws:ssm:"+props.region+":"+props.accountId+":parameter/"+props.getApplicationName().toLowerCase()+"/*"
                 )
         );
         managerRole.addToPolicy(

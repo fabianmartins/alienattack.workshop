@@ -2,8 +2,7 @@ import {App, Stack, Construct, StackProps} from '@aws-cdk/cdk';
 
 export interface IFlexNameApplication {
     applicationName? : string,
-    suffix?: string,
-    getAppRefName() : string
+    getApplicationName() : string
 }
 
 export interface IResourceAware {
@@ -85,20 +84,14 @@ export class ParameterAwareProps implements IParameterAwareProps {
     static defaultApplicationName : string = 'NRTA';
     applicationName? : string;
     setApplicationName(appName : string) {
-        if (appName && appName.length>0) this.applicationName = appName;
+        if (appName && appName.length>0) this.applicationName = appName.toUpperCase();
     }
-    getAppRefName() {
+    getApplicationName() {
         let appName = this.applicationName ? this.applicationName  : ParameterAwareProps.defaultApplicationName;
-        if (this.suffix && this.suffix.length>0)  return appName+this.suffix;
-        else return appName;
+        return appName;
     }    
-    suffix?: string;
-    setSuffix(suffix : string) {
-        if (suffix && suffix.length>0) this.suffix = suffix;
-    }
     
     parameters : Map<string,any>;
-
     
     getParameters() : Map<string,any> {
         return this.parameters;
@@ -127,9 +120,7 @@ export class ParameterAwareProps implements IParameterAwareProps {
 
     constructor(props?: IParameterAwareProps) {
         this.applicationName = (props && props.applicationName && props.applicationName.length > 0) ? props.applicationName : ParameterAwareProps.defaultApplicationName;
-        this.suffix =  (props && props.suffix && props.suffix.length>0) ? props.suffix :  '';
         if (props) {
-            this.suffix = props.suffix;
             this.region = props.region;
             this.accountId = props.accountId;
             if (props.getParameters()) props.getParameters().forEach( (v,k) => this.addParameter(k,v) );

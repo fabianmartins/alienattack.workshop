@@ -17,9 +17,7 @@ function removeQuotes() {
 }
 
 function setRoleMappings() {
-    envName=$1
-    suffix=$2
-    appName=$envName$suffix
+    appName=$1
     echo 
     echo "Setting Role Mappings for envName: "$appName
 
@@ -90,11 +88,14 @@ END
 }
 
 if [ "$1" == "" ]; then
-    echo ** ERROR**
+    echo 
+    echo "** ERROR**"
     echo At least the environment name must be provided
     echo 
     echo Usage:
-    echo fixcognito <envName>  [ <suffix> ]
+    echo "fixcognito <envName>"
+    echo
+    echo example: fixcognito testenv
 else
     envname=$(echo $1 | tr 'a-z' 'A-Z')
     setRoleMappings $envname $2

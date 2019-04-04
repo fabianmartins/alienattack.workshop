@@ -15,7 +15,7 @@ export class ConfigurationLayer extends ResourceAwareConstruct {
             let parametersToBeCreated = props.getParameter('ssmParameters');
             if (parametersToBeCreated) {
                 parametersToBeCreated.forEach( (v : any, k : string) => {
-                    let parameter = this.createParameter(props.getAppRefName(),k,<string> v);
+                    let parameter = this.createParameter(props.getApplicationName(),k,<string> v);
                     this.addResource('parameter.'+k,parameter);
                 });
             }

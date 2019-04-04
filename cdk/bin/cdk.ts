@@ -9,21 +9,16 @@ const app = new cdk.App();
 let envname = app.node.getContext('envname');
 if (!envname) envname = "";
 else envname=envname.toUpperCase();
-let providedsuffix = app.node.getContext('suffix');
-if (!providedsuffix) providedsuffix="";
-else providedsuffix=providedsuffix.toUpperCase();
-console.log('>>>> envname:',envname);
-console.log('>>>> providedSuffix:',providedsuffix);
+console.log('Environment name:',envname);
 let initProps = new NRTAProps();
 initProps.setApplicationName(envname);
-initProps.setSuffix(providedsuffix);
 
 Utils.checkforExistingBuckets(initProps.getBucketNames())
     .then((listOfExistingBuckets) => {
         if (listOfExistingBuckets && listOfExistingBuckets.length > 0)
             console.log("The following buckets are NOT being created because already exists: ", listOfExistingBuckets);
         initProps.addParameter('existingbuckets', listOfExistingBuckets);
-        new MainLayer(app, 'NRTA'+envname+providedsuffix, initProps);
+        new MainLayer(app, initProps.getApplicationName(), initProps);
         app.run();
 })
     .catch((errorList) => {

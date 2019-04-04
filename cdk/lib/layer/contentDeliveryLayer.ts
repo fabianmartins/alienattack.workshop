@@ -14,11 +14,11 @@ export class ContentDeliveryLayer extends ResourceAwareConstruct {
     private createDistribution(props: IParameterAwareProps) {
 
         let s3BucketOrCnfBucket = props.getParameter('appBucket');
-        let s3Bucket = <Bucket> Bucket.import(this, props.getAppRefName()+'ImportedBucket', {
+        let s3Bucket = <Bucket> Bucket.import(this, props.getApplicationName()+'ImportedBucket', {
             bucketName : s3BucketOrCnfBucket.bucketName
         });
 
-        new CloudFrontWebDistribution(this, props.getAppRefName(), {
+        new CloudFrontWebDistribution(this, props.getApplicationName(), {
             originConfigs: [
                 {
                     s3OriginSource: {

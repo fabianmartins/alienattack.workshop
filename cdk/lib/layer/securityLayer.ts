@@ -82,7 +82,7 @@ export class SecurityLayer extends ResourceAwareConstruct {
     private createUserPool() {
 
         const CDKNAMESPACE = 'aa596cee-451b-11e9-b210-d663bd873d93';
-        let genFunctionId = this.properties.getAppRefName()+'SimpleUserPoolGenFn';
+        let genFunctionId = this.properties.getApplicationName()+'SimpleUserPoolGenFn';
         const generatingFunction = new Lambda.SingletonFunction(this, genFunctionId, {
                  // To avoid collisions when running the on the same environment
                  // many times, we're using uuidv3 to stick to some 'aleatory' 
@@ -107,11 +107,11 @@ export class SecurityLayer extends ResourceAwareConstruct {
                .addAllResources()
            );
    
-           this.simpleUserPool = new Cfn.CustomResource(this, this.properties.getAppRefName()+'SimpleUserPoolCustomResource',{
+           this.simpleUserPool = new Cfn.CustomResource(this, this.properties.getApplicationName()+'SimpleUserPoolCustomResource',{
                 lambdaProvider : generatingFunction
                , properties : {
-                   AppName : this.properties.getAppRefName(),
-                   UserPoolName : this.properties.getAppRefName(),
+                   AppName : this.properties.getApplicationName(),
+                   UserPoolName : this.properties.getApplicationName(),
                    PostConfirmationLambdaArn : this.postRegistrationTriggerFunction.functionArn
                }
            });
@@ -122,14 +122,14 @@ export class SecurityLayer extends ResourceAwareConstruct {
            this.userPool.userPoolName = this.simpleUserPool.getAtt('UserPoolName').toString();
 
            // Gives permission for userpool to call the lambda trigger
-           new Lambda.CfnPermission(this, this.properties.getAppRefName()+'UserPoolPerm', {
+           new Lambda.CfnPermission(this, this.properties.getApplicationName()+'UserPoolPerm', {
                 action : 'lambda:invokeFunction'
                ,principal : 'cognito-idp.amazonaws.com'
                ,functionName : this.postRegistrationTriggerFunction.functionName
                ,sourceArn : this.userPool.userPoolArn
            })
 
-        let policy = new IAM.Policy(this,this.properties.getAppRefName()+'TriggerFunctionPolicy',{
+        let policy = new IAM.Policy(this,this.properties.getApplicationName()+'TriggerFunctionPolicy',{
             policyName : 'AllowAddUserToGroup'
         });
 
@@ -146,9 +146,9 @@ export class SecurityLayer extends ResourceAwareConstruct {
 
 
     private createUserPoolClientApp() {
-        this.userPoolClient = new Cognito.CfnUserPoolClient(this, this.properties.getAppRefName() + 'App', {
+        this.userPoolClient = new Cognito.CfnUserPoolClient(this, this.properties.getApplicationName() + 'App', {
             userPoolId: this.userPool.userPoolId,
-            clientName: this.properties.getAppRefName() + 'Website',
+            clientName: this.properties.getApplicationName() + 'Website',
             generateSecret: false,
             explicitAuthFlows : [ "USER_PASSWORD_AUTH" ]
         });
@@ -156,8 +156,8 @@ export class SecurityLayer extends ResourceAwareConstruct {
     }
 
     private createIdentityPool() {
-        this.identityPool = new Cognito.CfnIdentityPool(this, this.properties.getAppRefName() + 'IdentityPool', {
-            identityPoolName: this.properties.getAppRefName(),
+        this.identityPool = new Cognito.CfnIdentityPool(this, this.properties.getApplicationName() + 'IdentityPool', {
+            identityPoolName: this.properties.getApplicationName(),
             allowUnauthenticatedIdentities: false,
             cognitoIdentityProviders: [
                 {
@@ -173,8 +173,8 @@ export class SecurityLayer extends ResourceAwareConstruct {
 
     private createUserPoolGroups() {
         // PLAYERS
-        this.playersRole = new IAM.Role(this, this.properties.getAppRefName() + 'PlayersRole', {
-            roleName : this.properties.getAppRefName() + 'PlayersRole',
+        this.playersRole = new IAM.Role(this, this.properties.getApplicationName() + 'PlayersRole', {
+            roleName : this.properties.getApplicationName() + 'PlayersRole',
             assumedBy: new IAM.FederatedPrincipal('cognito-identity.amazonaws.com', {
                 "StringEquals": { "cognito-identity.amazonaws.com:aud": this.identityPool.identityPoolId },
                 "ForAnyValue:StringLike": { "cognito-identity.amazonaws.com:amr": "authenticated" }
@@ -189,7 +189,7 @@ export class SecurityLayer extends ResourceAwareConstruct {
         );
         this.addResource('security.playersrole',this.playersRole);
 
-        new Cognito.CfnUserPoolGroup(this, this.properties.getAppRefName() + 'Players', {
+        new Cognito.CfnUserPoolGroup(this, this.properties.getApplicationName() + 'Players', {
             groupName: 'Players',
             description: 'Players of the game.',
             precedence: 9999,
@@ -198,8 +198,8 @@ export class SecurityLayer extends ResourceAwareConstruct {
         });
 
         // MANAGERS
-        this.managersRole = new IAM.Role(this, this.properties.getAppRefName() + 'ManagersRole', {
-            roleName : this.properties.getAppRefName() + 'ManagersRole',
+        this.managersRole = new IAM.Role(this, this.properties.getApplicationName() + 'ManagersRole', {
+            roleName : this.properties.getApplicationName() + 'ManagersRole',
             assumedBy: new IAM.FederatedPrincipal('cognito-identity.amazonaws.com', {
                 "StringEquals": { "cognito-identity.amazonaws.com:aud": this.identityPool.identityPoolId },
                 "ForAnyValue:StringLike": { "cognito-identity.amazonaws.com:amr": "authenticated" }
@@ -214,7 +214,7 @@ export class SecurityLayer extends ResourceAwareConstruct {
             .addAllResources()
         );
         this.addResource('security.managersrole',this.managersRole);
-        new Cognito.CfnUserPoolGroup(this, this.properties.getAppRefName() + 'Managers', {
+        new Cognito.CfnUserPoolGroup(this, this.properties.getApplicationName() + 'Managers', {
             groupName: 'Managers',
             description: 'Managers of the game.',
             precedence: 0,
@@ -224,8 +224,8 @@ export class SecurityLayer extends ResourceAwareConstruct {
     }
 
     private configureIdentityPoolRoles() {
-        this.unauthenticatedRole = new IAM.Role(this, this.properties.getAppRefName() + 'UnauthRole', {
-            roleName : this.properties.getAppRefName() + 'UnauthRole',
+        this.unauthenticatedRole = new IAM.Role(this, this.properties.getApplicationName() + 'UnauthRole', {
+            roleName : this.properties.getApplicationName() + 'UnauthRole',
             assumedBy: new IAM.FederatedPrincipal('cognito-identity.amazonaws.com', {
                 "StringEquals": { "cognito-identity.amazonaws.com:aud": this.identityPool.identityPoolId },
                 "ForAnyValue:StringLike": { "cognito-identity.amazonaws.com:amr": "unauthenticated" }
@@ -240,7 +240,7 @@ export class SecurityLayer extends ResourceAwareConstruct {
         ); 
         
 
-        new Cognito.CfnIdentityPoolRoleAttachment(this, this.properties.getAppRefName() + "IDPRoles",
+        new Cognito.CfnIdentityPoolRoleAttachment(this, this.properties.getApplicationName() + "IDPRoles",
         {
             identityPoolId : this.identityPool.identityPoolId
            ,roles : {
@@ -275,18 +275,18 @@ export class SecurityLayer extends ResourceAwareConstruct {
 
     private creatPostRegistrationLambdaTrigger() {
 
-        this.postRegistrationTriggerFunctionRole = new IAM.Role(this, this.properties.getAppRefName() + 'PostRegistrationFn_Role', {
-            roleName: this.properties.getAppRefName() + 'PostRegistrationFn_Role'
+        this.postRegistrationTriggerFunctionRole = new IAM.Role(this, this.properties.getApplicationName() + 'PostRegistrationFn_Role', {
+            roleName: this.properties.getApplicationName() + 'PostRegistrationFn_Role'
             , assumedBy: new IAM.ServicePrincipal('lambda.amazonaws.com')
             , managedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole']
         });
         
         this.postRegistrationTriggerFunction =
-            new Lambda.Function(this, this.properties.getAppRefName() + 'PostRegistration', {
+            new Lambda.Function(this, this.properties.getApplicationName() + 'PostRegistration', {
                 runtime: Lambda.Runtime.NodeJS810,
                 handler: 'index.handler',
                 code: Lambda.Code.asset(path.join(lambdasLocation,'postRegistration'))
-                , functionName: this.properties.getAppRefName() + 'PostRegistrationFn'
+                , functionName: this.properties.getApplicationName() + 'PostRegistrationFn'
                 , description: 'This function adds an user to the Players group after confirmation'
                 , memorySize: 128
                 , timeout: 60

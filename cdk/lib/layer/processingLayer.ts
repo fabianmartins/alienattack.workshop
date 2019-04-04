@@ -60,12 +60,12 @@ export class ProcessingLayer extends ResourceAwareConstruct {
     *      process.env.SESSION_CONTROL_TABLENAME = getAppRefName+'SessionControl'
     */
         // MISSING PARAMETER - side effect - remove the next line, uncomment the next one.
-        let sessionParameter = { parameterName : '/'+this.properties.getAppRefName().toLocaleLowerCase()+'/session'};
+        let sessionParameter = { parameterName : '/'+this.properties.getApplicationName().toLocaleLowerCase()+'/session'};
         //let sessionParameter : CfnParameter = <CfnParameter> this.properties.getParameter('parameter.session');
         let sessionControlTable : Table = <Table> this.properties.getParameter('table.sessioncontrol');
         if (sessionParameter && sessionControlTable) {
             let createdFunction: Lambda.Function =
-                new Lambda.Function(this, this.properties.getAppRefName() + 'AllocateGamerFn', {
+                new Lambda.Function(this, this.properties.getApplicationName() + 'AllocateGamerFn', {
                     runtime: Lambda.Runtime.NodeJS610,
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation,'allocateGamer')),
@@ -73,12 +73,12 @@ export class ProcessingLayer extends ResourceAwareConstruct {
                         'SESSION_CONTROL_TABLENAME': sessionControlTable.tableName,
                         'SESSION_PARAMETER': sessionParameter.parameterName
                     }
-                    , functionName: this.properties.getAppRefName() + 'AllocateGamerFn'
+                    , functionName: this.properties.getApplicationName() + 'AllocateGamerFn'
                     , description: 'This function supports the allocation of gamers when the game is to start'
                     , memorySize: 128
                     , timeout: 60
-                    , role: new IAM.Role(this, this.properties.getAppRefName() + 'AllocateGamerFn_Role', {
-                        roleName: this.properties.getAppRefName() + 'AllocateGamerFn_Role'
+                    , role: new IAM.Role(this, this.properties.getApplicationName() + 'AllocateGamerFn_Role', {
+                        roleName: this.properties.getApplicationName() + 'AllocateGamerFn_Role'
                         , assumedBy: new IAM.ServicePrincipal('lambda.amazonaws.com')
                         , managedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole']
                         , inlinePolicies: {
@@ -117,12 +117,12 @@ export class ProcessingLayer extends ResourceAwareConstruct {
          *      process.env.SESSION_CONTROL_TABLENAME = getAppRefName+'SessionControl'
          */
         // MISSING PARAMETER - side effect - remove the next line, uncomment the next one.
-        let sessionParameter = { parameterName : '/'+this.properties.getAppRefName().toLocaleLowerCase()+'/session'};
+        let sessionParameter = { parameterName : '/'+this.properties.getApplicationName().toLocaleLowerCase()+'/session'};
         //let sessionParameter: CfnParameter = <CfnParameter>  this.properties.getParameter('parameter.session');
         let sessionControlTable: Table | undefined = <Table> this.properties.getParameter('table.sessionControl');
         if (sessionParameter && sessionControlTable) {
             let createdFunction: Lambda.Function =
-                new Lambda.Function(this, this.properties.getAppRefName() + 'DeallocateGamerFn', {
+                new Lambda.Function(this, this.properties.getApplicationName() + 'DeallocateGamerFn', {
                     runtime: Lambda.Runtime.NodeJS610,
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation,'deallocateGamer')),
@@ -130,12 +130,12 @@ export class ProcessingLayer extends ResourceAwareConstruct {
                         'SESSION_CONTROL_TABLENAME': sessionControlTable.tableName,
                         'SESSION_PARAMETER': sessionParameter.parameterName
                     }
-                    , functionName: this.properties.getAppRefName() + 'DeallocateGamerFn'
+                    , functionName: this.properties.getApplicationName() + 'DeallocateGamerFn'
                     , description: 'This function deallocates the gamer when a relevant event is identified (sign out, close window etc)'
                     , memorySize: 128
                     , timeout: 60
-                    , role: new IAM.Role(this, this.properties.getAppRefName() + 'DeallocateGamerFn_Role', {
-                        roleName: this.properties.getAppRefName() + 'DeallocateGamerFn_Role'
+                    , role: new IAM.Role(this, this.properties.getApplicationName() + 'DeallocateGamerFn_Role', {
+                        roleName: this.properties.getApplicationName() + 'DeallocateGamerFn_Role'
                         , assumedBy: new IAM.ServicePrincipal('lambda.amazonaws.com')
                         , managedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole']
                         , inlinePolicies: {
@@ -167,8 +167,8 @@ export class ProcessingLayer extends ResourceAwareConstruct {
 
     private getScoreboardFunction() {
 
-        let dlq = new SQS.Queue(this, this.properties.getAppRefName() + 'DLQ', {
-            queueName: this.properties.getAppRefName() + 'DLQ'
+        let dlq = new SQS.Queue(this, this.properties.getApplicationName() + 'DLQ', {
+            queueName: this.properties.getApplicationName() + 'DLQ'
         })
 
         /**
@@ -183,14 +183,14 @@ export class ProcessingLayer extends ResourceAwareConstruct {
          *      process.env.SESSIONTOPX_TABLENAME = getAppRefName+'SessionTopX'
          */
         // MISSING PARAMETER - side effect - remove the next line, uncomment the next one.
-        let sessionParameter = { parameterName : '/'+this.properties.getAppRefName().toLocaleLowerCase()+'/session'};
+        let sessionParameter = { parameterName : '/'+this.properties.getApplicationName().toLocaleLowerCase()+'/session'};
         //let sessionParameter: CfnParameter | undefined = <CfnParameter> this.properties.getParameter('parameter.session');
         let sessionControlTable: Table | undefined = <Table> this.properties.getParameter('table.sessionControl');
         let sessionTopX: Table | undefined = <Table> this.properties.getParameter('table.sessionTopX');
         let sessionTable: Table | undefined = <Table> this.properties.getParameter('table.session');
         if (sessionParameter && sessionControlTable && sessionTopX && sessionTable) {
             let createdFunction: Lambda.Function =
-                new Lambda.Function(this, this.properties.getAppRefName() + 'ScoreboardFn', {
+                new Lambda.Function(this, this.properties.getApplicationName() + 'ScoreboardFn', {
                     runtime: Lambda.Runtime.NodeJS610,
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation,'scoreboard')),
@@ -202,12 +202,12 @@ export class ProcessingLayer extends ResourceAwareConstruct {
                         'SESSION_TOPX_TABLENAME': sessionTopX.tableName,
                         'TopXValue': '10'
                     }
-                    , functionName: this.properties.getAppRefName() + 'ScoreboardFn'
+                    , functionName: this.properties.getApplicationName() + 'ScoreboardFn'
                     , description: 'This function computes the scoreboard'
                     , memorySize: 128
                     , timeout: 60
-                    , role: new IAM.Role(this, this.properties.getAppRefName() + 'ScoreboardFn_Role', {
-                        roleName: this.properties.getAppRefName() + 'ScoreboardFn_Role'
+                    , role: new IAM.Role(this, this.properties.getApplicationName() + 'ScoreboardFn_Role', {
+                        roleName: this.properties.getApplicationName() + 'ScoreboardFn_Role'
                         , assumedBy: new IAM.ServicePrincipal('lambda.amazonaws.com')
                         , managedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole']
                         , inlinePolicies: {
@@ -215,7 +215,7 @@ export class ProcessingLayer extends ResourceAwareConstruct {
                                 new IAM.PolicyDocument().addStatement(
                                     new IAM.PolicyStatement()
                                         .allow()
-                                        .addResource('arn:aws:dynamodb:' + this.properties.region + ':' + this.properties.accountId + ':table/' + this.properties.getAppRefName() + '*')
+                                        .addResource('arn:aws:dynamodb:' + this.properties.region + ':' + this.properties.accountId + ':table/' + this.properties.getApplicationName() + '*')
                                         .addAction('dynamodb:GetItem')
                                         .addAction('dynamodb:UpdateItem')
                                         .addAction('dynamodb:Scan')
@@ -228,7 +228,7 @@ export class ProcessingLayer extends ResourceAwareConstruct {
                                 new IAM.PolicyDocument().addStatement(
                                     new IAM.PolicyStatement()
                                         .allow()
-                                        .addResource('arn:aws:ssm:' + this.properties.region + ':' + this.properties.accountId + ':parameter/' + this.properties.getAppRefName().toLowerCase() + '*')
+                                        .addResource('arn:aws:ssm:' + this.properties.region + ':' + this.properties.accountId + ':parameter/' + this.properties.getApplicationName().toLowerCase() + '*')
                                         .addAction('ssm:Get*')
                                         .addAction('ssm:Get*')
                                         .addAction('ssm:List*')

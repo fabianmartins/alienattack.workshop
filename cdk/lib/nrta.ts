@@ -9,8 +9,8 @@ export class NRTAProps extends ParameterAwareProps {
 
     getBucketNames() : string[] {
         let result : string[] = [];
-        result.push((this.getAppRefName()+'.raw').toLowerCase());
-        result.push((this.getAppRefName()+'.app').toLowerCase());
+        result.push((this.getApplicationName()+'.raw').toLowerCase());
+        result.push((this.getApplicationName()+'.app').toLowerCase());
         return result; 
       }
 

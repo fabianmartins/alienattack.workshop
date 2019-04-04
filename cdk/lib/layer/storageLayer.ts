@@ -64,8 +64,8 @@ export class StorageLayer extends ResourceAwareConstruct {
     }
 
     createBuckets() {
-        let appBucketName = this.properties.getAppRefName().toLowerCase() + '.app';
-        let rawDataBucketName = this.properties.getAppRefName().toLowerCase() + '.raw';
+        let appBucketName = this.properties.getApplicationName().toLowerCase() + '.app';
+        let rawDataBucketName = this.properties.getApplicationName().toLowerCase() + '.raw';
 
         let appBucket = this.createCfnBucket( {
              bucketName : appBucketName
@@ -76,14 +76,14 @@ export class StorageLayer extends ResourceAwareConstruct {
        // let appBucket = this.createCfnBucket(appBucketName,true);
         this.addResource('appBucket',appBucket);
 
-        let cloudFrontAccessIdentity = new CfnCloudFrontOriginAccessIdentity(this,this.properties.getAppRefName()+'CDNAccessId', {
+        let cloudFrontAccessIdentity = new CfnCloudFrontOriginAccessIdentity(this,this.properties.getApplicationName()+'CDNAccessId', {
             cloudFrontOriginAccessIdentityConfig : {
                 // This is the name of the identity
-                comment : this.properties.getAppRefName()+'CDNAccessId'
+                comment : this.properties.getApplicationName()+'CDNAccessId'
             }
         })
 
-        new CfnBucketPolicy(this,this.properties.getAppRefName()+"AppBucketPolicy", {
+        new CfnBucketPolicy(this,this.properties.getApplicationName()+"AppBucketPolicy", {
             bucket : appBucket.bucketName
            ,policyDocument : new PolicyDocument()
                .addStatement(
@@ -103,7 +103,7 @@ export class StorageLayer extends ResourceAwareConstruct {
     }
 
     getRawDataBucketArn() : string {
-        let rawDataBucketName = this.properties.getAppRefName().toLowerCase() + '.raw';
+        let rawDataBucketName = this.properties.getApplicationName().toLowerCase() + '.raw';
         return 'arn:aws:s3:::'+rawDataBucketName;
         //return this.rawDataBucket.bucketArn;
     }

@@ -10,8 +10,8 @@ export class DatabaseLayer extends ResourceAwareConstruct {
     constructor(parent: Construct, name: string, props: IParameterAwareProps) {
         super(parent,name, props);
         
-        let sessionTable = new DynamoDB.Table(this,props.getAppRefName()+'Session', {
-            tableName : props.getAppRefName()+'Session',
+        let sessionTable = new DynamoDB.Table(this,props.getApplicationName()+'Session', {
+            tableName : props.getApplicationName()+'Session',
             partitionKey : {
                 name : 'SessionId',
                 type : DynamoDB.AttributeType.String
@@ -20,8 +20,8 @@ export class DatabaseLayer extends ResourceAwareConstruct {
         });
         this.addResource('table.session',sessionTable);
 
-        let sessionControlTable = new DynamoDB.Table(this,props.getAppRefName()+'SessionControl', {
-            tableName : props.getAppRefName()+'SessionControl',
+        let sessionControlTable = new DynamoDB.Table(this,props.getApplicationName()+'SessionControl', {
+            tableName : props.getApplicationName()+'SessionControl',
             partitionKey : {
                 name : 'SessionId',
                 type : DynamoDB.AttributeType.String
@@ -30,8 +30,8 @@ export class DatabaseLayer extends ResourceAwareConstruct {
         });
         this.addResource('table.sessioncontrol',sessionControlTable);
 
-        let sessionTopXTable = new DynamoDB.Table(this,props.getAppRefName()+'SessionTopX', {
-            tableName : props.getAppRefName()+'SessionTopX',
+        let sessionTopXTable = new DynamoDB.Table(this,props.getApplicationName()+'SessionTopX', {
+            tableName : props.getApplicationName()+'SessionTopX',
             partitionKey : {
                 name : 'SessionId',
                 type : DynamoDB.AttributeType.String
