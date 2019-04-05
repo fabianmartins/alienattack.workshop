@@ -2,7 +2,7 @@
 
 Welcome to the AWS Space Invaders workshop (beta version).   
 
-The purpose of AWS Space Invaders is to create a fun environment where you can taste and think about different aspects of serverless architectures for (near) real-time data ingesting and processing at AWS. You can use Space Invaders to talk about best practices for development, about security, databases and so on.
+The purpose of AWS Space Invaders is to create a fun environment where you can taste and think about different aspects of serverless architectures for (near) real-time ingesting and processing of data at AWS. You can use Space Invaders to talk about best practices for development, about security, databases and so on.
 
 AWS Space Invaders runs closely to zero-cost for one user. Check more details about the services/products used in this list:
 
