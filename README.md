@@ -298,7 +298,7 @@ const DEBUG = true;
 const AWS_CONFIG = {
     "region" : "us-east-1",
     "API_ENDPOINT" : " https://x22cd4aa99.execute-api.us-east-1.amazonaws.com/prod/v1/",
-    "APPNAME" : "MYAPP"
+    "APPNAME" : "R2D2"
 }
 ~~~ 
 
