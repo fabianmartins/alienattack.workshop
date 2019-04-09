@@ -289,7 +289,18 @@ Here is how to do it:
   * Click on **Stages**.
   * Click on **prod**.
   * At the top of the screen, on the right, you will see the **INVOKE URL**. It has the format `https://<API Id>.execute-api.<region>.amazonaws.com/prod`. When copying it to the required field in the awsconfig.js, don't forget to add the */v1/* at the end.
-3. **APPNAME**: This one is easy. Just copy the values that you selected for *envName*, **BUT MAKE SURE TO USE UPPERCASE**. So, for instance, if you selected *r2d2* for envName, then the value for this field will be *R2D2*. 
+3. **APPNAME**: This one is easy. Just copy the values that you selected for *envName*, **BUT MAKE SURE TO USE UPPERCASE**. So, for instance, if you selected *r2d2* for envName, then the value for this field will be *R2D2*.
+
+If you did everything correclty, your aws_config.js file will be similar to this:
+
+~~~
+const DEBUG = true;
+const AWS_CONFIG = {
+    "region" : "us-east-1",
+    "API_ENDPOINT" : " https://x22cd4aa99.execute-api.us-east-1.amazonaws.com/prod/v1/",
+    "APPNAME" : "MYAPP"
+}
+~~~ 
 
 **IMPORTANT**  
 
@@ -298,6 +309,7 @@ Here is how to do it:
   * For example, if you are in us-east-1, the line for the region will be `"region" : "us-east-1"`. See, the quotes are there
 * Be sure of using **uppercase** for the value of the field APPNAME. So, for example, if your environment name is r2d2, the line for appName will become `"APPNAME" : "R2D2"`. Again, the quotes are there
 * Save the file!
+
 
 ### fixACTIVITY 2 - Test the registration process
 
