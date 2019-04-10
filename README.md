@@ -6,7 +6,7 @@ The purpose of AWS Space Invaders is to create a fun environment where you can t
 
 AWS Space Invaders runs closely to zero-cost for one user. Check more details about the services/products used in this list:
 
-* **CDK**: AWS Space Invaders was built using CDK for the infrastructure deployment. To know more about CDK, check [what is cdk](https://docs.aws.amazon.com/CDK/latest/userguide/what-is.html) and visit its [github repository](https://github.com/awslabs/aws-cdk).
+* **CDK**: AWS Space Invaders was built using CDK for the infrastructure deployment. To know more about CDK, check [what is CDK](https://docs.aws.amazon.com/CDK/latest/userguide/what-is.html), and visit its [github repository](https://github.com/awslabs/aws-cdk). Also, take some time to explore this [workshop](https://cdkworkshop.com/).
 * **Cloud9**: Cloud9 it will be your "development environment". To know more about Cloud9, including pricing, click [here](https://aws.amazon.com/cloud9/). Cloud9 provides free tier.
 * **Amazon Cognito**: Cognito is the service that we are using to provide identification and authentication services to AWS Space Invaders. To know more about Cognito, including pricing, click [here](https://aws.amazon.com/cognito/). Cognito provides free tier.
 * **Amazon Identity and Access Management (IAM)**: IAM is a service that allows ytou to create and manage acess to AWS resources, and for Space Invaders we are using roles and polices alongside Cognito to provide the proper authorizations to the users. So, with Cognito and IAM, we cover identification, authentication, and authorization using RBAC (Role-Based Access Control). To learn more about IAM, go [here](https://aws.amazon.com/iam/). IAM is free.
