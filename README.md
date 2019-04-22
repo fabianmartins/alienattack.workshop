@@ -129,13 +129,13 @@ There are two ways of building the environment: *continuously*, and *on demand*.
 
 One way of configuring continuous compiling is by having 2 terminals open. One you will be using to issue commands. The other one, you will be using to monitor the progress of the development and corresponding compilation.
 
-*Lets configure it.*
+*Let's configure it.*
 
 * At the bottom of the page of your Cloud9 IDE, click the **`(+)`** icon, and then `New Terminal` to add a second terminal.
 * Chose one of the terminals, and get into the cdk folder. If this is the new one, you will be at `~/environment`. So, from there, run `npm run watch`:
 
 ~~~ 
-~/environment $ cd cd spaceinvaders.workshop/cdk/
+~/environment $ cd spaceinvaders.workshop/cdk/
 ~/environment/spaceinvaders.workshop/cdk (master) $ npm run watch
 ~~~ 
 
