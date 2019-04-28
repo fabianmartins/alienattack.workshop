@@ -583,7 +583,7 @@ Build a small team to work on the aspects of cost and limits of this architectur
 
 ### Pricing Activity
 
-So, we want you to estimate the costs for the environment, for the cost per user and per interval of time (choose the most appropriate) for the following scenarios:
+So, we want you to estimate the costs for the environment - the cost per user and per interval of time (choose the most appropriate) - for the following scenarios:
 
 1. One (1) gamer.
 2. Ten (10) gamers.
@@ -591,8 +591,6 @@ So, we want you to estimate the costs for the environment, for the cost per user
 4. One hundred (100) gamers.
 5. One hundred and fifty (150) gamers.
 6. Two hundred (200) gamers.
-
-Don't forget to include the costs (if any) for 
 
 ### Limits Activity
 
