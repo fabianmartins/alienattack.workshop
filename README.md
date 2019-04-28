@@ -567,6 +567,39 @@ It was said that for a full deployment, we will need to install the application 
 
 For this last part, we got intel from the rebels that, to solve this, go to the file `mainLayer.ts` which is on the deployment at Cloud9, search for *MISSING CLOUDFRONT DISTRIBUTION* and uncomment it at that file. The deployment it will take something around 20 minutes. Same time it will be required for the undeployment. But we are not expecting to solve this part today. We at the company believe that it was a big win to have reached to this point. Let's leave other adjustments for another sprints.
 
+## PRICING AND LIMITS
+
+Our executives are inexperienced with costs on AWS, and they would like to understand the rationale behind the costs of this architecture.
+
+We know that for the current implementation:
+
+* The payload is 120 bytes in size, in average.
+* A player pushes 1 record at each 300 ms.
+* A player reads the TOP 10 scoreboard (`GET/scoreboard`) at each 2 seconds.
+* The Manager scoreboard reads the Kinesis Data Stream at each 1.5 seconds.
+
+Build a small team to work on the aspects of cost and limits of this architecture.
+
+
+### Pricing Activity
+
+So, we want you to estimate the costs for the environment, for the cost per user and per interval of time (choose the most appropriate) for the following scenarios:
+
+1. One (1) gamer.
+2. Ten (10) gamers.
+3. Fifty (50) gamers.
+4. One hundred (100) gamers.
+5. One hundred and fifty (150) gamers.
+6. Two hundred (200) gamers.
+
+Don't forget to include the costs (if any) for 
+
+### Limits Activity
+
+We are aware that the code has some issues. We heard that the environment is not prepared to scale the ingestion/consumption layer yet, something that we will need to solve *in another workshop*. 
+
+So, **find the limits for this architecture considering that at this moment we will have only one (1) shard for Kinesis Data Streams**.
+
 
 ## Cleaning up the environment
 
