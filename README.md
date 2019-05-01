@@ -1,23 +1,23 @@
-# AWS Space Invaders Workshop
+# AWS Alien Attack Workshop
 
-Welcome to the AWS Space Invaders workshop (beta version).   
+Welcome to the AWS Alien Attack workshop (beta version).   
 
-The purpose of AWS Space Invaders is to create a fun environment where you can taste and think about different aspects of serverless architectures for (near) real-time ingesting and processing of data at AWS. You can use Space Invaders to talk about best practices for development, about security, databases and so on.
+The purpose of AWS Alien Attack is to create a fun environment where you can taste and think about different aspects of serverless architectures for (near) real-time ingesting and processing of data at AWS. You can use Alien Attack to talk about best practices for development, about security, databases and so on.
 
-AWS Space Invaders runs closely to zero-cost for one user. Check more details about the services/products used in this list:
+AWS Alien Attack runs very close at zero-cost for one user, but there is cost. Check more details about the services/products used in this list:
 
-* **CDK**: AWS Space Invaders was built using CDK for the infrastructure deployment. To know more about CDK, check [what is CDK](https://docs.aws.amazon.com/CDK/latest/userguide/what-is.html), and visit its [github repository](https://github.com/awslabs/aws-cdk). Also, take some time to explore this [workshop](https://cdkworkshop.com/).
+* **CDK**: AWS Alien Attack was built using CDK for the infrastructure deployment. To know more about CDK, check [what is CDK](https://docs.aws.amazon.com/CDK/latest/userguide/what-is.html), and visit its [github repository](https://github.com/awslabs/aws-cdk). Also, take some time to explore this [workshop](https://cdkworkshop.com/).
 * **Cloud9**: Cloud9 it will be your "development environment". To know more about Cloud9, including pricing, click [here](https://aws.amazon.com/cloud9/). Cloud9 provides free tier.
-* **Amazon Cognito**: Cognito is the service that we are using to provide identification and authentication services to AWS Space Invaders. To know more about Cognito, including pricing, click [here](https://aws.amazon.com/cognito/). Cognito provides free tier.
-* **Amazon Identity and Access Management (IAM)**: IAM is a service that allows ytou to create and manage acess to AWS resources, and for Space Invaders we are using roles and polices alongside Cognito to provide the proper authorizations to the users. So, with Cognito and IAM, we cover identification, authentication, and authorization using RBAC (Role-Based Access Control). To learn more about IAM, go [here](https://aws.amazon.com/iam/). IAM is free.
+* **Amazon Cognito**: Cognito is the service that we are using to provide identification and authentication services to AWS Alien Attack. To know more about Cognito, including pricing, click [here](https://aws.amazon.com/cognito/). Cognito provides free tier.
+* **Amazon Identity and Access Management (IAM)**: IAM is a service that allows ytou to create and manage acess to AWS resources, and for Alien Attack we are using roles and polices alongside Cognito to provide the proper authorizations to the users. So, with Cognito and IAM, we cover identification, authentication, and authorization using RBAC (Role-Based Access Control). To learn more about IAM, go [here](https://aws.amazon.com/iam/). IAM is free.
 * **Amazon S3**: S3 is used to host the website and to store the raw incoming data for analytics purposes. Read more about it [here](https://aws.amazon.com/s3/). S3 provides free tier.
 * **Amazon API Gateway**: API Gateway will be the interface between the gamer and the back-end. To know more about it, go [here](https://aws.amazon.com/api-gateway/). API Gateway provides free tier.
 * **AWS Lambda**: Lambda is the foundation for our processing layer. It allows you to run code without having to provision servers. To know more about it go [here](https://aws.amazon.com/lambda/). Lambda provides free tier.
 * **Amazon Kinesis Data Stream**: Is the service that we use for ingesting streaming data. To know more about Kinesis Data Stream, including pricing, click [here](https://aws.amazon.com/kinesis/data-streams/). Kinesis Data Streams *has not free tier* , but the cost for this application, for 1 user, the cost associated to Kinesis Data Streams it will be of 1 cent per hour approximately.
 * **Amazon Kinesis Data Firehose**: Amazon Kinesis Data Firehose is the easiest way to load streaming data into data stores and analytics tools. It can capture, transform, and load streaming data into Amazon S3, Amazon Redshift, Amazon Elasticsearch Service, and Splunk, enabling near real-time analytics with existing business intelligence tools and dashboards you’re already using today.  We are using it to drop data from Kinesis Data Streams to To know more about Kinesis Data Firehose, including pricing, click [here](https://aws.amazon.com/kinesis/data-firehose/). Kinesis Data Firehose *has not free tier* , but the cost for testing this application will be neglectable. Check the pricing model to learn more.
-* **Amazon DynamoDB**: Is the database that we are using to store the scoreboard data for the game sessions. Amazon DynamoDB is s a key-value and document database that delivers single-digit millisecond performance at any scale. It's a fully managed, multiregion, multimaster database with built-in security, backup and restore, and in-memory caching for internet-scale applications. DynamoDB can handle more than 10 trillion requests per day and support peaks of more than 20 million requests per second. DynamoDB provides free tier, and we will be running under it for Space Invaders. To learn more about it, visit [this link](https://aws.amazon.com/dynamodb/).
+* **Amazon DynamoDB**: Is the database that we are using to store the scoreboard data for the game sessions. Amazon DynamoDB is s a key-value and document database that delivers single-digit millisecond performance at any scale. It's a fully managed, multiregion, multimaster database with built-in security, backup and restore, and in-memory caching for internet-scale applications. DynamoDB can handle more than 10 trillion requests per day and support peaks of more than 20 million requests per second. DynamoDB provides free tier, and we will be running under it for Alien Attack. To learn more about it, visit [this link](https://aws.amazon.com/dynamodb/).
 * **AWS Systems Manager**: Systems Manager provides a unified user interface so you can view operational data from multiple AWS services and allows you to automate operational tasks across your AWS resources. We are using the [Parameter Store](https://aws.amazon.com/systems-manager/features/#Parameter_Store) feature of Systems Manager, which provides a centralized store to manage your configuration data, whether plain-text data such as database strings or secrets such as passwords. To know more about Systems Manager, including pricing, click [here](https://aws.amazon.com/systems-manager/).  Parameter store is free.
-* At the *programming* side, we are using [AWS SDK for Javascript in the Browser](https://aws.amazon.com/sdk-for-browser/) and [AWS SDK for node](https://aws.amazon.com/sdk-for-node-js/). Space Invaders was not developed using the best practices, exaclty because one of the workshops is about fixing it and applying the best practices for programming and DevSecOps.
+* At the *programming* side, we are using [AWS SDK for Javascript in the Browser](https://aws.amazon.com/sdk-for-browser/) and [AWS SDK for node](https://aws.amazon.com/sdk-for-node-js/). Alien Attack was not developed using the best practices, exaclty because one of the workshops is about fixing it and applying the best practices for programming and DevSecOps.
 
 Have fun!
 
@@ -26,15 +26,15 @@ Have fun!
 
 *UnicornGames* is a company focused in designing games for entertainment and in implementing gamefication strategies for companies over different contexts, like sales tracking, investment performance tracking, and more.
 
-We just bought the Space Invaders Unit from UnicornGames. Space Invaders seems to be only a simple game, but under the hood it is a near real-time application (NRTA) that computes scores from an incoming stream of data, and we want to leverage it for other purposes. 
+We just bought the Alien Attack Unit from UnicornGames. Alien Attack seems to be only a simple game, but under the hood it is a near real-time application (NRTA) that computes scores from an incoming stream of data, and we want to leverage it for other purposes. 
 
-The Chief Development Engineer at the Space Invaders Unit of UnicornGames is not happy by being acquired. He was expecting to become a VP and to buy part of the company. With our acquisition, he mutinied and left the company, taking some of the lead SDEs with him, and leaving us with with a broken code that we need to fix. 
+The Chief Development Engineer at the Alien Attack Unit of UnicornGames is not happy by being acquired. He was expecting to become a VP and to buy part of the company. With our acquisition, he mutinied and left the company, taking some of the lead SDEs with him, and leaving us with with a broken code that we need to fix. 
 
 We were able to recover some instructions that we believe will help us to deploy the broken environment, and fix it timely for the C-level demo.
 
 One of the recovered assets is the architecture. Additional information you will find by following the instructions.
 
-![Markdown preferences pane](./images/spaceinvaders.architecture.png)
+![Markdown preferences pane](./images/alienattack.architecture.png)
 
 We hope that your skills may help us with the challenge of *MAKING THE APPLICATION TO WORK*.
 
@@ -68,19 +68,19 @@ In a few seconds your environment will be available. You can close the Welcome t
 Down on your Cloud9 console, a terminal is available. Go to the terminal and clone this repository. This repository contains the back-end.
 
 ~~~
-~/environment $ git clone https://github.com/fabianmartins/spaceinvaders.workshop
+~/environment $ git clone https://github.com/fabianmartins/alienattack.workshop
 ~~~
 
 #### STEP 4 - Clone the application repository - ON YOUR COMPUTER
 
 **This is supposed to be done on your local computer**. You can clone it at your Cloud9 environment, but for having a better experience, using your favorite browser, clone it in your own computer.
 
-This is the repository with the Space Invaders front end.
+This is the repository with the Alien Attack front end.
 
 **IMPORTANT:** Disregard any instructions at that repository (but you can always read the comments).
 
 ~~~
- git clone https://github.com/fabianmartins/spaceinvaders.application.git
+ git clone https://github.com/fabianmartins/alienattack.application.git
 ~~~
 
 **IMPORTANT:** The frond-end DOES NOT WORK YET on mobile devices, and in some versions of Windows, especially those with touch screen.
@@ -93,8 +93,8 @@ Getting back to your **Cloud9 environment**, run the script `config.sh` followin
 Running this script will update your environment. This script changes your bash_profile. So, if your intend to run it on your own machine, be sure about the side effects of this action.
 
 ~~~
-~/environment $ cd spaceinvaders.workshop
-~/environment/spaceinvaders.workshop/ (master) $ source config.sh
+~/environment $ cd alienattack.workshop
+~/environment/alienattack.workshop/ (master) $ source config.sh
 ~~~
 
 Don't worry if some *warning* meessages appear, especially if it's about python.
@@ -135,8 +135,8 @@ One way of configuring continuous compiling is by having 2 terminals open. One y
 * Chose one of the terminals, and get into the cdk folder. If this is the new one, you will be at `~/environment`. So, from there, run `npm run watch`:
 
 ~~~ 
-~/environment $ cd spaceinvaders.workshop/cdk/
-~/environment/spaceinvaders.workshop/cdk (master) $ npm run watch
+~/environment $ cd alienattack.workshop/cdk/
+~/environment/alienattack.workshop/cdk (master) $ npm run watch
 ~~~ 
 
 This will kick off the continuous compiling of the environment. It may take a few seconds until you get the results. 
@@ -146,7 +146,7 @@ The output may come out perfectly with 0 errors, or with some errors. If these e
 A totally successful compilation will be something like the output below:
 
 ~~~ 
-~/environment/spaceinvaders.workshop/cdk (master) $ npm run watch
+~/environment/alienattack.workshop/cdk (master) $ npm run watch
 
 [0:00:00 AM] Starting compilation in watch mode...
 
@@ -162,7 +162,7 @@ A totally successful compilation will be something like the output below:
 Go to the other available terminal at your Cloud9 environment and be sure of being at the CDK folder
 
 ~~~
-~/environment/spaceinvaders.workshop/cdk (master) $
+~/environment/alienattack.workshop/cdk (master) $
 ~~~
 
 You will need to decide for an **"Environment name"** that will be used to configure and deploy your environment.
@@ -194,16 +194,16 @@ if the deployment WAS NOT SUCCESSFUL, then almost surely you had a S3 bucket nam
 ~~~
 Environment name: TEST
 [ { Forbidden: null
-      at Request.extractError (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/services/s3.js:565:35)
-      at Request.callListeners (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/sequential_executor.js:106:20)
-      at Request.emit (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/sequential_executor.js:78:10)
-      at Request.emit (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/request.js:683:14)
-      at Request.transition (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/request.js:22:10)
-      at AcceptorStateMachine.runTo (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/state_machine.js:14:12)
-      at /home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/state_machine.js:26:10
-      at Request.<anonymous> (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/request.js:38:9)
-      at Request.<anonymous> (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/request.js:685:12)
-      at Request.callListeners (/home/ec2-user/environment/spaceinvaders.workshop/cdk/node_modules/aws-sdk/lib/sequential_executor.js:116:18)
+      at Request.extractError (/home/ec2-user/environment/alienattack.workshop/cdk/node_modules/aws-sdk/lib/services/s3.js:565:35)
+      at Request.callListeners (/home/ec2-user/environment/alienattack.workshop/cdk/node_modules/aws-sdk/lib/sequential_executor.js:106:20)
+      at Request.emit (/home/ec2-user/environment/alienattack.workshop/cdk/node_modules/aws-sdk/lib/sequential_executor.js:78:10)
+      at Request.emit (/home/ec2-user/environment/alienattack.workshop/cdk/node_modules/aws-sdk/lib/request.js:683:14)
+      at Request.transition (/home/ec2-user/environment/alienattack.workshop/cdk/node_modules/aws-sdk/lib/request.js:22:10)
+      at AcceptorStateMachine.runTo (/home/ec2-user/environment/alienattack.workshop/cdk/node_modules/aws-sdk/lib/state_machine.js:14:12)
+      at /home/ec2-user/environment/alienattack.workshop/cdk/node_modules/aws-sdk/lib/state_machine.js:26:10
+      at Request.<anonymous> (/home/ec2-user/environment/alienattack.workshop/cdk/node_modules/aws-sdk/lib/request.js:38:9)
+      at Request.<anonymous> (/home/ec2-user/environment/alienattack.workshop/cdk/node_modules/aws-sdk/lib/request.js:685:12)
+      at Request.callListeners (/home/ec2-user/environment/alienattack.workshop/cdk/node_modules/aws-sdk/lib/sequential_executor.js:116:18)
     message: null,
     code: 'Forbidden',
     region: 'ap-southeast-1',
@@ -338,7 +338,7 @@ These steps are going to be executed using the respository that you cloned **to 
 4. If you get to a page where the indicating status is WAITING and a count down stopped at 10, then the login is ok, but something else is wrong (you can check the browser console, if you want).
 5. Close the window, to be sure that the cookies were deleted, so we can proceed with the test.
 
-### fixACTIVITY 4 - Test the Space Invaders' manager console
+### fixACTIVITY 4 - Test the Alien Attack' manager console
 
 The manager console is where the manager creates a game session, and starts the game so the other participants can join it.
 
@@ -383,7 +383,7 @@ The Identity Pool configuration is missing the configuration of the roles for ea
 11. Leave everything else as it is and click on **`Save changes`**
 
 **-- FastFix --**  
-The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixcognito.sh` which is inside the folder `~/environment/spaceinvaders.workshop`. Go to that folder, and run the following command:
+The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixcognito.sh` which is inside the folder `~/environment/alienattack.workshop`. Go to that folder, and run the following command:
 
 ~~~
 source fixcognito.sh <envname>

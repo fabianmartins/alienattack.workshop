@@ -1,8 +1,8 @@
 {
-  "name": "spaceinvaders.cdk",
+  "name": "alienattack.workshop",
   "version": "0.1.0",
   "bin": {
-    "spaceinvaders.cdk": "bin/spaceinvaders.cdk.js"
+    "alienattack.workshop": "bin/cdk.js"
   },
   "scripts": {
     "build": "tsc",

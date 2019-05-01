@@ -16,7 +16,7 @@ const scoreboardSortingFunction = function(playerA, playerB) {
 
 const reportInvalidRecordToDLQ = function(record) {
     var sqsParameter = {
-        //"QueueUrl" : "https://sqs.<region>.amazonaws.com/<account>/SpaceInvaders_DLQ",
+        //"QueueUrl" : "https://sqs.<region>.amazonaws.com/<account>/<envName>_DLQ",
         "QueueUrl" : process.env.DLQ_URL,
         "MessageBody" : JSON.stringify(record)
     };
@@ -135,7 +135,6 @@ const updateTopxTable = function(sessionData,callback) {
     let topxPlayers = sessionData.Scoreboard.slice(0,topXValue);
 
     let param = {
-        //"TableName" : "SpaceInvadersSessionTopX",
         "TableName" : process.env.SESSION_TOPX_TABLENAME,
         "Item" : {
             "SessionId" : sessionData.SessionId,
@@ -148,7 +147,6 @@ const updateTopxTable = function(sessionData,callback) {
 const readSessionData = function(sessionId,callback) {
     var getParams = {
         "TableName" : process.env.SESSION_TABLENAME,
-         //"TableName" : "SpaceInvadersSession",
          "Key" : { "SessionId" : sessionId },
          "ConsistentRead" : true
     };
@@ -201,7 +199,7 @@ const processKinesisRecords =  function(kinesisRecords,callback) {
             console.log('# of AFTER SESSION CLOSING (discarded) records:',preprocessedRecords.AfterSessionClosingRecords.length);
             if (preprocessedRecords.ReadyToProcessRecords.length == 0) callback(null,sessionInfo);
 		    else {
-		        // read SpaceInvadersSession from DynamoDB
+		        // read table <envName>Session from DynamoDB
     			readSessionData(sessionInfo.SessionId, function(rsdError, rsdData) {
         			if (rsdError) callback(new Error("Error reading session data."),rsdError);
         			else {

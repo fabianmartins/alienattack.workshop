@@ -174,7 +174,7 @@ export class ProcessingLayer extends ResourceAwareConstruct {
         /**
          * This function requires access to 
          * Queue
-         *      process.env.DLQ_URL = "https://sqs.<region>.amazonaws.com/<account>/SpaceInvaders_DLQ"
+         *      process.env.DLQ_URL = "https://sqs.<region>.amazonaws.com/<account>/<envName>_DLQ"
          * SystemsManager
          *      process.env.SESSION_PARAMETER = /<getAppRefName>/session
          * DynamoDB Tables

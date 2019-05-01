@@ -4,7 +4,7 @@ if (!AWS.config.region) AWS.config.region = 'us-east-1';
 const COGNITO = new AWS.CognitoIdentityServiceProvider();
 const SSM = new AWS.SSM();
 
-class SpaceInvadersGameInit {
+class AlienAttackGameInit {
 
     constructor() {
         this.UserPoolId = null;
@@ -13,9 +13,9 @@ class SpaceInvadersGameInit {
     getUserPoolId(callback) {
         if (this.UserPoolId == null) {
             var self = this;
-            SSM.getParameters( { 'Names' : [ 'spaceinvaders.userpoolid' ] }, (err,data) => {
+            SSM.getParameters( { 'Names' : [ 'alienattack.userpoolid' ] }, (err,data) => {
                 if (err) {
-                    console.log('Error reading spaceinvaders.userpoolid');
+                    console.log('Error reading alienattack.userpoolid');
                     console.log(err);
                     callback(null);
                 } else {
@@ -107,5 +107,5 @@ class SpaceInvadersGameInit {
     }
 };
 
-var gi = new SpaceInvadersGameInit();
+var gi = new AlienAttackGameInit();
 gi.init();
