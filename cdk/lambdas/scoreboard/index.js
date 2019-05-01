@@ -16,7 +16,7 @@ const scoreboardSortingFunction = function(playerA, playerB) {
 
 const reportInvalidRecordToDLQ = function(record) {
     var sqsParameter = {
-        //"QueueUrl" : "https://sqs.us-east-1.amazonaws.com/232189948602/SpaceInvaders_DLQ",
+        //"QueueUrl" : "https://sqs.<region>.amazonaws.com/<account>/SpaceInvaders_DLQ",
         "QueueUrl" : process.env.DLQ_URL,
         "MessageBody" : JSON.stringify(record)
     };

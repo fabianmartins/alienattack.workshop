@@ -112,7 +112,7 @@ REQUEST TEST EXAMPLE
   "ResourceProperties": {
     "AppName": "TestAppName",
     "UserPoolName": "TestAppName",
-    "PostConfirmationLambdaArn": "arn:aws:lambda:us-east-2:232189948602:function:NRTAPostRegistrationFn"
+    "PostConfirmationLambdaArn": "arn:aws:lambda:us-east-2:<account>:function:NRTAPostRegistrationFn"
   }
 }
 
@@ -157,7 +157,7 @@ REQUEST TEST EXAMPLE
   "ResourceProperties": {
     "AppName": "TestAppName",
     "UserPoolName": "TestAppName",
-    "PostConfirmationLambdaArn": "arn:aws:lambda:us-east-2:232189948602:function:NRTAPostRegistrationFn"
+    "PostConfirmationLambdaArn": "arn:aws:lambda:us-east-2:<account>:function:NRTAPostRegistrationFn"
   }
 }
 
@@ -200,12 +200,12 @@ REQUEST TEST EXAMPLE
   "ResourceProperties": {
     "AppName": "TestAppNameXPTO",
     "UserPoolName": "TestAppName",
-    "PostConfirmationLambdaArn": "arn:aws:lambda:us-east-2:232189948602:function:NRTAPostRegistrationFn"
+    "PostConfirmationLambdaArn": "arn:aws:lambda:us-east-2:<account>:function:NRTAPostRegistrationFn"
   },
   "OldResourceProperties": {
     "AppName": "TestAppName",
     "UserPoolName": "TestAppName",
-    "PostConfirmationLambdaArn": "arn:aws:lambda:us-east-2:232189948602:function:NRTAPostRegistrationFn"
+    "PostConfirmationLambdaArn": "arn:aws:lambda:us-east-2:<account>:function:NRTAPostRegistrationFn"
   }
 }
 
