@@ -68,7 +68,7 @@ In a few seconds your environment will be available. You can close the Welcome t
 Down on your Cloud9 console, a terminal is available. Go to the terminal and clone this repository. This repository contains the back-end.
 
 ~~~
-~/environment $ git clone <this repository URL>
+~/environment $ git clone https://github.com/fabianmartins/spaceinvaders.workshop
 ~~~
 
 #### STEP 4 - Clone the application repository - ON YOUR COMPUTER
@@ -392,7 +392,7 @@ source fixcognito.sh <envname>
 ### fixACTIVITY 6 - Testing the accesses again
 
 #### Step 1 - Testing again the login to the game
-Execute again the ***fixACTIVITY 3***. We've been said that it will still not work. Please confirm that this is the outcome of the test.
+Execute again the ***fixACTIVITY 3***. We've been said that it still will not work. Please confirm that this is the outcome of the test.
 
 #### Step 2 - Testing again the login to the manager console
 Execute again the ***fixACTIVITY 4***. We've been said that we are getting an AccessDeniedException. 
@@ -553,11 +553,12 @@ If you want to skip this activity:
 
 Get back to the manager console ('scoreboard/index.html' on your local computer), and follow the steps below to create a gaming session.
 
-1. On the field `Session Name` input **TEST**
-2. On the section `Game Type`, select **Multiple trials**
-3. Click on the button **Start game**
-4. If the page updates with a table containing a header with the words `Nickname`, `Score`, `Shots`, `Level`, `Lives`, then we are good.
-5. Open a second browser window, and execute again the steps to login into the game. For a better experience, leave the windows opened side by side. This time, if everything went well, you will see a button labeled **JOIN session**. Click on it 
+1. Reload the admin console, and login again. This is just to guarantee that your token will be refreshed.
+2. On the field `Session Name` input **TEST**
+3. On the section `Game Type`, select **Multiple trials**
+4. Click on the button **Start game**
+5. If the page updates with a table containing a header with the words `Nickname`, `Score`, `Shots`, `Level`, `Lives`, then we are good.
+6. Open a second browser window, and execute again the steps to login into the game. For a better experience, leave the windows opened side by side. This time, if everything went well, you will see a button labeled **JOIN session**. Click on it 
 
 If you are able to play, **you fixed it!**
 

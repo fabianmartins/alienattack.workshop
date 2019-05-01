@@ -64,13 +64,13 @@ const buildParamsForOperation = function (params) {
         ],
         SmsVerificationMessage: "Your verification code is {####}. ",
         EmailVerificationMessage: "Your verification code is {####}. ",
-        EmailVerificationSubject: params.AppName + " sent your verification code",
+        EmailVerificationSubject: "AlienAttack environment "+ params.AppName + " sent your verification code",
         VerificationMessageTemplate: {
             SmsMessage: "Your verification code is {####}. ",
             EmailMessage: "Your verification code is {####}. ",
             EmailSubject: params.AppName + " sent your verification code",
             EmailMessageByLink: "Please click the link below to verify your email address. {##Verify Email##} ",
-            EmailSubjectByLink: params.AppName + " sent your verification link",
+            EmailSubjectByLink: "AlienAttack environment " + params.AppName + " sent your verification link",
             DefaultEmailOption: "CONFIRM_WITH_LINK"
         },
         SmsAuthenticationMessage: "Your authentication code is {####}. ",
