@@ -97,7 +97,7 @@ Running this script will update your environment. This script changes your bash_
 ~/environment/alienattack.workshop/ (master) $ source config.sh
 ~~~
 
-Don't worry if some *warning* meessages appear, especially if it's about python.
+Don't worry if some *warning* messages appear, especially if it's about python.
 
 To check if everything is ok, you can run the following commands:
 
@@ -129,10 +129,10 @@ There are two ways of building the environment: *continuously*, and *on demand*.
 
 One way of configuring continuous compiling is by having 2 terminals open. One you will be using to issue commands. The other one, you will be using to monitor the progress of the development and corresponding compilation.
 
-*Let's configure it.*
+*Do this:*
 
-* At the bottom of the page of your Cloud9 IDE, click the **`(+)`** icon, and then `New Terminal` to add a second terminal.
-* Chose one of the terminals, and get into the cdk folder. If this is the new one, you will be at `~/environment`. So, from there, run `npm run watch`:
+1. At the bottom of the page of your Cloud9 IDE, click the **`(+)`** icon, and then `New Terminal` to add a second terminal.
+2. On the new terminal, get into the cdk folder and run `npm run watch`:
 
 ~~~ 
 ~/environment $ cd alienattack.workshop/cdk/
@@ -141,7 +141,7 @@ One way of configuring continuous compiling is by having 2 terminals open. One y
 
 This will kick off the continuous compiling of the environment. It may take a few seconds until you get the results. 
 
-The output may come out perfectly with 0 errors, or with some errors. If these errors are of the type TS6192 or TS6133, then you're good. This errors appear when some classes are imported but not used, like when part of the code is commented. This will not break the code at the running time.
+The output may come out perfectly with 0 errors, or with some errors. If these errors are of the type TS6192 or TS6133, then you're good. These errors appear when some classes are imported but not used, like when part of the code is commented. This will not break the code at the running time.
 
 A totally successful compilation will be something like the output below:
 
@@ -151,7 +151,7 @@ A totally successful compilation will be something like the output below:
 [0:00:00 AM] Starting compilation in watch mode...
 
 
-[0:00:14 AM] Found 0 errors. Watching for file changes.
+[0:00:00 AM] Found 0 errors. Watching for file changes.
 ~~~  
 
 **IMPORTANT:** If you decide for not using the continuous compiling, you must remember to run `npm run build` every time you save a file.
@@ -159,19 +159,15 @@ A totally successful compilation will be something like the output below:
 
 #### STEP 7 - Synthesize the cloudformation for your environment
 
-Go to the other available terminal at your Cloud9 environment and be sure of being at the CDK folder
-
-~~~
-~/environment/alienattack.workshop/cdk (master) $
-~~~
-
-You will need to decide for an **"Environment name"** that will be used to configure and deploy your environment.
+You will need to decide for an **"Environment name"** that will be used to configure and deploy your environment. 
 
 **My suggestions for you:**  
  
+* **DON'T** use special characters, dashes, spaces in the environment name.
 * **DON'T** use long names like *ThisIsMyEnvironmentName*, or *ThisIsAnUnecessaryVeryLongAndName*. Keep it simple. User something like Env01.
 * Also, **DON'T** use very short names, like *fm*. Try to use at least 5 characters to avoid name collisions.
-* If you're alone in the account/region, pick a small word for envname, like your initials, and add the month and day just to avoid collisions (ex: fabi0405)
+* If you're alone in the account/region, pick a small word for envname, like your initials, and add the month and day just to avoid collisions (ex: fabi0405).
+* The environment name will be used to create new S3 buckets. S3 bucket names are global. So, if you use very common words (like test, dev, prod, system, app) almost surely you will get a name collision. Be sure of chosing something that will avoid this kind of issue.
 * Avoid using potentially reserved words. Possible reserved words are AWS, S3, and so on.
 
 The configuration was designed like this for the case when different individuals are sharing the same account (due their company's requirements) and sharing the same region (due the need of specific features of the AWS services, only available in such regions).
@@ -220,21 +216,25 @@ Unable to find output file /tmp/cdkF6Q2pM/cdk.out; are you calling app.run()?
 
 ***
 
-Being inside the cdk folder as shown below, ask CDK to synthesize the Cloudformation specification for your environment.
+#### Step 7.1 - Synthetizing your environment
+
+1. Go to the other available terminal at your Cloud9 environment and be sure of being at the CDK folder
+2. Use the synth command for CDK to synthetize your enviroment.
 
 ~~~
-cdk synth -c envname=<envname>
+~/environment/alienattack.workshop/cdk (master) $
+~/environment/alienattack.workshop/cdk (master) $ cdk synth -c envname=<envname>
 ~~~
 
 This will generate an output for the corresponding Cloudformation template. You can save it by redirecting the result to some folder, so you can read it through.
 
 
-## Deploy your backend
+#### Step 7.2 - Deploy your backend
 
 Being at your cdk folder, and having decided for an *envname*, run the following command:
 
 ~~~
-cdk deploy -c envname=<envname>
+~/environment/alienattack.workshop/cdk (master) $ cdk deploy -c envname=<envname>
 ~~~
 
 CDK will first to show you what changes will be applied to the environment. After that, it will ask if you really want to deploy.
@@ -243,6 +243,7 @@ Answer with **y**, and wait for environment to be deployed.
 
 Wait for the environment finishing deploying.
 
+***
 
 ## Fix the application
 
@@ -250,7 +251,7 @@ Here is where we start fixing the environment.
 
 The system is comprised of two applications: the Game, and the Scoreboard.
 
-We know that the system is not running properly because we tried to run each one of the applications, and while with the console open on the browser, we could see a lot of errors, and it's clear that the application is broken.
+We know that the system is not running properly because we tried to run each one of the applications, and while having the browser console opened, we could see a lot of errors, and it's clear that the application is broken.
 
 As you will need to run the application after fixing it (or now, just to check if it's really broken), here is the guidance for opening each one of the applications. 
 
@@ -307,7 +308,8 @@ const AWS_CONFIG = {
 * Be sure of saving the file using UTF-8 (pure text). Avoid editors that save the files with special characters
 * Don't forget to maintain the quotes that are on those fields. 
   * For example, if you are in us-east-1, the line for the region will be `"region" : "us-east-1"`. See, the quotes are there
-* Be sure of using **uppercase** for the value of the field APPNAME. So, for example, if your environment name is r2d2, the line for appName will become `"APPNAME" : "R2D2"`. Again, the quotes are there
+* Be sure of using **uppercase** for the value of the field APPNAME. So, for example, if your environment name is r2d2, the line for appName will become `"APPNAME" : "R2D2"`. 
+* Again, check if the quotes are there!
 * Save the file!
 
 
@@ -335,7 +337,7 @@ These steps are going to be executed using the respository that you cloned **to 
 1. Get back to the application on your browser (the one that you opened from `./game/index.html`), and now choose **Login** (or skip to step 2 if you're already there).
 2. Enter your credentials, and click on **Login**.
 3. If you entered your credentials right, you will see a pop-up message `Login successful to user <username>`.
-4. If you get to a page where the indicating status is WAITING and a count down stopped at 10, then the login is ok, but something else is wrong (you can check the browser console, if you want).
+4. If you get to a page where the indicating status is WAITING and a countdown stopped at 10, then the login is ok, but something else is wrong (you can check the browser console, if you want).
 5. Close the window, to be sure that the cookies were deleted, so we can proceed with the test.
 
 ### fixACTIVITY 4 - Test the Alien Attack' manager console
@@ -370,7 +372,7 @@ The Identity Pool configuration is missing the configuration of the roles for ea
 7.  On the section `Authenticated role selection` there is a select button labeled as `Use default role`. Click on this button and select **Choose role with rules**. We will create two rules.
 8. First rule - **MANAGERS**
 	* For the field `Claim`, input the value **cognito:preferred_role**.
-	* For the drop down box at the right side of the field, leave the value **Contains** selected.
+	* For the drop down box at the right side of the field, select the value **Contains**.
 	* For the input box at the right of the `Contains` box, input the value **`<envName>ManagersRole`**. Be careful with typos, and use uppercase for the *`<envName>`* part.
 	* For the drop down box on the right, select **`<envName>ManagersRole`**.
 9. Second rule - **PLAYERS**
@@ -471,7 +473,7 @@ In accordance to some notes found, there are other pieces to be fixed.
 The people from the monitoring team said that they identified failure in getting the scoreboard computed and stored on DynamoDb. Our SysAdmin is friend of one of the rebels, and he send this message *"Check if the Lambda Function with the name Scoreboard is integrated to Kinesis. If there is no trigger configured for the lambda function, that's the issue"*.
 
 ##### [Problem] 
-The game data is ingested to the Kinesis Streams.Then, Lambda (the service) triggers a Lambda function at each second, to make it consume the data from the Kinesis Streams. What is done with the consumed records depends on what is coded on the Lambda function.
+The game data is ingested to the Kinesis Streams. Then, Lambda (the service) triggers a Lambda function at each second, to make it consume the data from the Kinesis Streams. What happen with the consumed records depends on what is coded on the Lambda function.
 
 We need to connect the Lambda function to Kinesis.
 
@@ -516,7 +518,7 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
 4. On the section *New delivery stream*, configure the fields as follows:
    * **Delivery stream name**: `<envName>Firehose`.
    * **Source**: Select the radio button *'Kinesis stream'*. 
-   * Drop-down **Choose Kinesis stream**: select the stream attached to your deployment (the same one we connected to the Lambda function).
+   * Drop-down **Choose Kinesis stream**: select the stream attached to your deployment (the same one we connected to the Lambda function). Its name starts with `<envName>`.
    * Click **Next**.
    * **Record transformation**: Select *'Disabled'*.
    * **Record format conversion**: Select *'Disabled'*.
@@ -553,7 +555,7 @@ If you want to skip this activity:
 
 Get back to the manager console ('scoreboard/index.html' on your local computer), and follow the steps below to create a gaming session.
 
-1. Reload the admin console, and login again. This is just to guarantee that your token will be refreshed.
+1. Reload the Scoreboard console, and login again. This is just to guarantee that your token will be refreshed.
 2. On the field `Session Name` input **TEST**
 3. On the section `Game Type`, select **Multiple trials**
 4. Click on the button **Start game**
@@ -599,6 +601,11 @@ We are aware that the code has some issues. We heard that the environment is not
 
 So, **find the limits for this architecture considering that at this moment we will have only one (1) shard for Kinesis Data Streams**.
 
+Tips:
+- What are the limits for Kinesis Streams, for one shard?
+- How the integration Lambda-Kinesis is affected if we have more users? Do we need to worry with the "batch size" for the Lambda-Kinesis integration? Or we just need to fine tune it?
+- How do we scale DynamoDB? Do we need to do something about it?
+
 
 ## Cleaning up the environment
 
@@ -607,7 +614,7 @@ So, **find the limits for this architecture considering that at this moment we w
 Go to the the terminal on your environment and type the following command. Be sure to be at your cdk folder.
 
 ```
-$ cdk destroy -c envname=<envName>
+~/environment/alienattack.workshop/cdk (master) $ cdk destroy -c envname=<envName>
 ```
 
 If everything went well, you will receive a message like the following one: 
@@ -615,6 +622,8 @@ If everything went well, you will receive a message like the following one:
 ```
 ✅  <envName>: destroyed
 ```
+
+If by any reason you don't have access anymore to the Cloud9 environment, or is unable to destroy the environment using CDK, go to CloudFormation on your AWS console, and delete the stack with "Stack Name" corresponding to your `<envName>`. Then move to the next activity.
 
 ### cleanACTIVITY 2 - Cleaning up the last resources
 
@@ -625,7 +634,7 @@ Let's fix this.
 1. Go to Systems Manager, then Parameter Store, and delete the parameter `<envName>/session`
 2. Go to Kinesis, then Kinesis Firehose, and delete the resource that you created by hand
 3. Go to IAM, and search for `<envName>`. Delete any resource configured like that. For sure the only resource will be `<envName>FirehoseRole`
-4. Delete the S3 buckets `<envName>`.app and `<envName>.raw`
+4. Delete the S3 buckets `<envName>.app` and `<envName>.raw`
 5. Delete your Cloud9 environment if you created it just for this workshop.
 
 ## Final activity
