@@ -593,6 +593,7 @@ We know that for the current implementation:
 * A player pushes 1 record at each 300 ms.
 * A player reads the TOP 10 scoreboard (`GET/scoreboard`) at each 2 seconds.
 * The Manager scoreboard reads the Kinesis Data Stream at each 1.5 seconds.
+* We are using provisioned capacity mode for DynamoDB
 
 Build a small team to work on the aspects of cost and limits of this architecture.
 
