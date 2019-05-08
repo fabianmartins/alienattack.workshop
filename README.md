@@ -24,7 +24,6 @@ These are the regions that cover all the services required for this workshop.
 ~~~
 [ { Name: 'Northern Virginia',   Continent: 'Americas', Id: 'us-east-1' },
   { Name: 'Ohio',                Continent: 'Americas', Id: 'us-east-2' },
-  { Name: 'Northern California', Continent: 'Americas', Id: 'us-west-1' },
   { Name: 'Oregon',              Continent: 'Americas', Id: 'us-west-2' },
   { Name: 'Ireland',             Continent: 'EMEA',     Id: 'eu-west-1' },
   { Name: 'Singapore',           Continent: 'APAC',     Id: 'ap-southeast-1' },
