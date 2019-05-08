@@ -616,7 +616,7 @@ So, **find the limits for this architecture considering that at this moment we w
 
 Tips:
 - What are the limits for Kinesis Streams, for one shard?
-- How the integration Lambda-Kinesis is affected if we have more users? Do we need to worry with the "batch size" for the Lambda-Kinesis integration? Or we just need to fine tune it?
+- How the integration Lambda-Kinesis is affected if we have more users? Do we need to worry about the "batch size" for the Lambda-Kinesis integration? Or do we just need to fine tune it?
 - How do we scale DynamoDB? Do we need to do something about it?
 
 
