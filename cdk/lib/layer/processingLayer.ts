@@ -66,7 +66,7 @@ export class ProcessingLayer extends ResourceAwareConstruct {
         if (sessionParameter && sessionControlTable) {
             let createdFunction: Lambda.Function =
                 new Lambda.Function(this, this.properties.getApplicationName() + 'AllocateGamerFn', {
-                    runtime: Lambda.Runtime.NodeJS610,
+                    runtime: Lambda.Runtime.NodeJS810,
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation,'allocateGamer')),
                     environment: {
@@ -123,7 +123,7 @@ export class ProcessingLayer extends ResourceAwareConstruct {
         if (sessionParameter && sessionControlTable) {
             let createdFunction: Lambda.Function =
                 new Lambda.Function(this, this.properties.getApplicationName() + 'DeallocateGamerFn', {
-                    runtime: Lambda.Runtime.NodeJS610,
+                    runtime: Lambda.Runtime.NodeJS810,
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation,'deallocateGamer')),
                     environment: {
@@ -191,7 +191,7 @@ export class ProcessingLayer extends ResourceAwareConstruct {
         if (sessionParameter && sessionControlTable && sessionTopX && sessionTable) {
             let createdFunction: Lambda.Function =
                 new Lambda.Function(this, this.properties.getApplicationName() + 'ScoreboardFn', {
-                    runtime: Lambda.Runtime.NodeJS610,
+                    runtime: Lambda.Runtime.NodeJS810,
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation,'scoreboard')),
                     environment: {
