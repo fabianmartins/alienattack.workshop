@@ -13,10 +13,10 @@ nvm alias default latest
 nvm use $node_version
 echo --
 echo Installing Typescript
-npm install -g typescript
+npm install -g typescript@3.1.2
 echo --
 echo Installing CDK
-npm install -g aws-cdk
+npm install -g aws-cdk@0.25.2
 echo --
 echo Bootstraping CDK
 account=$(aws sts get-caller-identity --output text --query 'Account')
