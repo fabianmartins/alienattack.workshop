@@ -92,7 +92,7 @@ export class SecurityLayer extends ResourceAwareConstruct {
                 ,description : "Generates the UserPool using configuration not available on CDK"
                 ,handler : 'index.handler'
                 ,timeout : 300
-                ,runtime : Lambda.Runtime.NodeJS610
+                ,runtime : Lambda.Runtime.NodeJS810
            });
    
            generatingFunction.addToRolePolicy( new IAM.PolicyStatement()
