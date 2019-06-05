@@ -131,15 +131,15 @@ cdk
 
 and getting a non-error response, you will be sure that CDK (Cloud Development Kit) is working.
 
-#### STEP 6 - Start background compiling for CDK
+#### STEP 6 - Start background compilation for CDK
 
 There are two ways of building the environment: *continuously*, and *on demand*. 
 
-*On demand* is done by running `npm run build` from inside the cdk folder at each time you change a .ts (typescript) file. This is not very operational, so we will stick to *continuous compiling*.
+*On demand* is done by running `npm run build` from inside the cdk folder at each time you change a .ts (typescript) file. This is not very operational, so we will stick to *continuous compilation*.
 
-*Continuous compiling*, the recommended approach, means that the environment will be automatically compiled at every file change, so you can check possible errors right away.
+*Continuous compilation*, the recommended approach, means that the environment will be automatically compiled at every file change, so you can check possible errors right away.
 
-One way of configuring continuous compiling is by having 2 terminals open. One you will be using to issue commands. The other one, you will be using to monitor the progress of the development and corresponding compilation.
+One way of configuring continuous compilation is by having 2 terminals open. One you will be using to issue commands. The other one, you will be using to monitor the progress of the development and corresponding compilation.
 
 *Do this:*
 
@@ -151,7 +151,7 @@ One way of configuring continuous compiling is by having 2 terminals open. One y
 ~/environment/alienattack.workshop/cdk (master) $ npm run watch
 ~~~ 
 
-This will kick off the continuous compiling of the environment. It may take a few seconds until you get the results. 
+This will kick off the continuous compilation of the environment. It may take a few seconds until you get the results. 
 
 The output may come out perfectly with 0 errors, or with some errors. If these errors are of the type TS6192 or TS6133, then you're good. These errors appear when some classes are imported but not used, like when part of the code is commented. This will not break the code at the running time.
 
@@ -166,7 +166,7 @@ A totally successful compilation will be something like the output below:
 [0:00:00 AM] Found 0 errors. Watching for file changes.
 ~~~  
 
-**IMPORTANT:** If you decide for not using the continuous compiling, you must remember to run `npm run build` every time you save a file.
+**IMPORTANT:** If you decide for not using the continuous compilation, you must remember to run `npm run build` every time you save a file.
 
 
 #### STEP 7 - Synthesize the cloudformation for your environment
@@ -297,7 +297,7 @@ Here is how to do it:
 
 1. **region**: To find the region is easy. Probably you still remember it, or you can get it from the last message of the CDK deployment. Optionally, you can go to your console and check the URL. It will be like `https://<region>.console.aws.amazon.com`. 
 2. **API_ENDPOINT**
-  * Go to the AWS console, in the region that you deployed the environment, and then go to the service *API Gateway*. You will find an API with the name beginning with the name that you provided at the time of the deployment. Click on it.
+  * Go to the AWS console, in the region that you deployed the environment, and then go to the service *API Gateway*. You will find an API with the name beginning with the name that you provided at the time of the deployment. Click on it.  
   		* From Cloud9, to open another window for the AWS console, just go to the meny and click on *AWS Cloud9* --> *Go To Your Dashboard*, and then *Services* --> *API Gateway*. You will find your API there.
   * Click on **Stages**.
   * Click on **prod**.
@@ -352,7 +352,7 @@ These steps are going to be executed using the respository that you cloned **to 
 4. If you get to a page where the indicating status is WAITING and a countdown stopped at 10, then the login is ok, but something else is wrong (you can check the browser console, if you want).
 5. Close the window, to be sure that the cookies were deleted, so we can proceed with the test.
 
-### fixACTIVITY 4 - Test the Alien Attack' manager console
+### fixACTIVITY 4 - Test the Alien Attack manager console
 
 The manager console is where the manager creates a game session, and starts the game so the other participants can join it.
 
@@ -368,12 +368,16 @@ We've been said that these applications are needing a face lifting. However, let
 
 ### fixACTIVITY 5 - Cognito - Fix the permissions on the groups for RBAC
 
-The people from the Security Team that joined our task force to solve the issues said that is essential to have RBAC (Role-Based Access Control) properly configured on the system. They also said that the version of the CDK used here doesn't allow us to solve that by code, unless we create a Custom Resource as it was done for the creation of the User Pool. Nobody on the team knows how to do it, and we're not but one of the SysAdmins said to have the playbook for that, and send us the guidance. Let's try to leverage it.
+The people from the Security Team that joined our task force to solve the issues said that is essential to have RBAC (Role-Based Access Control) properly configured on the system. They also said that the version of the CDK used here doesn't allow us to solve that by code, unless we create a Custom Resource as it was done for the creation of the User Pool. Nobody on the team knows how to do it, and we don't have time to dive deep on it now. 
+
+But one of the SysAdmins said to have the playbook for that, and send us the guidance. Let's try to leverage it.
 
 ##### [Problem] 
 The Identity Pool configuration is missing the configuration of the roles for each one of the groups (Managers and Players). We need to attach the proper roles to the user when the user signs in to the application.
 
 ##### [Solution guidance]
+
+This is the playbook that we've got from
 
 1. On your AWS Console, visit the Cognito service page.
 2. If you got to the landing page of the service, you will click on the button **Manage Identity Pools**.
@@ -416,7 +420,7 @@ Let's proceed to the next activity and check if we can solve it.
 
 ### fixACTIVITY 7 - Cognito - Configure yourself as a manager
 
-We found some notes at the desk of the solution architect. There is a piece of paper where is written *"use AWS CLI to make yourself an application admin"*. The following steps were found that paper. Hopefully they will help you to solve the issue.
+We have found some notes in the desk of the solutions architect. There is a piece of paper where is written *"use AWS CLI to make yourself an application admin"*. The following steps were found that paper. Hopefully they will help you to solve the issue.
 
 **Task 1.** Take note of the USER POOL ID  
 
@@ -446,7 +450,7 @@ After fixing this, try to login to the manager console again (*fixActivity 4*). 
 
 ### fixACTIVITY 8 - Systems Manager - Create the missing parameter
 
-One of the System Administrators took a look at the environment, and he said that a parameter missing on the back-end. He said that we need to fix Systems Manager. Go to the Systems Manager console, and create the parameter as specified below.
+One of the Systems Administrators took a look at the environment, and he said that a parameter missing on the back-end. He said that we need to fix Systems Manager. Go to the Systems Manager console, and create the parameter as specified below.
 
 ##### [Problem] 
 It seems that a *'session'* parameter is missing, and this is making the application to break. 
@@ -482,10 +486,10 @@ In accordance to some notes found, there are other pieces to be fixed.
 
 ### fixACTIVITY 9 - Kinesis Streams/Lambda Integration - Integrate Lambda to Kinesis
 
-The people from the monitoring team said that they identified failure in getting the scoreboard computed and stored on DynamoDb. Our SysAdmin is friend of one of the rebels, and he send this message *"Check if the Lambda Function with the name Scoreboard is integrated to Kinesis. If there is no trigger configured for the lambda function, that's the issue"*.
+The people from the Monitoring Team said that they have identified a failure in getting the scoreboard computed and stored on DynamoDb. Our SysAdmin is friend of one of the rebels, and he got this tip from his friend: *"Check if the Lambda Function with the name Scoreboard is integrated to Kinesis. If there is no trigger configured for the lambda function, that's the issue"*.
 
 ##### [Problem] 
-The game data is ingested to the Kinesis Streams. Then, Lambda (the service) triggers a Lambda function at each second, to make it consume the data from the Kinesis Streams. What happen with the consumed records depends on what is coded on the Lambda function.
+The game data is ingested to the Kinesis Streams. Then, Lambda (the service) triggers a Lambda function every second, to make it consume the data from the Kinesis Streams. What happens to the consumed records depends on what is coded on the Lambda function.
 
 We need to connect the Lambda function to Kinesis.
 
@@ -514,7 +518,7 @@ If you want to skip this activity:
 
 ### fixACTIVITY 10 - Kinesis Firehose - Create the missing Kinesis Firehose
 
-The analytics team complained that no data is going to their data lake staging area. They said that Kinesis Streams drops the data to a Kinesis Firehose, and then Kinesis Firehose moves the data to a S3 bucket named with the suffix "raw" (you can check if the bucket exists).
+The Analytics Team has complained that no data is going to their data lake staging area. They have said that Kinesis Streams drops the data to a Kinesis Firehose, and then Kinesis Firehose moves the data to a S3 bucket named with the suffix "raw" (you can check if the bucket exists).
 
 They said *"This is pretty simple! It is just to connect the Kinesis Firehose to the Kinesis Streams. If the Kinesis Firehose doesn't exists, create one! Give us access and we can help. Or, call us if you need"*.
 
@@ -586,13 +590,15 @@ For this last part, we got intel from the rebels that, to solve this, go to the 
 
 Our executives are inexperienced with costs on AWS, and they would like to understand the rationale behind the costs of this architecture.
 
+We learned that some arrangements were done to make this run under AWS Free Tier as much as possible, but we are not sure how much was left outside the free tier.
+
 We know that for the current implementation:
 
 * The payload is 120 bytes in size, in average.
-* A player pushes 1 record at each 300 ms.
-* A player reads the TOP 10 scoreboard (`GET/scoreboard`) at each 2 seconds.
+* A player pushes 1 record at every 1 second.
+* A player reads the TOP 10 scoreboard (`GET/scoreboard`) at every 2 seconds.
 * The Manager scoreboard reads the Kinesis Data Stream at each 1.5 seconds.
-* We are using provisioned capacity mode for DynamoDB
+* We are using provisioned capacity mode for DynamoDB.
 
 Build a small team to work on the aspects of cost and limits of this architecture.
 
