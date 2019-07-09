@@ -4,7 +4,8 @@ Welcome to the AWS Alien Attack workshop (beta version).
 
 The purpose of AWS Alien Attack is to create a fun environment where you can taste and think about different aspects of serverless architectures for (near) real-time ingesting and processing of data at AWS. You can use Alien Attack to think, exercise, and talk about best practices for development, about security, databases and so on.
 
-AWS Alien Attack runs very close at zero-cost for one user, but there is cost. Check more details about the services/products used in this list:
+<details><summary>
+AWS Alien Attack runs very close at zero-cost for one user, but there is cost. Check more details about the services/products used in this list.</summary>
 
 * **CDK**: AWS Alien Attack was built using CDK for the infrastructure deployment. To know more about CDK, check [what is CDK](https://docs.aws.amazon.com/CDK/latest/userguide/what-is.html), and visit its [github repository](https://github.com/awslabs/aws-cdk). Also, take some time to explore this [workshop](https://cdkworkshop.com/).
 * **Cloud9**: Cloud9 it will be your "development environment". To know more about Cloud9, including pricing, click [here](https://aws.amazon.com/cloud9/). Cloud9 provides free tier.
@@ -18,6 +19,7 @@ AWS Alien Attack runs very close at zero-cost for one user, but there is cost. C
 * **Amazon DynamoDB**: Is the database that we are using to store the scoreboard data for the game sessions. Amazon DynamoDB is s a key-value and document database that delivers single-digit millisecond performance at any scale. It's a fully managed, multiregion, multimaster database with built-in security, backup and restore, and in-memory caching for internet-scale applications. DynamoDB can handle more than 10 trillion requests per day and support peaks of more than 20 million requests per second. DynamoDB provides free tier, and we will be running under it for Alien Attack. To learn more about it, visit [this link](https://aws.amazon.com/dynamodb/).
 * **AWS Systems Manager**: Systems Manager provides a unified user interface so you can view operational data from multiple AWS services and allows you to automate operational tasks across your AWS resources. We are using the [Parameter Store](https://aws.amazon.com/systems-manager/features/#Parameter_Store) feature of Systems Manager, which provides a centralized store to manage your configuration data, whether plain-text data such as database strings or secrets such as passwords. To know more about Systems Manager, including pricing, click [here](https://aws.amazon.com/systems-manager/).  Parameter store is free.
 * At the *programming* side, we are using [AWS SDK for Javascript in the Browser](https://aws.amazon.com/sdk-for-browser/) and [AWS SDK for node](https://aws.amazon.com/sdk-for-node-js/). Alien Attack was not developed using the best practices, exaclty because one of the workshops is about fixing it and applying the best practices for programming and DevSecOps.
+</details>
 
 These are the regions that cover all the services required for this workshop.
 
@@ -40,7 +42,7 @@ Have fun!
 
 We just bought the Alien Attack Unit from UnicornGames. Alien Attack seems to be only a simple game, but under the hood it is a near real-time application (NRTA) that computes scores from an incoming stream of data, and we want to leverage it for other purposes. 
 
-The Chief Development Engineer at the Alien Attack Unit of UnicornGames is not happy by being acquired. He was expecting to become a VP and to buy part of the company. With our acquisition, he mutinied and left the company, taking some of the lead SDEs with him, and leaving us with with a broken code that we need to fix. 
+The Chief Development Engineer at the Alien Attack Unit of UnicornGames is not happy by being acquired. He was expecting to become a VP and to buy part of the company. With our acquisition, he mutinied and left the company, taking some of the lead SDEs with him, and leaving us with with a broken code that we need to fix before an upcoming presentation that we are going to do to our executives.
 
 We were able to recover some instructions that we believe will help us to deploy the broken environment, and fix it timely for the C-level demo.
 
@@ -256,6 +258,7 @@ Answer with **y**, and wait for environment to be deployed.
 Wait for the environment finishing deploying.
 
 ***
+
 
 ## Fix the application
 
@@ -578,13 +581,70 @@ Get back to the manager console ('scoreboard/index.html' on your local computer)
 5. If the page updates with a table containing a header with the words `Nickname`, `Score`, `Shots`, `Level`, `Lives`, then we are good.
 6. Open a second browser window, and execute again the steps to login into the game. For a better experience, leave the windows opened side by side. This time, if everything went well, you will see a button labeled **JOIN session**. Click on it 
 
-If you are able to play, **you fixed it!**
+If you are able to play, **you have fixed it!**
 
 Play a little bit. Check the scoreboard. Check the DynamoDB tables. Check the S3 buckets after some time.
 
-It was said that for a full deployment, we will need to install the application at the S3 folder with the `<appNames>.app`. We will also need to deploy the CloudFront distribution because the S3 buckets are not public.
+### fixACTIVITY 12 - Computing the performance for the Top10 best players
 
-For this last part, we got intel from the rebels that, to solve this, go to the file `mainLayer.ts` which is on the deployment at Cloud9, search for *MISSING CLOUDFRONT DISTRIBUTION* and uncomment it at that file. The deployment it will take something around 20 minutes. Same time it will be required for the undeployment. But we are not expecting to solve this part today. We at the company believe that it was a big win to have reached to this point. Let's leave other adjustments for another sprints.
+One of the people from the Analytics team said that they had tested an API that allowed them to retrieve the performance of the players. They need this on-line for the top 10 best players. It seems that this is an initial part of their infrastructure to build a fraud-prevention platform.
+
+We have tried, without any success, to find this code. We were able just to retrieve a small excerpt of the code, which we are showing below. We know that is not the full code required to implement the requirements, but this must be helpful.
+
+So, you are going to need to implement the API from scratch, following the requirements below:
+
+1. The resource to be added on API Gateway must have the name `topxstatistics`.
+2. The resource will execute a HTTP GET, passing the querystring sessionId, which will hold the session id provided by the consumer of the API.
+3. The API Gateway will be integrated to the Lambda Function that you are going to create, and that is going to compute the player's performance. The excerpt of code that we have is the one below:
+
+~~~
+const computeStatisticsForSession = function(sessionId,callback) { 
+  // let's start by reading the session data from the database
+  // retrieving the record attached to 'sessionId'
+  readTopxDataFromDatabase(sessionId, (err,topXSessionData) => {
+    if (err) callback(err);
+    else {
+      if (!topXSessionData.TopX) 
+        // Table is empty. No data found.
+        callback(null,null);
+      else {
+        // here we have the record from the TopX table
+        let statistics = [];
+        let position = 1;
+        // Make the computations
+        topXSessionData.TopX.forEach( (item) => {
+            let itemStatistics = {};
+            itemStatistics['Nickname'] = item.Nickname;
+            itemStatistics['Position'] = position++;
+            if (item.Shots != 0) {
+              itemStatistics['Performance'] = item.Score/item.Shots;
+            } else {
+              if (item.Score != 0) itemStatistics['Performance'] = -1;
+              else itemStatistics['Performance'] = 0;
+            }
+            statistics.push(itemStatistics);
+        });
+        callback(null,statistics);
+      }
+    }
+  });
+};
+~~~
+
+The API must be accessible only by the Manager.
+
+**-- FastFix --**  
+We heard that something can be learned from this [link](http://partnerfactoryprogram.s3-website-us-east-1.amazonaws.com/labpack/fullmicroservice/fullmicroservice.html). 
+
+
+### Additional (and optional) task for deploying the front-end on the account
+
+It was said that for a full deployment, we will need to install the application at the S3 bucket with the `<appNames>.app`. We will also need to deploy the CloudFront distribution because the S3 buckets are not public.
+
+For this last part, we got intel from the rebels that, to solve this, two actions are necessary:
+
+1. Copy the content of the front-end to the app bucket.
+2. Go to the file `mainLayer.ts` which is on the deployment at Cloud9, search for *MISSING CLOUDFRONT DISTRIBUTION* and uncomment it at that file. The deployment it will take something around 20 minutes. Same time it will be required for the undeployment. But we are not expecting to solve this part today. We at the company believe that it was a big win to have reached to this point. Let's leave other adjustments for another sprints.
 
 ## PRICING AND LIMITS
 
