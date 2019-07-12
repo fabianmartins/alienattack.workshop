@@ -33,7 +33,7 @@ function setRoleMappings() {
     unauthRoleArn=$(removeQuotes $( eval $getUnauthRole ))
     DEBUG echo $unauthRoleArn
 
-    getIdentityPool=$(echo aws "cognito-identity list-identity-pools --max-results 11 --query 'IdentityPools[?starts_with(IdentityPoolName,\`"$appName"\`)]|[0].IdentityPoolId'")
+    getIdentityPool=$(echo aws "cognito-identity list-identity-pools --max-results 20 --query 'IdentityPools[?starts_with(IdentityPoolName,\`"$appName"\`)]|[0].IdentityPoolId'")
     identityPoolId=$( removeQuotes $( eval $getIdentityPool ) )
     DEBUG echo $identityPoolId
 
@@ -42,7 +42,7 @@ function setRoleMappings() {
     DEBUG echo $cognitoProviderName
 
     #aws cognito-idp list-identity-providers --user-pool-id us-east-2_nMp73BoqG
-    getUserPoolId=$(echo "aws cognito-idp list-user-pools --query 'UserPools[?Name == \`"$appName"\`]|[0].Id' --max-results=1")
+    getUserPoolId=$(echo "aws cognito-idp list-user-pools --query 'UserPools[?Name == \`"$appName"\`]|[0].Id' --max-results=20")
     userPoolId=$( removeQuotes $( eval $getUserPoolId ) )
     DEBUG echo $userPoolId
 
