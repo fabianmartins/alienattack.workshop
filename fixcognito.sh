@@ -33,7 +33,7 @@ function setRoleMappings() {
     unauthRoleArn=$(removeQuotes $( eval $getUnauthRole ))
     DEBUG echo $unauthRoleArn
 
-    getIdentityPool=$(echo aws "cognito-identity list-identity-pools --max-results 20 --query 'IdentityPools[?starts_with(IdentityPoolName,\`"$appName"\`)]|[0].IdentityPoolId'")
+    getIdentityPool=$(echo aws "cognito-identity list-identity-pools --max-results 60 --query 'IdentityPools[?starts_with(IdentityPoolName,\`"$appName"\`)]|[0].IdentityPoolId'")
     identityPoolId=$( removeQuotes $( eval $getIdentityPool ) )
     DEBUG echo $identityPoolId
 
