@@ -44,6 +44,25 @@ const readSessionFromSSM = function (callback) {
     );
 };
 
+const postSynchronousStart = (session, callback) => {
+    session.SynchronizeTime = (new Date()).toJSON();
+    let payload = JSON.stringify(session);
+    let param = {
+        "Name": process.env.SESSION_PARAMETER,
+        "Type": 'String',
+        "Value": payload,
+        "Overwrite": true,
+        'Description': 'Currently opened or recently closed session',
+    };
+    SSM.putParameter(param, (err, _) => {
+        if (err) {
+            console.log(err);
+            callback(null, err);
+        }
+        callback();
+    });
+};
+
 const readConnectionsFromDynamo = (session, callback) => {
     let tableName = process.env.SESSION_CONTROL_TABLENAME;
     console.log(session);
@@ -65,9 +84,26 @@ const readConnectionsFromDynamo = (session, callback) => {
     });
 }
 
-const dispatchToConnections = (connections, callback) => {
+const deleteStaleConnection = (count, session, callback) => {
+    let tableName = process.env.SESSION_CONTROL_TABLENAME;
+    const updateParams = {
+        TableName: tableName, 
+        Key: { 'SessionId':  session.SessionId},
+        UpdateExpression: 'REMOVE #connections[' + count + ']',
+        ExpressionAttributeNames: {
+            '#connections': 'connections'
+        }
+    };
+    DynamoDB.update(updateParams, (err, _) => {
+        if (err) callback(err);
+        else callback();
+    });
+}
+
+const dispatchToConnections = async (connections, session, callback) => {
     console.log(APIGatewayManagement);
-    const posts = connections.map(async (connection) => {
+    let count = 0;
+    for (let connection of connections) {
         try {
             console.log('posting to connection: ', connection);
             await APIGatewayManagement.postToConnection({
@@ -77,11 +113,15 @@ const dispatchToConnections = (connections, callback) => {
         } catch (e) {
             console.log(e);
             if (e.statusCode == 410) {
-                // delete the connection
+                deleteStaleConnection(count, session, (err,_) => {
+                    if (err) console.alarm('Error deleting stale connection', err);
+                });
+                count--;
             }
         }
-    });
-    Promise.all(posts);
+        count++;
+    }
+
     console.log('Sent to all connections')
     callback(null, 'success');
 }
@@ -110,7 +150,8 @@ exports.handler = (event, context, callback) => {
                 };
                 callback(null, response);
             }
-            readConnectionsFromDynamo(session, (err, connections) => {
+            // Write to SSM and update paramater.
+            postSynchronousStart(session, (err,_) => {
                 if (err) {
                     response = {
                         isBase64Encoded: false,
@@ -120,36 +161,48 @@ exports.handler = (event, context, callback) => {
                         })
                     };
                     callback(null, response);
-                } else {
-                    if (!connections || connections.length == 0) {
+                }
+                readConnectionsFromDynamo(session, (err, connections) => {
+                    if (err) {
                         response = {
                             isBase64Encoded: false,
                             statusCode: 400,
                             body: JSON.stringify({
-                                'errorMessage': 'There are no connections',
-                                'errorCode': 400
+                                'error': err
                             })
                         };
-                    }
-                    dispatchToConnections(connections, (err,_) => {
-                        if (err) {
+                        callback(null, response);
+                    } else {
+                        if (!connections || connections.length == 0) {
                             response = {
                                 isBase64Encoded: false,
                                 statusCode: 400,
                                 body: JSON.stringify({
-                                    'error': err
+                                    'errorMessage': 'There are no connections',
+                                    'errorCode': 400
                                 })
                             };
-                            callback(null, response);
-                        } else {
-                            response = {
-                                isBase64Encoded: false,
-                                statusCode: 200
-                            };
-                            callback(null, response);
                         }
-                    });
-                }
+                        dispatchToConnections(connections, session, (err,_) => {
+                            if (err) {
+                                response = {
+                                    isBase64Encoded: false,
+                                    statusCode: 400,
+                                    body: JSON.stringify({
+                                        'error': err
+                                    })
+                                };
+                                callback(null, response);
+                            } else {
+                                response = {
+                                    isBase64Encoded: false,
+                                    statusCode: 200
+                                };
+                                callback(null, response);
+                            }
+                        });
+                    }
+                });
             });
         }
     });
