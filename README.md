@@ -643,7 +643,7 @@ We heard that something can be learned from this [link](http://partnerfactorypro
 <a href="https://console.aws.amazon.com/apigateway/home" target="_blank">here</a>.
 2. Depending on the state of your account you can find a **Create API** or **Get Started** Button. Click on the one that you see and you are going to be take a create API page.
     1. Press the **WebSocket** radio button for **Choose the Protocol**.
-    2. For **API name** put, `<AppName>WebSocket`
+    2. For **API name** put, `<envName>WebSocket`
     3. For **Route Selection Expression** enter `$request.body.action` 
        *Note: If you want to learn more about routes and what they do click on the **Learn More** button next to the input box*
     4. For Description enter, **WebSocket for Alien Attack**.
@@ -655,8 +655,8 @@ We heard that something can be learned from this [link](http://partnerfactorypro
 1. Click on the **$connect** route.
 1. Make sure **Lambda Function** is pressed for **Integration Type**
 2. Make sure **Lambda Proxy Integration** is clicked.
-3. Enter `<AppName>WebSocketConnect` for **Lambda Function**
-4. For Execution Role enter the `<AppName>API`.
+3. Enter `<envName>WebSocketConnect` for **Lambda Function**
+4. For Execution Role enter the `<envName>API`.
 <details><summary>Instructions to find the IAM Role</summary>
 
 1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
@@ -674,13 +674,13 @@ We heard that something can be learned from this [link](http://partnerfactorypro
 1. Enter `start-game` in, **New Route Key** and click the check box to the right. 
 1. Make sure **Lambda Function** is pressed for **Integration Type**
 2. Make sure **Lambda Proxy Integration** is clicked.
-3. Enter `<AppName>WebSocketSynchronizeStart` for **Lambda Function**
-4. For Execution Role enter the `<AppName>API`.
+3. Enter `<envName>WebSocketSynchronizeStart` for **Lambda Function**
+4. For Execution Role enter the `<envName>API`.
 <details><summary>Instructions to find the IAM Role</summary>
 
 1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
 2. Click on the **Roles** sidebard on the left side of the window.
-3. Search through the Roles to find the `<AppName>API` Role.
+3. Search through the Roles to find the `<envName>API` Role.
 4. Click on the Role, then copy the **Role ARN**
 </details>
 
@@ -693,13 +693,13 @@ We heard that something can be learned from this [link](http://partnerfactorypro
 1. Click on the **$disconnect** route.
 1. Make sure **Lambda Function** is pressed for **Integration Type**
 2. Make sure **Lambda Proxy Integration** is clicked.
-3. Enter `<AppName>WebSocketDisconnect` for **Lambda Function**
-4. For Execution Role enter the `<AppName>API`.
+3. Enter `<envName>WebSocketDisconnect` for **Lambda Function**
+4. For Execution Role enter the `<envName>API`.
 <details><summary>Instructions to find the IAM Role</summary>
 
 1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
 2. Click on the **Roles** sidebard on the left side of the window.
-3. Search through the Roles to find the `<AppName>API` Role.
+3. Search through the Roles to find the `<envName>API` Role.
 4. Click on the Role, then copy the **Role ARN**
 </details>
 
@@ -720,15 +720,16 @@ We heard that something can be learned from this [link](http://partnerfactorypro
 <a href="https://console.aws.amazon.com/systems-manager" target="_blank">here</a>.
 2. Navigate to **Parameter Store** on the lower left side of the webpage.
 3. Press **Create Paramater**
-    1. For **Name** enter, `/<appname>/websocket` (appname must be all lowercase).
+    1. For **Name** enter, `/<envName>/websocket` (appname must be all lowercase).
     2. For Description enter, "URL for the WebSocket for AAA"
     3. For value enter the URL that we copied earlier.
     4. Press **Create Parameter** 
 
 #### **Task 3:** Adjust IAM Role
+Do we have to change the role for manager?
 1. Navigate to the IAM Dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
 2. Click **Roles** on the left side of the window.
-3. Find `<AppName>WebSocketSynchronousStart_Role` click on it.
+3. Find `<envName>WebSocketSynchronousStart_Role` click on it.
 4. Click **Add inline policy**
 5. Press JSON. Copy and paste the JSON below:
 ```Javascript
@@ -751,7 +752,7 @@ We heard that something can be learned from this [link](http://partnerfactorypro
 1. Navigate to the APIGateway dashboard <a href="https://console.aws.amazon.com/apigateway/home" target="_blank">here</a>.
 2. Click on the WebSocket we set up.
 3. Click on the `$connect` route. 
-4. Copy the **ARN** underneath the **Route Request** up until `$connect` (including the `/*/`)
+4. Copy the **ARN** underneath the **Route Request** up until `$connect` (including the `/*`)
 </details> 
 
 6. Press review Policy

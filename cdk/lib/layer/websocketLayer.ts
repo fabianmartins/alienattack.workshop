@@ -67,7 +67,7 @@ export class WebSocketLayer extends ResourceAwareConstruct {
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation, 'websocketConnect')),
                     environment: {
-                        'SESSION_CONTROL_TABLENAME': sessionControlTable,
+                        'SESSION_CONTROL_TABLENAME': sessionControlTable.tableName,
                         'SESSION_PARAMETER': sessionParameter.parameterName
                     },
                     functionName: this.properties.getApplicationName() + 'WebSocketConnect',
@@ -120,7 +120,7 @@ export class WebSocketLayer extends ResourceAwareConstruct {
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation, 'synchronousStart')),
                     environment: {
-                        'SESSION_CONTROL_TABLENAME': sessionControlTable,
+                        'SESSION_CONTROL_TABLENAME': sessionControlTable.tableName,
                         'SESSION_PARAMETER': sessionParameter.parameterName
                     },
                     functionName: this.properties.getApplicationName() + 'WebSocketSynchronizeStart',
@@ -175,7 +175,7 @@ export class WebSocketLayer extends ResourceAwareConstruct {
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation, 'websocketDisconnect')),
                     environment: {
-                        'SESSION_CONTROL_TABLENAME': sessionControlTable,
+                        'SESSION_CONTROL_TABLENAME': sessionControlTable.tableName,
                         'SESSION_PARAMETER': sessionParameter.parameterName
                     },
                     functionName: this.properties.getApplicationName() + 'WebSocketDisconnect',
