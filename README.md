@@ -752,8 +752,11 @@ We heard that something can be learned from this [link](http://partnerfactorypro
 2. Click on the WebSocket we set up.
 3. Click on the `$connect` route. 
 4. Copy the **ARN** underneath the **Route Request** up until `$connect` (including the `/*/`)
-
 </details> 
+
+6. Press review Policy
+7. For name enter, **Invoke-Api-Policy**
+8. Press **Create Policy**
 
 ### Additional (and optional) task for deploying the front-end on the account
 
