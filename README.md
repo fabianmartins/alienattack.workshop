@@ -759,6 +759,15 @@ Do we have to change the role for manager?
 7. For name enter, **Invoke-Api-Policy**
 8. Press **Create Policy**
 
+**-- FastFix --**  
+The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixwebsocket.sh` which is inside the folder `~/environment/alienattack.workshop`. Go to that folder, and run the following command:
+
+~~~
+source fixwebsocket.sh <envname>
+~~~
+
+There should be a line that is outputted by the script which says `Websocket ARN: <Your WebSokcet ARN>` use this ARN to complete Task 3 above.
+
 ### Additional (and optional) task for deploying the front-end on the account
 
 It was said that for a full deployment, we will need to install the application at the S3 bucket with the `<appNames>.app`. We will also need to deploy the CloudFront distribution because the S3 buckets are not public.

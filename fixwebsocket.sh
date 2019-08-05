@@ -102,9 +102,11 @@ else
     envName=$(echo $1 | tr 'a-z' 'A-Z')
     region=$(aws configure get region)
     accountId=$(aws sts get-caller-identity --output text --query 'Account')
-    #apiId=$( createWebSocket $envName $region $accountId )
-    apiId=ntf7jj6qwi
+    apiId=$( createWebSocket $envName $region $accountId )
     URL="wss://${apiId}.execute-api.${region}.amazonaws.com/production"
-    #createUrlParam $envName $URL
-    adjustLambdaIamRole $envName $region $accountId $apiId
+    createUrlParam $envName $URL
+    # Uncomment the line below if you are running this command outside of Cloud 9
+    #adjustLambdaIamRole $envName $region $accountId $apiId
+    echo WebSocket ARN: "arn:aws:execute-api:"$region":"$accountId":"$apiId"/*"
+
 fi
