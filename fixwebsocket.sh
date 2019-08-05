@@ -15,7 +15,7 @@ function createWebSocket() {
     region=$2
     accountId=$3
 
-    websocketCreateCommand=$(echo aws apigatewayv2 --region "$region" create-api --name "$envName"WebSocket --protocol-type WEBSOCKET --route-selection-expression \$request.body.action --query ApiId --output text)
+    websocketCreateCommand=$(echo aws apigatewayv2 --region "$region" create-api --name "$envName"WebSocket --protocol-type WEBSOCKET --route-selection-expression '\$request.body.action' --query ApiId --output text)
     websocketApiId=$(removeQuotes $( eval $websocketCreateCommand ))
 
     getApiRole=$(echo aws "iam list-roles --query 'Roles[?contains(RoleName,\`"$envName"API\`)].Arn|[0]'")
@@ -53,7 +53,7 @@ function createWebSocket() {
 function createUrlParam() {
     URL=$2
     envName=$(echo $1 | tr 'A-Z' 'a-z')
-    success=$(aws ssm put-parameter --name /"$envName"/websocket --value $URL --type String)
+    success=$(aws ssm put-parameter --name /"$envName"/websocket --value $URL --type String --overwrite)
 }
 
 function adjustLambdaIamRole() {
