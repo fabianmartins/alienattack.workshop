@@ -729,7 +729,6 @@ We heard that something can be learned from this [link](http://partnerfactorypro
     4. Press **Create Parameter** 
 
 #### **Task 3:** Adjust IAM Role
-Do we have to change the role for manager?
 1. Navigate to the IAM Dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
 2. Click **Roles** on the left side of the window.
 3. Find `<envName>WebSocketSynchronousStart_Role` click on it.
@@ -860,7 +859,7 @@ Everything that was created by CloudFormation was deleted, with the exception of
 
 Let's fix this.
 
-1. Go to Systems Manager, then Parameter Store, and delete the parameter `<envName>/session`
+1. Go to Systems Manager, then Parameter Store, and delete the parameter `<envName>/session` and `<envName>/websocket`
 2. Go to Kinesis, then Kinesis Firehose, and delete the resource that you created by hand
 3. Go to IAM, and search for `<envName>`. Delete any resource configured like that. For sure the only resource will be `<envName>FirehoseRole`
 4. Delete the S3 buckets `<envName>.app` and `<envName>.raw`
