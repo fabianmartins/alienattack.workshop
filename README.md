@@ -656,17 +656,18 @@ We heard that something can be learned from this [link](http://partnerfactorypro
 1. Make sure **Lambda Function** is pressed for **Integration Type**
 2. Make sure **Lambda Proxy Integration** is clicked.
 3. Enter `<envName>WebSocketConnect` for **Lambda Function**
-4. For Execution Role enter the `<envName>API`.
+4. For Execution Role enter the ARN for the IAM Role `<envName>API`.
 <details><summary>Instructions to find the IAM Role</summary>
 
 1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
 2. Click on the **Roles** sidebard on the left side of the window.
-3. Search through the Roles to find the `<AppName>API` Role.
+3. Search through the Roles to find the `<envName>API` Role.
 4. Click on the Role, then copy the **Role ARN**
 </details>
 
 5. Click **Default Timeout** 
-6. Press **Create**
+6. Press **Save**
+7. Press **Ok** for any pop-ups
 </details>
 
 <details> <summary>Instructions for creating a start-game Route </summary>
@@ -675,7 +676,7 @@ We heard that something can be learned from this [link](http://partnerfactorypro
 1. Make sure **Lambda Function** is pressed for **Integration Type**
 2. Make sure **Lambda Proxy Integration** is clicked.
 3. Enter `<envName>WebSocketSynchronizeStart` for **Lambda Function**
-4. For Execution Role enter the `<envName>API`.
+4. For Execution Role enter the ARN for the IAM Role `<envName>API`.
 <details><summary>Instructions to find the IAM Role</summary>
 
 1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
@@ -685,7 +686,8 @@ We heard that something can be learned from this [link](http://partnerfactorypro
 </details>
 
 5. Click **Default Timeout** 
-6. Press **Create**
+6. Press **Save**
+7. Press **Ok** for any pop-ups
 </details>
 
 <details> <summary>Instructions for setting up the Disconnect Route </summary>
@@ -694,7 +696,7 @@ We heard that something can be learned from this [link](http://partnerfactorypro
 1. Make sure **Lambda Function** is pressed for **Integration Type**
 2. Make sure **Lambda Proxy Integration** is clicked.
 3. Enter `<envName>WebSocketDisconnect` for **Lambda Function**
-4. For Execution Role enter the `<envName>API`.
+4. For Execution Role enter the ARN for the IAM Role `<envName>API`.
 <details><summary>Instructions to find the IAM Role</summary>
 
 1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
@@ -704,7 +706,8 @@ We heard that something can be learned from this [link](http://partnerfactorypro
 </details>
 
 5. Click **Default Timeout** 
-6. Press **Create**
+6. Press **Save**
+7. Press **Ok** for any pop-ups
 </details>
 
 5. Once all the routes are deployed press the dropdown menu, **Actions**.
@@ -731,7 +734,7 @@ Do we have to change the role for manager?
 2. Click **Roles** on the left side of the window.
 3. Find `<envName>WebSocketSynchronousStart_Role` click on it.
 4. Click **Add inline policy**
-5. Press JSON. Copy and paste the JSON below:
+5. Press JSON. Copy and paste the JSON below: (Note the placeholder for the WebSocket ARN)
 ```Javascript
 {
     "Version": "2012-10-17",
@@ -742,7 +745,7 @@ Do we have to change the role for manager?
                 "execute-api:Invoke",
                 "execute-api:ManageConnections"
             ],
-            "Resource": <WebSocketARN>
+            "Resource": "<Your WebSocketARN>"
         }
     ]
 }
@@ -753,6 +756,8 @@ Do we have to change the role for manager?
 2. Click on the WebSocket we set up.
 3. Click on the `$connect` route. 
 4. Copy the **ARN** underneath the **Route Request** up until `$connect` (including the `/*`)
+
+The ARN should take the form: `arn:aws:execute-api:{region}:{account ID}:{API ID}/*`
 </details> 
 
 6. Press review Policy
@@ -767,6 +772,20 @@ source fixwebsocket.sh <envname>
 ~~~
 
 There should be a line that is outputted by the script which says `Websocket ARN: <Your WebSokcet ARN>` use this ARN to complete Task 3 above.
+
+#### Creating a Synchrnous Game
+1. Visit `./scoreboard/index.html` in your browser, and log in.
+2. Press **Single Trial** and check the box **Synchrnous**
+3. Press **Start Game**
+4. The **Sync Button** should be enabled as of right now. 
+
+*Note: as of right now anyone in the session can't play they are waiting for you to press **Sync Game***
+
+5. Open `./game/index.html` in another tab, and log in.
+6. Press **Join Session**
+7. Navigate back to the **Scoreboard** page.
+8. Press **Sync Game**.
+9. You should now be able to play the game on `./game/index.html`
 
 ### Additional (and optional) task for deploying the front-end on the account
 
