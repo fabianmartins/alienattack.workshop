@@ -94,7 +94,7 @@ This is the repository with the Alien Attack front end.
 **IMPORTANT:** Disregard any instructions at that repository (but you can always read the comments).
 
 ~~~
- git clone https://github.com/fabianmartins/alienattack.application.git
+$ git clone https://github.com/fabianmartins/alienattack.application.git
 ~~~
 
 **IMPORTANT:** The frond-end DOES NOT WORK YET on mobile devices, and in some versions of Windows, especially those with touch screen.
@@ -107,8 +107,18 @@ Getting back to your **Cloud9 environment**, run the script `config.sh` followin
 Running this script will update your environment. This script changes your bash_profile. So, if your intend to run it on your own machine, be sure about the side effects of this action.
 
 ~~~
-~/environment $ cd alienattack.workshop
-~/environment/alienattack.workshop/ (master) $ source config.sh
+cd alienattack.workshop
+~~~
+Make sure that your screen shows:
+
+~~~
+~/environment/alienattack.workshop/cdk
+~~~
+
+Then run the following command to configure your environment.
+
+~~~
+source config.sh
 ~~~
 
 Don't worry if some *warning* messages appear, especially if it's about python.
@@ -404,7 +414,15 @@ This is the playbook that we've got from
 11. Leave everything else as it is and click on **`Save changes`**
 
 **-- FastFix --**  
-The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixcognito.sh` which is inside the folder `~/environment/alienattack.workshop`. Go to that folder, and run the following command:
+The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixcognito.sh`
+
+1. Go to the folder `alienattack.workshop` by:
+
+~~~
+cd ~/environment/alienattack.workshop
+~~~
+
+2. Run the following command:
 
 ~~~
 source fixcognito.sh <envname>
@@ -468,7 +486,7 @@ This parameter holds the game session configuration. Every time when the Manager
   * Name: `/<envName>/session`
   * Description: `Existing session (opened or closed)`
   * Type: `String`
-  * Value:  `null` (insert the word *null*).
+  * Value:  `null` (insert the word *null* and be sure of the casing, *Null* will not work).
 5. Scroll down and click on **Create parameter**
 
 If everything went well, you will get the message *Create parameter request succeeded*. Check if the parameter exists on the list of parameters.
@@ -638,6 +656,12 @@ We heard that something can be learned from this [link](http://partnerfactorypro
 
 ### fixACTIVITY 13 - Deploying the WebSocket for APIGateway 
 
+We have heard that at some point someone on the management team has complained that for the game it was possible for someone to start earlier, to have some time to train, and then get into the competition. This manager thought this not to be fair with all gamers, and because of that there was a request to include some sort of mechanism to have all of the gamers start at the same time.
+
+We don’t know how much this functionality will be helpful to our application, but we want to understand how to implement it, because we are expecting to need to implement some kind of mechanism for people to interact to each other. We also want to provide a direct communication layer to customers to support them, so we need to understand how to implement this “push notification” mechanism.
+
+We have learned that this is implemeted via “websockets”, and we have the following playbook when checking the home folder of one of the former SAs. Go through it and let us know if you were able to deploy the required feature.
+
 #### **Task 1:** Create WebSocket on APIGateway
 1. Navigate to the API Gateway console 
 <a href="https://console.aws.amazon.com/apigateway/home" target="_blank">here</a>.
@@ -649,20 +673,21 @@ We heard that something can be learned from this [link](http://partnerfactorypro
     4. For Description enter, **WebSocket for Alien Attack**.
     5. Click **Create API**
 3. Navigate to the **Routes** page.
-4. Follow the instructions below for each Route below.
+4. Follow the instructions below for each Route.
 <details> <summary>Instructions for setting up the Connect Route </summary>
 
 1. Click on the **$connect** route.
 1. Make sure **Lambda Function** is pressed for **Integration Type**
 2. Make sure **Lambda Proxy Integration** is clicked.
 3. Enter `<envName>WebSocketConnect` for **Lambda Function**
-4. For Execution Role enter the ARN for the IAM Role `<envName>API`.
+4. For Execution Role enter the ARN for the IAM Role `<envName>API` (See instructions below)
 <details><summary>Instructions to find the IAM Role</summary>
 
 1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
 2. Click on the **Roles** sidebard on the left side of the window.
 3. Search through the Roles to find the `<envName>API` Role.
 4. Click on the Role, then copy the **Role ARN**
+5. *Note: You will need this role for the other two roles; it will be beneficial to copy this ARN to a local clipboard*
 </details>
 
 5. Click **Default Timeout** 
@@ -774,7 +799,7 @@ There should be a line that is outputted by the script which says `Websocket ARN
 
 #### Creating a Synchrnous Game
 1. Visit `./scoreboard/index.html` in your browser, and log in.
-2. Press **Single Trial** and check the box **Synchrnous**
+2. Press **Single Trial** and check the box **Synchrnized**
 3. Press **Start Game**
 4. The **Sync Button** should be enabled as of right now. 
 
