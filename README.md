@@ -876,6 +876,21 @@ If everything went well, you will receive a message like the following one:
 ✅  <envName>: destroyed
 ```
 
+If you receive an error that looks something like this: 
+
+```
+<envName>: destroy failed Error: The stack named <envName> is in a failed state: DELETE_FAILED (The following resource(s) failed to delete: [WebSocketLayer<envName>WebSocketSynchronizeStartFnRole]. )
+```
+
+That's ok we have worked with CDK at Unicorn Games before and can solve this!
+1. Go to to the CloudFormation console.
+2. Click on `<envName>`
+3. Click **Delete**. A window should pop up.
+  * Scroll all the way to the bottom and find the role that was giving an issue earlier. Should look like `WebSocketLayer<envName>WebSocketSynchronizeStartFnRole`
+  * Check the box to left of it.
+  * Press **Delete Stack**
+4. We just have to remember to make sure that we delete this role manually. We can do this easily by just searching for it while we are in the IAM page when we do cleanACTIVITY 2 step three.
+
 If by any reason you don't have access anymore to the Cloud9 environment, or is unable to destroy the environment using CDK, go to CloudFormation on your AWS console, and delete the stack with "Stack Name" corresponding to your `<envName>`. Then move to the next activity.
 
 ### cleanACTIVITY 2 - Cleaning up the last resources
