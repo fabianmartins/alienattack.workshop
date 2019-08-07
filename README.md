@@ -803,7 +803,7 @@ There should be a line that is outputted by the script which says `Websocket ARN
 3. Press **Start Game**
 4. The **Sync Button** should be enabled as of right now. 
 
-*Note: as of right now anyone in the session can't play they are waiting for you to press **Sync Game***
+Note: as of right now anyone in the session can't play they are waiting for you to press **Sync Game**
 
 5. Open `./game/index.html` in another tab, and log in.
 6. Press **Join Session**
