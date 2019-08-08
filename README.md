@@ -94,7 +94,7 @@ This is the repository with the Alien Attack front end.
 **IMPORTANT:** Disregard any instructions at that repository (but you can always read the comments).
 
 ~~~
- git clone https://github.com/fabianmartins/alienattack.application.git
+$ git clone https://github.com/fabianmartins/alienattack.application.git
 ~~~
 
 **IMPORTANT:** The frond-end DOES NOT WORK YET on mobile devices, and in some versions of Windows, especially those with touch screen.
@@ -107,8 +107,18 @@ Getting back to your **Cloud9 environment**, run the script `config.sh` followin
 Running this script will update your environment. This script changes your bash_profile. So, if your intend to run it on your own machine, be sure about the side effects of this action.
 
 ~~~
-~/environment $ cd alienattack.workshop
-~/environment/alienattack.workshop/ (master) $ source config.sh
+cd alienattack.workshop
+~~~
+Make sure that your screen shows:
+
+~~~
+~/environment/alienattack.workshop/cdk
+~~~
+
+Then run the following command to configure your environment.
+
+~~~
+source config.sh
 ~~~
 
 Don't worry if some *warning* messages appear, especially if it's about python.
@@ -404,7 +414,15 @@ This is the playbook that we've got from
 11. Leave everything else as it is and click on **`Save changes`**
 
 **-- FastFix --**  
-The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixcognito.sh` which is inside the folder `~/environment/alienattack.workshop`. Go to that folder, and run the following command:
+The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixcognito.sh`
+
+1. Go to the folder `alienattack.workshop` by:
+
+~~~
+cd ~/environment/alienattack.workshop
+~~~
+
+2. Run the following command:
 
 ~~~
 source fixcognito.sh <envname>
@@ -468,7 +486,7 @@ This parameter holds the game session configuration. Every time when the Manager
   * Name: `/<envName>/session`
   * Description: `Existing session (opened or closed)`
   * Type: `String`
-  * Value:  `null` (insert the word *null*).
+  * Value:  `null` (insert the word *null* and be sure of the casing, *Null* will not work).
 5. Scroll down and click on **Create parameter**
 
 If everything went well, you will get the message *Create parameter request succeeded*. Check if the parameter exists on the list of parameters.
@@ -636,6 +654,162 @@ The API must be accessible only by the Manager.
 **-- FastFix --**  
 We heard that something can be learned from this [link](http://partnerfactoryprogram.s3-website-us-east-1.amazonaws.com/labpack/fullmicroservice/fullmicroservice.html). 
 
+### fixACTIVITY 13 - Deploying the WebSocket for APIGateway 
+
+We have heard that at some point someone on the management team has complained that for the game it was possible for someone to start earlier, to have some time to train, and then get into the competition. This manager thought this not to be fair with all gamers, and because of that there was a request to include some sort of mechanism to have all of the gamers start at the same time.
+
+We don’t know how much this functionality will be helpful to our application, but we want to understand how to implement it, because we are expecting to need to implement some kind of mechanism for people to interact to each other. We also want to provide a direct communication layer to customers to support them, so we need to understand how to implement this “push notification” mechanism.
+
+We have learned that this is implemeted via “websockets”, and we have the following playbook when checking the home folder of one of the former SAs. Go through it and let us know if you were able to deploy the required feature.
+
+#### **Task 1:** Create WebSocket on APIGateway
+1. Navigate to the API Gateway console 
+<a href="https://console.aws.amazon.com/apigateway/home" target="_blank">here</a>.
+2. Depending on the state of your account you can find a **Create API** or **Get Started** Button. Click on the one that you see and you are going to be take a create API page.
+    1. Press the **WebSocket** radio button for **Choose the Protocol**.
+    2. For **API name** put, `<envName>WebSocket`
+    3. For **Route Selection Expression** enter `$request.body.action` 
+       *Note: If you want to learn more about routes and what they do click on the **Learn More** button next to the input box*
+    4. For Description enter, **WebSocket for Alien Attack**.
+    5. Click **Create API**
+3. Navigate to the **Routes** page.
+4. Follow the instructions below for each Route.
+<details> <summary>Instructions for setting up the Connect Route </summary>
+
+1. Click on the **$connect** route.
+1. Make sure **Lambda Function** is pressed for **Integration Type**
+2. Make sure **Lambda Proxy Integration** is clicked.
+3. Enter `<envName>WebSocketConnect` for **Lambda Function**
+4. For Execution Role enter the ARN for the IAM Role `<envName>API` (See instructions below)
+<details><summary>Instructions to find the IAM Role</summary>
+
+1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
+2. Click on the **Roles** sidebard on the left side of the window.
+3. Search through the Roles to find the `<envName>API` Role.
+4. Click on the Role, then copy the **Role ARN**
+5. *Note: You will need this role for the other two roles; it will be beneficial to copy this ARN to a local clipboard*
+</details>
+
+5. Click **Default Timeout** 
+6. Press **Save**
+7. Press **Ok** for any pop-ups
+</details>
+
+<details> <summary>Instructions for creating a start-game Route </summary>
+
+1. Enter `start-game` in, **New Route Key** and click the check box to the right. 
+1. Make sure **Lambda Function** is pressed for **Integration Type**
+2. Make sure **Lambda Proxy Integration** is clicked.
+3. Enter `<envName>WebSocketSynchronizeStart` for **Lambda Function**
+4. For Execution Role enter the ARN for the IAM Role `<envName>API`.
+<details><summary>Instructions to find the IAM Role</summary>
+
+1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
+2. Click on the **Roles** sidebard on the left side of the window.
+3. Search through the Roles to find the `<envName>API` Role.
+4. Click on the Role, then copy the **Role ARN**
+</details>
+
+5. Click **Default Timeout** 
+6. Press **Save**
+7. Press **Ok** for any pop-ups
+</details>
+
+<details> <summary>Instructions for setting up the Disconnect Route </summary>
+
+1. Click on the **$disconnect** route.
+1. Make sure **Lambda Function** is pressed for **Integration Type**
+2. Make sure **Lambda Proxy Integration** is clicked.
+3. Enter `<envName>WebSocketDisconnect` for **Lambda Function**
+4. For Execution Role enter the ARN for the IAM Role `<envName>API`.
+<details><summary>Instructions to find the IAM Role</summary>
+
+1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
+2. Click on the **Roles** sidebard on the left side of the window.
+3. Search through the Roles to find the `<envName>API` Role.
+4. Click on the Role, then copy the **Role ARN**
+</details>
+
+5. Click **Default Timeout** 
+6. Press **Save**
+7. Press **Ok** for any pop-ups
+</details>
+
+5. Once all the routes are deployed press the dropdown menu, **Actions**.
+6. Click **Deploy API**
+    1. For **Deployment Stage** enter, **[New Stage]**
+    2. For **Stage Name** enter, **Production**
+    3. Press **Deploy**
+7. There is now a page that has the **WebSocket URL** and **Connection URL**
+8. Copy the **WebSocket URL**.
+
+#### **Task 2:** Store WebSocket URL in Parameter Store
+1. Navigate to the Systems Manager console 
+<a href="https://console.aws.amazon.com/systems-manager" target="_blank">here</a>.
+2. Navigate to **Parameter Store** on the lower left side of the webpage.
+3. Press **Create Paramater**
+    1. For **Name** enter, `/<envName>/websocket` (appname must be all lowercase).
+    2. For Description enter, "URL for the WebSocket for AAA"
+    3. For value enter the URL that we copied earlier.
+    4. Press **Create Parameter** 
+
+#### **Task 3:** Adjust IAM Role
+1. Navigate to the IAM Dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
+2. Click **Roles** on the left side of the window.
+3. Find `<envName>WebSocketSynchronousStart_Role` click on it.
+4. Click **Add inline policy**
+5. Press JSON. Copy and paste the JSON below: (Note the placeholder for the WebSocket ARN)
+```Javascript
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "execute-api:Invoke",
+                "execute-api:ManageConnections"
+            ],
+            "Resource": "<Your WebSocketARN>"
+        }
+    ]
+}
+```
+<details><summary>Instructions Finding WebSocketARN</summary>
+
+1. Navigate to the APIGateway dashboard <a href="https://console.aws.amazon.com/apigateway/home" target="_blank">here</a>.
+2. Click on the WebSocket we set up.
+3. Click on the `$connect` route. 
+4. Copy the **ARN** underneath the **Route Request** up until `$connect` (including the `/*`)
+
+The ARN should take the form: `arn:aws:execute-api:{region}:{account ID}:{API ID}/*`
+</details> 
+
+6. Press review Policy
+7. For name enter, **Invoke-Api-Policy**
+8. Press **Create Policy**
+
+**-- FastFix --**  
+The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixwebsocket.sh` which is inside the folder `~/environment/alienattack.workshop`. Go to that folder, and run the following command:
+
+~~~
+source fixwebsocket.sh <envname>
+~~~
+
+There should be a line that is outputted by the script which says `Websocket ARN: <Your WebSokcet ARN>` use this ARN to complete Task 3 above.
+
+#### Creating a Synchrnous Game
+1. Visit `./scoreboard/index.html` in your browser, and log in.
+2. Press **Single Trial** and check the box **Synchrnized**
+3. Press **Start Game**
+4. The **Sync Button** should be enabled as of right now. 
+
+Note: as of right now anyone in the session can't play they are waiting for you to press **Sync Game**
+
+5. Open `./game/index.html` in another tab, and log in.
+6. Press **Join Session**
+7. Navigate back to the **Scoreboard** page.
+8. Press **Sync Game**.
+9. You should now be able to play the game on `./game/index.html`
 
 ### Additional (and optional) task for deploying the front-end on the account
 
@@ -702,6 +876,21 @@ If everything went well, you will receive a message like the following one:
 ✅  <envName>: destroyed
 ```
 
+If you receive an error that looks something like this: 
+
+```
+<envName>: destroy failed Error: The stack named <envName> is in a failed state: DELETE_FAILED (The following resource(s) failed to delete: [WebSocketLayer<envName>WebSocketSynchronizeStartFnRole]. )
+```
+
+That's ok we have worked with CDK at Unicorn Games before and can solve this!
+1. Go to to the CloudFormation console.
+2. Click on `<envName>`
+3. Click **Delete**. A window should pop up.
+  * Scroll all the way to the bottom and find the role that was giving an issue earlier. Should look like `WebSocketLayer<envName>WebSocketSynchronizeStartFnRole`
+  * Check the box to left of it.
+  * Press **Delete Stack**
+4. We just have to remember to make sure that we delete this role manually. We can do this easily by just searching for it while we are in the IAM page when we do cleanACTIVITY 2 step three.
+
 If by any reason you don't have access anymore to the Cloud9 environment, or is unable to destroy the environment using CDK, go to CloudFormation on your AWS console, and delete the stack with "Stack Name" corresponding to your `<envName>`. Then move to the next activity.
 
 ### cleanACTIVITY 2 - Cleaning up the last resources
@@ -710,7 +899,7 @@ Everything that was created by CloudFormation was deleted, with the exception of
 
 Let's fix this.
 
-1. Go to Systems Manager, then Parameter Store, and delete the parameter `<envName>/session`
+1. Go to Systems Manager, then Parameter Store, and delete the parameter `<envName>/session` and `<envName>/websocket`
 2. Go to Kinesis, then Kinesis Firehose, and delete the resource that you created by hand
 3. Go to IAM, and search for `<envName>`. Delete any resource configured like that. For sure the only resource will be `<envName>FirehoseRole`
 4. Delete the S3 buckets `<envName>.app` and `<envName>.raw`
