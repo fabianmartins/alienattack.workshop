@@ -1,4 +1,4 @@
-import { Construct } from '@aws-cdk/cdk';
+import { Construct } from '@aws-cdk/core';
 import { ResourceAwareConstruct, IParameterAwareProps } from './../resourceawarestack'
 
 
@@ -365,101 +365,6 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                 }
             ]
         });
-        
-        /**
-         * Websocket resource /websocket
-         * GET {no parameter} - returns websocketURL data from ssm.parameter /ssm/websocket
-         * 
-         */
-        let websocket = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1websocket", {
-            parentId: v1.resourceId
-            , pathPart: 'websocket'
-            , restApiId: this.api.restApiId
-        });
-
-        let websocketGetMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1websocketGET", {
-            restApiId: this.api.restApiId
-            , resourceId: websocket.resourceId
-            , authorizationType: APIGTW.AuthorizationType.Cognito
-            , authorizerId: authorizer.authorizerId
-            , httpMethod: 'GET'
-            , requestParameters: {
-                  'method.request.querystring.Name': true
-                , 'method.request.header.Authentication': true
-            }
-            , requestModels : undefined
-            , integration: {
-                passthroughBehavior: 'WHEN_NO_MATCH'
-                , integrationHttpMethod: 'POST'
-                , type: 'AWS'
-                , uri: 'arn:aws:apigateway:' + props.region + ':ssm:action/GetParameter'
-                , credentials: apirole.roleArn
-                , requestParameters: {
-                      'integration.request.querystring.Name': "'/" + props.getApplicationName().toLowerCase() + "/websocket'"
-                    , 'integration.request.header.Authentication': 'method.request.header.Authentication'
-                }
-                , requestTemplates : undefined
-                , integrationResponses: [
-                    {
-                        statusCode: '200'
-                        , responseParameters: {
-                            'method.response.header.Access-Control-Allow-Origin': "'*'"
-                        }
-                        , responseTemplates: {
-                            'application/json': `"$util.escapeJavaScript("$input.path('$').GetParameterResponse.GetParameterResult.Parameter.Value").replaceAll("\'",'"')"`
-                        }
-                    }]
-            }
-            , methodResponses: [
-                {
-                    statusCode: '200'
-                    , responseParameters: {
-                        'method.response.header.Access-Control-Allow-Origin': false
-                    }
-                    , responseModels: {
-                           'application/json': 'Empty'
-                    }
-                }
-            ]
-        });
-
-        // OPTIONS
-        let websocketOptionsMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1websocketOPTIONS", {
-            restApiId: this.api.restApiId
-            , resourceId: websocket.resourceId
-            , authorizationType: APIGTW.AuthorizationType.None
-            , httpMethod: 'OPTIONS'
-            , integration: {
-                passthroughBehavior: 'WHEN_NO_MATCH'
-                , type: 'MOCK'
-                , requestTemplates: {
-                    'application/json': '{\"statusCode\": 200}'
-                }
-                , integrationResponses: [
-                    {
-                        statusCode: '200'
-                        , responseParameters: {
-                            'method.response.header.Access-Control-Allow-Headers' : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-                            ,'method.response.header.Access-Control-Allow-Methods' : "'*'"
-                            ,'method.response.header.Access-Control-Allow-Origin' : "'*'"
-                        }
-                    }]
-            }
-            , methodResponses: [
-                {
-                    statusCode: '200'
-                    , responseParameters: {
-                          'method.response.header.Access-Control-Allow-Origin': false
-                        , 'method.response.header.Access-Control-Allow-Methods': false
-                        , 'method.response.header.Access-Control-Allow-Headers': false
-                    }
-                    , responseModels: {
-                        "application/json": 'Empty'
-                    }
-                }
-            ]
-        });
-
 
         /**
          * CONFIG 
@@ -1002,8 +907,6 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
         });
         deployment.addDependsOn(sessionGetMethod);
         deployment.addDependsOn(sessionOptionsMethod);
-        deployment.addDependsOn(websocketGetMethod);
-        deployment.addDependsOn(websocketOptionsMethod);
         deployment.addDependsOn(configGetMethod);
         deployment.addDependsOn(configOptionsMethod);
         deployment.addDependsOn(allocatePostMethod);

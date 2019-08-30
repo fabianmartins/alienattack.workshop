@@ -1,4 +1,4 @@
-import { Construct } from '@aws-cdk/cdk';
+import { Construct } from '@aws-cdk/core';
 import { ResourceAwareConstruct, IParameterAwareProps } from './../resourceawarestack'
 
 import Lambda = require('@aws-cdk/aws-lambda');
@@ -8,6 +8,7 @@ import SQS = require('@aws-cdk/aws-sqs');
 // MISSING PARAMETER  - side effect - uncomment the next line to fix it
 // import { CfnParameter } from '@aws-cdk/aws-ssm';
 import { Table } from '@aws-cdk/aws-dynamodb';
+import { Effect } from '@aws-cdk/aws-iam';
 
 const path = require('path');
 
@@ -241,16 +242,14 @@ export class ProcessingLayer extends ResourceAwareConstruct {
                                         .addAction('sqs:SendMessage')
                                 ),
                             'KinesisPermissions':
-                                new IAM.PolicyDocument().addStatement(
-                                    new IAM.PolicyStatement()
-                                        .allow()
+                                new IAM.PolicyDocument().addStatements(
+                                    new IAM.PolicyStatement({effect : Effect.ALLOW , resources : ["*"]})
                                         .addActions(
                                             "kinesis:SubscribeToShard",
                                             "kinesis:GetShardIterator",
                                             "kinesis:GetRecords",
                                             "kinesis:DescribeStream"
                                         )
-                                        .addAllResources()
                                 )
                         }
                     })

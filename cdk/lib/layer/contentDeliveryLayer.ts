@@ -1,4 +1,4 @@
-import { Construct } from '@aws-cdk/cdk';
+import { Construct } from '@aws-cdk/core';
 import { ResourceAwareConstruct, IParameterAwareProps } from './../resourceawarestack'
 import { CloudFrontWebDistribution } from '@aws-cdk/aws-cloudfront';
 import { Bucket } from '@aws-cdk/aws-s3';

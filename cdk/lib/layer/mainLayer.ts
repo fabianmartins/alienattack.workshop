@@ -1,4 +1,4 @@
-import { App } from '@aws-cdk/cdk';
+import { App } from '@aws-cdk/core';
 import { IParameterAwareProps, ParameterAwareProps, ResourceAwareStack} from '../resourceawarestack';
 
 import { SecurityLayer } from './securityLayer';
@@ -7,7 +7,6 @@ import { StorageLayer } from './storageLayer';
 import { DatabaseLayer } from './databaseLayer';
 import { IngestionConsumptionLayer } from './ingestionConsumptionLayer';
 import { ProcessingLayer } from './processingLayer';
-import { WebSocketLayer } from './websocketLayer';
 // MISSING CLOUDFRONT DISTRIBUTION - side effect
 // Uncomment the following line if you want to deploy your Cloudfront distribution. It takes 20 mminutes
 //import { ContentDeliveryLayer } from './contentDeliveryLayer';
@@ -68,11 +67,6 @@ export class MainLayer extends ResourceAwareStack  {
       processingLayerProps.addParameter('table.sessionTopX', databaseLayer.getResource('table.sessionTopX'));
       processingLayerProps.addParameter('table.session', databaseLayer.getResource('table.session'));
     let processingLayer = new ProcessingLayer(this, 'ProcessingLayer', processingLayerProps);
-
-    // WebSocket Layer
-    let webSocketLayerProps = new ParameterAwareProps(this.properties);
-    webSocketLayerProps.addParameter('table.sessionControl', databaseLayer.getResource('table.sessionControl'));
-    new WebSocketLayer(this, 'WebSocketLayer', webSocketLayerProps);
 
     // Ingestion/consumption layer
     let ingestionConsumptionLayerProps = new ParameterAwareProps(processingLayerProps);

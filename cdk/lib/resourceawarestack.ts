@@ -1,4 +1,4 @@
-import {App, Stack, Construct, StackProps} from '@aws-cdk/cdk';
+import {App, Stack, Construct, StackProps} from '@aws-cdk/core';
 
 export interface IFlexNameApplication {
     applicationName? : string,
@@ -139,7 +139,7 @@ export class ResourceAwareStack extends Stack implements IResourceAware {
         super(parent,name,props);
         this.scope = parent;
         if (!this.properties) this.properties = new ParameterAwareProps(props);
-        if (!this.properties.accountId) this.properties.accountId = this.accountId;
+        if (!this.properties.accountId) this.properties.accountId = this.account;
         if (!this.properties.region) this.properties.region = this.region;
     }
     
