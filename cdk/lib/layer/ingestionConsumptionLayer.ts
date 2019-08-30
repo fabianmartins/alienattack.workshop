@@ -6,7 +6,6 @@ import KDS = require('@aws-cdk/aws-kinesis');
 import KDF = require('@aws-cdk/aws-kinesisfirehose');
 import IAM = require('@aws-cdk/aws-iam');
 import APIGTW = require('@aws-cdk/aws-apigateway');
-import { PolicyDocument } from '@aws-cdk/aws-iam';
 import { Table } from '@aws-cdk/aws-dynamodb';
 import Lambda = require('@aws-cdk/aws-lambda');
 /**
@@ -29,10 +28,10 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
     constructor(parent: Construct, name: string, props: IParameterAwareProps) {
         super(parent, name, props);
-    /**
-     * MISSING KINESIS FIREHOSE - side effect
-     * Uncomment the following section to solve it
-     */
+        /**
+         * MISSING KINESIS FIREHOSE - side effect
+         * Uncomment the following section to solve it
+         */
         //this.rawbucketarn = props.getParameter('rawbucketarn');
         this.userpool = props.getParameter('userpool');
         this.createKinesis(props);
@@ -64,149 +63,133 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
          * MISSING KINESIS FIREHOSE
          * Uncomment the following section to solve it
          */
-/*
-        let firehoseLogGroup = '/aws/kinesisfirehose/' + ((props.getAppRefName() + 'firehose').toLowerCase());
-        let self = this;
-        let firehoseRole = new IAM.Role(this, props.getAppRefName() + 'FirehoseToStreamsRole', {
-            roleName: props.getAppRefName() + 'FirehoseToStreamsRole',
-            assumedBy: new IAM.ServicePrincipal('firehose.amazonaws.com'),
-            inlinePolicies: {
-                'S3RawDataPermission': new PolicyDocument()
-                    .addStatement(new IAM.PolicyStatement()
-                        .allow()
-                        .addAction('s3:AbortMultipartUpload')
-                        .addAction('s3:GetBucketLocation')
-                        .addAction('s3:GetObject')
-                        .addAction('s3:ListBucket')
-                        .addAction('s3:ListBucketMultipartUploads')
-                        .addAction('s3:PutObject')
-                        .addResource(self.rawbucketarn)
-                        .addResource(self.rawbucketarn + '/*')
-                    )
-                ,
-                'InputStreamReadPermissions': new PolicyDocument()
-                    .addStatement(new IAM.PolicyStatement()
-                        .allow()
-                        .addAction('kinesis:DescribeStream')
-                        .addAction('kinesis:GetShardIterator')
-                        .addAction('kinesis:GetRecords')
-                        .addResource(this.kinesisStreams.streamArn)
-                    )
-                ,
-                'GluePermissions': new PolicyDocument()
-                    .addStatement(new IAM.PolicyStatement()
-                        .allow()
-                        .addAllResources()
-                        .addAction('glue:GetTableVersions')
-                    )
-                ,
-                'CloudWatchLogsPermissions': new PolicyDocument()
-                    .addStatement(new IAM.PolicyStatement()
-                        .allow()
-                        .addAction('logs:PutLogEvents')
-                        .addResource('arn:aws:logs:' + props.region + ':' + props.accountId + ':log-group:' + firehoseLogGroup + ':*:*')
-                        .addResource('arn:aws:logs:' + props.region + ':' + props.accountId + ':log-group:' + firehoseLogGroup)
-                    )
-            }
-        });
+        /*
+                let firehoseLogGroup = '/aws/kinesisfirehose/' + ((props.getAppRefName() + 'firehose').toLowerCase());
+                let self = this;
+                let firehoseRole = new IAM.Role(this, props.getAppRefName() + 'FirehoseToStreamsRole', {
+                    roleName: props.getAppRefName() + 'FirehoseToStreamsRole',
+                    assumedBy: new IAM.ServicePrincipal('firehose.amazonaws.com'),
+                    inlinePolicies: {
+                        'S3RawDataPermission': new PolicyDocument()
+                            .addStatement(new IAM.PolicyStatement()
+                                .allow()
+                                .addAction('s3:AbortMultipartUpload')
+                                .addAction('s3:GetBucketLocation')
+                                .addAction('s3:GetObject')
+                                .addAction('s3:ListBucket')
+                                .addAction('s3:ListBucketMultipartUploads')
+                                .addAction('s3:PutObject')
+                                .addResource(self.rawbucketarn)
+                                .addResource(self.rawbucketarn + '/*')
+                            )
+                        ,
+                        'InputStreamReadPermissions': new PolicyDocument()
+                            .addStatement(new IAM.PolicyStatement()
+                                .allow()
+                                .addAction('kinesis:DescribeStream')
+                                .addAction('kinesis:GetShardIterator')
+                                .addAction('kinesis:GetRecords')
+                                .addResource(this.kinesisStreams.streamArn)
+                            )
+                        ,
+                        'GluePermissions': new PolicyDocument()
+                            .addStatement(new IAM.PolicyStatement()
+                                .allow()
+                                .addAllResources()
+                                .addAction('glue:GetTableVersions')
+                            )
+                        ,
+                        'CloudWatchLogsPermissions': new PolicyDocument()
+                            .addStatement(new IAM.PolicyStatement()
+                                .allow()
+                                .addAction('logs:PutLogEvents')
+                                .addResource('arn:aws:logs:' + props.region + ':' + props.accountId + ':log-group:' + firehoseLogGroup + ':*:*')
+                                .addResource('arn:aws:logs:' + props.region + ':' + props.accountId + ':log-group:' + firehoseLogGroup)
+                            )
+                    }
+                });
+        
+                this.kinesisFirehose = new KDF.CfnDeliveryStream(this, props.getAppRefName() + 'RawData', {
+                    deliveryStreamType: 'KinesisStreamAsSource',
+                    deliveryStreamName: props.getAppRefName() + 'Firehose',
+                    kinesisStreamSourceConfiguration: {
+                        kinesisStreamArn: this.kinesisStreams.streamArn,
+                        roleArn: firehoseRole.roleArn
+                    }
+                    , s3DestinationConfiguration: {
+                        bucketArn: <string>this.rawbucketarn,
+                        bufferingHints: {
+                            intervalInSeconds: 900,
+                            sizeInMBs: 10
+                        },
+                        compressionFormat: 'GZIP',
+                        roleArn: firehoseRole.roleArn,
+                        cloudWatchLoggingOptions: {
+                            enabled: true,
+                            logGroupName: firehoseLogGroup,
+                            logStreamName: firehoseLogGroup
+                        }
+                    }
+                })
+                */
 
-        this.kinesisFirehose = new KDF.CfnDeliveryStream(this, props.getAppRefName() + 'RawData', {
-            deliveryStreamType: 'KinesisStreamAsSource',
-            deliveryStreamName: props.getAppRefName() + 'Firehose',
-            kinesisStreamSourceConfiguration: {
-                kinesisStreamArn: this.kinesisStreams.streamArn,
-                roleArn: firehoseRole.roleArn
-            }
-            , s3DestinationConfiguration: {
-                bucketArn: <string>this.rawbucketarn,
-                bufferingHints: {
-                    intervalInSeconds: 900,
-                    sizeInMBs: 10
-                },
-                compressionFormat: 'GZIP',
-                roleArn: firehoseRole.roleArn,
-                cloudWatchLoggingOptions: {
-                    enabled: true,
-                    logGroupName: firehoseLogGroup,
-                    logStreamName: firehoseLogGroup
-                }
-            }
-        })
-        */
-    
     }
 
     createAPIGateway(props: IParameterAwareProps) {
 
         let apirole = new IAM.Role(this, props.getApplicationName() + 'APIRole', {
-            roleName: props.getApplicationName() + 'API'
-            , assumedBy: new IAM.ServicePrincipal('apigateway.amazonaws.com')
-            , inlinePolicies: {
-                'LambdaPermissions':
-                    new PolicyDocument()
-                        .addStatement(
-                            new IAM.PolicyStatement()
-                                .allow()
-                                .addAction('lambda:InvokeFunction')
-                                .addAction('lambda:InvokeAsync')
-                                .addResource('arn:aws:lambda:' + props.region + ':' + props.accountId + ':function:' + props.getApplicationName() + '*')
-                        ),
-                'SSMPermissions':
-                    new PolicyDocument()
-                        .addStatement(
-                            new IAM.PolicyStatement()
-                                .allow()
-                                .addActions("ssm:GetParameterHistory")
-                                .addAction("ssm:GetParametersByPath")
-                                .addAction("ssm:GetParameters")
-                                .addAction("ssm:GetParameter")
-                                .addResource('arn:aws:ssm:'.concat(props.region!, ':', props.accountId!, ':parameter/', props.getApplicationName().toLowerCase(), '/*'))
-                        ),
-                'DynamoDBPermissions':
-                    new PolicyDocument()
-                        .addStatement(
-                            new IAM.PolicyStatement()
-                                .allow()
-                                .addAction('dynamodb:GetItem')
-                                .addResources(
-                                     (<Table>props.getParameter('table.session')).tableArn
-                                    ,(<Table>props.getParameter('table.sessiontopx')).tableArn
-                                )
-                        ),
-                'KinesisPermissions':
-                    new PolicyDocument()
-                        .addStatement(
-                            new IAM.PolicyStatement()
-                                .addAction('kinesis:PutRecord')
-                                .addAction('kinesis:PutRecords')
-                                .addResource(this.kinesisStreams.streamArn)
-                        )
-            }
+            roleName: props.getApplicationName() + 'API',
+            assumedBy: new IAM.ServicePrincipal('apigateway.amazonaws.com')
         });
-        apirole.attachManagedPolicy('arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs');
+        apirole.addToPolicy(
+            new IAM.PolicyStatement({
+                actions: ['lambda:InvokeFunction', 'lambda:InvokeAsync'],
+                resources: ['arn:aws:lambda:' + props.region + ':' + props.accountId + ':function:' + props.getApplicationName() + '*']
+            })
+        );
+        apirole.addToPolicy(new IAM.PolicyStatement({
+            actions: [
+                "ssm:GetParameterHistory",
+                "ssm:GetParametersByPath",
+                "ssm:GetParameters",
+                "ssm:GetParameter"
+            ],
+            resources: ['arn:aws:ssm:'.concat(props.region!, ':', props.accountId!, ':parameter/', props.getApplicationName().toLowerCase(), '/*')]
+        }));
+        apirole.addToPolicy(new IAM.PolicyStatement({
+            actions: ['dynamodb:GetItem'],
+            resources: [
+                (<Table>props.getParameter('table.session')).tableArn
+                , (<Table>props.getParameter('table.sessiontopx')).tableArn
+            ]
+        }));
+        apirole.addToPolicy(new IAM.PolicyStatement({
+            actions: ['kinesis:PutRecord', 'kinesis:PutRecords'],
+            resources: [this.kinesisStreams.streamArn]
+        }));
+        apirole.addManagedPolicy(IAM.ManagedPolicy.fromAwsManagedPolicyName("service-role/AmazonAPIGatewayPushToCloudWatchLogs"));
 
         this.api = new APIGTW.CfnRestApi(this, props.getApplicationName() + "API", {
-              name: props.getApplicationName().toLowerCase()
+            name: props.getApplicationName().toLowerCase()
             , description: 'API supporting the application ' + props.getApplicationName()
-
         });
 
-        new APIGTW.CfnGatewayResponse(this,props.getApplicationName()+'GTWResponse', {
-            restApiId : this.api.restApiId
-            ,responseType : 'DEFAULT_4XX'
-            ,responseParameters : {
-            "gatewayresponse.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-            "gatewayresponse.header.Access-Control-Allow-Methods": "'*'",
-            "gatewayresponse.header.Access-Control-Allow-Origin": "'*'"
+        new APIGTW.CfnGatewayResponse(this, props.getApplicationName() + 'GTWResponse', {
+            restApiId: this.api.ref
+            , responseType: 'DEFAULT_4XX'
+            , responseParameters: {
+                "gatewayresponse.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "gatewayresponse.header.Access-Control-Allow-Methods": "'*'",
+                "gatewayresponse.header.Access-Control-Allow-Origin": "'*'"
             }
-            ,responseTemplates : {
-            "application/json": "{\"message\":$context.error.messageString}"
+            , responseTemplates: {
+                "application/json": "{\"message\":$context.error.messageString}"
             }
         }).addDependsOn(this.api);
 
         let authorizer = new APIGTW.CfnAuthorizer(this, props.getApplicationName() + "Authorizer", {
             name: props.getApplicationName().toLowerCase() + 'Authorizer'
-            , restApiId: this.api.restApiId
+            , restApiId: this.api.ref
             , type: 'COGNITO_USER_POOLS'
             , identitySource: 'method.request.header.Authorization'
             , providerArns: [
@@ -218,7 +201,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             contentType: 'application/json'
             , description: 'Scoreboard response model (for /scoreboard/GET)'
             , name: 'ScoreboardResponseModel'
-            , restApiId: this.api.restApiId
+            , restApiId: this.api.ref
             , schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "title": "ScoreboardResponseModel",
@@ -251,7 +234,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             contentType: 'application/json'
             , description: 'Model to request SSM:GetParameters'
             , name: 'GetParametersRequest'
-            , restApiId: this.api.restApiId
+            , restApiId: this.api.ref
             , schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "title": "GetParametersRequest",
@@ -264,13 +247,13 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
         //Version 1 of the API
         let v1 = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1", {
-            parentId: this.api.restApiRootResourceId
+            parentId: this.api.attrRootResourceId
             , pathPart: 'v1'
-            , restApiId: this.api.restApiId
+            , restApiId: this.api.ref
         });
 
 
-    
+
 
         /**
          * SESSION resource /session
@@ -278,22 +261,22 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
          * 
          */
         let session = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1session", {
-            parentId: v1.resourceId
+            parentId: v1.ref
             , pathPart: 'session'
-            , restApiId: this.api.restApiId
+            , restApiId: this.api.ref
         });
 
         let sessionGetMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1sessionGET", {
-            restApiId: this.api.restApiId
-            , resourceId: session.resourceId
-            , authorizationType: APIGTW.AuthorizationType.Cognito
-            , authorizerId: authorizer.authorizerId
+            restApiId: this.api.ref
+            , resourceId: session.ref
+            , authorizationType: APIGTW.AuthorizationType.COGNITO
+            , authorizerId: authorizer.ref
             , httpMethod: 'GET'
             , requestParameters: {
-                  'method.request.querystring.Name': true
+                'method.request.querystring.Name': true
                 , 'method.request.header.Authentication': true
             }
-            , requestModels : undefined
+            , requestModels: undefined
             , integration: {
                 passthroughBehavior: 'WHEN_NO_MATCH'
                 , integrationHttpMethod: 'POST'
@@ -301,10 +284,10 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                 , uri: 'arn:aws:apigateway:' + props.region + ':ssm:action/GetParameter'
                 , credentials: apirole.roleArn
                 , requestParameters: {
-                      'integration.request.querystring.Name': "'/" + props.getApplicationName().toLowerCase() + "/session'"
+                    'integration.request.querystring.Name': "'/" + props.getApplicationName().toLowerCase() + "/session'"
                     , 'integration.request.header.Authentication': 'method.request.header.Authentication'
                 }
-                , requestTemplates : undefined
+                , requestTemplates: undefined
                 , integrationResponses: [
                     {
                         statusCode: '200'
@@ -323,7 +306,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                         'method.response.header.Access-Control-Allow-Origin': false
                     }
                     , responseModels: {
-                           'application/json': 'Empty'
+                        'application/json': 'Empty'
                     }
                 }
             ]
@@ -331,9 +314,9 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
         // OPTIONS
         let sessionOptionsMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1sessionOPTIONS", {
-            restApiId: this.api.restApiId
-            , resourceId: session.resourceId
-            , authorizationType: APIGTW.AuthorizationType.None
+            restApiId: this.api.ref
+            , resourceId: session.ref
+            , authorizationType: APIGTW.AuthorizationType.NONE
             , httpMethod: 'OPTIONS'
             , integration: {
                 passthroughBehavior: 'WHEN_NO_MATCH'
@@ -345,9 +328,9 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                     {
                         statusCode: '200'
                         , responseParameters: {
-                            'method.response.header.Access-Control-Allow-Headers' : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-                            ,'method.response.header.Access-Control-Allow-Methods' : "'*'"
-                            ,'method.response.header.Access-Control-Allow-Origin' : "'*'"
+                            'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+                            , 'method.response.header.Access-Control-Allow-Methods': "'*'"
+                            , 'method.response.header.Access-Control-Allow-Origin': "'*'"
                         }
                     }]
             }
@@ -355,7 +338,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                 {
                     statusCode: '200'
                     , responseParameters: {
-                          'method.response.header.Access-Control-Allow-Origin': false
+                        'method.response.header.Access-Control-Allow-Origin': false
                         , 'method.response.header.Access-Control-Allow-Methods': false
                         , 'method.response.header.Access-Control-Allow-Headers': false
                     }
@@ -394,16 +377,16 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             }
          */
         let config = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1config", {
-            parentId: v1.resourceId
+            parentId: v1.ref
             , pathPart: 'config'
-            , restApiId: this.api.restApiId
+            , restApiId: this.api.ref
         });
 
         // GET
         let configGetMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1configGET", {
-            restApiId: this.api.restApiId
-            , resourceId: config.resourceId
-            , authorizationType: APIGTW.AuthorizationType.None
+            restApiId: this.api.ref
+            , resourceId: config.ref
+            , authorizationType: APIGTW.AuthorizationType.NONE
             , httpMethod: 'GET'
             , requestParameters: {
                 'method.request.header.Content-Type': true
@@ -459,9 +442,9 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                     , responseParameters: {
                         'method.response.header.Access-Control-Allow-Origin': true
                     }
-                        , responseModels: {
-                          'application/json': 'Empty'
-                         }
+                    , responseModels: {
+                        'application/json': 'Empty'
+                    }
                 }
             ]
         });
@@ -469,9 +452,9 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
         // OPTIONS
         let configOptionsMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1configOPTIONS", {
-            restApiId: this.api.restApiId
-            , resourceId: config.resourceId
-            , authorizationType: APIGTW.AuthorizationType.None
+            restApiId: this.api.ref
+            , resourceId: config.ref
+            , authorizationType: APIGTW.AuthorizationType.NONE
             , httpMethod: 'OPTIONS'
             , integration: {
                 passthroughBehavior: 'when_no_match'
@@ -483,7 +466,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                     {
                         statusCode: '200'
                         , responseParameters: {
-                             'method.response.header.Access-Control-Allow-Origin': "'*'"
+                            'method.response.header.Access-Control-Allow-Origin': "'*'"
                             , 'method.response.header.Access-Control-Allow-Methods': "'*'"
                             , 'method.response.header.Access-Control-Allow-Headers': "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
                         }
@@ -493,12 +476,12 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                 {
                     statusCode: '200'
                     , responseParameters: {
-                          'method.response.header.Access-Control-Allow-Origin': true
+                        'method.response.header.Access-Control-Allow-Origin': true
                         , 'method.response.header.Access-Control-Allow-Methods': true
                         , 'method.response.header.Access-Control-Allow-Headers': true
                     }
                     , responseModels: {
-                     'application/json': 'Empty'
+                        'application/json': 'Empty'
                     }
                 }
             ]
@@ -511,20 +494,20 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
          * Request format: { 'Username' : '<the user name>'}
          */
         let allocate = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1allocate", {
-            parentId: v1.resourceId
+            parentId: v1.ref
             , pathPart: 'allocate'
-            , restApiId: this.api.restApiId
+            , restApiId: this.api.ref
         });
 
 
-        let lambdaAllocate = (<Lambda.Function> props.getParameter('lambda.allocate'));
+        let lambdaAllocate = (<Lambda.Function>props.getParameter('lambda.allocate'));
 
         // POST
         let allocatePostMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1allocatePOST", {
-            restApiId: this.api.restApiId
-            , resourceId: allocate.resourceId
-            , authorizationType: APIGTW.AuthorizationType.Cognito
-            , authorizerId: authorizer.authorizerId
+            restApiId: this.api.ref
+            , resourceId: allocate.ref
+            , authorizationType: APIGTW.AuthorizationType.COGNITO
+            , authorizerId: authorizer.ref
             , httpMethod: 'POST'
             , integration: {
                 passthroughBehavior: 'WHEN_NO_MATCH'
@@ -532,7 +515,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                 , type: 'AWS_PROXY'
                 , uri: 'arn:aws:apigateway:' + props.region + ':lambda:path/2015-03-31/functions/' + lambdaAllocate.functionArn + '/invocations'
                 , credentials: apirole.roleArn
-              //  , uri: 'arn:aws:apigateway:' + props.region + ':lambda:path/2015-03-31/functions/' + props.getParameter('lambda.allocate') + '/invocations'
+                //  , uri: 'arn:aws:apigateway:' + props.region + ':lambda:path/2015-03-31/functions/' + props.getParameter('lambda.allocate') + '/invocations'
             }
             , methodResponses: [
                 {
@@ -541,20 +524,20 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             ]
         });
 
-/* TO BE IMPLEMENTED ON CDK
-        lambdaAllocate.addEventSource(
-            new ApiEventSource( 'POST','/v1/allocate',{
-                   authorizationType : APIGTW.AuthorizationType.Cognito
-                 , authorizerId : authorizer.authorizerId
-            })
-        );
-*/
+        /* TO BE IMPLEMENTED ON CDK
+                lambdaAllocate.addEventSource(
+                    new ApiEventSource( 'POST','/v1/allocate',{
+                           authorizationType : APIGTW.AuthorizationType.COGNITO
+                         , authorizerId : authorizer.ref
+                    })
+                );
+        */
 
         // OPTIONS
         let allocateOptionsMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1allocateOPTIONS", {
-            restApiId: this.api.restApiId
-            , resourceId: allocate.resourceId
-            , authorizationType: APIGTW.AuthorizationType.None
+            restApiId: this.api.ref
+            , resourceId: allocate.ref
+            , authorizationType: APIGTW.AuthorizationType.NONE
             , httpMethod: 'OPTIONS'
             , integration: {
                 passthroughBehavior: 'WHEN_NO_MATCH'
@@ -581,7 +564,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                         , 'method.response.header.Access-Control-Allow-Headers': true
                     }
                     , responseModels: {
-                    'application/json': 'Empty'
+                        'application/json': 'Empty'
                     }
                 }
             ]
@@ -595,17 +578,17 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
          * Request format: { 'Username' : '<the user name>'}
          */
         let deallocate = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1deallocate", {
-            parentId: v1.resourceId
+            parentId: v1.ref
             , pathPart: 'deallocate'
-            , restApiId: this.api.restApiId
+            , restApiId: this.api.ref
         });
 
         // POST
         let deallocatePostMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1deallocatePOST", {
-              restApiId: this.api.restApiId
-            , resourceId: deallocate.resourceId
-            , authorizationType: APIGTW.AuthorizationType.Cognito
-            , authorizerId: authorizer.authorizerId
+            restApiId: this.api.ref
+            , resourceId: deallocate.ref
+            , authorizationType: APIGTW.AuthorizationType.COGNITO
+            , authorizerId: authorizer.ref
             , httpMethod: 'POST'
             , integration: {
                 integrationHttpMethod: 'POST'
@@ -624,9 +607,9 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
         // OPTIONS
         let deallocateOptionsMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1deallocateOPTIONS", {
-            restApiId: this.api.restApiId
-            , resourceId: deallocate.resourceId
-            , authorizationType: APIGTW.AuthorizationType.None
+            restApiId: this.api.ref
+            , resourceId: deallocate.ref
+            , authorizationType: APIGTW.AuthorizationType.NONE
             , httpMethod: 'OPTIONS'
             , integration: {
                 passthroughBehavior: 'when_no_match'
@@ -681,17 +664,17 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             }
          */
         let scoreboard = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1scoreboard", {
-            parentId: v1.resourceId
+            parentId: v1.ref
             , pathPart: 'scoreboard'
-            , restApiId: this.api.restApiId
+            , restApiId: this.api.ref
         });
 
         // POST
         let scoreboardPostMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1scoreboardPOST", {
-            restApiId: this.api.restApiId
-            , resourceId: scoreboard.resourceId
-            , authorizationType: APIGTW.AuthorizationType.Cognito
-            , authorizerId: authorizer.authorizerId
+            restApiId: this.api.ref
+            , resourceId: scoreboard.ref
+            , authorizationType: APIGTW.AuthorizationType.COGNITO
+            , authorizerId: authorizer.ref
             , httpMethod: 'GET'
             , requestParameters: {
                 'method.request.querystring.sessionId': true
@@ -758,9 +741,9 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
         // OPTIONS
         let scoreboardOptionsMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1scoreboardOPTIONS", {
-            restApiId: this.api.restApiId
-            , resourceId: scoreboard.resourceId
-            , authorizationType: APIGTW.AuthorizationType.None
+            restApiId: this.api.ref
+            , resourceId: scoreboard.ref
+            , authorizationType: APIGTW.AuthorizationType.NONE
             , httpMethod: 'OPTIONS'
             , integration: {
                 passthroughBehavior: 'when_no_match'
@@ -810,17 +793,17 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
          *       }
          */
         let updateStatus = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1updatestatus", {
-            parentId: v1.resourceId
+            parentId: v1.ref
             , pathPart: 'updatestatus'
-            , restApiId: this.api.restApiId
+            , restApiId: this.api.ref
         });
 
         // POST
         let updatestatusPostMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1updatestatusPOST", {
-            restApiId: this.api.restApiId
-            , resourceId: updateStatus.resourceId
-            , authorizationType: APIGTW.AuthorizationType.Cognito
-            , authorizerId: authorizer.authorizerId
+            restApiId: this.api.ref
+            , resourceId: updateStatus.ref
+            , authorizationType: APIGTW.AuthorizationType.COGNITO
+            , authorizerId: authorizer.ref
             , httpMethod: 'POST'
             , requestParameters: {
                 'method.request.header.Authentication': true
@@ -854,9 +837,9 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                     , responseParameters: {
                         'method.response.header.Access-Control-Allow-Origin': true
                     }
-                   , responseModels: {
-                    'application/json': 'Empty'
-                }
+                    , responseModels: {
+                        'application/json': 'Empty'
+                    }
                 }
             ]
         });
@@ -864,9 +847,9 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
         // OPTIONS
         let updatestatusOptionsMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1updateStatusOPTIONS", {
-            restApiId: this.api.restApiId
-            , resourceId: updateStatus.resourceId
-            , authorizationType: APIGTW.AuthorizationType.None
+            restApiId: this.api.ref
+            , resourceId: updateStatus.ref
+            , authorizationType: APIGTW.AuthorizationType.NONE
             , httpMethod: 'OPTIONS'
             , integration: {
                 passthroughBehavior: 'when_no_match'
@@ -892,16 +875,16 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                         , 'method.response.header.Access-Control-Allow-Methods': true
                         , 'method.response.header.Access-Control-Allow-Headers': true
                     }
-                      , responseModels: {
-                           'application/json': 'Empty'
-                      }
+                    , responseModels: {
+                        'application/json': 'Empty'
+                    }
                 }
             ]
         });
 
 
         let deployment = new APIGTW.CfnDeployment(this, props.getApplicationName() + "APIDeployment", {
-            restApiId: this.api.restApiId
+            restApiId: this.api.ref
             , stageName: 'prod'
             , description: 'Production deployment'
         });
@@ -922,107 +905,98 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
     updateUsersRoles(props: IParameterAwareProps) {
 
-        let baseArn = 'arn:aws:apigateway:' + props.region + ':'+props.accountId+':' + this.api.restApiId + '/prod/*/';
-        let baseExecArn = 'arn:aws:execute-api:' + props.region + ':'+props.accountId+':' + this.api.restApiId + '/prod/';
+        let baseArn = 'arn:aws:apigateway:' + props.region + ':' + props.accountId + ':' + this.api.ref + '/prod/*/';
+        let baseExecArn = 'arn:aws:execute-api:' + props.region + ':' + props.accountId + ':' + this.api.ref + '/prod/';
         let playerRole = (<IAM.Role>props.getParameter('security.playersrole'));
 
         playerRole.addToPolicy(
-            new IAM.PolicyStatement()
-                .describe('APIGatewayGETPermissions')
-                .allow()
-                .addAction('apigateway:GET')
-                .addResources(
+            new IAM.PolicyStatement({
+                actions: ['apigateway:GET'],
+                resources: [
                     baseArn + 'config',
                     baseArn + 'session',
                     baseArn + 'scoreboard'
-                )
+                ]
+            })
         );
         playerRole.addToPolicy(
-            new IAM.PolicyStatement()
-                .describe('APIGatewayEXECGETPermissions')
-                .allow()
-                .addAction('execute-api:Invoke')
-                .addResources(
-                    baseExecArn + 'GET/config',
-                    baseExecArn + 'GET/session',
-                    baseExecArn + 'GET/scoreboard'
-                )
+            new IAM.PolicyStatement(
+                {
+                    actions: ['execute-api:Invoke'],
+                    resources: [
+                        baseExecArn + 'GET/config',
+                        baseExecArn + 'GET/session',
+                        baseExecArn + 'GET/scoreboard'
+                    ]
+                })
         );
         playerRole.addToPolicy(
-            new IAM.PolicyStatement()
-                .describe('APIGatewayPOSTPermissions')
-                .allow()
-                .addAction('apigateway:POST')
-                .addResources(
-                    baseArn + 'updatestatus',
-                    baseArn + 'allocate',
-                    baseArn + 'deallocate'
-                )
+            new IAM.PolicyStatement(
+                {
+                    actions: ['apigateway:POST'],
+                    resources: [
+                        baseArn + 'updatestatus',
+                        baseArn + 'allocate',
+                        baseArn + 'deallocate'
+                    ]
+                })
         );
         playerRole.addToPolicy(
-            new IAM.PolicyStatement()
-                .describe('APIGatewayEXECPOSTPermissions')
-                .allow()
-                .addAction('execute-api:Invoke')
-                .addResources(
+            new IAM.PolicyStatement({
+                actions: ['execute-api:Invoke'],
+                resources: [
                     baseExecArn + 'POST/updatestatus',
                     baseExecArn + 'POST/allocate',
                     baseExecArn + 'POST/deallocate'
-                )
+                ]
+            })
         );
 
-        let managerRole = (<IAM.Role> props.getParameter('security.managersrole'));
+        let managerRole = (<IAM.Role>props.getParameter('security.managersrole'));
         managerRole.addToPolicy(
-            new IAM.PolicyStatement()
-                .describe('DynamoDBPermissions')
-                .allow()
-                .addActions(
+            new IAM.PolicyStatement({
+                actions : [
                     "dynamodb:BatchGetItem",
                     "dynamodb:BatchWriteItem",
                     "dynamodb:PutItem",
                     "dynamodb:Scan",
                     "dynamodb:Query",
-                    "dynamodb:GetItem"                  
-                )
-                .addResource(
-                    "arn:aws:dynamodb:"+props.region+":"+props.accountId+":table/"+props.getApplicationName()+"*"
-                )
+                    "dynamodb:GetItem"
+                ],
+                resources : [ "arn:aws:dynamodb:" + props.region + ":" + props.accountId + ":table/" + props.getApplicationName() + "*" ]
+
+            })
         );
         managerRole.addToPolicy(
-            new IAM.PolicyStatement()
-                .describe('SystemsManagerPermissions')
-                .addActions(
+            new IAM.PolicyStatement({    
+                actions : [
                     "ssm:GetParameters",
                     "ssm:GetParameter",
                     "ssm:DeleteParameters",
                     "ssm:PutParameter",
                     "ssm:DeleteParameter"
-                )
-                .addResource(
-                    "arn:aws:ssm:"+props.region+":"+props.accountId+":parameter/"+props.getApplicationName().toLowerCase()+"/*"
-                )
+                ],
+                resources : [
+                    "arn:aws:ssm:" + props.region + ":" + props.accountId + ":parameter/" + props.getApplicationName().toLowerCase() + "/*"
+                ]
+            })
         );
         managerRole.addToPolicy(
-            new IAM.PolicyStatement()
-            .describe('KinesisPermissions')
-            .addActions(
-                "kinesis:GetShardIterator",
-                "kinesis:DescribeStream",
-                "kinesis:GetRecords"
-            )
-            .addResource(
-                this.kinesisStreams.streamArn
-            )
+            new IAM.PolicyStatement({
+                actions : [
+                    "kinesis:GetShardIterator",
+                    "kinesis:DescribeStream",
+                    "kinesis:GetRecords"
+                ],
+                resources : [ this.kinesisStreams.streamArn ]
+            })
         );
 
         managerRole.addToPolicy(
-            new IAM.PolicyStatement()
-                .describe('APIGatewayPermissions')
-                .allow()
-                .addAction('apigateway:*')
-                .addResources(
-                    baseArn + '*' 
-                )
+            new IAM.PolicyStatement({
+                actions: [ 'apigateway:*' ],
+                resources : [ baseArn + '*' ]
+            })
         );
     }
 

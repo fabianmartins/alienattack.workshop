@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 
 import { MainLayer } from '../lib/layer/mainLayer';
 import { NRTAProps } from '../lib/nrta';
 import { Utils } from '../lib/util/utils'
 
 const app = new cdk.App();
-let envname = app.node.getContext('envname');
+let envname = app.node.tryGetContext('envname');
 if (!envname) envname = "";
 else envname=envname.toUpperCase();
 console.log('Environment name:',envname);
@@ -19,7 +19,6 @@ Utils.checkforExistingBuckets(initProps.getBucketNames())
             console.log("The following buckets are NOT being created because already exists: ", listOfExistingBuckets);
         initProps.addParameter('existingbuckets', listOfExistingBuckets);
         new MainLayer(app, initProps.getApplicationName(), initProps);
-        app.run();
 })
     .catch((errorList) => {
         console.log(errorList);

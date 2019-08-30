@@ -16,6 +16,10 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "experimentalDecorators": true,
-    "strictPropertyInitialization":false
+    "strictPropertyInitialization":false,
+    "types": ["node"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
   }
 }

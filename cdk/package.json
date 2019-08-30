@@ -10,7 +10,6 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@types/node": "^10.15.3",
     "typescript": "^3.4.5"
   },
   "dependencies": {
@@ -28,6 +27,7 @@
     "@aws-cdk/aws-ssm": "^1.6.1",
     "@aws-cdk/cdk": "^0.36.1",
     "@aws-cdk/core": "^1.6.1",
+    "@types/node": "^12.7.3",
     "aws-sdk": "^2.521.0",
     "uuid": "^3.3.2"
   }
