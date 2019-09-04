@@ -63,7 +63,7 @@ export class SecurityLayer extends ResourceAwareConstruct {
     }
 
     getIdentityPoolId() {
-        return this.identityPool.logicalId;
+        return this.identityPool.ref
     }
 
     constructor(parent: Construct, name: string, props: IParameterAwareProps) {
@@ -229,7 +229,7 @@ export class SecurityLayer extends ResourceAwareConstruct {
         this.unauthenticatedRole = new Role(this, this.properties.getApplicationName() + 'UnauthRole', {
             roleName : this.properties.getApplicationName() + 'UnauthRole',
             assumedBy: new FederatedPrincipal('cognito-identity.amazonaws.com', {
-                "StringEquals": { "cognito-identity.amazonaws.com:aud": this.identityPool.logicalId },
+                "StringEquals": { "cognito-identity.amazonaws.com:aud": this.identityPool.ref },
                 "ForAnyValue:StringLike": { "cognito-identity.amazonaws.com:amr": "unauthenticated" }
             })
         });
@@ -243,7 +243,7 @@ export class SecurityLayer extends ResourceAwareConstruct {
 
         new Cognito.CfnIdentityPoolRoleAttachment(this, this.properties.getApplicationName() + "IDPRoles",
         {
-            identityPoolId : this.identityPool.logicalId
+            identityPoolId : this.identityPool.ref
            ,roles : {
                authenticated : this.playersRole.roleArn,
                unauthenticated : this.unauthenticatedRole.roleArn

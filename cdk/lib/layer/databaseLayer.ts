@@ -1,4 +1,4 @@
-import { Construct } from '@aws-cdk/core';
+import { Construct, RemovalPolicy } from '@aws-cdk/core';
 import { ResourceAwareConstruct, IParameterAwareProps } from './../resourceawarestack'
 
 import DynamoDB = require('@aws-cdk/aws-dynamodb');
@@ -16,7 +16,8 @@ export class DatabaseLayer extends ResourceAwareConstruct {
                 name : 'SessionId',
                 type : DynamoDB.AttributeType.STRING
             },
-            billingMode : DynamoDB.BillingMode.PAY_PER_REQUEST      
+            billingMode : DynamoDB.BillingMode.PAY_PER_REQUEST   ,
+            removalPolicy : RemovalPolicy.DESTROY   
         });
         this.addResource('table.session',sessionTable);
 
@@ -26,7 +27,8 @@ export class DatabaseLayer extends ResourceAwareConstruct {
                 name : 'SessionId',
                 type : DynamoDB.AttributeType.STRING
             },
-            billingMode : DynamoDB.BillingMode.PAY_PER_REQUEST
+            billingMode : DynamoDB.BillingMode.PAY_PER_REQUEST,
+            removalPolicy : RemovalPolicy.DESTROY   
         });
         this.addResource('table.sessioncontrol',sessionControlTable);
 
@@ -36,7 +38,8 @@ export class DatabaseLayer extends ResourceAwareConstruct {
                 name : 'SessionId',
                 type : DynamoDB.AttributeType.STRING
             },
-            billingMode : DynamoDB.BillingMode.PAY_PER_REQUEST
+            billingMode : DynamoDB.BillingMode.PAY_PER_REQUEST,
+            removalPolicy : RemovalPolicy.DESTROY
         });
         this.addResource('table.sessiontopx',sessionTopXTable);
     }

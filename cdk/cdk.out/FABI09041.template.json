@@ -1,6 +1,6 @@
 {
   "Resources": {
-    "SecurityLayerFABIPostRegistrationFnRole072B32A0": {
+    "SecurityLayerFABI09041PostRegistrationFnRoleCE24FBDE": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -18,18 +18,18 @@
         "ManagedPolicyArns": [
           "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
         ],
-        "RoleName": "FABIPostRegistrationFn_Role"
+        "RoleName": "FABI09041PostRegistrationFn_Role"
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/SecurityLayer/FABIPostRegistrationFn_Role/Resource"
+        "aws:cdk:path": "FABI09041/SecurityLayer/FABI09041PostRegistrationFn_Role/Resource"
       }
     },
-    "SecurityLayerFABIPostRegistrationD6000456": {
+    "SecurityLayerFABI09041PostRegistration9E46E4E3": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "SecurityLayerFABIPostRegistrationCodeS3Bucket310F973F"
+            "Ref": "SecurityLayerFABI09041PostRegistrationCodeS3BucketD229FB5E"
           },
           "S3Key": {
             "Fn::Join": [
@@ -42,7 +42,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "SecurityLayerFABIPostRegistrationCodeS3VersionKey0C3EC15E"
+                          "Ref": "SecurityLayerFABI09041PostRegistrationCodeS3VersionKey08666829"
                         }
                       ]
                     }
@@ -55,7 +55,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "SecurityLayerFABIPostRegistrationCodeS3VersionKey0C3EC15E"
+                          "Ref": "SecurityLayerFABI09041PostRegistrationCodeS3VersionKey08666829"
                         }
                       ]
                     }
@@ -68,39 +68,39 @@
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
-            "SecurityLayerFABIPostRegistrationFnRole072B32A0",
+            "SecurityLayerFABI09041PostRegistrationFnRoleCE24FBDE",
             "Arn"
           ]
         },
         "Runtime": "nodejs10.x",
         "Description": "This function adds an user to the Players group after confirmation",
-        "FunctionName": "FABIPostRegistrationFn",
+        "FunctionName": "FABI09041PostRegistrationFn",
         "MemorySize": 128,
         "Timeout": 60
       },
       "DependsOn": [
-        "SecurityLayerFABIPostRegistrationFnRole072B32A0"
+        "SecurityLayerFABI09041PostRegistrationFnRoleCE24FBDE"
       ],
       "Metadata": {
-        "aws:cdk:path": "FABI/SecurityLayer/FABIPostRegistration/Resource",
+        "aws:cdk:path": "FABI09041/SecurityLayer/FABI09041PostRegistration/Resource",
         "aws:asset:path": "asset.e6f369750e57d23358dd07d1e3121aae813f75525f4f45d3a915307bef8cc81a",
         "aws:asset:property": "Code"
       }
     },
-    "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6": {
+    "SecurityLayerFABI09041SimpleUserPoolCustomResourceDDFBF15B": {
       "Type": "AWS::CloudFormation::CustomResource",
       "Properties": {
         "ServiceToken": {
           "Fn::GetAtt": [
-            "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7EADB0E47",
+            "SingletonLambda24ab400649be3df4b03a519fdfc8b655187ED471",
             "Arn"
           ]
         },
-        "AppName": "FABI",
-        "UserPoolName": "FABI",
+        "AppName": "FABI09041",
+        "UserPoolName": "FABI09041",
         "PostConfirmationLambdaArn": {
           "Fn::GetAtt": [
-            "SecurityLayerFABIPostRegistrationD6000456",
+            "SecurityLayerFABI09041PostRegistration9E46E4E3",
             "Arn"
           ]
         }
@@ -108,29 +108,29 @@
       "UpdateReplacePolicy": "Delete",
       "DeletionPolicy": "Delete",
       "Metadata": {
-        "aws:cdk:path": "FABI/SecurityLayer/FABISimpleUserPoolCustomResource/Default"
+        "aws:cdk:path": "FABI09041/SecurityLayer/FABI09041SimpleUserPoolCustomResource/Default"
       }
     },
-    "SecurityLayerFABIUserPoolPerm527B8576": {
+    "SecurityLayerFABI09041UserPoolPerm1E16F8A6": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:invokeFunction",
         "FunctionName": {
-          "Ref": "SecurityLayerFABIPostRegistrationD6000456"
+          "Ref": "SecurityLayerFABI09041PostRegistration9E46E4E3"
         },
         "Principal": "cognito-idp.amazonaws.com",
         "SourceArn": {
           "Fn::GetAtt": [
-            "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+            "SecurityLayerFABI09041SimpleUserPoolCustomResourceDDFBF15B",
             "UserPoolArn"
           ]
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/SecurityLayer/FABIUserPoolPerm"
+        "aws:cdk:path": "FABI09041/SecurityLayer/FABI09041UserPoolPerm"
       }
     },
-    "SecurityLayerFABITriggerFunctionPolicy3E331AE0": {
+    "SecurityLayerFABI09041TriggerFunctionPolicy33B166C1": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -140,7 +140,7 @@
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+                  "SecurityLayerFABI09041SimpleUserPoolCustomResourceDDFBF15B",
                   "UserPoolArn"
                 ]
               }
@@ -151,59 +151,59 @@
         "PolicyName": "AllowAddUserToGroup",
         "Roles": [
           {
-            "Ref": "SecurityLayerFABIPostRegistrationFnRole072B32A0"
+            "Ref": "SecurityLayerFABI09041PostRegistrationFnRoleCE24FBDE"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/SecurityLayer/FABITriggerFunctionPolicy/Resource"
+        "aws:cdk:path": "FABI09041/SecurityLayer/FABI09041TriggerFunctionPolicy/Resource"
       }
     },
-    "SecurityLayerFABIApp5F21811D": {
+    "SecurityLayerFABI09041App614BB26A": {
       "Type": "AWS::Cognito::UserPoolClient",
       "Properties": {
         "UserPoolId": {
           "Fn::GetAtt": [
-            "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+            "SecurityLayerFABI09041SimpleUserPoolCustomResourceDDFBF15B",
             "UserPoolId"
           ]
         },
-        "ClientName": "FABIWebsite",
+        "ClientName": "FABI09041Website",
         "ExplicitAuthFlows": [
           "USER_PASSWORD_AUTH"
         ],
         "GenerateSecret": false
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/SecurityLayer/FABIApp"
+        "aws:cdk:path": "FABI09041/SecurityLayer/FABI09041App"
       }
     },
-    "SecurityLayerFABIIdentityPoolE9F27BD7": {
+    "SecurityLayerFABI09041IdentityPool5ABA04BF": {
       "Type": "AWS::Cognito::IdentityPool",
       "Properties": {
         "AllowUnauthenticatedIdentities": false,
         "CognitoIdentityProviders": [
           {
-            "ClientId": "FABIWebsite",
+            "ClientId": "FABI09041Website",
             "ProviderName": {
               "Fn::GetAtt": [
-                "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+                "SecurityLayerFABI09041SimpleUserPoolCustomResourceDDFBF15B",
                 "UserPoolProviderName"
               ]
             },
             "ServerSideTokenCheck": false
           }
         ],
-        "IdentityPoolName": "FABI"
+        "IdentityPoolName": "FABI09041"
       },
       "DependsOn": [
-        "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6"
+        "SecurityLayerFABI09041SimpleUserPoolCustomResourceDDFBF15B"
       ],
       "Metadata": {
-        "aws:cdk:path": "FABI/SecurityLayer/FABIIdentityPool"
+        "aws:cdk:path": "FABI09041/SecurityLayer/FABI09041IdentityPool"
       }
     },
-    "SecurityLayerFABIPlayersRole33BCCBB2": {
+    "SecurityLayerFABI09041PlayersRoleB889AED2": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -212,7 +212,7 @@
               "Action": "sts:AssumeRoleWithWebIdentity",
               "Condition": {
                 "StringEquals": {
-                  "cognito-identity.amazonaws.com:aud": "SecurityLayerFABIIdentityPoolE9F27BD7"
+                  "cognito-identity.amazonaws.com:aud": "SecurityLayerFABI09041IdentityPool5ABA04BF"
                 },
                 "ForAnyValue:StringLike": {
                   "cognito-identity.amazonaws.com:amr": "authenticated"
@@ -226,13 +226,13 @@
           ],
           "Version": "2012-10-17"
         },
-        "RoleName": "FABIPlayersRole"
+        "RoleName": "FABI09041PlayersRole"
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/SecurityLayer/FABIPlayersRole/Resource"
+        "aws:cdk:path": "FABI09041/SecurityLayer/FABI09041PlayersRole/Resource"
       }
     },
-    "SecurityLayerFABIPlayersRoleDefaultPolicy5649E7E2": {
+    "SecurityLayerFABI09041PlayersRoleDefaultPolicy42917C8E": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -264,7 +264,7 @@
                       },
                       ":",
                       {
-                        "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+                        "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
                       },
                       "/prod/*/config"
                     ]
@@ -284,7 +284,7 @@
                       },
                       ":",
                       {
-                        "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+                        "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
                       },
                       "/prod/*/session"
                     ]
@@ -304,7 +304,7 @@
                       },
                       ":",
                       {
-                        "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+                        "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
                       },
                       "/prod/*/scoreboard"
                     ]
@@ -330,7 +330,7 @@
                       },
                       ":",
                       {
-                        "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+                        "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
                       },
                       "/prod/GET/config"
                     ]
@@ -350,7 +350,7 @@
                       },
                       ":",
                       {
-                        "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+                        "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
                       },
                       "/prod/GET/session"
                     ]
@@ -370,7 +370,7 @@
                       },
                       ":",
                       {
-                        "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+                        "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
                       },
                       "/prod/GET/scoreboard"
                     ]
@@ -396,7 +396,7 @@
                       },
                       ":",
                       {
-                        "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+                        "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
                       },
                       "/prod/*/updatestatus"
                     ]
@@ -416,7 +416,7 @@
                       },
                       ":",
                       {
-                        "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+                        "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
                       },
                       "/prod/*/allocate"
                     ]
@@ -436,7 +436,7 @@
                       },
                       ":",
                       {
-                        "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+                        "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
                       },
                       "/prod/*/deallocate"
                     ]
@@ -462,7 +462,7 @@
                       },
                       ":",
                       {
-                        "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+                        "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
                       },
                       "/prod/POST/updatestatus"
                     ]
@@ -482,7 +482,7 @@
                       },
                       ":",
                       {
-                        "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+                        "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
                       },
                       "/prod/POST/allocate"
                     ]
@@ -502,7 +502,7 @@
                       },
                       ":",
                       {
-                        "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+                        "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
                       },
                       "/prod/POST/deallocate"
                     ]
@@ -513,23 +513,23 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "SecurityLayerFABIPlayersRoleDefaultPolicy5649E7E2",
+        "PolicyName": "SecurityLayerFABI09041PlayersRoleDefaultPolicy42917C8E",
         "Roles": [
           {
-            "Ref": "SecurityLayerFABIPlayersRole33BCCBB2"
+            "Ref": "SecurityLayerFABI09041PlayersRoleB889AED2"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/SecurityLayer/FABIPlayersRole/DefaultPolicy/Resource"
+        "aws:cdk:path": "FABI09041/SecurityLayer/FABI09041PlayersRole/DefaultPolicy/Resource"
       }
     },
-    "SecurityLayerFABIPlayers2881945C": {
+    "SecurityLayerFABI09041Players68EADD33": {
       "Type": "AWS::Cognito::UserPoolGroup",
       "Properties": {
         "UserPoolId": {
           "Fn::GetAtt": [
-            "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+            "SecurityLayerFABI09041SimpleUserPoolCustomResourceDDFBF15B",
             "UserPoolId"
           ]
         },
@@ -538,16 +538,16 @@
         "Precedence": 9999,
         "RoleArn": {
           "Fn::GetAtt": [
-            "SecurityLayerFABIPlayersRole33BCCBB2",
+            "SecurityLayerFABI09041PlayersRoleB889AED2",
             "Arn"
           ]
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/SecurityLayer/FABIPlayers"
+        "aws:cdk:path": "FABI09041/SecurityLayer/FABI09041Players"
       }
     },
-    "SecurityLayerFABIManagersRoleF7BC6F01": {
+    "SecurityLayerFABI09041ManagersRoleE077E002": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -556,7 +556,7 @@
               "Action": "sts:AssumeRoleWithWebIdentity",
               "Condition": {
                 "StringEquals": {
-                  "cognito-identity.amazonaws.com:aud": "SecurityLayerFABIIdentityPoolE9F27BD7"
+                  "cognito-identity.amazonaws.com:aud": "SecurityLayerFABI09041IdentityPool5ABA04BF"
                 },
                 "ForAnyValue:StringLike": {
                   "cognito-identity.amazonaws.com:amr": "authenticated"
@@ -573,13 +573,13 @@
         "ManagedPolicyArns": [
           "arn:aws:iam::aws:policy/AmazonCognitoPowerUser"
         ],
-        "RoleName": "FABIManagersRole"
+        "RoleName": "FABI09041ManagersRole"
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/SecurityLayer/FABIManagersRole/Resource"
+        "aws:cdk:path": "FABI09041/SecurityLayer/FABI09041ManagersRole/Resource"
       }
     },
-    "SecurityLayerFABIManagersRoleDefaultPolicy0D8870B4": {
+    "SecurityLayerFABI09041ManagersRoleDefaultPolicy775E12E2": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -615,7 +615,7 @@
                     {
                       "Ref": "AWS::AccountId"
                     },
-                    ":table/FABI*"
+                    ":table/FABI09041*"
                   ]
                 ]
               }
@@ -641,7 +641,7 @@
                     {
                       "Ref": "AWS::AccountId"
                     },
-                    ":parameter/fabi/*"
+                    ":parameter/fabi09041/*"
                   ]
                 ]
               }
@@ -655,7 +655,7 @@
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "IngestionConsumptionLayerFABIInputStream2FDBC8DF",
+                  "IngestionConsumptionLayerFABI09041InputStream58225546",
                   "Arn"
                 ]
               }
@@ -677,7 +677,7 @@
                     },
                     ":",
                     {
-                      "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+                      "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
                     },
                     "/prod/*/*"
                   ]
@@ -687,23 +687,23 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "SecurityLayerFABIManagersRoleDefaultPolicy0D8870B4",
+        "PolicyName": "SecurityLayerFABI09041ManagersRoleDefaultPolicy775E12E2",
         "Roles": [
           {
-            "Ref": "SecurityLayerFABIManagersRoleF7BC6F01"
+            "Ref": "SecurityLayerFABI09041ManagersRoleE077E002"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/SecurityLayer/FABIManagersRole/DefaultPolicy/Resource"
+        "aws:cdk:path": "FABI09041/SecurityLayer/FABI09041ManagersRole/DefaultPolicy/Resource"
       }
     },
-    "SecurityLayerFABIManagersFBC88EB8": {
+    "SecurityLayerFABI09041Managers52F22E98": {
       "Type": "AWS::Cognito::UserPoolGroup",
       "Properties": {
         "UserPoolId": {
           "Fn::GetAtt": [
-            "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+            "SecurityLayerFABI09041SimpleUserPoolCustomResourceDDFBF15B",
             "UserPoolId"
           ]
         },
@@ -712,16 +712,16 @@
         "Precedence": 0,
         "RoleArn": {
           "Fn::GetAtt": [
-            "SecurityLayerFABIManagersRoleF7BC6F01",
+            "SecurityLayerFABI09041ManagersRoleE077E002",
             "Arn"
           ]
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/SecurityLayer/FABIManagers"
+        "aws:cdk:path": "FABI09041/SecurityLayer/FABI09041Managers"
       }
     },
-    "SecurityLayerFABIUnauthRole9158B024": {
+    "SecurityLayerFABI09041UnauthRole77278B9F": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -730,7 +730,7 @@
               "Action": "sts:AssumeRole",
               "Condition": {
                 "StringEquals": {
-                  "cognito-identity.amazonaws.com:aud": "SecurityLayerFABIIdentityPoolE9F27BD7"
+                  "cognito-identity.amazonaws.com:aud": "SecurityLayerFABI09041IdentityPool5ABA04BF"
                 },
                 "ForAnyValue:StringLike": {
                   "cognito-identity.amazonaws.com:amr": "unauthenticated"
@@ -744,13 +744,13 @@
           ],
           "Version": "2012-10-17"
         },
-        "RoleName": "FABIUnauthRole"
+        "RoleName": "FABI09041UnauthRole"
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/SecurityLayer/FABIUnauthRole/Resource"
+        "aws:cdk:path": "FABI09041/SecurityLayer/FABI09041UnauthRole/Resource"
       }
     },
-    "SecurityLayerFABIUnauthRoleDefaultPolicy7871C67E": {
+    "SecurityLayerFABI09041UnauthRoleDefaultPolicy88A9B95F": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -767,41 +767,46 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "SecurityLayerFABIUnauthRoleDefaultPolicy7871C67E",
+        "PolicyName": "SecurityLayerFABI09041UnauthRoleDefaultPolicy88A9B95F",
         "Roles": [
           {
-            "Ref": "SecurityLayerFABIUnauthRole9158B024"
+            "Ref": "SecurityLayerFABI09041UnauthRole77278B9F"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/SecurityLayer/FABIUnauthRole/DefaultPolicy/Resource"
+        "aws:cdk:path": "FABI09041/SecurityLayer/FABI09041UnauthRole/DefaultPolicy/Resource"
       }
     },
-    "SecurityLayerFABIIDPRoles25076101": {
+    "SecurityLayerFABI09041IDPRolesB583A2CF": {
       "Type": "AWS::Cognito::IdentityPoolRoleAttachment",
       "Properties": {
-        "IdentityPoolId": "SecurityLayerFABIIdentityPoolE9F27BD7",
+        "IdentityPoolId": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABI09041IdentityPool5ABA04BF",
+            "Id"
+          ]
+        },
         "Roles": {
           "authenticated": {
             "Fn::GetAtt": [
-              "SecurityLayerFABIPlayersRole33BCCBB2",
+              "SecurityLayerFABI09041PlayersRoleB889AED2",
               "Arn"
             ]
           },
           "unauthenticated": {
             "Fn::GetAtt": [
-              "SecurityLayerFABIUnauthRole9158B024",
+              "SecurityLayerFABI09041UnauthRole77278B9F",
               "Arn"
             ]
           }
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/SecurityLayer/FABIIDPRoles"
+        "aws:cdk:path": "FABI09041/SecurityLayer/FABI09041IDPRoles"
       }
     },
-    "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7ServiceRole12CB95C7": {
+    "SingletonLambda24ab400649be3df4b03a519fdfc8b655ServiceRole92586BF6": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -832,10 +837,10 @@
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/SingletonLambdaffecfdf0de023fca939453dd21ccd1d7/ServiceRole/Resource"
+        "aws:cdk:path": "FABI09041/SingletonLambda24ab400649be3df4b03a519fdfc8b655/ServiceRole/Resource"
       }
     },
-    "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7ServiceRoleDefaultPolicyE0BBD1DA": {
+    "SingletonLambda24ab400649be3df4b03a519fdfc8b655ServiceRoleDefaultPolicy9C12F520": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -854,23 +859,23 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7ServiceRoleDefaultPolicyE0BBD1DA",
+        "PolicyName": "SingletonLambda24ab400649be3df4b03a519fdfc8b655ServiceRoleDefaultPolicy9C12F520",
         "Roles": [
           {
-            "Ref": "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7ServiceRole12CB95C7"
+            "Ref": "SingletonLambda24ab400649be3df4b03a519fdfc8b655ServiceRole92586BF6"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/SingletonLambdaffecfdf0de023fca939453dd21ccd1d7/ServiceRole/DefaultPolicy/Resource"
+        "aws:cdk:path": "FABI09041/SingletonLambda24ab400649be3df4b03a519fdfc8b655/ServiceRole/DefaultPolicy/Resource"
       }
     },
-    "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7EADB0E47": {
+    "SingletonLambda24ab400649be3df4b03a519fdfc8b655187ED471": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7CodeS3BucketD9D697AE"
+            "Ref": "SingletonLambda24ab400649be3df4b03a519fdfc8b655CodeS3Bucket2299F323"
           },
           "S3Key": {
             "Fn::Join": [
@@ -883,7 +888,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7CodeS3VersionKey7A829202"
+                          "Ref": "SingletonLambda24ab400649be3df4b03a519fdfc8b655CodeS3VersionKeyDFECB5FB"
                         }
                       ]
                     }
@@ -896,7 +901,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7CodeS3VersionKey7A829202"
+                          "Ref": "SingletonLambda24ab400649be3df4b03a519fdfc8b655CodeS3VersionKeyDFECB5FB"
                         }
                       ]
                     }
@@ -909,7 +914,7 @@
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
-            "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7ServiceRole12CB95C7",
+            "SingletonLambda24ab400649be3df4b03a519fdfc8b655ServiceRole92586BF6",
             "Arn"
           ]
         },
@@ -918,56 +923,56 @@
         "Timeout": 300
       },
       "DependsOn": [
-        "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7ServiceRoleDefaultPolicyE0BBD1DA",
-        "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7ServiceRole12CB95C7"
+        "SingletonLambda24ab400649be3df4b03a519fdfc8b655ServiceRoleDefaultPolicy9C12F520",
+        "SingletonLambda24ab400649be3df4b03a519fdfc8b655ServiceRole92586BF6"
       ],
       "Metadata": {
-        "aws:cdk:path": "FABI/SingletonLambdaffecfdf0de023fca939453dd21ccd1d7/Resource",
+        "aws:cdk:path": "FABI09041/SingletonLambda24ab400649be3df4b03a519fdfc8b655/Resource",
         "aws:asset:path": "asset.b095b505c175f6aa6f0e9d92bbb8ff729cbcc525842abea1b87a75aab0cf6e94",
         "aws:asset:property": "Code"
       }
     },
-    "ConfigurationLayerSSMParameterFABIRegion0039AB7A": {
+    "ConfigurationLayerSSMParameterFABI09041Region9C48952C": {
       "Type": "AWS::SSM::Parameter",
       "Properties": {
         "Type": "String",
         "Value": {
           "Ref": "AWS::Region"
         },
-        "Name": "/fabi/region"
+        "Name": "/fabi09041/region"
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/ConfigurationLayer/SSMParameterFABIRegion"
+        "aws:cdk:path": "FABI09041/ConfigurationLayer/SSMParameterFABI09041Region"
       }
     },
-    "ConfigurationLayerSSMParameterFABIClientId17E39155": {
+    "ConfigurationLayerSSMParameterFABI09041ClientIdF292B9EA": {
       "Type": "AWS::SSM::Parameter",
       "Properties": {
         "Type": "String",
-        "Value": "FABIWebsite",
-        "Name": "/fabi/clientid"
+        "Value": "FABI09041Website",
+        "Name": "/fabi09041/clientid"
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/ConfigurationLayer/SSMParameterFABIClientId"
+        "aws:cdk:path": "FABI09041/ConfigurationLayer/SSMParameterFABI09041ClientId"
       }
     },
-    "ConfigurationLayerSSMParameterFABIUserpoolIdF889A50A": {
+    "ConfigurationLayerSSMParameterFABI09041UserpoolId2526C7F4": {
       "Type": "AWS::SSM::Parameter",
       "Properties": {
         "Type": "String",
         "Value": {
           "Fn::GetAtt": [
-            "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+            "SecurityLayerFABI09041SimpleUserPoolCustomResourceDDFBF15B",
             "UserPoolId"
           ]
         },
-        "Name": "/fabi/userpoolid"
+        "Name": "/fabi09041/userpoolid"
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/ConfigurationLayer/SSMParameterFABIUserpoolId"
+        "aws:cdk:path": "FABI09041/ConfigurationLayer/SSMParameterFABI09041UserpoolId"
       }
     },
-    "ConfigurationLayerSSMParameterFABIUserPoolURL9A281475": {
+    "ConfigurationLayerSSMParameterFABI09041UserPoolURL29CB1888": {
       "Type": "AWS::SSM::Parameter",
       "Properties": {
         "Type": "String",
@@ -982,34 +987,34 @@
               ".amazonaws.com/",
               {
                 "Fn::GetAtt": [
-                  "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+                  "SecurityLayerFABI09041SimpleUserPoolCustomResourceDDFBF15B",
                   "UserPoolId"
                 ]
               }
             ]
           ]
         },
-        "Name": "/fabi/userpoolurl"
+        "Name": "/fabi09041/userpoolurl"
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/ConfigurationLayer/SSMParameterFABIUserPoolURL"
+        "aws:cdk:path": "FABI09041/ConfigurationLayer/SSMParameterFABI09041UserPoolURL"
       }
     },
-    "ConfigurationLayerSSMParameterFABIIdentityPoolId77ACAEAB": {
+    "ConfigurationLayerSSMParameterFABI09041IdentityPoolIdFA48B918": {
       "Type": "AWS::SSM::Parameter",
       "Properties": {
         "Type": "String",
-        "Value": "SecurityLayerFABIIdentityPoolE9F27BD7",
-        "Name": "/fabi/identitypoolid"
+        "Value": "SecurityLayerFABI09041IdentityPool5ABA04BF",
+        "Name": "/fabi09041/identitypoolid"
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/ConfigurationLayer/SSMParameterFABIIdentityPoolId"
+        "aws:cdk:path": "FABI09041/ConfigurationLayer/SSMParameterFABI09041IdentityPoolId"
       }
     },
-    "StorageStoragefabiappA6DACD14": {
+    "StorageStoragefabi09041appABB531E8": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
-        "BucketName": "fabi.app",
+        "BucketName": "fabi09041.app",
         "CorsConfiguration": {
           "CorsRules": [
             {
@@ -1033,72 +1038,24 @@
           "IndexDocument": "index.html"
         }
       },
-      "UpdateReplacePolicy": "Retain",
-      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
       "Metadata": {
-        "aws:cdk:path": "FABI/StorageStorage/fabi.app/Resource"
+        "aws:cdk:path": "FABI09041/StorageStorage/fabi09041.app/Resource"
       }
     },
-    "StorageStorageFABICDNAccessId3561FAAC": {
-      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
-      "Properties": {
-        "CloudFrontOriginAccessIdentityConfig": {
-          "Comment": "FABICDNAccessId"
-        }
-      },
-      "Metadata": {
-        "aws:cdk:path": "FABI/StorageStorage/FABICDNAccessId"
-      }
-    },
-    "StorageStorageFABIAppBucketPolicy951C5884": {
-      "Type": "AWS::S3::BucketPolicy",
-      "Properties": {
-        "Bucket": {
-          "Ref": "StorageStoragefabiappA6DACD14"
-        },
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "s3:GetObject",
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity [object Object]"
-              },
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Fn::GetAtt": [
-                        "StorageStoragefabiappA6DACD14",
-                        "Arn"
-                      ]
-                    },
-                    "/*"
-                  ]
-                ]
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        }
-      },
-      "Metadata": {
-        "aws:cdk:path": "FABI/StorageStorage/FABIAppBucketPolicy/Resource"
-      }
-    },
-    "StorageStoragefabirawEDEC63C4": {
+    "StorageStoragefabi09041raw5630DB7A": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
-        "BucketName": "fabi.raw"
+        "BucketName": "fabi09041.raw"
       },
-      "UpdateReplacePolicy": "Retain",
-      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
       "Metadata": {
-        "aws:cdk:path": "FABI/StorageStorage/fabi.raw/Resource"
+        "aws:cdk:path": "FABI09041/StorageStorage/fabi09041.raw/Resource"
       }
     },
-    "DatabaseLayerFABISessionA78C13B7": {
+    "DatabaseLayerFABI09041Session5625DFD8": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
         "KeySchema": [
@@ -1114,15 +1071,15 @@
           }
         ],
         "BillingMode": "PAY_PER_REQUEST",
-        "TableName": "FABISession"
+        "TableName": "FABI09041Session"
       },
-      "UpdateReplacePolicy": "Retain",
-      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
       "Metadata": {
-        "aws:cdk:path": "FABI/DatabaseLayer/FABISession/Resource"
+        "aws:cdk:path": "FABI09041/DatabaseLayer/FABI09041Session/Resource"
       }
     },
-    "DatabaseLayerFABISessionControlDC15915E": {
+    "DatabaseLayerFABI09041SessionControlCF35B79A": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
         "KeySchema": [
@@ -1138,15 +1095,15 @@
           }
         ],
         "BillingMode": "PAY_PER_REQUEST",
-        "TableName": "FABISessionControl"
+        "TableName": "FABI09041SessionControl"
       },
-      "UpdateReplacePolicy": "Retain",
-      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
       "Metadata": {
-        "aws:cdk:path": "FABI/DatabaseLayer/FABISessionControl/Resource"
+        "aws:cdk:path": "FABI09041/DatabaseLayer/FABI09041SessionControl/Resource"
       }
     },
-    "DatabaseLayerFABISessionTopXD664D029": {
+    "DatabaseLayerFABI09041SessionTopXB7FD9C38": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
         "KeySchema": [
@@ -1162,172 +1119,15 @@
           }
         ],
         "BillingMode": "PAY_PER_REQUEST",
-        "TableName": "FABISessionTopX"
+        "TableName": "FABI09041SessionTopX"
       },
-      "UpdateReplacePolicy": "Retain",
-      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
       "Metadata": {
-        "aws:cdk:path": "FABI/DatabaseLayer/FABISessionTopX/Resource"
+        "aws:cdk:path": "FABI09041/DatabaseLayer/FABI09041SessionTopX/Resource"
       }
     },
-    "ProcessingLayerFABIAllocateGamerFnRole986B23F8": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com"
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition"
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-              ]
-            ]
-          }
-        ],
-        "Policies": [
-          {
-            "PolicyDocument": {
-              "Statement": [
-                {
-                  "Action": [
-                    "dynamodb:GetItem",
-                    "dynamodb:UpdateItem",
-                    "dynamodb:Scan",
-                    "dynamodb:Query"
-                  ],
-                  "Effect": "Allow",
-                  "Resource": "sessionControlTable.tableArn"
-                }
-              ],
-              "Version": "2012-10-17"
-            },
-            "PolicyName": "DynamoDBPermissions"
-          },
-          {
-            "PolicyDocument": {
-              "Statement": [
-                {
-                  "Action": [
-                    "ssm:GetParameter",
-                    "ssm:GetParameters"
-                  ],
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::Join": [
-                      "",
-                      [
-                        "arn:aws:ssm:",
-                        {
-                          "Ref": "AWS::Region"
-                        },
-                        ":",
-                        {
-                          "Ref": "AWS::AccountId"
-                        },
-                        ":parameter/fabi/session"
-                      ]
-                    ]
-                  }
-                }
-              ],
-              "Version": "2012-10-17"
-            },
-            "PolicyName": "SystemsManagerPermissions"
-          }
-        ],
-        "RoleName": "FABIAllocateGamerFn_Role"
-      },
-      "Metadata": {
-        "aws:cdk:path": "FABI/ProcessingLayer/FABIAllocateGamerFn_Role/Resource"
-      }
-    },
-    "ProcessingLayerFABIAllocateGamerFn051A6AC2": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "ProcessingLayerFABIAllocateGamerFnCodeS3BucketE4322AFD"
-          },
-          "S3Key": {
-            "Fn::Join": [
-              "",
-              [
-                {
-                  "Fn::Select": [
-                    0,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "ProcessingLayerFABIAllocateGamerFnCodeS3VersionKey06EFDB14"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Fn::Select": [
-                    1,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "ProcessingLayerFABIAllocateGamerFnCodeS3VersionKey06EFDB14"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ProcessingLayerFABIAllocateGamerFnRole986B23F8",
-            "Arn"
-          ]
-        },
-        "Runtime": "nodejs8.10",
-        "Description": "This function supports the allocation of gamers when the game is to start",
-        "Environment": {
-          "Variables": {
-            "SESSION_CONTROL_TABLENAME": {
-              "Ref": "DatabaseLayerFABISessionControlDC15915E"
-            },
-            "SESSION_PARAMETER": "/fabi/session"
-          }
-        },
-        "FunctionName": "FABIAllocateGamerFn",
-        "MemorySize": 128,
-        "Timeout": 60
-      },
-      "DependsOn": [
-        "ProcessingLayerFABIAllocateGamerFnRole986B23F8"
-      ],
-      "Metadata": {
-        "aws:cdk:path": "FABI/ProcessingLayer/FABIAllocateGamerFn/Resource",
-        "aws:asset:path": "asset.5fbbde35634d5de13314b5da90dcda3b8db607c2163706500121b1ebd51b6a5e",
-        "aws:asset:property": "Code"
-      }
-    },
-    "ProcessingLayerFABIDeallocateGamerFnRole6C8A3123": {
+    "ProcessingLayerFABI09041AllocateGamerFnRole3BB7AB10": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -1370,7 +1170,7 @@
                   "Effect": "Allow",
                   "Resource": {
                     "Fn::GetAtt": [
-                      "DatabaseLayerFABISessionControlDC15915E",
+                      "DatabaseLayerFABI09041SessionControlCF35B79A",
                       "Arn"
                     ]
                   }
@@ -1401,7 +1201,7 @@
                         {
                           "Ref": "AWS::AccountId"
                         },
-                        ":parameter/fabi/session"
+                        ":parameter/fabi09041/session"
                       ]
                     ]
                   }
@@ -1412,18 +1212,18 @@
             "PolicyName": "SystemsManagerPermissions"
           }
         ],
-        "RoleName": "FABIDeallocateGamerFn_Role"
+        "RoleName": "FABI09041AllocateGamerFn_Role"
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/ProcessingLayer/FABIDeallocateGamerFn_Role/Resource"
+        "aws:cdk:path": "FABI09041/ProcessingLayer/FABI09041AllocateGamerFn_Role/Resource"
       }
     },
-    "ProcessingLayerFABIDeallocateGamerFn2669BDFA": {
+    "ProcessingLayerFABI09041AllocateGamerFn8ECB4D5C": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "ProcessingLayerFABIDeallocateGamerFnCodeS3Bucket83A6F60A"
+            "Ref": "ProcessingLayerFABI09041AllocateGamerFnCodeS3BucketD15A6457"
           },
           "S3Key": {
             "Fn::Join": [
@@ -1436,7 +1236,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "ProcessingLayerFABIDeallocateGamerFnCodeS3VersionKey43AA5137"
+                          "Ref": "ProcessingLayerFABI09041AllocateGamerFnCodeS3VersionKeyBD9C2C65"
                         }
                       ]
                     }
@@ -1449,7 +1249,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "ProcessingLayerFABIDeallocateGamerFnCodeS3VersionKey43AA5137"
+                          "Ref": "ProcessingLayerFABI09041AllocateGamerFnCodeS3VersionKeyBD9C2C65"
                         }
                       ]
                     }
@@ -1462,7 +1262,169 @@
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
-            "ProcessingLayerFABIDeallocateGamerFnRole6C8A3123",
+            "ProcessingLayerFABI09041AllocateGamerFnRole3BB7AB10",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs8.10",
+        "Description": "This function supports the allocation of gamers when the game is to start",
+        "Environment": {
+          "Variables": {
+            "SESSION_CONTROL_TABLENAME": {
+              "Ref": "DatabaseLayerFABI09041SessionControlCF35B79A"
+            },
+            "SESSION_PARAMETER": "/fabi09041/session"
+          }
+        },
+        "FunctionName": "FABI09041AllocateGamerFn",
+        "MemorySize": 128,
+        "Timeout": 60
+      },
+      "DependsOn": [
+        "ProcessingLayerFABI09041AllocateGamerFnRole3BB7AB10"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "FABI09041/ProcessingLayer/FABI09041AllocateGamerFn/Resource",
+        "aws:asset:path": "asset.5fbbde35634d5de13314b5da90dcda3b8db607c2163706500121b1ebd51b6a5e",
+        "aws:asset:property": "Code"
+      }
+    },
+    "ProcessingLayerFABI09041DeallocateGamerFnRoleA723B493": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ],
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:Scan",
+                    "dynamodb:Query"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "DatabaseLayerFABI09041SessionControlCF35B79A",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "DynamoDBPermissions"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ssm:GetParameter",
+                    "ssm:GetParameters"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:aws:ssm:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":parameter/fabi09041/session"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "SystemsManagerPermissions"
+          }
+        ],
+        "RoleName": "FABI09041DeallocateGamerFn_Role"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09041/ProcessingLayer/FABI09041DeallocateGamerFn_Role/Resource"
+      }
+    },
+    "ProcessingLayerFABI09041DeallocateGamerFnDC2E1DD9": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ProcessingLayerFABI09041DeallocateGamerFnCodeS3Bucket597E357F"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "ProcessingLayerFABI09041DeallocateGamerFnCodeS3VersionKey98E97A13"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "ProcessingLayerFABI09041DeallocateGamerFnCodeS3VersionKey98E97A13"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ProcessingLayerFABI09041DeallocateGamerFnRoleA723B493",
             "Arn"
           ]
         },
@@ -1471,34 +1433,34 @@
         "Environment": {
           "Variables": {
             "SESSION_CONTROL_TABLENAME": {
-              "Ref": "DatabaseLayerFABISessionControlDC15915E"
+              "Ref": "DatabaseLayerFABI09041SessionControlCF35B79A"
             },
-            "SESSION_PARAMETER": "/fabi/session"
+            "SESSION_PARAMETER": "/fabi09041/session"
           }
         },
-        "FunctionName": "FABIDeallocateGamerFn",
+        "FunctionName": "FABI09041DeallocateGamerFn",
         "MemorySize": 128,
         "Timeout": 60
       },
       "DependsOn": [
-        "ProcessingLayerFABIDeallocateGamerFnRole6C8A3123"
+        "ProcessingLayerFABI09041DeallocateGamerFnRoleA723B493"
       ],
       "Metadata": {
-        "aws:cdk:path": "FABI/ProcessingLayer/FABIDeallocateGamerFn/Resource",
+        "aws:cdk:path": "FABI09041/ProcessingLayer/FABI09041DeallocateGamerFn/Resource",
         "aws:asset:path": "asset.528e7d9d6b52bad0f2d0b0aa4cec2ba3eb502637197cd918333ed586cf87c4b9",
         "aws:asset:property": "Code"
       }
     },
-    "ProcessingLayerFABIDLQBABBDA9E": {
+    "ProcessingLayerFABI09041DLQF89A4444": {
       "Type": "AWS::SQS::Queue",
       "Properties": {
-        "QueueName": "FABIDLQ"
+        "QueueName": "FABI09041DLQ"
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/ProcessingLayer/FABIDLQ/Resource"
+        "aws:cdk:path": "FABI09041/ProcessingLayer/FABI09041DLQ/Resource"
       }
     },
-    "ProcessingLayerFABIScoreboardFnRole7913BD17": {
+    "ProcessingLayerFABI09041ScoreboardFnRole0301E458": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -1554,7 +1516,7 @@
                         {
                           "Ref": "AWS::AccountId"
                         },
-                        ":table/FABI*"
+                        ":table/FABI09041*"
                       ]
                     ]
                   }
@@ -1585,7 +1547,7 @@
                         {
                           "Ref": "AWS::AccountId"
                         },
-                        ":parameter/fabi*"
+                        ":parameter/fabi09041*"
                       ]
                     ]
                   }
@@ -1603,7 +1565,7 @@
                   "Effect": "Allow",
                   "Resource": {
                     "Fn::GetAtt": [
-                      "ProcessingLayerFABIDLQBABBDA9E",
+                      "ProcessingLayerFABI09041DLQF89A4444",
                       "Arn"
                     ]
                   }
@@ -1632,18 +1594,18 @@
             "PolicyName": "KinesisPermissions"
           }
         ],
-        "RoleName": "FABIScoreboardFn_Role"
+        "RoleName": "FABI09041ScoreboardFn_Role"
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/ProcessingLayer/FABIScoreboardFn_Role/Resource"
+        "aws:cdk:path": "FABI09041/ProcessingLayer/FABI09041ScoreboardFn_Role/Resource"
       }
     },
-    "ProcessingLayerFABIScoreboardFn39B5940A": {
+    "ProcessingLayerFABI09041ScoreboardFn4489EF41": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "ProcessingLayerFABIScoreboardFnCodeS3Bucket45C2012D"
+            "Ref": "ProcessingLayerFABI09041ScoreboardFnCodeS3Bucket4A6A82AB"
           },
           "S3Key": {
             "Fn::Join": [
@@ -1656,7 +1618,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "ProcessingLayerFABIScoreboardFnCodeS3VersionKeyD183FFE3"
+                          "Ref": "ProcessingLayerFABI09041ScoreboardFnCodeS3VersionKey97907CD3"
                         }
                       ]
                     }
@@ -1669,7 +1631,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "ProcessingLayerFABIScoreboardFnCodeS3VersionKeyD183FFE3"
+                          "Ref": "ProcessingLayerFABI09041ScoreboardFnCodeS3VersionKey97907CD3"
                         }
                       ]
                     }
@@ -1682,7 +1644,7 @@
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
-            "ProcessingLayerFABIScoreboardFnRole7913BD17",
+            "ProcessingLayerFABI09041ScoreboardFnRole0301E458",
             "Arn"
           ]
         },
@@ -1691,46 +1653,46 @@
         "Environment": {
           "Variables": {
             "DLQ_URL": {
-              "Ref": "ProcessingLayerFABIDLQBABBDA9E"
+              "Ref": "ProcessingLayerFABI09041DLQF89A4444"
             },
-            "SESSION_PARAMETER": "/fabi/session",
+            "SESSION_PARAMETER": "/fabi09041/session",
             "SESSION_TABLENAME": {
-              "Ref": "DatabaseLayerFABISessionA78C13B7"
+              "Ref": "DatabaseLayerFABI09041Session5625DFD8"
             },
             "SESSION_CONTROL_TABLENAME": {
-              "Ref": "DatabaseLayerFABISessionControlDC15915E"
+              "Ref": "DatabaseLayerFABI09041SessionControlCF35B79A"
             },
             "SESSION_TOPX_TABLENAME": {
-              "Ref": "DatabaseLayerFABISessionTopXD664D029"
+              "Ref": "DatabaseLayerFABI09041SessionTopXB7FD9C38"
             },
             "TopXValue": "10"
           }
         },
-        "FunctionName": "FABIScoreboardFn",
+        "FunctionName": "FABI09041ScoreboardFn",
         "MemorySize": 128,
         "Timeout": 60
       },
       "DependsOn": [
-        "ProcessingLayerFABIScoreboardFnRole7913BD17"
+        "ProcessingLayerFABI09041ScoreboardFnRole0301E458"
       ],
       "Metadata": {
-        "aws:cdk:path": "FABI/ProcessingLayer/FABIScoreboardFn/Resource",
+        "aws:cdk:path": "FABI09041/ProcessingLayer/FABI09041ScoreboardFn/Resource",
         "aws:asset:path": "asset.167a1cca886516d4c19847697df5b1c021e6595589c2e8d34e846ac75d92c10d",
         "aws:asset:property": "Code"
       }
     },
-    "IngestionConsumptionLayerFABIInputStream2FDBC8DF": {
+    "IngestionConsumptionLayerFABI09041InputStream58225546": {
       "Type": "AWS::Kinesis::Stream",
       "Properties": {
         "ShardCount": 1,
-        "Name": "FABI_InputStream",
+        "Name": "FABI09041_InputStream",
         "RetentionPeriodHours": 24
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIInputStream/Resource"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041InputStream/Resource"
       }
     },
-    "IngestionConsumptionLayerFABIAPIRoleD0E9E957": {
+    "IngestionConsumptionLayerFABI09041APIRoleEE278363": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -1759,13 +1721,13 @@
             ]
           }
         ],
-        "RoleName": "FABIAPI"
+        "RoleName": "FABI09041API"
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIRole/Resource"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIRole/Resource"
       }
     },
-    "IngestionConsumptionLayerFABIAPIRoleDefaultPolicyA4B534B3": {
+    "IngestionConsumptionLayerFABI09041APIRoleDefaultPolicy6C81D027": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -1788,7 +1750,7 @@
                     {
                       "Ref": "AWS::AccountId"
                     },
-                    ":function:FABI*"
+                    ":function:FABI09041*"
                   ]
                 ]
               }
@@ -1813,7 +1775,7 @@
                     {
                       "Ref": "AWS::AccountId"
                     },
-                    ":parameter/fabi/*"
+                    ":parameter/fabi09041/*"
                   ]
                 ]
               }
@@ -1824,13 +1786,13 @@
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "DatabaseLayerFABISessionA78C13B7",
+                    "DatabaseLayerFABI09041Session5625DFD8",
                     "Arn"
                   ]
                 },
                 {
                   "Fn::GetAtt": [
-                    "DatabaseLayerFABISessionTopXD664D029",
+                    "DatabaseLayerFABI09041SessionTopXB7FD9C38",
                     "Arn"
                   ]
                 }
@@ -1844,7 +1806,7 @@
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "IngestionConsumptionLayerFABIInputStream2FDBC8DF",
+                  "IngestionConsumptionLayerFABI09041InputStream58225546",
                   "Arn"
                 ]
               }
@@ -1852,33 +1814,33 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "IngestionConsumptionLayerFABIAPIRoleDefaultPolicyA4B534B3",
+        "PolicyName": "IngestionConsumptionLayerFABI09041APIRoleDefaultPolicy6C81D027",
         "Roles": [
           {
-            "Ref": "IngestionConsumptionLayerFABIAPIRoleD0E9E957"
+            "Ref": "IngestionConsumptionLayerFABI09041APIRoleEE278363"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIRole/DefaultPolicy/Resource"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIRole/DefaultPolicy/Resource"
       }
     },
-    "IngestionConsumptionLayerFABIAPIC4B14A55": {
+    "IngestionConsumptionLayerFABI09041API32E48B9A": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Description": "API supporting the application FABI",
-        "Name": "fabi"
+        "Description": "API supporting the application FABI09041",
+        "Name": "fabi09041"
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPI"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041API"
       }
     },
-    "IngestionConsumptionLayerFABIGTWResponse62E7C463": {
+    "IngestionConsumptionLayerFABI09041GTWResponseFD90683B": {
       "Type": "AWS::ApiGateway::GatewayResponse",
       "Properties": {
         "ResponseType": "DEFAULT_4XX",
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "ResponseParameters": {
           "gatewayresponse.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
@@ -1890,39 +1852,39 @@
         }
       },
       "DependsOn": [
-        "IngestionConsumptionLayerFABIAPIC4B14A55"
+        "IngestionConsumptionLayerFABI09041API32E48B9A"
       ],
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIGTWResponse"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041GTWResponse"
       }
     },
-    "IngestionConsumptionLayerFABIAuthorizer8B4CBD16": {
+    "IngestionConsumptionLayerFABI09041Authorizer7CE285A0": {
       "Type": "AWS::ApiGateway::Authorizer",
       "Properties": {
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "Type": "COGNITO_USER_POOLS",
         "IdentitySource": "method.request.header.Authorization",
-        "Name": "fabiAuthorizer",
+        "Name": "fabi09041Authorizer",
         "ProviderARNs": [
           {
             "Fn::GetAtt": [
-              "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+              "SecurityLayerFABI09041SimpleUserPoolCustomResourceDDFBF15B",
               "UserPoolArn"
             ]
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAuthorizer"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041Authorizer"
       }
     },
-    "IngestionConsumptionLayerFABIAPIModelScoreboardResponseModelED4E4E4F": {
+    "IngestionConsumptionLayerFABI09041APIModelScoreboardResponseModelAD5D9888": {
       "Type": "AWS::ApiGateway::Model",
       "Properties": {
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "ContentType": "application/json",
         "Description": "Scoreboard response model (for /scoreboard/GET)",
@@ -1967,14 +1929,14 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIModelScoreboardResponseModel"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIModelScoreboardResponseModel"
       }
     },
-    "IngestionConsumptionLayerFABIAPIModelGetParametersRequest2B830050": {
+    "IngestionConsumptionLayerFABI09041APIModelGetParametersRequest437FF7C9": {
       "Type": "AWS::ApiGateway::Model",
       "Properties": {
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "ContentType": "application/json",
         "Description": "Model to request SSM:GetParameters",
@@ -1991,60 +1953,60 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIModelGetParametersRequest"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIModelGetParametersRequest"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv189AE0D2E": {
+    "IngestionConsumptionLayerFABI09041APIv1A63756C6": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
           "Fn::GetAtt": [
-            "IngestionConsumptionLayerFABIAPIC4B14A55",
+            "IngestionConsumptionLayerFABI09041API32E48B9A",
             "RootResourceId"
           ]
         },
         "PathPart": "v1",
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1sessionF122A675": {
+    "IngestionConsumptionLayerFABI09041APIv1sessionA8713989": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv189AE0D2E"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1A63756C6"
         },
         "PathPart": "session",
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1session"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1session"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1sessionGET4F5ADB7E": {
+    "IngestionConsumptionLayerFABI09041APIv1sessionGET71AA3032": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "ResourceId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv1sessionF122A675"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1sessionA8713989"
         },
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "AuthorizationType": "COGNITO_USER_POOLS",
         "AuthorizerId": {
-          "Ref": "IngestionConsumptionLayerFABIAuthorizer8B4CBD16"
+          "Ref": "IngestionConsumptionLayerFABI09041Authorizer7CE285A0"
         },
         "Integration": {
           "Credentials": {
             "Fn::GetAtt": [
-              "IngestionConsumptionLayerFABIAPIRoleD0E9E957",
+              "IngestionConsumptionLayerFABI09041APIRoleEE278363",
               "Arn"
             ]
           },
@@ -2062,7 +2024,7 @@
           ],
           "PassthroughBehavior": "WHEN_NO_MATCH",
           "RequestParameters": {
-            "integration.request.querystring.Name": "'/fabi/session'",
+            "integration.request.querystring.Name": "'/fabi09041/session'",
             "integration.request.header.Authentication": "method.request.header.Authentication"
           },
           "Type": "AWS",
@@ -2096,18 +2058,18 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1sessionGET"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1sessionGET"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1sessionOPTIONSFD9C2D6C": {
+    "IngestionConsumptionLayerFABI09041APIv1sessionOPTIONSF76D40F8": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "OPTIONS",
         "ResourceId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv1sessionF122A675"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1sessionA8713989"
         },
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -2142,39 +2104,39 @@
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1sessionOPTIONS"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1sessionOPTIONS"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1config1E278088": {
+    "IngestionConsumptionLayerFABI09041APIv1config44888B03": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv189AE0D2E"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1A63756C6"
         },
         "PathPart": "config",
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1config"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1config"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1configGET126DBE59": {
+    "IngestionConsumptionLayerFABI09041APIv1configGET73CD1354": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "ResourceId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv1config1E278088"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1config44888B03"
         },
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "AuthorizationType": "NONE",
         "Integration": {
           "Credentials": {
             "Fn::GetAtt": [
-              "IngestionConsumptionLayerFABIAPIRoleD0E9E957",
+              "IngestionConsumptionLayerFABI09041APIRoleEE278363",
               "Arn"
             ]
           },
@@ -2196,7 +2158,7 @@
             "integration.request.header.X-Amz-Target": "'AmazonSSM.GetParameters'"
           },
           "RequestTemplates": {
-            "application/json": "{\"Names\" : [\"/fabi/userpoolid\",\"/fabi/userpoolurl\",\"/fabi/clientid\",\"/fabi/identitypoolid\"]}"
+            "application/json": "{\"Names\" : [\"/fabi09041/userpoolid\",\"/fabi09041/userpoolurl\",\"/fabi09041/clientid\",\"/fabi09041/identitypoolid\"]}"
           },
           "Type": "AWS",
           "Uri": {
@@ -2225,7 +2187,7 @@
         ],
         "RequestModels": {
           "application/json": {
-            "Ref": "IngestionConsumptionLayerFABIAPIModelGetParametersRequest2B830050"
+            "Ref": "IngestionConsumptionLayerFABI09041APIModelGetParametersRequest437FF7C9"
           }
         },
         "RequestParameters": {
@@ -2234,18 +2196,18 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1configGET"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1configGET"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1configOPTIONSC6B05AFD": {
+    "IngestionConsumptionLayerFABI09041APIv1configOPTIONSAAE89927": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "OPTIONS",
         "ResourceId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv1config1E278088"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1config44888B03"
         },
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -2280,42 +2242,42 @@
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1configOPTIONS"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1configOPTIONS"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1allocate1F035DBE": {
+    "IngestionConsumptionLayerFABI09041APIv1allocate53EF0DF5": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv189AE0D2E"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1A63756C6"
         },
         "PathPart": "allocate",
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1allocate"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1allocate"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1allocatePOST164A8F4A": {
+    "IngestionConsumptionLayerFABI09041APIv1allocatePOST72C2773C": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "POST",
         "ResourceId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv1allocate1F035DBE"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1allocate53EF0DF5"
         },
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "AuthorizationType": "COGNITO_USER_POOLS",
         "AuthorizerId": {
-          "Ref": "IngestionConsumptionLayerFABIAuthorizer8B4CBD16"
+          "Ref": "IngestionConsumptionLayerFABI09041Authorizer7CE285A0"
         },
         "Integration": {
           "Credentials": {
             "Fn::GetAtt": [
-              "IngestionConsumptionLayerFABIAPIRoleD0E9E957",
+              "IngestionConsumptionLayerFABI09041APIRoleEE278363",
               "Arn"
             ]
           },
@@ -2333,7 +2295,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "ProcessingLayerFABIAllocateGamerFn051A6AC2",
+                    "ProcessingLayerFABI09041AllocateGamerFn8ECB4D5C",
                     "Arn"
                   ]
                 },
@@ -2349,18 +2311,18 @@
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1allocatePOST"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1allocatePOST"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1allocateOPTIONS66758A52": {
+    "IngestionConsumptionLayerFABI09041APIv1allocateOPTIONSDE60E216": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "OPTIONS",
         "ResourceId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv1allocate1F035DBE"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1allocate53EF0DF5"
         },
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -2395,43 +2357,43 @@
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1allocateOPTIONS"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1allocateOPTIONS"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1deallocate573554A8": {
+    "IngestionConsumptionLayerFABI09041APIv1deallocate470E2C78": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv189AE0D2E"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1A63756C6"
         },
         "PathPart": "deallocate",
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1deallocate"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1deallocate"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1deallocatePOST79E63849": {
+    "IngestionConsumptionLayerFABI09041APIv1deallocatePOST004DE8B3": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "POST",
         "ResourceId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv1deallocate573554A8"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1deallocate470E2C78"
         },
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "AuthorizationType": "COGNITO_USER_POOLS",
         "AuthorizerId": {
-          "Ref": "IngestionConsumptionLayerFABIAuthorizer8B4CBD16"
+          "Ref": "IngestionConsumptionLayerFABI09041Authorizer7CE285A0"
         },
         "Integration": {
           "ContentHandling": "CONVERT_TO_TEXT",
           "Credentials": {
             "Fn::GetAtt": [
-              "IngestionConsumptionLayerFABIAPIRoleD0E9E957",
+              "IngestionConsumptionLayerFABI09041APIRoleEE278363",
               "Arn"
             ]
           },
@@ -2448,7 +2410,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "ProcessingLayerFABIDeallocateGamerFn2669BDFA",
+                    "ProcessingLayerFABI09041DeallocateGamerFnDC2E1DD9",
                     "Arn"
                   ]
                 },
@@ -2464,18 +2426,18 @@
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1deallocatePOST"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1deallocatePOST"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1deallocateOPTIONS8D704F74": {
+    "IngestionConsumptionLayerFABI09041APIv1deallocateOPTIONSDDFF5960": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "OPTIONS",
         "ResourceId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv1deallocate573554A8"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1deallocate470E2C78"
         },
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -2510,42 +2472,42 @@
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1deallocateOPTIONS"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1deallocateOPTIONS"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1scoreboardAF4CA527": {
+    "IngestionConsumptionLayerFABI09041APIv1scoreboardD873367E": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv189AE0D2E"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1A63756C6"
         },
         "PathPart": "scoreboard",
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1scoreboard"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1scoreboard"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1scoreboardPOST66E095E2": {
+    "IngestionConsumptionLayerFABI09041APIv1scoreboardPOST2F96F482": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "ResourceId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv1scoreboardAF4CA527"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1scoreboardD873367E"
         },
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "AuthorizationType": "COGNITO_USER_POOLS",
         "AuthorizerId": {
-          "Ref": "IngestionConsumptionLayerFABIAuthorizer8B4CBD16"
+          "Ref": "IngestionConsumptionLayerFABI09041Authorizer7CE285A0"
         },
         "Integration": {
           "Credentials": {
             "Fn::GetAtt": [
-              "IngestionConsumptionLayerFABIAPIRoleD0E9E957",
+              "IngestionConsumptionLayerFABI09041APIRoleEE278363",
               "Arn"
             ]
           },
@@ -2572,7 +2534,7 @@
                 [
                   "{\n                        \"TableName\" : \"",
                   {
-                    "Ref": "DatabaseLayerFABISessionTopXD664D029"
+                    "Ref": "DatabaseLayerFABI09041SessionTopXB7FD9C38"
                   },
                   "\",\n                        \"Key\" : {\n                            \"SessionId\" : {\n                                \"S\" : \"$input.params('sessionId')\"\n                            }\n                        }\n                    }"
                 ]
@@ -2597,7 +2559,7 @@
           {
             "ResponseModels": {
               "application/json": {
-                "Ref": "IngestionConsumptionLayerFABIAPIModelScoreboardResponseModelED4E4E4F"
+                "Ref": "IngestionConsumptionLayerFABI09041APIModelScoreboardResponseModelAD5D9888"
               }
             },
             "ResponseParameters": {
@@ -2611,18 +2573,18 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1scoreboardPOST"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1scoreboardPOST"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1scoreboardOPTIONSB9AE45CC": {
+    "IngestionConsumptionLayerFABI09041APIv1scoreboardOPTIONS9D5ACB64": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "OPTIONS",
         "ResourceId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv1scoreboardAF4CA527"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1scoreboardD873367E"
         },
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -2657,42 +2619,42 @@
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1scoreboardOPTIONS"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1scoreboardOPTIONS"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1updatestatus0A69A879": {
+    "IngestionConsumptionLayerFABI09041APIv1updatestatus7E0516C0": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv189AE0D2E"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1A63756C6"
         },
         "PathPart": "updatestatus",
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1updatestatus"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1updatestatus"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1updatestatusPOST61620E3B": {
+    "IngestionConsumptionLayerFABI09041APIv1updatestatusPOSTF1FEBBD1": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "POST",
         "ResourceId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv1updatestatus0A69A879"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1updatestatus7E0516C0"
         },
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "AuthorizationType": "COGNITO_USER_POOLS",
         "AuthorizerId": {
-          "Ref": "IngestionConsumptionLayerFABIAuthorizer8B4CBD16"
+          "Ref": "IngestionConsumptionLayerFABI09041Authorizer7CE285A0"
         },
         "Integration": {
           "Credentials": {
             "Fn::GetAtt": [
-              "IngestionConsumptionLayerFABIAPIRoleD0E9E957",
+              "IngestionConsumptionLayerFABI09041APIRoleEE278363",
               "Arn"
             ]
           },
@@ -2713,7 +2675,7 @@
                 [
                   "#set($inputRoot = $input.path('$'))\n                        {\n                            \"Data\" : \"$util.base64Encode(\"$input.json('$')\")\",\n                            \"PartitionKey\" : $input.json('$.SessionId'),\n                            \"StreamName\" : \"",
                   {
-                    "Ref": "IngestionConsumptionLayerFABIInputStream2FDBC8DF"
+                    "Ref": "IngestionConsumptionLayerFABI09041InputStream58225546"
                   },
                   "\"\n                        }"
                 ]
@@ -2750,18 +2712,18 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1updatestatusPOST"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1updatestatusPOST"
       }
     },
-    "IngestionConsumptionLayerFABIAPIv1updateStatusOPTIONS70C66A51": {
+    "IngestionConsumptionLayerFABI09041APIv1updateStatusOPTIONSA1628CE4": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "OPTIONS",
         "ResourceId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIv1updatestatus0A69A879"
+          "Ref": "IngestionConsumptionLayerFABI09041APIv1updatestatus7E0516C0"
         },
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -2796,97 +2758,97 @@
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIv1updateStatusOPTIONS"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIv1updateStatusOPTIONS"
       }
     },
-    "IngestionConsumptionLayerFABIAPIDeploymentE222950F": {
+    "IngestionConsumptionLayerFABI09041APIDeployment0D60C393": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
-          "Ref": "IngestionConsumptionLayerFABIAPIC4B14A55"
+          "Ref": "IngestionConsumptionLayerFABI09041API32E48B9A"
         },
         "Description": "Production deployment",
         "StageName": "prod"
       },
       "DependsOn": [
-        "IngestionConsumptionLayerFABIAPIv1allocateOPTIONS66758A52",
-        "IngestionConsumptionLayerFABIAPIv1allocatePOST164A8F4A",
-        "IngestionConsumptionLayerFABIAPIv1configGET126DBE59",
-        "IngestionConsumptionLayerFABIAPIv1configOPTIONSC6B05AFD",
-        "IngestionConsumptionLayerFABIAPIv1deallocateOPTIONS8D704F74",
-        "IngestionConsumptionLayerFABIAPIv1deallocatePOST79E63849",
-        "IngestionConsumptionLayerFABIAPIv1scoreboardOPTIONSB9AE45CC",
-        "IngestionConsumptionLayerFABIAPIv1scoreboardPOST66E095E2",
-        "IngestionConsumptionLayerFABIAPIv1sessionGET4F5ADB7E",
-        "IngestionConsumptionLayerFABIAPIv1sessionOPTIONSFD9C2D6C",
-        "IngestionConsumptionLayerFABIAPIv1updateStatusOPTIONS70C66A51",
-        "IngestionConsumptionLayerFABIAPIv1updatestatusPOST61620E3B"
+        "IngestionConsumptionLayerFABI09041APIv1allocateOPTIONSDE60E216",
+        "IngestionConsumptionLayerFABI09041APIv1allocatePOST72C2773C",
+        "IngestionConsumptionLayerFABI09041APIv1configGET73CD1354",
+        "IngestionConsumptionLayerFABI09041APIv1configOPTIONSAAE89927",
+        "IngestionConsumptionLayerFABI09041APIv1deallocateOPTIONSDDFF5960",
+        "IngestionConsumptionLayerFABI09041APIv1deallocatePOST004DE8B3",
+        "IngestionConsumptionLayerFABI09041APIv1scoreboardOPTIONS9D5ACB64",
+        "IngestionConsumptionLayerFABI09041APIv1scoreboardPOST2F96F482",
+        "IngestionConsumptionLayerFABI09041APIv1sessionGET71AA3032",
+        "IngestionConsumptionLayerFABI09041APIv1sessionOPTIONSF76D40F8",
+        "IngestionConsumptionLayerFABI09041APIv1updateStatusOPTIONSA1628CE4",
+        "IngestionConsumptionLayerFABI09041APIv1updatestatusPOSTF1FEBBD1"
       ],
       "Metadata": {
-        "aws:cdk:path": "FABI/IngestionConsumptionLayer/FABIAPIDeployment"
+        "aws:cdk:path": "FABI09041/IngestionConsumptionLayer/FABI09041APIDeployment"
       }
     }
   },
   "Parameters": {
-    "SecurityLayerFABIPostRegistrationCodeS3Bucket310F973F": {
+    "SecurityLayerFABI09041PostRegistrationCodeS3BucketD229FB5E": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"FABI/SecurityLayer/FABIPostRegistration/Code\""
+      "Description": "S3 bucket for asset \"FABI09041/SecurityLayer/FABI09041PostRegistration/Code\""
     },
-    "SecurityLayerFABIPostRegistrationCodeS3VersionKey0C3EC15E": {
+    "SecurityLayerFABI09041PostRegistrationCodeS3VersionKey08666829": {
       "Type": "String",
-      "Description": "S3 key for asset version \"FABI/SecurityLayer/FABIPostRegistration/Code\""
+      "Description": "S3 key for asset version \"FABI09041/SecurityLayer/FABI09041PostRegistration/Code\""
     },
-    "SecurityLayerFABIPostRegistrationCodeArtifactHash311C7989": {
+    "SecurityLayerFABI09041PostRegistrationCodeArtifactHashAAC73B11": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"FABI/SecurityLayer/FABIPostRegistration/Code\""
+      "Description": "Artifact hash for asset \"FABI09041/SecurityLayer/FABI09041PostRegistration/Code\""
     },
-    "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7CodeS3BucketD9D697AE": {
+    "SingletonLambda24ab400649be3df4b03a519fdfc8b655CodeS3Bucket2299F323": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"FABI/SingletonLambdaffecfdf0de023fca939453dd21ccd1d7/Code\""
+      "Description": "S3 bucket for asset \"FABI09041/SingletonLambda24ab400649be3df4b03a519fdfc8b655/Code\""
     },
-    "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7CodeS3VersionKey7A829202": {
+    "SingletonLambda24ab400649be3df4b03a519fdfc8b655CodeS3VersionKeyDFECB5FB": {
       "Type": "String",
-      "Description": "S3 key for asset version \"FABI/SingletonLambdaffecfdf0de023fca939453dd21ccd1d7/Code\""
+      "Description": "S3 key for asset version \"FABI09041/SingletonLambda24ab400649be3df4b03a519fdfc8b655/Code\""
     },
-    "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7CodeArtifactHashC4BB3AA4": {
+    "SingletonLambda24ab400649be3df4b03a519fdfc8b655CodeArtifactHash399C492C": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"FABI/SingletonLambdaffecfdf0de023fca939453dd21ccd1d7/Code\""
+      "Description": "Artifact hash for asset \"FABI09041/SingletonLambda24ab400649be3df4b03a519fdfc8b655/Code\""
     },
-    "ProcessingLayerFABIAllocateGamerFnCodeS3BucketE4322AFD": {
+    "ProcessingLayerFABI09041AllocateGamerFnCodeS3BucketD15A6457": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"FABI/ProcessingLayer/FABIAllocateGamerFn/Code\""
+      "Description": "S3 bucket for asset \"FABI09041/ProcessingLayer/FABI09041AllocateGamerFn/Code\""
     },
-    "ProcessingLayerFABIAllocateGamerFnCodeS3VersionKey06EFDB14": {
+    "ProcessingLayerFABI09041AllocateGamerFnCodeS3VersionKeyBD9C2C65": {
       "Type": "String",
-      "Description": "S3 key for asset version \"FABI/ProcessingLayer/FABIAllocateGamerFn/Code\""
+      "Description": "S3 key for asset version \"FABI09041/ProcessingLayer/FABI09041AllocateGamerFn/Code\""
     },
-    "ProcessingLayerFABIAllocateGamerFnCodeArtifactHash97295A6A": {
+    "ProcessingLayerFABI09041AllocateGamerFnCodeArtifactHashC2CE6D64": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"FABI/ProcessingLayer/FABIAllocateGamerFn/Code\""
+      "Description": "Artifact hash for asset \"FABI09041/ProcessingLayer/FABI09041AllocateGamerFn/Code\""
     },
-    "ProcessingLayerFABIDeallocateGamerFnCodeS3Bucket83A6F60A": {
+    "ProcessingLayerFABI09041DeallocateGamerFnCodeS3Bucket597E357F": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"FABI/ProcessingLayer/FABIDeallocateGamerFn/Code\""
+      "Description": "S3 bucket for asset \"FABI09041/ProcessingLayer/FABI09041DeallocateGamerFn/Code\""
     },
-    "ProcessingLayerFABIDeallocateGamerFnCodeS3VersionKey43AA5137": {
+    "ProcessingLayerFABI09041DeallocateGamerFnCodeS3VersionKey98E97A13": {
       "Type": "String",
-      "Description": "S3 key for asset version \"FABI/ProcessingLayer/FABIDeallocateGamerFn/Code\""
+      "Description": "S3 key for asset version \"FABI09041/ProcessingLayer/FABI09041DeallocateGamerFn/Code\""
     },
-    "ProcessingLayerFABIDeallocateGamerFnCodeArtifactHashE79D6298": {
+    "ProcessingLayerFABI09041DeallocateGamerFnCodeArtifactHash9FAAAD19": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"FABI/ProcessingLayer/FABIDeallocateGamerFn/Code\""
+      "Description": "Artifact hash for asset \"FABI09041/ProcessingLayer/FABI09041DeallocateGamerFn/Code\""
     },
-    "ProcessingLayerFABIScoreboardFnCodeS3Bucket45C2012D": {
+    "ProcessingLayerFABI09041ScoreboardFnCodeS3Bucket4A6A82AB": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"FABI/ProcessingLayer/FABIScoreboardFn/Code\""
+      "Description": "S3 bucket for asset \"FABI09041/ProcessingLayer/FABI09041ScoreboardFn/Code\""
     },
-    "ProcessingLayerFABIScoreboardFnCodeS3VersionKeyD183FFE3": {
+    "ProcessingLayerFABI09041ScoreboardFnCodeS3VersionKey97907CD3": {
       "Type": "String",
-      "Description": "S3 key for asset version \"FABI/ProcessingLayer/FABIScoreboardFn/Code\""
+      "Description": "S3 key for asset version \"FABI09041/ProcessingLayer/FABI09041ScoreboardFn/Code\""
     },
-    "ProcessingLayerFABIScoreboardFnCodeArtifactHash3377770E": {
+    "ProcessingLayerFABI09041ScoreboardFnCodeArtifactHashA622A9D6": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"FABI/ProcessingLayer/FABIScoreboardFn/Code\""
+      "Description": "Artifact hash for asset \"FABI09041/ProcessingLayer/FABI09041ScoreboardFn/Code\""
     }
   }
 }

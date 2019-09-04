@@ -57,23 +57,22 @@ export class MainLayer extends ResourceAwareStack  {
 
 
     // database layer
-    /*--
     let databaseLayer =
       new DatabaseLayer(this, 'DatabaseLayer', this.properties);
-    --*/
+    
 
     // processing layer
-    //*--let processingLayerProps = new ParameterAwareProps(this.properties);
+    let processingLayerProps = new ParameterAwareProps(this.properties);
     // MISSING PARAMETER - side effect - uncomment the next line
       //processingLayerProps.addParameter('parameter.session', configLayer.getResource('parameter.session'));
-   /*--
+   
       processingLayerProps.addParameter('table.sessionControl', databaseLayer.getResource('table.sessionControl'));
       processingLayerProps.addParameter('table.sessionTopX', databaseLayer.getResource('table.sessionTopX'));
       processingLayerProps.addParameter('table.session', databaseLayer.getResource('table.session'));
     let processingLayer = new ProcessingLayer(this, 'ProcessingLayer', processingLayerProps);
-   --*/
+   
     // Ingestion/consumption layer
-    /*--
+    
     let ingestionConsumptionLayerProps = new ParameterAwareProps(processingLayerProps);
     ingestionConsumptionLayerProps.addParameter('rawbucketarn', storageLayer.getRawDataBucketArn());
     ingestionConsumptionLayerProps.addParameter('userpool',securityLayer.getUserPoolArn());
@@ -86,6 +85,6 @@ export class MainLayer extends ResourceAwareStack  {
     ingestionConsumptionLayerProps.addParameter('security.playersrole', securityLayer.getResource('security.playersrole'));
     ingestionConsumptionLayerProps.addParameter('security.managersrole', securityLayer.getResource('security.managersrole'));
     new IngestionConsumptionLayer(this, 'IngestionConsumptionLayer',ingestionConsumptionLayerProps); 
-    --*/
+    
   }
 }

@@ -87,7 +87,7 @@ export class ProcessingLayer extends ResourceAwareConstruct {
                                 new IAM.PolicyDocument({
                                     statements : [
                                         new IAM.PolicyStatement({
-                                            resources : [  "sessionControlTable.tableArn" ]
+                                            resources : [  sessionControlTable.tableArn ]
                                             ,actions : [
                                                 "dynamodb:GetItem",
                                                 "dynamodb:UpdateItem",
