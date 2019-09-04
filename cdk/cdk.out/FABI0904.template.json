@@ -1012,48 +1012,47 @@
         "aws:cdk:path": "FABI0904/ConfigurationLayer/SSMParameterFABI0904IdentityPoolId"
       }
     },
-    "StorageStoragefabi0904app9706AEDA": {
-      "Type": "AWS::S3::Bucket",
+    "StorageStorageFABI0904CDNAccessIdCFF4D338": {
+      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
       "Properties": {
-        "BucketName": "fabi0904.app",
-        "CorsConfiguration": {
-          "CorsRules": [
-            {
-              "AllowedHeaders": [
-                "*"
-              ],
-              "AllowedMethods": [
-                "GET",
-                "PUT",
-                "DELETE",
-                "POST"
-              ],
-              "AllowedOrigins": [
-                "*"
-              ]
-            }
-          ]
-        },
-        "WebsiteConfiguration": {
-          "ErrorDocument": "error.html",
-          "IndexDocument": "index.html"
+        "CloudFrontOriginAccessIdentityConfig": {
+          "Comment": "FABI0904CDNAccessId"
         }
       },
-      "UpdateReplacePolicy": "Delete",
-      "DeletionPolicy": "Delete",
       "Metadata": {
-        "aws:cdk:path": "FABI0904/StorageStorage/fabi0904.app/Resource"
+        "aws:cdk:path": "FABI0904/StorageStorage/FABI0904CDNAccessId"
       }
     },
-    "StorageStoragefabi0904rawC513211C": {
-      "Type": "AWS::S3::Bucket",
+    "StorageStorageFABI0904AppBucketPolicyF22E894C": {
+      "Type": "AWS::S3::BucketPolicy",
       "Properties": {
-        "BucketName": "fabi0904.raw"
+        "Bucket": "fabi0904.app",
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ",
+                      {
+                        "Ref": "StorageStorageFABI0904CDNAccessIdCFF4D338"
+                      }
+                    ]
+                  ]
+                }
+              },
+              "Resource": "arn:aws:s3:::fabi0904.app/*"
+            }
+          ],
+          "Version": "2012-10-17"
+        }
       },
-      "UpdateReplacePolicy": "Delete",
-      "DeletionPolicy": "Delete",
       "Metadata": {
-        "aws:cdk:path": "FABI0904/StorageStorage/fabi0904.raw/Resource"
+        "aws:cdk:path": "FABI0904/StorageStorage/FABI0904AppBucketPolicy/Resource"
       }
     },
     "DatabaseLayerFABI0904Session72107F4C": {

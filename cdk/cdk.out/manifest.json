@@ -537,15 +537,13 @@
             ]
           }
         ],
-        "/FABI0904/StorageStorage/fabi0904.app/Resource": [
+        "/FABI0904/StorageStorage/FABI0904CDNAccessId": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "StorageStoragefabi0904app9706AEDA",
+            "data": "StorageStorageFABI0904CDNAccessIdCFF4D338",
             "trace": [
-              "new Bucket (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/node_modules/@aws-cdk/aws-s3/lib/bucket.js:342:26)",
-              "StorageLayer.createBucket (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/lib/layer/storageLayer.js:65:26)",
-              "StorageLayer.createBuckets (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/lib/layer/storageLayer.js:86:30)",
-              "new StorageLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/lib/layer/storageLayer.js:13:14)",
+              "StorageLayer.createBuckets (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/lib/layer/storageLayer.js:101:40)",
+              "new StorageLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/lib/layer/storageLayer.js:15:14)",
               "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/lib/layer/mainLayer.js:36:28)",
               "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/lib/layer/mainLayer.js:16:14)",
               "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/bin/cdk.js:22:5)",
@@ -553,15 +551,14 @@
             ]
           }
         ],
-        "/FABI0904/StorageStorage/fabi0904.raw/Resource": [
+        "/FABI0904/StorageStorage/FABI0904AppBucketPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "StorageStoragefabi0904rawC513211C",
+            "data": "StorageStorageFABI0904AppBucketPolicyF22E894C",
             "trace": [
-              "new Bucket (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/node_modules/@aws-cdk/aws-s3/lib/bucket.js:342:26)",
-              "StorageLayer.createBucket (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/lib/layer/storageLayer.js:78:26)",
-              "StorageLayer.createBuckets (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/lib/layer/storageLayer.js:93:34)",
-              "new StorageLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/lib/layer/storageLayer.js:13:14)",
+              "new BucketPolicy (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/node_modules/@aws-cdk/aws-s3/lib/bucket-policy.js:21:9)",
+              "StorageLayer.createBuckets (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/lib/layer/storageLayer.js:107:28)",
+              "new StorageLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/lib/layer/storageLayer.js:15:14)",
               "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/lib/layer/mainLayer.js:36:28)",
               "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/lib/layer/mainLayer.js:16:14)",
               "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop.fixed/cdk/bin/cdk.js:22:5)",
@@ -1403,6 +1400,7 @@
       "@aws-cdk/aws-events": "1.6.1",
       "@aws-cdk/aws-cognito": "1.6.1",
       "@aws-cdk/aws-cloudformation": "1.6.1",
+      "@aws-cdk/aws-cloudfront": "1.6.1",
       "@aws-cdk/aws-dynamodb": "1.6.1",
       "@aws-cdk/aws-applicationautoscaling": "1.6.1",
       "@aws-cdk/aws-autoscaling-common": "1.6.1",

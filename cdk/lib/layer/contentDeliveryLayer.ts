@@ -15,7 +15,7 @@ export class ContentDeliveryLayer extends ResourceAwareConstruct {
     private createDistribution(props: IParameterAwareProps) {
 
         let s3BucketOrCnfBucket = props.getParameter('appBucket');
-        let s3Bucket = <Bucket> Bucket.fromBucketName(this, props.getApplicationName()+'ImportedBucket', s3BucketOrCnfBucket.bucketName);
+        let appBucket = <Bucket> Bucket.fromBucketName(this, props.getApplicationName()+'ImportedBucket', s3BucketOrCnfBucket.bucketName);
         
         let cloudFrontAccessIdentity = new CfnCloudFrontOriginAccessIdentity(this,this.properties.getApplicationName()+'CDNAccessId', {
             cloudFrontOriginAccessIdentityConfig : {
@@ -25,12 +25,12 @@ export class ContentDeliveryLayer extends ResourceAwareConstruct {
         })
 
         let bucketPolicy = new BucketPolicy(this, this.properties.getApplicationName()+"AppBucketPolicy", {
-            bucket : s3Bucket
+            bucket : appBucket
         });
         
         bucketPolicy.document.addStatements(
             new PolicyStatement({
-                resources : [  s3Bucket.bucketArn+'/*' ],
+                resources : [  appBucket.bucketArn+'/*' ],
                 actions : [ 's3:GetObject' ],
                 principals : [
                     new ArnPrincipal('arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity '+cloudFrontAccessIdentity.ref) //cloudFrontAccessIdentity.cloudFrontOriginAccessIdentityConfig)
@@ -38,11 +38,13 @@ export class ContentDeliveryLayer extends ResourceAwareConstruct {
             })
         );
 
+
+
         new CloudFrontWebDistribution(this, props.getApplicationName(), {
             originConfigs: [
                 {
                     s3OriginSource: {
-                         s3BucketSource: s3Bucket
+                         s3BucketSource: appBucket
                     },
                     behaviors : [ {isDefaultBehavior: true}]
                 }
