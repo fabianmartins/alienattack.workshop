@@ -1,7 +1,7 @@
 import { Construct, Duration } from '@aws-cdk/core';
 import { ResourceAwareConstruct, IParameterAwareProps } from './../resourceawarestack'
 import { Function, SingletonFunction, Code, Runtime, CfnPermission } from '@aws-cdk/aws-lambda'
-import { Role, Effect, PolicyStatement, FederatedPrincipal, ServicePrincipal, PolicyDocument, Policy } from '@aws-cdk/aws-iam';
+import { Role, Effect, PolicyStatement, FederatedPrincipal, ServicePrincipal, Policy } from '@aws-cdk/aws-iam';
 
 import Cognito = require('@aws-cdk/aws-cognito');
 import Cfn = require('@aws-cdk/aws-cloudformation');
@@ -50,8 +50,12 @@ export class SecurityLayer extends ResourceAwareConstruct {
         return this.userPoolClient;
     }
 
-    getUserPoolClientId() {
-        return this.userPoolClient.clientName;
+    getUserPoolClientId() : string {
+        let id = this.userPoolClient.clientName;
+        let result : string | undefined = undefined;
+        if (!id) result = "";
+        else result = id;
+        return result;
     }
 
     getIdentityPool() {

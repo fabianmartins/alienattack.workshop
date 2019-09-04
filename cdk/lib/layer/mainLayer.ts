@@ -26,6 +26,7 @@ export class MainLayer extends ResourceAwareStack  {
       new SecurityLayer(this, 'SecurityLayer', this.properties);
     
     // configuration layer
+    
     let configLayerProps = new ParameterAwareProps(this.properties);
     
     let ssmProperties = new Map<string,string>();
@@ -34,17 +35,17 @@ export class MainLayer extends ResourceAwareStack  {
     ssmProperties.set("UserpoolId", securityLayer.getUserPoolId());
     ssmProperties.set("UserPoolURL", securityLayer.getUserPoolUrl());
     ssmProperties.set("IdentityPoolId", securityLayer.getIdentityPoolId());
+    
     // MISSING PARAMETER - Uncomment the next line to create the parameter
     // ssmProperties.set("Session", "null");
     configLayerProps.addParameter('ssmParameters',ssmProperties);
     // MISSING PARAMETER  - side effect - uncomment the next line to fix it
    // let configLayer =
-      new ConfigurationLayer(this, 'ConfigurationLayer', configLayerProps);
+       new ConfigurationLayer(this, 'ConfigurationLayer', configLayerProps);
 
     // storage layer
     let storageLayer =
       new StorageLayer(this, 'StorageStorage', this.properties);
-
 
     // MISSING CLOUDFRONT DISTRIBUTION 
     // Uncomment the following section if you want to deploy your Cloudfront distribution. It takes 20 mminutes
@@ -56,19 +57,23 @@ export class MainLayer extends ResourceAwareStack  {
 
 
     // database layer
+    /*--
     let databaseLayer =
       new DatabaseLayer(this, 'DatabaseLayer', this.properties);
-    
+    --*/
+
     // processing layer
-    let processingLayerProps = new ParameterAwareProps(this.properties);
+    //*--let processingLayerProps = new ParameterAwareProps(this.properties);
     // MISSING PARAMETER - side effect - uncomment the next line
       //processingLayerProps.addParameter('parameter.session', configLayer.getResource('parameter.session'));
+   /*--
       processingLayerProps.addParameter('table.sessionControl', databaseLayer.getResource('table.sessionControl'));
       processingLayerProps.addParameter('table.sessionTopX', databaseLayer.getResource('table.sessionTopX'));
       processingLayerProps.addParameter('table.session', databaseLayer.getResource('table.session'));
     let processingLayer = new ProcessingLayer(this, 'ProcessingLayer', processingLayerProps);
-
+   --*/
     // Ingestion/consumption layer
+    /*--
     let ingestionConsumptionLayerProps = new ParameterAwareProps(processingLayerProps);
     ingestionConsumptionLayerProps.addParameter('rawbucketarn', storageLayer.getRawDataBucketArn());
     ingestionConsumptionLayerProps.addParameter('userpool',securityLayer.getUserPoolArn());
@@ -81,5 +86,6 @@ export class MainLayer extends ResourceAwareStack  {
     ingestionConsumptionLayerProps.addParameter('security.playersrole', securityLayer.getResource('security.playersrole'));
     ingestionConsumptionLayerProps.addParameter('security.managersrole', securityLayer.getResource('security.managersrole'));
     new IngestionConsumptionLayer(this, 'IngestionConsumptionLayer',ingestionConsumptionLayerProps); 
+    --*/
   }
 }

@@ -1,0 +1,773 @@
+{
+  "Resources": {
+    "SecurityLayerFABIPostRegistrationFnRole072B32A0": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        ],
+        "RoleName": "FABIPostRegistrationFn_Role"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/SecurityLayer/FABIPostRegistrationFn_Role/Resource"
+      }
+    },
+    "SecurityLayerFABIPostRegistrationD6000456": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "SecurityLayerFABIPostRegistrationCodeS3Bucket310F973F"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "SecurityLayerFABIPostRegistrationCodeS3VersionKey0C3EC15E"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "SecurityLayerFABIPostRegistrationCodeS3VersionKey0C3EC15E"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABIPostRegistrationFnRole072B32A0",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs10.x",
+        "Description": "This function adds an user to the Players group after confirmation",
+        "FunctionName": "FABIPostRegistrationFn",
+        "MemorySize": 128,
+        "Timeout": 60
+      },
+      "DependsOn": [
+        "SecurityLayerFABIPostRegistrationFnRole072B32A0"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "FABI/SecurityLayer/FABIPostRegistration/Resource",
+        "aws:asset:path": "asset.e6f369750e57d23358dd07d1e3121aae813f75525f4f45d3a915307bef8cc81a",
+        "aws:asset:property": "Code"
+      }
+    },
+    "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6": {
+      "Type": "AWS::CloudFormation::CustomResource",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7EADB0E47",
+            "Arn"
+          ]
+        },
+        "AppName": "FABI",
+        "UserPoolName": "FABI",
+        "PostConfirmationLambdaArn": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABIPostRegistrationD6000456",
+            "Arn"
+          ]
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "FABI/SecurityLayer/FABISimpleUserPoolCustomResource/Default"
+      }
+    },
+    "SecurityLayerFABIUserPoolPerm527B8576": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:invokeFunction",
+        "FunctionName": {
+          "Ref": "SecurityLayerFABIPostRegistrationD6000456"
+        },
+        "Principal": "cognito-idp.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+            "UserPoolArn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/SecurityLayer/FABIUserPoolPerm"
+      }
+    },
+    "SecurityLayerFABITriggerFunctionPolicy3E331AE0": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "cognito-idp:AdminAddUserToGroup",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+                  "UserPoolArn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "AllowAddUserToGroup",
+        "Roles": [
+          {
+            "Ref": "SecurityLayerFABIPostRegistrationFnRole072B32A0"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/SecurityLayer/FABITriggerFunctionPolicy/Resource"
+      }
+    },
+    "SecurityLayerFABIApp5F21811D": {
+      "Type": "AWS::Cognito::UserPoolClient",
+      "Properties": {
+        "UserPoolId": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+            "UserPoolId"
+          ]
+        },
+        "ClientName": "FABIWebsite",
+        "ExplicitAuthFlows": [
+          "USER_PASSWORD_AUTH"
+        ],
+        "GenerateSecret": false
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/SecurityLayer/FABIApp"
+      }
+    },
+    "SecurityLayerFABIIdentityPoolE9F27BD7": {
+      "Type": "AWS::Cognito::IdentityPool",
+      "Properties": {
+        "AllowUnauthenticatedIdentities": false,
+        "CognitoIdentityProviders": [
+          {
+            "ClientId": "FABIWebsite",
+            "ProviderName": {
+              "Fn::GetAtt": [
+                "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+                "UserPoolProviderName"
+              ]
+            },
+            "ServerSideTokenCheck": false
+          }
+        ],
+        "IdentityPoolName": "FABI"
+      },
+      "DependsOn": [
+        "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "FABI/SecurityLayer/FABIIdentityPool"
+      }
+    },
+    "SecurityLayerFABIPlayersRole33BCCBB2": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "StringEquals": {
+                  "cognito-identity.amazonaws.com:aud": "SecurityLayerFABIIdentityPoolE9F27BD7"
+                },
+                "ForAnyValue:StringLike": {
+                  "cognito-identity.amazonaws.com:amr": "authenticated"
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "cognito-identity.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "RoleName": "FABIPlayersRole"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/SecurityLayer/FABIPlayersRole/Resource"
+      }
+    },
+    "SecurityLayerFABIPlayersRoleDefaultPolicy5649E7E2": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "mobileanalytics:PutEvents",
+                "cognito-sync:*",
+                "cognito-identity:*"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SecurityLayerFABIPlayersRoleDefaultPolicy5649E7E2",
+        "Roles": [
+          {
+            "Ref": "SecurityLayerFABIPlayersRole33BCCBB2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/SecurityLayer/FABIPlayersRole/DefaultPolicy/Resource"
+      }
+    },
+    "SecurityLayerFABIPlayers2881945C": {
+      "Type": "AWS::Cognito::UserPoolGroup",
+      "Properties": {
+        "UserPoolId": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+            "UserPoolId"
+          ]
+        },
+        "Description": "Players of the game.",
+        "GroupName": "Players",
+        "Precedence": 9999,
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABIPlayersRole33BCCBB2",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/SecurityLayer/FABIPlayers"
+      }
+    },
+    "SecurityLayerFABIManagersRoleF7BC6F01": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "StringEquals": {
+                  "cognito-identity.amazonaws.com:aud": "SecurityLayerFABIIdentityPoolE9F27BD7"
+                },
+                "ForAnyValue:StringLike": {
+                  "cognito-identity.amazonaws.com:amr": "authenticated"
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "cognito-identity.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/AmazonCognitoPowerUser"
+        ],
+        "RoleName": "FABIManagersRole"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/SecurityLayer/FABIManagersRole/Resource"
+      }
+    },
+    "SecurityLayerFABIManagersRoleDefaultPolicy0D8870B4": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "mobileanalytics:PutEvents",
+                "cognito-sync:*",
+                "cognito-identity:*"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SecurityLayerFABIManagersRoleDefaultPolicy0D8870B4",
+        "Roles": [
+          {
+            "Ref": "SecurityLayerFABIManagersRoleF7BC6F01"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/SecurityLayer/FABIManagersRole/DefaultPolicy/Resource"
+      }
+    },
+    "SecurityLayerFABIManagersFBC88EB8": {
+      "Type": "AWS::Cognito::UserPoolGroup",
+      "Properties": {
+        "UserPoolId": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+            "UserPoolId"
+          ]
+        },
+        "Description": "Managers of the game.",
+        "GroupName": "Managers",
+        "Precedence": 0,
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABIManagersRoleF7BC6F01",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/SecurityLayer/FABIManagers"
+      }
+    },
+    "SecurityLayerFABIUnauthRole9158B024": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "StringEquals": {
+                  "cognito-identity.amazonaws.com:aud": "SecurityLayerFABIIdentityPoolE9F27BD7"
+                },
+                "ForAnyValue:StringLike": {
+                  "cognito-identity.amazonaws.com:amr": "unauthenticated"
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "cognito-identity.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "RoleName": "FABIUnauthRole"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/SecurityLayer/FABIUnauthRole/Resource"
+      }
+    },
+    "SecurityLayerFABIUnauthRoleDefaultPolicy7871C67E": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "mobileanalytics:PutEvents",
+                "cognito-sync:*",
+                "cognito-identity:*"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SecurityLayerFABIUnauthRoleDefaultPolicy7871C67E",
+        "Roles": [
+          {
+            "Ref": "SecurityLayerFABIUnauthRole9158B024"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/SecurityLayer/FABIUnauthRole/DefaultPolicy/Resource"
+      }
+    },
+    "SecurityLayerFABIIDPRoles25076101": {
+      "Type": "AWS::Cognito::IdentityPoolRoleAttachment",
+      "Properties": {
+        "IdentityPoolId": "SecurityLayerFABIIdentityPoolE9F27BD7",
+        "Roles": {
+          "authenticated": {
+            "Fn::GetAtt": [
+              "SecurityLayerFABIPlayersRole33BCCBB2",
+              "Arn"
+            ]
+          },
+          "unauthenticated": {
+            "Fn::GetAtt": [
+              "SecurityLayerFABIUnauthRole9158B024",
+              "Arn"
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/SecurityLayer/FABIIDPRoles"
+      }
+    },
+    "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7ServiceRole12CB95C7": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/SingletonLambdaffecfdf0de023fca939453dd21ccd1d7/ServiceRole/Resource"
+      }
+    },
+    "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7ServiceRoleDefaultPolicyE0BBD1DA": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "cognito-idp:DeleteUserPool",
+                "cognito-idp:CreateUserPool",
+                "cognito-idp:UpdateUserPool",
+                "cognito-idp:CreateUserPoolDomain",
+                "cognito-idp:DeleteUserPoolDomain"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7ServiceRoleDefaultPolicyE0BBD1DA",
+        "Roles": [
+          {
+            "Ref": "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7ServiceRole12CB95C7"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/SingletonLambdaffecfdf0de023fca939453dd21ccd1d7/ServiceRole/DefaultPolicy/Resource"
+      }
+    },
+    "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7EADB0E47": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7CodeS3BucketD9D697AE"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7CodeS3VersionKey7A829202"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7CodeS3VersionKey7A829202"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7ServiceRole12CB95C7",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs10.x",
+        "Description": "Generates the UserPool using configuration not available on CDK",
+        "Timeout": 300
+      },
+      "DependsOn": [
+        "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7ServiceRoleDefaultPolicyE0BBD1DA",
+        "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7ServiceRole12CB95C7"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "FABI/SingletonLambdaffecfdf0de023fca939453dd21ccd1d7/Resource",
+        "aws:asset:path": "asset.b095b505c175f6aa6f0e9d92bbb8ff729cbcc525842abea1b87a75aab0cf6e94",
+        "aws:asset:property": "Code"
+      }
+    },
+    "ConfigurationLayerSSMParameterFABIRegion0039AB7A": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Type": "String",
+        "Value": {
+          "Ref": "AWS::Region"
+        },
+        "Name": "/fabi/region"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/ConfigurationLayer/SSMParameterFABIRegion"
+      }
+    },
+    "ConfigurationLayerSSMParameterFABIClientId17E39155": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Type": "String",
+        "Value": "FABIWebsite",
+        "Name": "/fabi/clientid"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/ConfigurationLayer/SSMParameterFABIClientId"
+      }
+    },
+    "ConfigurationLayerSSMParameterFABIUserpoolIdF889A50A": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+            "UserPoolId"
+          ]
+        },
+        "Name": "/fabi/userpoolid"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/ConfigurationLayer/SSMParameterFABIUserpoolId"
+      }
+    },
+    "ConfigurationLayerSSMParameterFABIUserPoolURL9A281475": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Type": "String",
+        "Value": {
+          "Fn::Join": [
+            "",
+            [
+              "cognito-idp.",
+              {
+                "Ref": "AWS::Region"
+              },
+              ".amazonaws.com/",
+              {
+                "Fn::GetAtt": [
+                  "SecurityLayerFABISimpleUserPoolCustomResource7C3341B6",
+                  "UserPoolId"
+                ]
+              }
+            ]
+          ]
+        },
+        "Name": "/fabi/userpoolurl"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/ConfigurationLayer/SSMParameterFABIUserPoolURL"
+      }
+    },
+    "ConfigurationLayerSSMParameterFABIIdentityPoolId77ACAEAB": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Type": "String",
+        "Value": "SecurityLayerFABIIdentityPoolE9F27BD7",
+        "Name": "/fabi/identitypoolid"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/ConfigurationLayer/SSMParameterFABIIdentityPoolId"
+      }
+    },
+    "StorageStoragefabiappA6DACD14": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "fabi.app",
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*"
+              ],
+              "AllowedMethods": [
+                "GET",
+                "PUT",
+                "DELETE",
+                "POST"
+              ],
+              "AllowedOrigins": [
+                "*"
+              ]
+            }
+          ]
+        },
+        "WebsiteConfiguration": {
+          "ErrorDocument": "error.html",
+          "IndexDocument": "index.html"
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "FABI/StorageStorage/fabi.app/Resource"
+      }
+    },
+    "StorageStorageFABICDNAccessId3561FAAC": {
+      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+      "Properties": {
+        "CloudFrontOriginAccessIdentityConfig": {
+          "Comment": "FABICDNAccessId"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/StorageStorage/FABICDNAccessId"
+      }
+    },
+    "StorageStorageFABIAppBucketPolicy951C5884": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "StorageStoragefabiappA6DACD14"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity [object Object]"
+              },
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "StorageStoragefabiappA6DACD14",
+                        "Arn"
+                      ]
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI/StorageStorage/FABIAppBucketPolicy/Resource"
+      }
+    },
+    "StorageStoragefabirawEDEC63C4": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "fabi.raw"
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "FABI/StorageStorage/fabi.raw/Resource"
+      }
+    }
+  },
+  "Parameters": {
+    "SecurityLayerFABIPostRegistrationCodeS3Bucket310F973F": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"FABI/SecurityLayer/FABIPostRegistration/Code\""
+    },
+    "SecurityLayerFABIPostRegistrationCodeS3VersionKey0C3EC15E": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"FABI/SecurityLayer/FABIPostRegistration/Code\""
+    },
+    "SecurityLayerFABIPostRegistrationCodeArtifactHash311C7989": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"FABI/SecurityLayer/FABIPostRegistration/Code\""
+    },
+    "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7CodeS3BucketD9D697AE": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"FABI/SingletonLambdaffecfdf0de023fca939453dd21ccd1d7/Code\""
+    },
+    "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7CodeS3VersionKey7A829202": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"FABI/SingletonLambdaffecfdf0de023fca939453dd21ccd1d7/Code\""
+    },
+    "SingletonLambdaffecfdf0de023fca939453dd21ccd1d7CodeArtifactHashC4BB3AA4": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"FABI/SingletonLambdaffecfdf0de023fca939453dd21ccd1d7/Code\""
+    }
+  }
+}

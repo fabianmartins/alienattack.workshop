@@ -1,8 +1,8 @@
 import { Construct, RemovalPolicy } from '@aws-cdk/core';
 import { ResourceAwareConstruct, IParameterAwareProps } from './../resourceawarestack'
-import { IBucket, CfnBucketPolicy, Bucket, BucketProps, HttpMethods } from '@aws-cdk/aws-s3';
+import { IBucket, BucketPolicy, Bucket, BucketProps, HttpMethods } from '@aws-cdk/aws-s3';
 import { CfnCloudFrontOriginAccessIdentity } from '@aws-cdk/aws-cloudfront';
-import { PolicyStatement, PolicyDocument, Effect } from '@aws-cdk/aws-iam';
+import { PolicyStatement, ArnPrincipal } from '@aws-cdk/aws-iam';
 
 
 interface IBucketCreationProps {
@@ -30,9 +30,10 @@ export class StorageLayer extends ResourceAwareConstruct {
     private createBucket(props: IBucketCreationProps) : IBucket {
         let bucket : IBucket;
         if (props.alreadyExists) {
-            //console.log('>>> IMPORTING BUCKET:',props.bucketName);
+            console.log('>>> IMPORTING BUCKET:',props.bucketName);
             bucket = Bucket.fromBucketArn(this, props.bucketName,'arn:aws:s3:::'+props.bucketName);      
         } else {
+            console.log('>>> CREATING BUCKET:',props.bucketName);
             var bucketProperties : BucketProps;
             if (props.isWeb) {
                 if (props.retain)
@@ -55,26 +56,25 @@ export class StorageLayer extends ResourceAwareConstruct {
                        ,removalPolicy : RemovalPolicy.RETAIN
                     }                    
                 else 
-                bucketProperties  = {
-                    bucketName : props.bucketName
-                   ,cors : [
-                       {
-                           allowedHeaders : ["*"]
-                           ,allowedMethods : [
-                               HttpMethods.GET,
-                               HttpMethods.PUT,
-                               HttpMethods.DELETE,
-                               HttpMethods.POST
-                           ] 
-                           ,allowedOrigins : ["*"]
-                       }
-                   ]
-                   ,websiteIndexDocument : 'index.html'
-                   ,websiteErrorDocument : 'error.html'
-                }  
+                    bucketProperties  = {
+                        bucketName : props.bucketName
+                        ,cors : [
+                            {
+                                allowedHeaders : ["*"]
+                                ,allowedMethods : [
+                                    HttpMethods.GET,
+                                    HttpMethods.PUT,
+                                    HttpMethods.DELETE,
+                                    HttpMethods.POST
+                                ] 
+                                ,allowedOrigins : ["*"]
+                            }
+                        ]
+                        ,websiteIndexDocument : 'index.html'
+                        ,websiteErrorDocument : 'error.html'
+                    };
                 bucket = new Bucket(this, props.bucketName, bucketProperties );
             } else {
-                //console.log('>>> CREATING BUCKET:',props.bucketName); 
                 if (props.retain) 
                     bucketProperties =  {
                          bucketName : props.bucketName
@@ -83,7 +83,7 @@ export class StorageLayer extends ResourceAwareConstruct {
                 else 
                 bucketProperties =  {
                     bucketName : props.bucketName
-                };
+                };     
                 bucket = new Bucket(this,props.bucketName,bucketProperties);
             }
         }
@@ -109,16 +109,19 @@ export class StorageLayer extends ResourceAwareConstruct {
             }
         })
 
-        let policyStatement = new PolicyStatement({
-            effect : Effect.ALLOW
+        let bucketPolicy = new BucketPolicy(this, this.properties.getApplicationName()+"AppBucketPolicy", {
+            bucket : appBucket
         });
-        policyStatement.addActions('s3:GetObject');
-        policyStatement.addResources(appBucket.bucketArn+'/*');
-        policyStatement.addArnPrincipal('arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity '+cloudFrontAccessIdentity.cloudFrontOriginAccessIdentityConfig);
-        new CfnBucketPolicy(this,this.properties.getApplicationName()+"AppBucketPolicy", {
-            bucket : appBucket.bucketName
-           ,policyDocument : new PolicyDocument().addStatements(policyStatement)
-        });
+        bucketPolicy.document.addStatements(
+            new PolicyStatement({
+                resources : [  appBucket.bucketArn+'/*' ],
+                actions : [ 's3:GetObject' ],
+                principals : [
+                    new ArnPrincipal('arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity '+cloudFrontAccessIdentity.cloudFrontOriginAccessIdentityConfig)
+                ]
+            })
+        );
+
         let rawDataBucket = this.createBucket({
              bucketName : rawDataBucketName
             ,alreadyExists : this.properties.getParameter('existingbuckets').includes(rawDataBucketName)

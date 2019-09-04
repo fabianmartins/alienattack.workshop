@@ -1,4 +1,4 @@
-import { Construct } from '@aws-cdk/core';
+import { Construct, Duration } from '@aws-cdk/core';
 import { ResourceAwareConstruct, IParameterAwareProps } from './../resourceawarestack'
 
 import Lambda = require('@aws-cdk/aws-lambda');
@@ -8,7 +8,7 @@ import SQS = require('@aws-cdk/aws-sqs');
 // MISSING PARAMETER  - side effect - uncomment the next line to fix it
 // import { CfnParameter } from '@aws-cdk/aws-ssm';
 import { Table } from '@aws-cdk/aws-dynamodb';
-import { Effect } from '@aws-cdk/aws-iam';
+import { ManagedPolicy } from '@aws-cdk/aws-iam';
 
 const path = require('path');
 
@@ -67,7 +67,7 @@ export class ProcessingLayer extends ResourceAwareConstruct {
         if (sessionParameter && sessionControlTable) {
             let createdFunction: Lambda.Function =
                 new Lambda.Function(this, this.properties.getApplicationName() + 'AllocateGamerFn', {
-                    runtime: Lambda.Runtime.NodeJS810,
+                    runtime: Lambda.Runtime.NODEJS_8_10,
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation,'allocateGamer')),
                     environment: {
@@ -77,33 +77,39 @@ export class ProcessingLayer extends ResourceAwareConstruct {
                     , functionName: this.properties.getApplicationName() + 'AllocateGamerFn'
                     , description: 'This function supports the allocation of gamers when the game is to start'
                     , memorySize: 128
-                    , timeout: 60
+                    , timeout: Duration.seconds(60)
                     , role: new IAM.Role(this, this.properties.getApplicationName() + 'AllocateGamerFn_Role', {
                         roleName: this.properties.getApplicationName() + 'AllocateGamerFn_Role'
                         , assumedBy: new IAM.ServicePrincipal('lambda.amazonaws.com')
-                        , managedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole']
+                        , managedPolicies : [ ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole') ]
                         , inlinePolicies: {
-                            'DynamoDBPermissions':
-                                new IAM.PolicyDocument().addStatement(
-                                    new IAM.PolicyStatement()
-                                        .allow()
-                                        .addResource(sessionControlTable.tableArn)
-                                        .addAction('dynamodb:GetItem')
-                                        .addAction('dynamodb:UpdateItem')
-                                        .addAction('dynamodb:Scan')
-                                        .addAction('dynamodb:Query')
-                                ),
+                            'DynamoDBPermissions' :
+                                new IAM.PolicyDocument({
+                                    statements : [
+                                        new IAM.PolicyStatement({
+                                            resources : [  "sessionControlTable.tableArn" ]
+                                            ,actions : [
+                                                "dynamodb:GetItem",
+                                                "dynamodb:UpdateItem",
+                                                "dynamodb:Scan",
+                                                "dynamodb:Query"
+                                            ]
+                                        })
+                                    ]
+                                }),
                             'SystemsManagerPermissions':
-                                new IAM.PolicyDocument().addStatement(
-                                    new IAM.PolicyStatement()
-                                        .allow()
-                                        .addResource('arn:aws:ssm:'+this.properties.region+':'+this.properties.accountId+':parameter'+sessionParameter.parameterName)
-                                        .addAction('ssm:GetParameter')
-                                        .addAction('ssm:GetParameters')
-                                ),
+                                new IAM.PolicyDocument({
+                                    statements : [                                    
+                                        new IAM.PolicyStatement({
+                                            resources: ['arn:aws:ssm:'+this.properties.region+':'+this.properties.accountId+':parameter'+sessionParameter.parameterName ],
+                                            actions: [ 'ssm:GetParameter' , 'ssm:GetParameters']
+                                        })
+                                    ]
+                                })
                         }
                     })
-                });
+                }
+            );
             return createdFunction;
         }
         else return undefined;
@@ -124,7 +130,7 @@ export class ProcessingLayer extends ResourceAwareConstruct {
         if (sessionParameter && sessionControlTable) {
             let createdFunction: Lambda.Function =
                 new Lambda.Function(this, this.properties.getApplicationName() + 'DeallocateGamerFn', {
-                    runtime: Lambda.Runtime.NodeJS810,
+                    runtime: Lambda.Runtime.NODEJS_8_10,
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation,'deallocateGamer')),
                     environment: {
@@ -134,30 +140,38 @@ export class ProcessingLayer extends ResourceAwareConstruct {
                     , functionName: this.properties.getApplicationName() + 'DeallocateGamerFn'
                     , description: 'This function deallocates the gamer when a relevant event is identified (sign out, close window etc)'
                     , memorySize: 128
-                    , timeout: 60
+                    , timeout: Duration.seconds(60)
                     , role: new IAM.Role(this, this.properties.getApplicationName() + 'DeallocateGamerFn_Role', {
                         roleName: this.properties.getApplicationName() + 'DeallocateGamerFn_Role'
                         , assumedBy: new IAM.ServicePrincipal('lambda.amazonaws.com')
-                        , managedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole']
+                        , managedPolicies : [ ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole') ]
                         , inlinePolicies: {
                             'DynamoDBPermissions':
-                                new IAM.PolicyDocument().addStatement(
-                                    new IAM.PolicyStatement()
-                                        .allow()
-                                        .addResource(sessionControlTable.tableArn)
-                                        .addAction('dynamodb:GetItem')
-                                        .addAction('dynamodb:UpdateItem')
-                                        .addAction('dynamodb:Scan')
-                                        .addAction('dynamodb:Query')
-                                ),
+                                new IAM.PolicyDocument({
+                                    statements : [
+                                        new IAM.PolicyStatement( {
+                                            resources : [ sessionControlTable.tableArn ],
+                                            actions : [ 
+                                                'dynamodb:GetItem',
+                                                'dynamodb:UpdateItem',
+                                                'dynamodb:Scan',
+                                                'dynamodb:Query'
+                                            ]
+                                        })
+                                    ]
+                                }),
                             'SystemsManagerPermissions':
-                                new IAM.PolicyDocument().addStatement(
-                                    new IAM.PolicyStatement()
-                                        .allow()
-                                        .addResource('arn:aws:ssm:'+this.properties.region+':'+this.properties.accountId+':parameter'+sessionParameter.parameterName)
-                                        .addAction('ssm:GetParameter')
-                                        .addAction('ssm:GetParameters')
-                                ),
+                                new IAM.PolicyDocument({
+                                    statements : [
+                                        new IAM.PolicyStatement({
+                                            resources : [ 'arn:aws:ssm:'+this.properties.region+':'+this.properties.accountId+':parameter'+sessionParameter.parameterName ]
+                                           ,actions: [
+                                               'ssm:GetParameter',
+                                               'ssm:GetParameters'
+                                            ]
+                                        })
+                                    ]
+                                })
                         }
                     })
                 });
@@ -192,7 +206,7 @@ export class ProcessingLayer extends ResourceAwareConstruct {
         if (sessionParameter && sessionControlTable && sessionTopX && sessionTable) {
             let createdFunction: Lambda.Function =
                 new Lambda.Function(this, this.properties.getApplicationName() + 'ScoreboardFn', {
-                    runtime: Lambda.Runtime.NodeJS810,
+                    runtime: Lambda.Runtime.NODEJS_8_10,
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation,'scoreboard')),
                     environment: {
@@ -206,51 +220,64 @@ export class ProcessingLayer extends ResourceAwareConstruct {
                     , functionName: this.properties.getApplicationName() + 'ScoreboardFn'
                     , description: 'This function computes the scoreboard'
                     , memorySize: 128
-                    , timeout: 60
+                    , timeout: Duration.seconds(60)
                     , role: new IAM.Role(this, this.properties.getApplicationName() + 'ScoreboardFn_Role', {
                         roleName: this.properties.getApplicationName() + 'ScoreboardFn_Role'
                         , assumedBy: new IAM.ServicePrincipal('lambda.amazonaws.com')
-                        , managedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole']
+                        , managedPolicies : [ ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole') ]
                         , inlinePolicies: {
                             'DynamoDBPermissions':
-                                new IAM.PolicyDocument().addStatement(
-                                    new IAM.PolicyStatement()
-                                        .allow()
-                                        .addResource('arn:aws:dynamodb:' + this.properties.region + ':' + this.properties.accountId + ':table/' + this.properties.getApplicationName() + '*')
-                                        .addAction('dynamodb:GetItem')
-                                        .addAction('dynamodb:UpdateItem')
-                                        .addAction('dynamodb:Scan')
-                                        .addAction('dynamodb:Query')
-                                        .addAction('dynamodb:Batch*')
-                                        .addAction('dynamodb:PutItem')
-                                        .addAction('dynamodb:DeleteItem')
-                                ),
+                                new IAM.PolicyDocument({
+                                    statements : [
+                                        new IAM.PolicyStatement({
+                                            resources : [ 'arn:aws:dynamodb:' + this.properties.region + ':' + this.properties.accountId + ':table/' + this.properties.getApplicationName() + '*' ],
+                                            actions: [
+                                                 'dynamodb:GetItem'
+                                                ,'dynamodb:UpdateItem'
+                                                ,'dynamodb:Scan'
+                                                ,'dynamodb:Query'
+                                                ,'dynamodb:Batch*'
+                                                ,'dynamodb:PutItem'
+                                                ,'dynamodb:DeleteItem'
+                                            ]
+                                        })
+                                    ]
+                                }),
                             'SystemsManagerPermissions':
-                                new IAM.PolicyDocument().addStatement(
-                                    new IAM.PolicyStatement()
-                                        .allow()
-                                        .addResource('arn:aws:ssm:' + this.properties.region + ':' + this.properties.accountId + ':parameter/' + this.properties.getApplicationName().toLowerCase() + '*')
-                                        .addAction('ssm:Get*')
-                                        .addAction('ssm:Get*')
-                                        .addAction('ssm:List*')
-                                ),
+                                new IAM.PolicyDocument({
+                                    statements : [
+                                        new IAM.PolicyStatement({
+                                             resources : [ 'arn:aws:ssm:' + this.properties.region + ':' + this.properties.accountId + ':parameter/' + this.properties.getApplicationName().toLowerCase() + '*' ]
+                                            ,actions : [ 
+                                                 'ssm:Get*'
+                                                ,'ssm:List*'
+                                            ]
+                                        })
+                                    ]
+                                }),
                             'SQSPermissions':
-                                new IAM.PolicyDocument().addStatement(
-                                    new IAM.PolicyStatement()
-                                        .allow()
-                                        .addResource(dlq.queueArn)
-                                        .addAction('sqs:SendMessage')
-                                ),
+                                new IAM.PolicyDocument({
+                                    statements : [
+                                        new IAM.PolicyStatement({
+                                             resources : [ dlq.queueArn ]
+                                            ,actions :[ 'sqs:SendMessage' ]
+                                        })
+                                    ]
+                                }),
                             'KinesisPermissions':
-                                new IAM.PolicyDocument().addStatements(
-                                    new IAM.PolicyStatement({effect : Effect.ALLOW , resources : ["*"]})
-                                        .addActions(
-                                            "kinesis:SubscribeToShard",
-                                            "kinesis:GetShardIterator",
-                                            "kinesis:GetRecords",
-                                            "kinesis:DescribeStream"
-                                        )
-                                )
+                                new IAM.PolicyDocument({
+                                    statements : [
+                                        new IAM.PolicyStatement({
+                                             resources : ["*"]
+                                            , actions : [
+                                                "kinesis:SubscribeToShard",
+                                                "kinesis:GetShardIterator",
+                                                "kinesis:GetRecords",
+                                                "kinesis:DescribeStream"
+                                            ]
+                                        })
+                                    ]
+                                })
                         }
                     })
                 });
@@ -258,6 +285,5 @@ export class ProcessingLayer extends ResourceAwareConstruct {
         }
         else return undefined;
     }
-
 }
 
