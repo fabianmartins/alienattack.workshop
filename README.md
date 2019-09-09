@@ -21,7 +21,7 @@ AWS Alien Attack runs very close at zero-cost for one user, but there is cost. C
 * At the *programming* side, we are using [AWS SDK for Javascript in the Browser](https://aws.amazon.com/sdk-for-browser/) and [AWS SDK for node](https://aws.amazon.com/sdk-for-node-js/). Alien Attack was not developed using the best practices, exaclty because one of the workshops is about fixing it and applying the best practices for programming and DevSecOps.
 </details>
 
-These are the regions that cover all the services required for this workshop.
+Considering that we are using Cloud9, these are the regions that, at the time of writing this document, cover all the services required for this workshop. If you are not using Cloud9, other regions can be considered.
 
 ~~~
 [ { Name: 'Northern Virginia',   Continent: 'Americas', Id: 'us-east-1' },
@@ -60,8 +60,8 @@ We hope that your skills may help us with the challenge of *MAKING THE APPLICATI
 ### prepACTIVITY 1 - Cloud9 - Create your environment
 
 #### STEP 1 - Access your account
-1. Login to your account
-2. Select a region (take note of the region) - We recommend us-east-1 (Virginia) or us-east-2 (Ohio)
+1. Login to your account.
+2. Select a region (take note of the region).
 
 **IMPORTANT:** Be sure that you have permissions to create resources on your account. For the purpose of this workshop, having administrative privileges is the best option.
 
@@ -75,93 +75,86 @@ We hope that your skills may help us with the challenge of *MAKING THE APPLICATI
 		* For "Instance type" choose `t2.micro (1 GiB RAM + 1 vCPU)*`
 		* Leave the other configuration settings at their default values and click **Next step**, and then **Create environment**
 
-In a few seconds your environment will be available. You can close the Welcome tab.
+In a few seconds your environment will be available. You can close the Welcome tab, and also the *Immediate* tab that you can see at the bottom of your screen.
 
-#### <a name="config-cloneapprep"></a>STEP 3 - Clone this repository
+#### <a name="config-cloneapprep"></a>STEP 3 - Clone the back-end repository
 
 Down on your Cloud9 console, a terminal is available. Go to the terminal and clone this repository. This repository contains the back-end.
 
 ~~~
-~/environment $ git clone https://github.com/fabianmartins/alienattack.workshop
+$ git clone https://github.com/fabianmartins/alienattack.workshop
 ~~~
 
-#### STEP 4 - Clone the application repository - ON YOUR COMPUTER
+#### STEP 4 - Clone the front-end repository
 
-**This is supposed to be done on your local computer**. You can clone it at your Cloud9 environment, but for having a better experience, using your favorite browser, clone it in your own computer.
+This is the repository for the Alien Attack front-end.
 
-This is the repository with the Alien Attack front end.
-
-**IMPORTANT:** Disregard any instructions at that repository (but you can always read the comments).
+**IMPORTANT:** Disregard any instructions at that repository (but you can always read the comments if you want).
 
 ~~~
 $ git clone https://github.com/fabianmartins/alienattack.application.git
 ~~~
+
+At this point, if you look at the left hand side of your Cloud9 console, your folder tree must be showing two main folders: one for `alienattack.workshop` and one for `alienattack.application`.
+
 
 **IMPORTANT:** The frond-end DOES NOT WORK YET on mobile devices, and in some versions of Windows, especially those with touch screen.
 
 
 #### STEP 5 - Update the environment - at Cloud9
 
-Getting back to your **Cloud9 environment**, run the script `config.sh` following the instructions below.
+Getting back to your **Cloud9 environment**, let's update the current instance.
 
-Running this script will update your environment. This script changes your bash_profile. So, if your intend to run it on your own machine, be sure about the side effects of this action.
+1. Input the command below to get into the alienattack.workshop folder
 
-~~~
-cd alienattack.workshop
-~~~
-Make sure that your screen shows:
+    ~~~
+    cd alienattack.workshop/cdk
+    ~~~
+    Make sure that your screen shows:
 
-~~~
-~/environment/alienattack.workshop/cdk
-~~~
+    ~~~
+    ~/environment/alienattack.workshop
+    ~~~
 
-Then run the following command to configure your environment.
+2. Run the following command to update and configure your environment.
 
-~~~
-source config.sh
-~~~
+    ~~~
+    source config.sh
+    ~~~
 
 Don't worry if some *warning* messages appear, especially if it's about python.
 
-To check if everything is ok, you can run the following commands:
-
-~~~
-node --version
-~~~
-This will show you the latest version, which you can compare to the results of  
-
-~~~
-nvm ls-remote --lts | grep Latest
-~~~
-which will give you the list of long-term supported (lts) versions.
-
-And by running 
-
-~~~
-cdk
-~~~
-
-and getting a non-error response, you will be sure that CDK (Cloud Development Kit) is working.
 
 #### STEP 6 - Start background compilation for CDK
 
+<details><summary>Click here to expand the comments and understand what we are doing here</summary>
 There are two ways of building the environment: *continuously*, and *on demand*. 
 
 *On demand* is done by running `npm run build` from inside the cdk folder at each time you change a .ts (typescript) file. This is not very operational, so we will stick to *continuous compilation*.
 
 *Continuous compilation*, the recommended approach, means that the environment will be automatically compiled at every file change, so you can check possible errors right away.
 
-One way of configuring continuous compilation is by having 2 terminals open. One you will be using to issue commands. The other one, you will be using to monitor the progress of the development and corresponding compilation.
-
-*Do this:*
+One way of configuring continuous compilation is by having 2 terminals open. One of those terminals you will be using to issue commands. The other one, you will be using to monitor the progress of the development and corresponding compilation.
+</details>
 
 1. At the bottom of the page of your Cloud9 IDE, click the **`(+)`** icon, and then `New Terminal` to add a second terminal.
-2. On the new terminal, get into the cdk folder and run `npm run watch`:
+2. Considering that you are at `~/environment` on the new terminal, get into the cdk folder 
 
-~~~ 
-~/environment $ cd alienattack.workshop/cdk/
-~/environment/alienattack.workshop/cdk (master) $ npm run watch
-~~~ 
+    ~~~ 
+    cd alienattack.workshop/cdk/
+    ~~~
+    
+    After issuing the command above, your prompt line will look like this:
+    
+    ~~~
+    ~/environment/alienattack.workshop/cdk (master) $
+    ~~~
+
+3. Kick off the continuous backgorund compilation by issuing the following command:
+
+    ~~~ 
+    npm run watch
+    ~~~ 
 
 This will kick off the continuous compilation of the environment. It may take a few seconds until you get the results. 
 
@@ -178,7 +171,7 @@ A totally successful compilation will be something like the output below:
 [0:00:00 AM] Found 0 errors. Watching for file changes.
 ~~~  
 
-**IMPORTANT:** If you decide for not using the continuous compilation, you must remember to run `npm run build` every time you save a file.
+**IMPORTANT:** If you decide for not using the continuous compilation, you must remember to run `npm run build` every time you edit and save a file.
 
 
 #### STEP 7 - Synthesize the cloudformation for your environment
@@ -188,17 +181,18 @@ You will need to decide for an **"Environment name"** that will be used to confi
 **My suggestions for you:**  
  
 * **DON'T** use special characters, dashes, spaces in the environment name.
-* **DON'T** use long names like *ThisIsMyEnvironmentName*, or *ThisIsAnUnecessaryVeryLongAndName*. Keep it simple. User something like Env01.
+* **DON'T** use long names like *ThisIsAnUnecessaryVeryLongAndName*. Keep it simple. Use something like Env01.
 * Also, **DON'T** use very short names, like *fm*. Try to use at least 5 characters to avoid name collisions.
 * If you're alone in the account/region, pick a small word for envname, like your initials, and add the month and day just to avoid collisions (ex: fabi0405).
 * The environment name will be used to create new S3 buckets. S3 bucket names are global. So, if you use very common words (like test, dev, prod, system, app) almost surely you will get a name collision. Be sure of chosing something that will avoid this kind of issue.
 * Avoid using potentially reserved words. Possible reserved words are AWS, S3, and so on.
 
-The configuration was designed like this for the case when different individuals are sharing the same account (due their company's requirements) and sharing the same region (due the need of specific features of the AWS services, only available in such regions).
+<details><summary>*Click here to expand and understand why you are doing this step*</summary>
+We are running the synthesizing step to give you the opportunity of reading the generated Cloudformation template. Also, the configuration was designed like this for the case when different individuals are sharing the same account (due their company's requirements) and sharing the same region (due the need of specific features of the AWS services, only available in such regions).
 
 Yet, the value chosen for **"envname"** is used to create the buckets required by the application, so chose them in a way that most likely will avoid collision to S3 bucket names (which are global).
 
-Let's suppose that you selected envname=r2d2. Then, if the deployment is successful, at the end something like this will appear
+For instance, let's suppose that you have selected envname=r2d2. Then, if the deployment is successful, at the end something like this will appear
 
 ***
 
@@ -238,16 +232,17 @@ Environment name: TEST
 Unable to find output file /tmp/cdkF6Q2pM/cdk.out; are you calling app.run()?
 ~~~
 
+</details>
+
 ***
 
 #### Step 7.1 - Synthetizing your environment
 
-1. Go to the other available terminal at your Cloud9 environment and be sure of being at the CDK folder
+1. Go to the other available terminal at your Cloud9 environment and be sure of being at the CDK folder. You prompt should look like `~/environment/alienattack.workshop/cdk (master) $`
 2. Use the synth command for CDK to synthetize your enviroment.
 
 ~~~
-~/environment/alienattack.workshop/cdk (master) $
-~/environment/alienattack.workshop/cdk (master) $ cdk synth -c envname=<envname>
+cdk synth -c envname=<envname>
 ~~~
 
 This will generate an output for the corresponding Cloudformation template. You can save it by redirecting the result to some folder, so you can read it through.
@@ -258,16 +253,14 @@ This will generate an output for the corresponding Cloudformation template. You 
 Being at your cdk folder, and having decided for an *envname*, run the following command:
 
 ~~~
-~/environment/alienattack.workshop/cdk (master) $ cdk deploy -c envname=<envname>
+cdk deploy -c envname=<envname>
 ~~~
 
-CDK will first to show you what changes will be applied to the environment. After that, it will ask if you really want to deploy.
+CDK will first show you what changes will be applied to the environment. After that, it will ask if you really want to deploy.
 
-Answer with **y**, and wait for environment to be deployed.
+Answer with **y**, and wait for environment to be deployed. If everything is ok, at the end you are going to see something like this:
 
-Wait for the environment finishing deploying.
-
-***
+ `✅  <envname>`
 
 
 ## Fix the application
@@ -280,7 +273,7 @@ We know that the system is not running properly because we tried to run each one
 
 As you will need to run the application after fixing it (or now, just to check if it's really broken), here is the guidance for opening each one of the applications. 
 
-For this part, you will use the environment that you cloned **into your local computer** on the step ["Clone the application repository - ON YOUR COMPUTER"](#config-cloneapprep).
+For this part, you will visit the `alienattack.application` folder in your environment. Let's access both applications:
 
 * **Manager console**: using your browser, visit the folder where you installed the application, and open **`./scoreboard/index.html`**.
 * **Game console**: using your browser, visit the folder where you installed the application, and open **`./game/index.html`**.
