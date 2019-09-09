@@ -174,7 +174,7 @@ A totally successful compilation will be something like the output below:
 **IMPORTANT:** If you decide for not using the continuous compilation, you must remember to run `npm run build` every time you edit and save a file.
 
 
-#### STEP 7 - Synthesize the cloudformation for your environment
+#### STEP 7 - Deploy the back-end
 
 You will need to decide for an **"Environment name"** that will be used to configure and deploy your environment. 
 
@@ -283,6 +283,8 @@ For this part, you will visit the `alienattack.application` folder in your envir
     
 3. See that at the right of the line where is the URL for the file we have highlighted an arrow-box that will open the application on a tab on your browser. This is the best way for us to track what's happening on the application. Click on that arrow-box.
 
+If you visit the console of your browser, you will see some 404 errors, and the message `ERROR LOADING CONFIG`. That is expected, as the application is broken.
+
 The process for opening the Manager application is analogous. Follow the steps below:
 
 ### Accessing the Manager application
@@ -318,8 +320,8 @@ const AWS_CONFIG = {
 You need to replace the fields with the values related to the environment that you have just deployed using CDK. Here is how you get the required values:
 
 1. **API_ENDPOINT**
-  * Go to the AWS console, in the region that you deployed the environment, and then go to the service *API Gateway*. You will find an API with the name beginning with the name that you provided at the time of the deployment. Click on it.  
-  		* From Cloud9, to open another window for the AWS console, just go to the meny and click on *AWS Cloud9* --> *Go To Your Dashboard*, and then *Services* --> *API Gateway*. You will find your API there.
+  * From Cloud9, to open another window for the AWS console, just go to the menu and click on *AWS Cloud9* --> *Go To Your Dashboard*, and then *Services* --> *API Gateway*. You will find your API there.
+  * Click on the API named as **`<envname>`** (the name
   * Click on **Stages**.
   * Click on **prod**.
   * At the top of the screen, on the right, you will see the **INVOKE URL**. It has the format `https://<API Id>.execute-api.<region>.amazonaws.com/prod`. When copying it to the required field in the awsconfig.js, don't forget to add the */v1/* at the end.
@@ -353,11 +355,11 @@ const AWS_CONFIG = {
 
 ### fixACTIVITY 2 - Test the registration process
 
-Now, probably the application must be running, at least in part. Let's try to create an user.
+Now, probably the application must be running, at least in part. Let's try to create an user. Confirm that you executed the Fix Activity 1. The file `./resources/js/aws_config.js` must be properly configured.  
 
-1. Confirm that you executed the Fix Activity 1. The file `./resources/js/aws_config.js` must be properly configured.
-2. Go to the Game tab that you have just opened using the process described in the section ["Accessing the Game Application"](#accessing-the-game-application). 
-3. If everything was ok, and the application was able to retrieve the configurations, you will see a page with the buttons `Register` and `Login`. Choose **Register**.
+1. Go to the Game tab that you have just opened using the process described in the section ["Accessing the Game Application"](#accessing-the-game-application). If it's already open, reload it.
+2. If everything was ok, you are going to see on the console window of your browser that the 404 errors are not there anymore, and that the message `CONFIG LOADED` is shown, meaning that the application was able to retrieve the configurations.  
+3. You will see a page with the buttons `Register` and `Login`. Choose **Register**.
 4. Register yourself filling the fields properly
 	* **Username**: Define a username. Use only lowercase letters and don't use symbols. Don't use your email here also, as this is a PII information.
 	* **e-mail**: You will need a valid and accessible email. Cognito needs to send you a confirmation email and you will need to click on it to confirm. We recommend using a personal email to not get into anti-spam controls.
@@ -379,7 +381,7 @@ Now, probably the application must be running, at least in part. Let's try to cr
 
 The manager console is where the manager creates a game session, and starts the game so the other participants can join it.
 
-1. Go to the Manager application, that you have opened using the steps described in the section ["Accessing the Manager application](#accessing-the-manager-application)
+1. Go to the Manager application, that you have opened using the steps described in the section ["Accessing the Manager application](#accessing-the-manager-application). The same way that we did with the Game application, if you already have it opened on a tab, reload it.
 2. The page will show some fields for you to enter the username and password that you defined earlier. Do it.
 3. If the application indicates `AccessDeniedException`, then we have an access problem. Proceed to the next fixActivity to keep on fixing the system.
 
@@ -398,7 +400,8 @@ The Identity Pool configuration is missing the configuration of the roles for ea
 This is the playbook that we've got from
 
 1. On your AWS Console, visit the Cognito service page.
-2. If you got to the landing page of the service, you will click on the button **Manage Identity Pools**.
+2. If you got to the landing page of the service, you will click on the button **Manage Identity Pools**. 
+    * If by any reason you have landed on the User Pools configuration page, look at the top of the window and click on *Federated Identities*.
 3. You will see an Identity Pool named as `<envName>`. Click on it.
 4. On the top right, there is a very discreet label entitled `Edit Identity Pool`. Click on it.
 5. Open the section `Authentication Providers`.
@@ -409,6 +412,7 @@ This is the playbook that we've got from
 	* For the drop down box at the right side of the field, select the value **Contains**.
 	* For the input box at the right of the `Contains` box, input the value **`<envName>ManagersRole`**. Be careful with typos, and use uppercase for the *`<envName>`* part.
 	* For the drop down box on the right, select **`<envName>ManagersRole`**.
+9 Click on the button `Add another rule`.
 9. Second rule - **PLAYERS**
 	* For the field `Claim`, input the value **cognito:preferred_role**.
 	* For the drop down box at the right side of the field, leave the value **Contains** selected.
@@ -441,7 +445,7 @@ Execute again the ***fixACTIVITY 3***. We've been said that it still will not wo
 #### Step 2 - Testing again the login to the manager console
 Execute again the ***fixACTIVITY 4***. We've been said that we are getting an AccessDeniedException. 
 
-Let's proceed to the next activity and check if we can solve it.
+Let's proceed to the next activity and check if we can fix the login page.
 
 
 ### fixACTIVITY 7 - Cognito - Configure yourself as a manager
@@ -523,16 +527,18 @@ We need to connect the Lambda function to Kinesis.
 1. Go to your AWS Console, and visit the Lambda service page.
 2. Search for a function named **`<envName>ScoreboardFn`**.  
 3. Click on the name of the function. You will be taken to the configuration of the lambda function.
-4. Check if the information sent from the rebel is correct. On the section named *Designer* if you see a message *"Add triggers from the list on the left"*, then the rebel is right. The trigger is missing. Let's create it.
-5. On the left, on the section 'Add triggers', click on **Kinesis**. A section named *Configure triggers* will appear below.
+4. Check if the information sent from the rebel is correct. On the section named *Designer* if you see the message *"Add trigger"*, then the rebel is right. The trigger is missing. Let's create it.
+5. On the left, click on 'Add trigger'
+6. On the Trigger Configuration, click on the drop down list and type **Kinesis**. A section for you to configure the trigger will show up.
 6. Configure the fields:
    * **Kinesis stream**: Select the Kinesis Data Stream attached to your environment. The name must be in the form `<envName>_InputStream`
    * **Consumer**: select *No consumer*
    * **Batch size**: insert the value *700*.
+   * **Batch window**: Input *1*.
    * **Starting position**: select *Latest*.
    * Check box **Enable trigger**: leave it marked for now.
    * Click on the button **Add** at the right.
-   * On the top, click on the button **Save**.
+   * If everything went well you will get a message confirming that you have added the trigger.
 
 **-- FastFix --**  
 If you want to skip this activity: 
@@ -544,7 +550,7 @@ If you want to skip this activity:
 
 ### fixACTIVITY 10 - Kinesis Firehose - Create the missing Kinesis Firehose
 
-The Analytics Team has complained that no data is going to their data lake staging area. They have said that Kinesis Streams drops the data to a Kinesis Firehose, and then Kinesis Firehose moves the data to a S3 bucket named with the suffix "raw" (you can check if the bucket exists).
+The Analytics Team has complained that when the application is running no data is going to their data lake's staging area. They have said that Kinesis Streams drops the data onto a Kinesis Firehose, and then Kinesis Firehose moves the data to a S3 bucket named with the suffix "raw" (you can check if the bucket exists).
 
 They said *"This is pretty simple! It is just to connect the Kinesis Firehose to the Kinesis Streams. If the Kinesis Firehose doesn't exists, create one! Give us access and we can help. Or, call us if you need"*.
 
@@ -555,7 +561,7 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
 
 ##### [Solution guidance]
 1. Go to your AWS Console, and visit the page of Kinesis (don't confuse it with Kinesis Video).
-2. On the service page you are expected to see the Kinesis Streams on the left, and a missing Kinesis Firehose for the application. Let's create it.
+2. On the service page you are expected to see the Kinesis Streams on the left, and on the right hand side a Kinesis Firehose section where there is nothing for your application. Let's create it.
 3. Under the section *'Kinesis Firehose Delivery Streams*', or by clicking on *'Data Firehose*' at the left hand side, click on the button **Create Delivery Stream**.
 4. On the section *New delivery stream*, configure the fields as follows:
    * **Delivery stream name**: `<envName>Firehose`.
@@ -577,7 +583,7 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
    * **Error logging**: Select *Enabled*
    * **IAM Role**: Click on the button `Create new or choose`. An IAM configuration page will open.
    		* *IAMRole*: Leave the option *Create a new IAM Role* selected.
-   		* *Role Name*: `<envName>FirehoseRole`
+   		* *Role Name*: `<envName>_FirehoseRole`
    		* Click on the button **Allow**. You will be taken to the previous page.
    	* Click **Next**.
    	* Check the presented configuration.
@@ -602,7 +608,7 @@ Get back to the manager console ('scoreboard/index.html'), and follow the steps 
 3. On the section `Game Type`, select **Multiple trials**
 4. Click on the button **Start game**
 5. If the page updates with a table containing a header with the words `Nickname`, `Score`, `Shots`, `Level`, `Lives`, then we are good.
-6. Open a second browser window, and execute again the steps to login into the game. For a better experience, leave the windows opened side by side. This time, if everything went well, you will see a button labeled **JOIN session**. Click on it 
+6. Get back to the game tab (or open another one). For a better experience, leave the windows opened side by side. This time, if everything went well, you will see a button labeled **JOIN session**. Click on it 
 
 If you are able to play, **you have fixed it!**
 
