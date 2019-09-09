@@ -5,9 +5,9 @@ cdk/lib/layer/*.js
 cdk/lib/util/*.js
 cdk/node_modules
 cdk/output/**
+cdk/cdk.out
+cdk/cdk.out/**
 *.d.ts
 *.yaml
 node_modules
 output
-cdk/cdk.out
-cdk/cdk.out/**

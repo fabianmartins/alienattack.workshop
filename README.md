@@ -267,7 +267,7 @@ Answer with **y**, and wait for environment to be deployed. If everything is ok,
 
 Here is where we start fixing the environment.
 
-The system is comprised of two applications: the Game, and the Scoreboard.
+The system is comprised of two applications: the Game, and the Scoreboard. We've been said that these applications are needing a facelift. However, let's leave the cosmetics for another opportunity.
 
 We know that the system is not running properly because we tried to run each one of the applications, and while having the browser console opened, we could see a lot of errors, and it's clear that the application is broken.
 
@@ -275,10 +275,26 @@ As you will need to run the application after fixing it (or now, just to check i
 
 For this part, you will visit the `alienattack.application` folder in your environment. Let's access both applications:
 
-* **Manager console**: using your browser, visit the folder where you installed the application, and open **`./scoreboard/index.html`**.
-* **Game console**: using your browser, visit the folder where you installed the application, and open **`./game/index.html`**.
+### Accessing the Game application
+1. Select the file **`alienattack.application/game/index.html`**
+2. Right-click the file to open the menu, and select **Preview**. A browser will be opened on Cloud9. See that at the top. You are expected to see a screen similar to the one below. 
 
-As it is not running, let's try to fix it using the following instructions.
+    ![](./images/alienattack.cloud9.browser.game.png) 
+    
+3. See that at the right of the line where is the URL for the file we have highlighted an arrow-box that will open the application on a tab on your browser. This is the best way for us to track what's happening on the application. Click on that arrow-box.
+
+The process for opening the Manager application is analogous. Follow the steps below:
+
+### Accessing the Manager application
+1. Select the file **`alienattack.application/scoreboard/index.html`**
+2. Right-click the file to open the menu, and select **Preview**. A browser will be opened on Cloud9. See that at the top. You are expected to see a screen similar to the one below. 
+
+      ![](./images/alienattack.cloud9.browser.manager.png) 
+
+3. As we did for the Game Application, click on the arrow-box to open the application in another browser tab.
+   
+The applications are still not working. We need you to work on the architecture to make it work properly.
+
 
 ### fixACTIVITY 1 - Application - Fix the application configuration
 
@@ -288,7 +304,7 @@ We got a tip from one of the developers that remained at the company that a conf
 The config file for the downloaded application is invalid.
 
 ##### [Solution guidance]
-On your **local machine**, where you cloned the application, open the file `resources/js/awsconfig.js` and change it to have the following format
+On Cloud9, open the file where you cloned the application, open the file `alienattack.application/resources/js/awsconfig.js`. It is going to have the following format:
 
 ~~~
 const DEBUG = true;
@@ -299,16 +315,20 @@ const AWS_CONFIG = {
 }
 ~~~
 
-Here is how to do it:
+You need to replace the fields with the values related to the environment that you have just deployed using CDK. Here is how you get the required values:
 
-1. **region**: To find the region is easy. Probably you still remember it, or you can get it from the last message of the CDK deployment. Optionally, you can go to your console and check the URL. It will be like `https://<region>.console.aws.amazon.com`. 
-2. **API_ENDPOINT**
+1. **API_ENDPOINT**
   * Go to the AWS console, in the region that you deployed the environment, and then go to the service *API Gateway*. You will find an API with the name beginning with the name that you provided at the time of the deployment. Click on it.  
   		* From Cloud9, to open another window for the AWS console, just go to the meny and click on *AWS Cloud9* --> *Go To Your Dashboard*, and then *Services* --> *API Gateway*. You will find your API there.
   * Click on **Stages**.
   * Click on **prod**.
   * At the top of the screen, on the right, you will see the **INVOKE URL**. It has the format `https://<API Id>.execute-api.<region>.amazonaws.com/prod`. When copying it to the required field in the awsconfig.js, don't forget to add the */v1/* at the end.
-3. **APPNAME**: This one is easy. Just copy the values that you selected for *envName*, **BUT MAKE SURE TO USE UPPERCASE**. So, for instance, if you selected *r2d2* for envName, then the value for this field will be *R2D2*.
+
+
+2. **region**: You can extract the region from the API_ENDPOINT, from the last message of the CDK deployment, or you can even go to your console and check the URL. It will be like `https://<region>.console.aws.amazon.com`. 
+
+
+3. **APPNAME**: This one is easy. Just copy the value that you have selected for *envName*, **BUT MAKE SURE TO USE UPPERCASE**. So, for instance, if you selected *r2d2* for envName, then the value for this field will be *R2D2*.
 
 If you did everything correclty, your aws_config.js file will be similar to this:
 
@@ -323,9 +343,9 @@ const AWS_CONFIG = {
 
 **IMPORTANT**  
 
-* Be sure of saving the file using UTF-8 (pure text). Avoid editors that save the files with special characters
+* In the future, when doing this on your own computer, be sure of saving the file using UTF-8 (pure text). Avoid editors that save the files with special characters
 * Don't forget to maintain the quotes that are on those fields. 
-  * For example, if you are in us-east-1, the line for the region will be `"region" : "us-east-1"`. See, the quotes are there
+  * For example, if you are in us-east-1, the line for the region will be `"region" : "us-east-1"`. See, the quotes are there.
 * Be sure of using **uppercase** for the value of the field APPNAME. So, for example, if your environment name is r2d2, the line for appName will become `"APPNAME" : "R2D2"`. 
 * Again, check if the quotes are there!
 * Save the file!
@@ -335,14 +355,11 @@ const AWS_CONFIG = {
 
 Now, probably the application must be running, at least in part. Let's try to create an user.
 
-These steps are going to be executed using the respository that you cloned **to your local computer**.
-
 1. Confirm that you executed the Fix Activity 1. The file `./resources/js/aws_config.js` must be properly configured.
-2. Open a privacy/incognito page for your browser. This will guarantee that you will have the cookies cleared after use.
-3. Open this file that is on your application deployment: `./game/index.html`
-4. If everything was ok, and the application was able to retrieve the configurations, you will see a page with the buttons `Register` and `Login`. Choose **Register**.
-5. Register yourself filling the fields properly
-	* **Username**: Define a username. Use only lowercase letters and don't use symbols.
+2. Go to the Game tab that you have just opened using the process described in the section ["Accessing the Game Application"](#accessing-the-game-application). 
+3. If everything was ok, and the application was able to retrieve the configurations, you will see a page with the buttons `Register` and `Login`. Choose **Register**.
+4. Register yourself filling the fields properly
+	* **Username**: Define a username. Use only lowercase letters and don't use symbols. Don't use your email here also, as this is a PII information.
 	* **e-mail**: You will need a valid and accessible email. Cognito needs to send you a confirmation email and you will need to click on it to confirm. We recommend using a personal email to not get into anti-spam controls.
 	* **Password**: For testing purposes, use a simple password (like `abc123`). This password is managed by Cognito. So, it's not stored on any application database.
 	* **Confirm (and memorize, or take note) your password**: Repeat your password.
@@ -352,31 +369,26 @@ These steps are going to be executed using the respository that you cloned **to 
 
 ### fixACTIVITY 3 - Test the login process
 
-1. Get back to the application on your browser (the one that you opened from `./game/index.html`), and now choose **Login** (or skip to step 2 if you're already there).
+1. Get back to the Game application on your browser, and now choose **Login** (or skip to step 2 if you're already there).
 2. Enter your credentials, and click on **Login**.
 3. If you entered your credentials right, you will see a pop-up message `Login successful to user <username>`.
 4. If you get to a page where the indicating status is WAITING and a countdown stopped at 10, then the login is ok, but something else is wrong (you can check the browser console, if you want).
-5. Close the window, to be sure that the cookies were deleted, so we can proceed with the test.
+
 
 ### fixACTIVITY 4 - Test the Alien Attack manager console
 
 The manager console is where the manager creates a game session, and starts the game so the other participants can join it.
 
-We've been said that these applications are needing a face lifting. However, let's leave the cosmetics for another opportunity.
-
-**These steps are going to be executed using the respository that you cloned to your local computer.**
-
-1. Open a privacy/incognito page for your browser. This will guarantee that you will have the cookies cleared after use.
-2. Open this file that is on your application deployment: `./scoreboard/index.html`.
-3. The page will show some fields for you to enter the username and password that you defined earlier. Do it.
-4. If the application indicates `AccessDeniedException`, then we have an access problem. Proceed to the next fixActivity to keep on fixing the system.
+1. Go to the Manager application, that you have opened using the steps described in the section ["Accessing the Manager application](#accessing-the-manager-application)
+2. The page will show some fields for you to enter the username and password that you defined earlier. Do it.
+3. If the application indicates `AccessDeniedException`, then we have an access problem. Proceed to the next fixActivity to keep on fixing the system.
 
 
 ### fixACTIVITY 5 - Cognito - Fix the permissions on the groups for RBAC
 
 The people from the Security Team that joined our task force to solve the issues said that is essential to have RBAC (Role-Based Access Control) properly configured on the system. They also said that the version of the CDK used here doesn't allow us to solve that by code, unless we create a Custom Resource as it was done for the creation of the User Pool. Nobody on the team knows how to do it, and we don't have time to dive deep on it now. 
 
-But one of the SysAdmins said to have the playbook for that, and send us the guidance. Let's try to leverage it.
+However, one of the SysAdmins said to have the playbook for that, and send us the guidance. Let's try to leverage it.
 
 ##### [Problem] 
 The Identity Pool configuration is missing the configuration of the roles for each one of the groups (Managers and Players). We need to attach the proper roles to the user when the user signs in to the application.
@@ -409,7 +421,7 @@ This is the playbook that we've got from
 **-- FastFix --**  
 The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixcognito.sh`
 
-1. Go to the folder `alienattack.workshop` by:
+1. On your Clou9 environment, go to the folder `alienattack.workshop` by issuing:
 
 ~~~
 cd ~/environment/alienattack.workshop
@@ -434,7 +446,7 @@ Let's proceed to the next activity and check if we can solve it.
 
 ### fixACTIVITY 7 - Cognito - Configure yourself as a manager
 
-We have found some notes in the desk of the solutions architect. There is a piece of paper where is written *"use AWS CLI to make yourself an application admin"*. The following steps were found that paper. Hopefully they will help you to solve the issue.
+We have found some notes on the desk of the solutions architect. There is a post-it note where is written *"use AWS CLI to make yourself an application admin"*. The following steps were found that note. Hopefully they will help you to solve the issue.
 
 **Task 1.** Take note of the USER POOL ID  
 
@@ -583,7 +595,7 @@ If you want to skip this activity:
 
 ### fixACTIVITY 11 - Create a session for the game
 
-Get back to the manager console ('scoreboard/index.html' on your local computer), and follow the steps below to create a gaming session.
+Get back to the manager console ('scoreboard/index.html'), and follow the steps below to create a gaming session.
 
 1. Reload the Scoreboard console, and login again. This is just to guarantee that your token will be refreshed.
 2. On the field `Session Name` input **TEST**
