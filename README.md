@@ -624,7 +624,8 @@ So, you are going to need to implement the API from scratch, following the requi
 
 1. The resource to be added on API Gateway must have the name `topxstatistics`.
 2. The resource will execute a HTTP GET, passing the querystring sessionId, which will hold the session id provided by the consumer of the API.
-3. The API Gateway will be integrated to the Lambda Function that you are going to create, and that is going to compute the player's performance. The excerpt of code that we have is the one below:
+   * Something likke `<api>/topxstatistics?sessionId=<session id>`
+3. The API Gateway request will be integrated to the Lambda Function that you are going to create, that going to compute the player's performance. The excerpt of code that we have is the one below:
 
 ~~~
 const computeStatisticsForSession = function(sessionId,callback) { 
@@ -663,7 +664,7 @@ const computeStatisticsForSession = function(sessionId,callback) {
 The API must be accessible only by the Manager.
 
 **-- FastFix --**  
-We heard that something can be learned from this [link](http://partnerfactoryprogram.s3-website-us-east-1.amazonaws.com/labpack/fullmicroservice/fullmicroservice.html). 
+We heard that something can be learned from this [link](http://partnerfactoryprogram.s3-website-us-east-1.amazonaws.com/labpack/fullmicroservice/fullmicroservice.html). Be sure of double checking your environment. It seems that you might already have the required table created. You might just need to populate the data.
 
 ### fixACTIVITY 13 - Deploying the WebSocket for APIGateway 
 
@@ -683,76 +684,66 @@ We have learned that this is implemeted via “websockets”, and we have the fo
        *Note: If you want to learn more about routes and what they do click on the **Learn More** button next to the input box*
     4. For Description enter, **WebSocket for Alien Attack**.
     5. Click **Create API**
-3. Navigate to the **Routes** page.
-4. Follow the instructions below for each Route.
-<details> <summary>Instructions for setting up the Connect Route </summary>
+3. Navigate to the **Routes** page (possibly you are going to be there already).
+4. Follow the instructions below for each Route:
 
-1. Click on the **$connect** route.
-1. Make sure **Lambda Function** is pressed for **Integration Type**
-2. Make sure **Lambda Proxy Integration** is clicked.
-3. Enter `<envName>WebSocketConnect` for **Lambda Function**
-4. For Execution Role enter the ARN for the IAM Role `<envName>API` (See instructions below)
-<details><summary>Instructions to find the IAM Role</summary>
+    1. For the **connect** route:
+      1. Click on the **$connect** route.
+	   2. Make sure **Lambda Function** is pressed for **Integration Type**
+	   3. Make sure **Lambda Proxy Integration** is clicked.
+	   4. Enter `<envName>WebSocketConnect` for **Lambda Function**
+	   5. For Execution Role enter the ARN for the IAM Role `<envName>API` (See instructions below)
+	<details><summary>Instructions to find the IAM Role</summary>
+		  1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
+		  2. Click on the **Roles** sidebard on the left side of the window.
+		  3. Search through the Roles to find the `<envName>API` Role.
+		  4. Click on the Role, then copy the **Role ARN**
+		  5. *Note: You will need this role for the other two roles; it will be beneficial to copy this ARN to a local clipboard*
+	</details>
+		  6. Click **Default Timeout** 
+		  7. Press **Save**
+		  8. Press **Ok** for any pop-ups
+	</details>
+	 
+	 2. For the **start-game** route:
+	     1. Enter `start-game` in, **New Route Key** and click the check box to the right. 
+		  2. Make sure **Lambda Function** is pressed for **Integration Type**
+		  3. Make sure **Lambda Proxy Integration** is clicked.
+		  4. Enter `<envName>WebSocketSynchronizeStart` for **Lambda Function**
+		  5. For Execution Role enter the ARN for the IAM Role `<envName>API` (See instructions below)
+			     <details><summary>Instructions to find the IAM Role</summary>
+					   1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
+						2. Click on the **Roles** sidebard on the left side of the window.
+						3. Search through the Roles to find the `<envName>API` Role.
+						4. Click on the Role, then copy the **Role ARN**
+						</details>
+	      6. Click **Default Timeout** 
+		   7. Press **Save**
+		   8. Press **Ok** for any pop-ups
 
-1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
-2. Click on the **Roles** sidebard on the left side of the window.
-3. Search through the Roles to find the `<envName>API` Role.
-4. Click on the Role, then copy the **Role ARN**
-5. *Note: You will need this role for the other two roles; it will be beneficial to copy this ARN to a local clipboard*
-</details>
-
-5. Click **Default Timeout** 
-6. Press **Save**
-7. Press **Ok** for any pop-ups
-</details>
-
-<details> <summary>Instructions for creating a start-game Route </summary>
-
-1. Enter `start-game` in, **New Route Key** and click the check box to the right. 
-1. Make sure **Lambda Function** is pressed for **Integration Type**
-2. Make sure **Lambda Proxy Integration** is clicked.
-3. Enter `<envName>WebSocketSynchronizeStart` for **Lambda Function**
-4. For Execution Role enter the ARN for the IAM Role `<envName>API`.
-<details><summary>Instructions to find the IAM Role</summary>
-
-1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
-2. Click on the **Roles** sidebard on the left side of the window.
-3. Search through the Roles to find the `<envName>API` Role.
-4. Click on the Role, then copy the **Role ARN**
-</details>
-
-5. Click **Default Timeout** 
-6. Press **Save**
-7. Press **Ok** for any pop-ups
-</details>
-
-<details> <summary>Instructions for setting up the Disconnect Route </summary>
-
-1. Click on the **$disconnect** route.
-1. Make sure **Lambda Function** is pressed for **Integration Type**
-2. Make sure **Lambda Proxy Integration** is clicked.
-3. Enter `<envName>WebSocketDisconnect` for **Lambda Function**
-4. For Execution Role enter the ARN for the IAM Role `<envName>API`.
-<details><summary>Instructions to find the IAM Role</summary>
-
-1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
-2. Click on the **Roles** sidebard on the left side of the window.
-3. Search through the Roles to find the `<envName>API` Role.
-4. Click on the Role, then copy the **Role ARN**
-</details>
-
-5. Click **Default Timeout** 
-6. Press **Save**
-7. Press **Ok** for any pop-ups
-</details>
-
-5. Once all the routes are deployed press the dropdown menu, **Actions**.
-6. Click **Deploy API**
-    1. For **Deployment Stage** enter, **[New Stage]**
-    2. For **Stage Name** enter, **Production**
-    3. Press **Deploy**
-7. There is now a page that has the **WebSocket URL** and **Connection URL**
-8. Copy the **WebSocket URL**.
+     3. For the **Disconnect** route:
+         1. Click on the $disconnect route.
+         2. Make sure Lambda Function is pressed for Integration Type
+         3. Make sure Lambda Proxy Integration is clicked.
+         4. Enter `<envName>WebSocketDisconnect` for Lambda Function
+         5. For Execution Role enter the ARN for the IAM Role `<envName>API`  (See instructions below)
+			     <details><summary>Instructions to find the IAM Role</summary>
+					   1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
+						2. Click on the **Roles** sidebard on the left side of the window.
+						3. Search through the Roles to find the `<envName>API` Role.
+						4. Click on the Role, then copy the **Role ARN**
+						</details>
+	      6. Click **Default Timeout** 
+		   7. Press **Save**
+		   8. Press **Ok** for any pop-ups
+			   
+    5. Once all the routes are deployed press the dropdown menu, **Actions**.
+    6. Click **Deploy API**
+	     1. For **Deployment Stage** enter, **[New Stage]**
+	     2. For **Stage Name** enter, **Production**
+	     3. Press **Deploy**
+	7. There is now a page that has the **WebSocket URL** and **Connection URL**
+	8. Copy the **WebSocket URL**.
 
 #### **Task 2:** Store WebSocket URL in Parameter Store
 1. Navigate to the Systems Manager console 

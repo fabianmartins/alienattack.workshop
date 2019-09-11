@@ -3,12 +3,13 @@ import { ResourceAwareConstruct, IParameterAwareProps } from './../resourceaware
 
 import Lambda = require('@aws-cdk/aws-lambda');
 import IAM = require('@aws-cdk/aws-iam');
+import { Table } from '@aws-cdk/aws-dynamodb';
+import { ManagedPolicy } from '@aws-cdk/aws-iam';
 
 import SQS = require('@aws-cdk/aws-sqs');
 // MISSING PARAMETER  - side effect - uncomment the next line to fix it
 // import { CfnParameter } from '@aws-cdk/aws-ssm';
-import { Table } from '@aws-cdk/aws-dynamodb';
-import { ManagedPolicy } from '@aws-cdk/aws-iam';
+
 
 const path = require('path');
 
