@@ -8,6 +8,7 @@ import IAM = require('@aws-cdk/aws-iam');
 import APIGTW = require('@aws-cdk/aws-apigateway');
 import { Table } from '@aws-cdk/aws-dynamodb';
 import Lambda = require('@aws-cdk/aws-lambda');
+
 /**
  * MISSING KINESIS INTEGRATION - side effect
  * Uncomment the following line to solve it
@@ -900,6 +901,8 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
         deployment.addDependsOn(scoreboardOptionsMethod);
         deployment.addDependsOn(updatestatusPostMethod);
         deployment.addDependsOn(updatestatusOptionsMethod);
+
+        this.addResource("apigtw.url","https://"+this.api.ref+".execute-api."+props.region+".amazonaws.com/prod/v1/");
     }
 
 

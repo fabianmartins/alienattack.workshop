@@ -1,4 +1,4 @@
-import { App } from '@aws-cdk/core';
+import { App, CfnOutput } from '@aws-cdk/core';
 import { IParameterAwareProps, ParameterAwareProps, ResourceAwareStack} from '../resourceawarestack';
 
 import { SecurityLayer } from './securityLayer';
@@ -89,7 +89,25 @@ export class MainLayer extends ResourceAwareStack  {
     ingestionConsumptionLayerProps.addParameter('lambda.scoreboard',processingLayer.getScoreboardFunctionRef());
     ingestionConsumptionLayerProps.addParameter('security.playersrole', securityLayer.getResource('security.playersrole'));
     ingestionConsumptionLayerProps.addParameter('security.managersrole', securityLayer.getResource('security.managersrole'));
-    new IngestionConsumptionLayer(this, 'IngestionConsumptionLayer',ingestionConsumptionLayerProps); 
+    let icl = new IngestionConsumptionLayer(this, 'IngestionConsumptionLayer',ingestionConsumptionLayerProps); 
     
+    new CfnOutput(this, "apigtw", {
+      description : "API Gateway URL",
+      value : icl.getResource("apigtw.url"),
+      exportName : "apigtw"
+    });
+
+    new CfnOutput(this, "region", {
+      description : "region",
+      value : this.region,
+      exportName : "region"
+    });
+
+    new CfnOutput(this, "envname", {
+      description : "region",
+      value : this.properties.getApplicationName(),
+      exportName : "envname"
+    });
+
   }
 }
