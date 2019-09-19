@@ -1,10 +1,11 @@
-import { Construct } from '@aws-cdk/cdk';
+import { Construct, Duration } from '@aws-cdk/core';
 import { ResourceAwareConstruct, IParameterAwareProps } from './../resourceawarestack'
 
 import Lambda = require('@aws-cdk/aws-lambda');
 import IAM = require('@aws-cdk/aws-iam');
 
 import { Table } from '@aws-cdk/aws-dynamodb';
+import { ManagedPolicy } from '@aws-cdk/aws-iam';
 
 const path = require('path');
 
@@ -63,7 +64,7 @@ export class WebSocketLayer extends ResourceAwareConstruct {
         if (sessionParameter && sessionControlTable) {
             let createdFunction: Lambda.Function = 
                 new Lambda.Function(this, this.properties.getApplicationName() + 'WebSocketConnect', {
-                    runtime: Lambda.Runtime.NodeJS810,
+                    runtime: Lambda.Runtime.NODEJS_8_10,
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation, 'websocketConnect')),
                     environment: {
@@ -73,27 +74,30 @@ export class WebSocketLayer extends ResourceAwareConstruct {
                     functionName: this.properties.getApplicationName() + 'WebSocketConnect',
                     description: 'This function stores the connectionID to DynamoDB',
                     memorySize: 128,
-                    timeout: 60,
+                    timeout: Duration.seconds(60),
                     role: new IAM.Role(this, this.properties.getApplicationName() + 'WebSocketConnectFn_Role', {
                         roleName: this.properties.getApplicationName() + 'WebSocketConnectFn_Role',
                         assumedBy: new IAM.ServicePrincipal('lambda.amazonaws.com'),
-                        managedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'],
+                        managedPolicies : [ ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole') ],
                         inlinePolicies: {
                             'DynamoDBPermissions':
-                                new IAM.PolicyDocument().addStatement(
-                                    new IAM.PolicyStatement()
-                                        .allow()
-                                        .addResource(sessionControlTable.tableArn)
-                                        .addAction('dynamodb:UpdateItem')
-                                ),
+                                new IAM.PolicyDocument({
+                                    statements : [
+                                        new IAM.PolicyStatement({
+                                            resources: [ sessionControlTable.tableArn ],
+                                            actions : [ 'dynamodb:UpdateItem' ]
+                                        })
+                                    ]
+                                }),
                             'SystemsManagerPermissions':
-                                    new IAM.PolicyDocument().addStatement(
-                                        new IAM.PolicyStatement()
-                                        .allow()
-                                        .addResource('arn:aws:ssm:'+this.properties.region+':'+this.properties.accountId+':parameter'+sessionParameter.parameterName)
-                                        .addAction('ssm:GetParameter')
-                                        .addAction('ssm:GetParameters')
-                                )
+                                new IAM.PolicyDocument({
+                                    statements: [
+                                        new IAM.PolicyStatement({
+                                            resources : ['arn:aws:ssm:'+this.properties.region+':'+this.properties.accountId+':parameter'+sessionParameter.parameterName ] ,
+                                            actions : ['ssm:GetParameter' , 'ssm:GetParameters' ]
+                                        })
+                                    ]
+                                })
                         }  
                     })
                 });
@@ -116,7 +120,7 @@ export class WebSocketLayer extends ResourceAwareConstruct {
         if (sessionParameter && sessionControlTable) {
             let createdFunction: Lambda.Function = 
                 new Lambda.Function(this, this.properties.getApplicationName() + 'WebSocketSynchronizeStart', {
-                    runtime: Lambda.Runtime.NodeJS810,
+                    runtime: Lambda.Runtime.NODEJS_8_10,
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation, 'synchronousStart')),
                     environment: {
@@ -126,29 +130,30 @@ export class WebSocketLayer extends ResourceAwareConstruct {
                     functionName: this.properties.getApplicationName() + 'WebSocketSynchronizeStart',
                     description: 'This function invokes the WebSocket to start the AAA Game',
                     memorySize: 128,
-                    timeout: 60,
+                    timeout: Duration.seconds(60),
                     role: new IAM.Role(this, this.properties.getApplicationName() + 'WebSocketSynchronizeStartFn_Role', {
                         roleName: this.properties.getApplicationName() + 'WebSocketSynchronizeStartFn_Role',
                         assumedBy: new IAM.ServicePrincipal('lambda.amazonaws.com'),
-                        managedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'],
+                        managedPolicies: [ ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole') ],
                         inlinePolicies: {
                             'DynamoDBPermissions':
-                                new IAM.PolicyDocument().addStatement(
-                                    new IAM.PolicyStatement()
-                                        .allow()
-                                        .addResource(sessionControlTable.tableArn)
-                                        .addAction('dynamodb:UpdateItem')
-                                        .addAction('dynamodb:GetItem')
-                                ),
+                                new IAM.PolicyDocument({
+                                    statements : [
+                                        new IAM.PolicyStatement({
+                                            resources : [ sessionControlTable.tableArn ],
+                                            actions : [ 'dynamodb:UpdateItem' , 'dynamodb:GetItem' ]
+                                        })
+                                    ]
+                                }),
                             'SystemsManagerPermissions':
-                                    new IAM.PolicyDocument().addStatement(
-                                        new IAM.PolicyStatement()
-                                        .allow()
-                                        .addResource('arn:aws:ssm:'+this.properties.region+':'+this.properties.accountId+':parameter'+sessionParameter.parameterName)
-                                        .addAction('ssm:GetParameter')
-                                        .addAction('ssm:GetParameters')
-                                        .addAction('ssm:PutParameter')
-                                )
+                                    new IAM.PolicyDocument({
+                                        statements : [ 
+                                            new IAM.PolicyStatement({
+                                                resources : [ 'arn:aws:ssm:'+this.properties.region+':'+this.properties.accountId+':parameter'+sessionParameter.parameterName ], 
+                                                actions : [ 'ssm:GetParameter', 'ssm:GetParameters', 'ssm:PutParameter']
+                                            })
+                                        ]
+                                    })
                         }  
                     })
                 });
@@ -171,7 +176,7 @@ export class WebSocketLayer extends ResourceAwareConstruct {
         if (sessionParameter && sessionControlTable) {
             let createdFunction: Lambda.Function = 
                 new Lambda.Function(this, this.properties.getApplicationName() + 'WebSocketDisconnect', {
-                    runtime: Lambda.Runtime.NodeJS810,
+                    runtime: Lambda.Runtime.NODEJS_8_10,
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation, 'websocketDisconnect')),
                     environment: {
@@ -181,29 +186,30 @@ export class WebSocketLayer extends ResourceAwareConstruct {
                     functionName: this.properties.getApplicationName() + 'WebSocketDisconnect',
                     description: 'This function deletes the connectionID to DynamoDB',
                     memorySize: 128,
-                    timeout: 60,
+                   timeout: Duration.seconds(60),
                     role: new IAM.Role(this, this.properties.getApplicationName() + 'WebSocketDisconnectFn_Role', {
                         roleName: this.properties.getApplicationName() + 'WebSocketDisconnectFn_Role',
                         assumedBy: new IAM.ServicePrincipal('lambda.amazonaws.com'),
-                        managedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'],
+                        managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
                         inlinePolicies: {
                             'DynamoDBPermissions':
-                                new IAM.PolicyDocument().addStatement(
-                                    new IAM.PolicyStatement()
-                                        .allow()
-                                        .addResource(sessionControlTable.tableArn)
-                                        .addAction('dynamodb:UpdateItem')
-                                        .addAction('dynamodb:GetItems')
-                                        .addAction('dynamodb:GetItem')
-                                ),
+                                new IAM.PolicyDocument({
+                                    statements : [ 
+                                        new IAM.PolicyStatement({
+                                            resources : [ sessionControlTable.tableArn ] ,
+                                            actions : [ 'dynamodb:UpdateItem', 'dynamodb:GetItems', 'dynamodb:GetItem'] 
+                                        })
+                                    ]
+                                }),
                             'SystemsManagerPermissions':
-                                    new IAM.PolicyDocument().addStatement(
-                                        new IAM.PolicyStatement()
-                                        .allow()
-                                        .addResource('arn:aws:ssm:'+this.properties.region+':'+this.properties.accountId+':parameter'+sessionParameter.parameterName)
-                                        .addAction('ssm:GetParameter')
-                                        .addAction('ssm:GetParameters')
-                                )
+                                    new IAM.PolicyDocument({
+                                        statements : [
+                                            new IAM.PolicyStatement({
+                                                resources: [ 'arn:aws:ssm:'+this.properties.region+':'+this.properties.accountId+':parameter'+sessionParameter.parameterName ],
+                                                actions : [ 'ssm:GetParameter' , 'ssm:GetParameters' ]
+                                            })
+                                        ]
+                                    })
                         }  
                     })
                 });
@@ -211,5 +217,4 @@ export class WebSocketLayer extends ResourceAwareConstruct {
         }
         else return undefined;
     }
-    
 }

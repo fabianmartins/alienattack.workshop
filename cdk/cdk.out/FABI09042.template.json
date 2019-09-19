@@ -1,0 +1,2854 @@
+{
+  "Resources": {
+    "SecurityLayerFABI09042PostRegistrationFnRole1FDB885B": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        ],
+        "RoleName": "FABI09042PostRegistrationFn_Role"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SecurityLayer/FABI09042PostRegistrationFn_Role/Resource"
+      }
+    },
+    "SecurityLayerFABI09042PostRegistration499AFD9C": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "SecurityLayerFABI09042PostRegistrationCodeS3BucketCE5A2BB4"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "SecurityLayerFABI09042PostRegistrationCodeS3VersionKey0265DB60"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "SecurityLayerFABI09042PostRegistrationCodeS3VersionKey0265DB60"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABI09042PostRegistrationFnRole1FDB885B",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs10.x",
+        "Description": "This function adds an user to the Players group after confirmation",
+        "FunctionName": "FABI09042PostRegistrationFn",
+        "MemorySize": 128,
+        "Timeout": 60
+      },
+      "DependsOn": [
+        "SecurityLayerFABI09042PostRegistrationFnRole1FDB885B"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SecurityLayer/FABI09042PostRegistration/Resource",
+        "aws:asset:path": "asset.e6f369750e57d23358dd07d1e3121aae813f75525f4f45d3a915307bef8cc81a",
+        "aws:asset:property": "Code"
+      }
+    },
+    "SecurityLayerFABI09042SimpleUserPoolCustomResourceD4F80B00": {
+      "Type": "AWS::CloudFormation::CustomResource",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "SingletonLambda2ef0f630941232199d0b7f4928e34907190FF5EE",
+            "Arn"
+          ]
+        },
+        "AppName": "FABI09042",
+        "UserPoolName": "FABI09042",
+        "PostConfirmationLambdaArn": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABI09042PostRegistration499AFD9C",
+            "Arn"
+          ]
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SecurityLayer/FABI09042SimpleUserPoolCustomResource/Default"
+      }
+    },
+    "SecurityLayerFABI09042UserPoolPerm58CF905B": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:invokeFunction",
+        "FunctionName": {
+          "Ref": "SecurityLayerFABI09042PostRegistration499AFD9C"
+        },
+        "Principal": "cognito-idp.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABI09042SimpleUserPoolCustomResourceD4F80B00",
+            "UserPoolArn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SecurityLayer/FABI09042UserPoolPerm"
+      }
+    },
+    "SecurityLayerFABI09042TriggerFunctionPolicy90A54846": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "cognito-idp:AdminAddUserToGroup",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "SecurityLayerFABI09042SimpleUserPoolCustomResourceD4F80B00",
+                  "UserPoolArn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "AllowAddUserToGroup",
+        "Roles": [
+          {
+            "Ref": "SecurityLayerFABI09042PostRegistrationFnRole1FDB885B"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SecurityLayer/FABI09042TriggerFunctionPolicy/Resource"
+      }
+    },
+    "SecurityLayerFABI09042AppD318D663": {
+      "Type": "AWS::Cognito::UserPoolClient",
+      "Properties": {
+        "UserPoolId": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABI09042SimpleUserPoolCustomResourceD4F80B00",
+            "UserPoolId"
+          ]
+        },
+        "ClientName": "FABI09042Website",
+        "ExplicitAuthFlows": [
+          "USER_PASSWORD_AUTH"
+        ],
+        "GenerateSecret": false
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SecurityLayer/FABI09042App"
+      }
+    },
+    "SecurityLayerFABI09042IdentityPool108FDF8C": {
+      "Type": "AWS::Cognito::IdentityPool",
+      "Properties": {
+        "AllowUnauthenticatedIdentities": false,
+        "CognitoIdentityProviders": [
+          {
+            "ClientId": "FABI09042Website",
+            "ProviderName": {
+              "Fn::GetAtt": [
+                "SecurityLayerFABI09042SimpleUserPoolCustomResourceD4F80B00",
+                "UserPoolProviderName"
+              ]
+            },
+            "ServerSideTokenCheck": false
+          }
+        ],
+        "IdentityPoolName": "FABI09042"
+      },
+      "DependsOn": [
+        "SecurityLayerFABI09042SimpleUserPoolCustomResourceD4F80B00"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SecurityLayer/FABI09042IdentityPool"
+      }
+    },
+    "SecurityLayerFABI09042PlayersRoleF253436E": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "StringEquals": {
+                  "cognito-identity.amazonaws.com:aud": "SecurityLayerFABI09042IdentityPool108FDF8C"
+                },
+                "ForAnyValue:StringLike": {
+                  "cognito-identity.amazonaws.com:amr": "authenticated"
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "cognito-identity.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "RoleName": "FABI09042PlayersRole"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SecurityLayer/FABI09042PlayersRole/Resource"
+      }
+    },
+    "SecurityLayerFABI09042PlayersRoleDefaultPolicy08D58916": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "mobileanalytics:PutEvents",
+                "cognito-sync:*",
+                "cognito-identity:*"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "apigateway:GET",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+                      },
+                      "/prod/*/config"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+                      },
+                      "/prod/*/session"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+                      },
+                      "/prod/*/scoreboard"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "execute-api:Invoke",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+                      },
+                      "/prod/GET/config"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+                      },
+                      "/prod/GET/session"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+                      },
+                      "/prod/GET/scoreboard"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "apigateway:POST",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+                      },
+                      "/prod/*/updatestatus"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+                      },
+                      "/prod/*/allocate"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+                      },
+                      "/prod/*/deallocate"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "execute-api:Invoke",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+                      },
+                      "/prod/POST/updatestatus"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+                      },
+                      "/prod/POST/allocate"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+                      },
+                      "/prod/POST/deallocate"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SecurityLayerFABI09042PlayersRoleDefaultPolicy08D58916",
+        "Roles": [
+          {
+            "Ref": "SecurityLayerFABI09042PlayersRoleF253436E"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SecurityLayer/FABI09042PlayersRole/DefaultPolicy/Resource"
+      }
+    },
+    "SecurityLayerFABI09042Players2E873C42": {
+      "Type": "AWS::Cognito::UserPoolGroup",
+      "Properties": {
+        "UserPoolId": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABI09042SimpleUserPoolCustomResourceD4F80B00",
+            "UserPoolId"
+          ]
+        },
+        "Description": "Players of the game.",
+        "GroupName": "Players",
+        "Precedence": 9999,
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABI09042PlayersRoleF253436E",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SecurityLayer/FABI09042Players"
+      }
+    },
+    "SecurityLayerFABI09042ManagersRole4391335C": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "StringEquals": {
+                  "cognito-identity.amazonaws.com:aud": "SecurityLayerFABI09042IdentityPool108FDF8C"
+                },
+                "ForAnyValue:StringLike": {
+                  "cognito-identity.amazonaws.com:amr": "authenticated"
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "cognito-identity.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/AmazonCognitoPowerUser"
+        ],
+        "RoleName": "FABI09042ManagersRole"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SecurityLayer/FABI09042ManagersRole/Resource"
+      }
+    },
+    "SecurityLayerFABI09042ManagersRoleDefaultPolicy18D864DD": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "mobileanalytics:PutEvents",
+                "cognito-sync:*",
+                "cognito-identity:*"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:GetItem"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:dynamodb:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":table/FABI09042*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:DeleteParameters",
+                "ssm:PutParameter",
+                "ssm:DeleteParameter"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":parameter/fabi09042/*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "kinesis:GetShardIterator",
+                "kinesis:DescribeStream",
+                "kinesis:GetRecords"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "IngestionConsumptionLayerFABI09042InputStreamA5D5ACBE",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "apigateway:*",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+                    },
+                    "/prod/*/*"
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SecurityLayerFABI09042ManagersRoleDefaultPolicy18D864DD",
+        "Roles": [
+          {
+            "Ref": "SecurityLayerFABI09042ManagersRole4391335C"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SecurityLayer/FABI09042ManagersRole/DefaultPolicy/Resource"
+      }
+    },
+    "SecurityLayerFABI09042Managers158F206A": {
+      "Type": "AWS::Cognito::UserPoolGroup",
+      "Properties": {
+        "UserPoolId": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABI09042SimpleUserPoolCustomResourceD4F80B00",
+            "UserPoolId"
+          ]
+        },
+        "Description": "Managers of the game.",
+        "GroupName": "Managers",
+        "Precedence": 0,
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABI09042ManagersRole4391335C",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SecurityLayer/FABI09042Managers"
+      }
+    },
+    "SecurityLayerFABI09042UnauthRole80E0D860": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "StringEquals": {
+                  "cognito-identity.amazonaws.com:aud": "SecurityLayerFABI09042IdentityPool108FDF8C"
+                },
+                "ForAnyValue:StringLike": {
+                  "cognito-identity.amazonaws.com:amr": "unauthenticated"
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "cognito-identity.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "RoleName": "FABI09042UnauthRole"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SecurityLayer/FABI09042UnauthRole/Resource"
+      }
+    },
+    "SecurityLayerFABI09042UnauthRoleDefaultPolicyCC02977A": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "mobileanalytics:PutEvents",
+                "cognito-sync:*",
+                "cognito-identity:*"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SecurityLayerFABI09042UnauthRoleDefaultPolicyCC02977A",
+        "Roles": [
+          {
+            "Ref": "SecurityLayerFABI09042UnauthRole80E0D860"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SecurityLayer/FABI09042UnauthRole/DefaultPolicy/Resource"
+      }
+    },
+    "SecurityLayerFABI09042IDPRolesD8B080BB": {
+      "Type": "AWS::Cognito::IdentityPoolRoleAttachment",
+      "Properties": {
+        "IdentityPoolId": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABI09042IdentityPool108FDF8C",
+            "Id"
+          ]
+        },
+        "Roles": {
+          "authenticated": {
+            "Fn::GetAtt": [
+              "SecurityLayerFABI09042PlayersRoleF253436E",
+              "Arn"
+            ]
+          },
+          "unauthenticated": {
+            "Fn::GetAtt": [
+              "SecurityLayerFABI09042UnauthRole80E0D860",
+              "Arn"
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SecurityLayer/FABI09042IDPRoles"
+      }
+    },
+    "SingletonLambda2ef0f630941232199d0b7f4928e34907ServiceRole0BB5F161": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SingletonLambda2ef0f630941232199d0b7f4928e34907/ServiceRole/Resource"
+      }
+    },
+    "SingletonLambda2ef0f630941232199d0b7f4928e34907ServiceRoleDefaultPolicyBEC8B190": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "cognito-idp:DeleteUserPool",
+                "cognito-idp:CreateUserPool",
+                "cognito-idp:UpdateUserPool",
+                "cognito-idp:CreateUserPoolDomain",
+                "cognito-idp:DeleteUserPoolDomain"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SingletonLambda2ef0f630941232199d0b7f4928e34907ServiceRoleDefaultPolicyBEC8B190",
+        "Roles": [
+          {
+            "Ref": "SingletonLambda2ef0f630941232199d0b7f4928e34907ServiceRole0BB5F161"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SingletonLambda2ef0f630941232199d0b7f4928e34907/ServiceRole/DefaultPolicy/Resource"
+      }
+    },
+    "SingletonLambda2ef0f630941232199d0b7f4928e34907190FF5EE": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "SingletonLambda2ef0f630941232199d0b7f4928e34907CodeS3Bucket85097470"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "SingletonLambda2ef0f630941232199d0b7f4928e34907CodeS3VersionKey31EFDABA"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "SingletonLambda2ef0f630941232199d0b7f4928e34907CodeS3VersionKey31EFDABA"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "SingletonLambda2ef0f630941232199d0b7f4928e34907ServiceRole0BB5F161",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs10.x",
+        "Description": "Generates the UserPool using configuration not available on CDK",
+        "Timeout": 300
+      },
+      "DependsOn": [
+        "SingletonLambda2ef0f630941232199d0b7f4928e34907ServiceRoleDefaultPolicyBEC8B190",
+        "SingletonLambda2ef0f630941232199d0b7f4928e34907ServiceRole0BB5F161"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/SingletonLambda2ef0f630941232199d0b7f4928e34907/Resource",
+        "aws:asset:path": "asset.e39118d11f89ede71cfaa874b9ff60359469d187f4ce6d2e7dfed4c5ee9466d6",
+        "aws:asset:property": "Code"
+      }
+    },
+    "ConfigurationLayerSSMParameterFABI09042Region5D536F51": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Type": "String",
+        "Value": {
+          "Ref": "AWS::Region"
+        },
+        "Name": "/fabi09042/region"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/ConfigurationLayer/SSMParameterFABI09042Region"
+      }
+    },
+    "ConfigurationLayerSSMParameterFABI09042ClientId6A746237": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Type": "String",
+        "Value": "FABI09042Website",
+        "Name": "/fabi09042/clientid"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/ConfigurationLayer/SSMParameterFABI09042ClientId"
+      }
+    },
+    "ConfigurationLayerSSMParameterFABI09042UserpoolId505D4931": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "SecurityLayerFABI09042SimpleUserPoolCustomResourceD4F80B00",
+            "UserPoolId"
+          ]
+        },
+        "Name": "/fabi09042/userpoolid"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/ConfigurationLayer/SSMParameterFABI09042UserpoolId"
+      }
+    },
+    "ConfigurationLayerSSMParameterFABI09042UserPoolURLE2A306EF": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Type": "String",
+        "Value": {
+          "Fn::Join": [
+            "",
+            [
+              "cognito-idp.",
+              {
+                "Ref": "AWS::Region"
+              },
+              ".amazonaws.com/",
+              {
+                "Fn::GetAtt": [
+                  "SecurityLayerFABI09042SimpleUserPoolCustomResourceD4F80B00",
+                  "UserPoolId"
+                ]
+              }
+            ]
+          ]
+        },
+        "Name": "/fabi09042/userpoolurl"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/ConfigurationLayer/SSMParameterFABI09042UserPoolURL"
+      }
+    },
+    "ConfigurationLayerSSMParameterFABI09042IdentityPoolIdBF09958A": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Type": "String",
+        "Value": "SecurityLayerFABI09042IdentityPool108FDF8C",
+        "Name": "/fabi09042/identitypoolid"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/ConfigurationLayer/SSMParameterFABI09042IdentityPoolId"
+      }
+    },
+    "StorageStoragefabi09042app98369A22": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "fabi09042.app",
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*"
+              ],
+              "AllowedMethods": [
+                "GET",
+                "PUT",
+                "DELETE",
+                "POST"
+              ],
+              "AllowedOrigins": [
+                "*"
+              ]
+            }
+          ]
+        },
+        "WebsiteConfiguration": {
+          "ErrorDocument": "error.html",
+          "IndexDocument": "index.html"
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/StorageStorage/fabi09042.app/Resource"
+      }
+    },
+    "StorageStoragefabi09042raw2C3A8443": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "fabi09042.raw"
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/StorageStorage/fabi09042.raw/Resource"
+      }
+    },
+    "DatabaseLayerFABI09042SessionC76C30C8": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "KeySchema": [
+          {
+            "AttributeName": "SessionId",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "SessionId",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "TableName": "FABI09042Session"
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/DatabaseLayer/FABI09042Session/Resource"
+      }
+    },
+    "DatabaseLayerFABI09042SessionControl2C78FE5C": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "KeySchema": [
+          {
+            "AttributeName": "SessionId",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "SessionId",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "TableName": "FABI09042SessionControl"
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/DatabaseLayer/FABI09042SessionControl/Resource"
+      }
+    },
+    "DatabaseLayerFABI09042SessionTopXF2DF7846": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "KeySchema": [
+          {
+            "AttributeName": "SessionId",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "SessionId",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "TableName": "FABI09042SessionTopX"
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/DatabaseLayer/FABI09042SessionTopX/Resource"
+      }
+    },
+    "ProcessingLayerFABI09042AllocateGamerFnRole910AEB00": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ],
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:Scan",
+                    "dynamodb:Query"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "DatabaseLayerFABI09042SessionControl2C78FE5C",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "DynamoDBPermissions"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ssm:GetParameter",
+                    "ssm:GetParameters"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:aws:ssm:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":parameter/fabi09042/session"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "SystemsManagerPermissions"
+          }
+        ],
+        "RoleName": "FABI09042AllocateGamerFn_Role"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/ProcessingLayer/FABI09042AllocateGamerFn_Role/Resource"
+      }
+    },
+    "ProcessingLayerFABI09042AllocateGamerFn9B1A45A4": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ProcessingLayerFABI09042AllocateGamerFnCodeS3BucketEE25B92A"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "ProcessingLayerFABI09042AllocateGamerFnCodeS3VersionKeyD93640C0"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "ProcessingLayerFABI09042AllocateGamerFnCodeS3VersionKeyD93640C0"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ProcessingLayerFABI09042AllocateGamerFnRole910AEB00",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs8.10",
+        "Description": "This function supports the allocation of gamers when the game is to start",
+        "Environment": {
+          "Variables": {
+            "SESSION_CONTROL_TABLENAME": {
+              "Ref": "DatabaseLayerFABI09042SessionControl2C78FE5C"
+            },
+            "SESSION_PARAMETER": "/fabi09042/session"
+          }
+        },
+        "FunctionName": "FABI09042AllocateGamerFn",
+        "MemorySize": 128,
+        "Timeout": 60
+      },
+      "DependsOn": [
+        "ProcessingLayerFABI09042AllocateGamerFnRole910AEB00"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/ProcessingLayer/FABI09042AllocateGamerFn/Resource",
+        "aws:asset:path": "asset.5fbbde35634d5de13314b5da90dcda3b8db607c2163706500121b1ebd51b6a5e",
+        "aws:asset:property": "Code"
+      }
+    },
+    "ProcessingLayerFABI09042DeallocateGamerFnRole2268FA1D": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ],
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:Scan",
+                    "dynamodb:Query"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "DatabaseLayerFABI09042SessionControl2C78FE5C",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "DynamoDBPermissions"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ssm:GetParameter",
+                    "ssm:GetParameters"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:aws:ssm:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":parameter/fabi09042/session"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "SystemsManagerPermissions"
+          }
+        ],
+        "RoleName": "FABI09042DeallocateGamerFn_Role"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/ProcessingLayer/FABI09042DeallocateGamerFn_Role/Resource"
+      }
+    },
+    "ProcessingLayerFABI09042DeallocateGamerFn5752A49E": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ProcessingLayerFABI09042DeallocateGamerFnCodeS3Bucket56D55FE8"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "ProcessingLayerFABI09042DeallocateGamerFnCodeS3VersionKeyEEBAD357"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "ProcessingLayerFABI09042DeallocateGamerFnCodeS3VersionKeyEEBAD357"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ProcessingLayerFABI09042DeallocateGamerFnRole2268FA1D",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs8.10",
+        "Description": "This function deallocates the gamer when a relevant event is identified (sign out, close window etc)",
+        "Environment": {
+          "Variables": {
+            "SESSION_CONTROL_TABLENAME": {
+              "Ref": "DatabaseLayerFABI09042SessionControl2C78FE5C"
+            },
+            "SESSION_PARAMETER": "/fabi09042/session"
+          }
+        },
+        "FunctionName": "FABI09042DeallocateGamerFn",
+        "MemorySize": 128,
+        "Timeout": 60
+      },
+      "DependsOn": [
+        "ProcessingLayerFABI09042DeallocateGamerFnRole2268FA1D"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/ProcessingLayer/FABI09042DeallocateGamerFn/Resource",
+        "aws:asset:path": "asset.528e7d9d6b52bad0f2d0b0aa4cec2ba3eb502637197cd918333ed586cf87c4b9",
+        "aws:asset:property": "Code"
+      }
+    },
+    "ProcessingLayerFABI09042DLQ00622919": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "QueueName": "FABI09042DLQ"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/ProcessingLayer/FABI09042DLQ/Resource"
+      }
+    },
+    "ProcessingLayerFABI09042ScoreboardFnRole2174E62A": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ],
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:Scan",
+                    "dynamodb:Query",
+                    "dynamodb:Batch*",
+                    "dynamodb:PutItem",
+                    "dynamodb:DeleteItem"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:aws:dynamodb:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":table/FABI09042*"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "DynamoDBPermissions"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ssm:Get*",
+                    "ssm:List*"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:aws:ssm:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":parameter/fabi09042*"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "SystemsManagerPermissions"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "sqs:SendMessage",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "ProcessingLayerFABI09042DLQ00622919",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "SQSPermissions"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "kinesis:SubscribeToShard",
+                    "kinesis:GetShardIterator",
+                    "kinesis:GetRecords",
+                    "kinesis:DescribeStream"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "KinesisPermissions"
+          }
+        ],
+        "RoleName": "FABI09042ScoreboardFn_Role"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/ProcessingLayer/FABI09042ScoreboardFn_Role/Resource"
+      }
+    },
+    "ProcessingLayerFABI09042ScoreboardFn6649DA27": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ProcessingLayerFABI09042ScoreboardFnCodeS3Bucket84A53926"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "ProcessingLayerFABI09042ScoreboardFnCodeS3VersionKeyBCD177B0"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "ProcessingLayerFABI09042ScoreboardFnCodeS3VersionKeyBCD177B0"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ProcessingLayerFABI09042ScoreboardFnRole2174E62A",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs8.10",
+        "Description": "This function computes the scoreboard",
+        "Environment": {
+          "Variables": {
+            "DLQ_URL": {
+              "Ref": "ProcessingLayerFABI09042DLQ00622919"
+            },
+            "SESSION_PARAMETER": "/fabi09042/session",
+            "SESSION_TABLENAME": {
+              "Ref": "DatabaseLayerFABI09042SessionC76C30C8"
+            },
+            "SESSION_CONTROL_TABLENAME": {
+              "Ref": "DatabaseLayerFABI09042SessionControl2C78FE5C"
+            },
+            "SESSION_TOPX_TABLENAME": {
+              "Ref": "DatabaseLayerFABI09042SessionTopXF2DF7846"
+            },
+            "TopXValue": "10"
+          }
+        },
+        "FunctionName": "FABI09042ScoreboardFn",
+        "MemorySize": 128,
+        "Timeout": 60
+      },
+      "DependsOn": [
+        "ProcessingLayerFABI09042ScoreboardFnRole2174E62A"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/ProcessingLayer/FABI09042ScoreboardFn/Resource",
+        "aws:asset:path": "asset.167a1cca886516d4c19847697df5b1c021e6595589c2e8d34e846ac75d92c10d",
+        "aws:asset:property": "Code"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042InputStreamA5D5ACBE": {
+      "Type": "AWS::Kinesis::Stream",
+      "Properties": {
+        "ShardCount": 1,
+        "Name": "FABI09042_InputStream",
+        "RetentionPeriodHours": 24
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042InputStream/Resource"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIRoleE30F6AF2": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+              ]
+            ]
+          }
+        ],
+        "RoleName": "FABI09042API"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIRole/Resource"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIRoleDefaultPolicy1D70E4DB": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "lambda:InvokeFunction",
+                "lambda:InvokeAsync"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:lambda:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":function:FABI09042*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:GetParameterHistory",
+                "ssm:GetParametersByPath",
+                "ssm:GetParameters",
+                "ssm:GetParameter"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":parameter/fabi09042/*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "dynamodb:GetItem",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "DatabaseLayerFABI09042SessionC76C30C8",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::GetAtt": [
+                    "DatabaseLayerFABI09042SessionTopXF2DF7846",
+                    "Arn"
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "kinesis:PutRecord",
+                "kinesis:PutRecords"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "IngestionConsumptionLayerFABI09042InputStreamA5D5ACBE",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "IngestionConsumptionLayerFABI09042APIRoleDefaultPolicy1D70E4DB",
+        "Roles": [
+          {
+            "Ref": "IngestionConsumptionLayerFABI09042APIRoleE30F6AF2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIRole/DefaultPolicy/Resource"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042API2EFB027D": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Description": "API supporting the application FABI09042",
+        "Name": "fabi09042"
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042API"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042GTWResponse585E750D": {
+      "Type": "AWS::ApiGateway::GatewayResponse",
+      "Properties": {
+        "ResponseType": "DEFAULT_4XX",
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "ResponseParameters": {
+          "gatewayresponse.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+          "gatewayresponse.header.Access-Control-Allow-Methods": "'*'",
+          "gatewayresponse.header.Access-Control-Allow-Origin": "'*'"
+        },
+        "ResponseTemplates": {
+          "application/json": "{\"message\":$context.error.messageString}"
+        }
+      },
+      "DependsOn": [
+        "IngestionConsumptionLayerFABI09042API2EFB027D"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042GTWResponse"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042Authorizer982EE784": {
+      "Type": "AWS::ApiGateway::Authorizer",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "Type": "COGNITO_USER_POOLS",
+        "IdentitySource": "method.request.header.Authorization",
+        "Name": "fabi09042Authorizer",
+        "ProviderARNs": [
+          {
+            "Fn::GetAtt": [
+              "SecurityLayerFABI09042SimpleUserPoolCustomResourceD4F80B00",
+              "UserPoolArn"
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042Authorizer"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIModelScoreboardResponseModel46C0C5D9": {
+      "Type": "AWS::ApiGateway::Model",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "ContentType": "application/json",
+        "Description": "Scoreboard response model (for /scoreboard/GET)",
+        "Name": "ScoreboardResponseModel",
+        "Schema": {
+          "$schema": "http://json-schema.org/draft-04/schema#",
+          "title": "ScoreboardResponseModel",
+          "type": "object",
+          "properties": {
+            "Scoreboard": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GamerScore"
+              }
+            }
+          },
+          "definitions": {
+            "GamerScore": {
+              "type": "object",
+              "properties": {
+                "Name": {
+                  "type": "integer"
+                },
+                "Score": {
+                  "type": "integer"
+                },
+                "Level": {
+                  "type": "integer"
+                },
+                "Shots": {
+                  "type": "integer"
+                },
+                "Nickname": {
+                  "type": "string"
+                },
+                "Lives": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIModelScoreboardResponseModel"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIModelGetParametersRequest1F7D3F01": {
+      "Type": "AWS::ApiGateway::Model",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "ContentType": "application/json",
+        "Description": "Model to request SSM:GetParameters",
+        "Name": "GetParametersRequest",
+        "Schema": {
+          "$schema": "http://json-schema.org/draft-04/schema#",
+          "title": "GetParametersRequest",
+          "type": "object",
+          "properties": {
+            "names": {
+              "type": "array"
+            }
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIModelGetParametersRequest"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1FA28EBAE": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "IngestionConsumptionLayerFABI09042API2EFB027D",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "v1",
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1session6E7B8346": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1FA28EBAE"
+        },
+        "PathPart": "session",
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1session"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1sessionGET10F0FAF1": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "ResourceId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1session6E7B8346"
+        },
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "AuthorizationType": "COGNITO_USER_POOLS",
+        "AuthorizerId": {
+          "Ref": "IngestionConsumptionLayerFABI09042Authorizer982EE784"
+        },
+        "Integration": {
+          "Credentials": {
+            "Fn::GetAtt": [
+              "IngestionConsumptionLayerFABI09042APIRoleE30F6AF2",
+              "Arn"
+            ]
+          },
+          "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              },
+              "ResponseTemplates": {
+                "application/json": "\"$util.escapeJavaScript(\"$input.path('$').GetParameterResponse.GetParameterResult.Parameter.Value\").replaceAll(\"'\",'\"')\""
+              },
+              "StatusCode": "200"
+            }
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "RequestParameters": {
+            "integration.request.querystring.Name": "'/fabi09042/session'",
+            "integration.request.header.Authentication": "method.request.header.Authentication"
+          },
+          "Type": "AWS",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":ssm:action/GetParameter"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": false
+            },
+            "StatusCode": "200"
+          }
+        ],
+        "RequestParameters": {
+          "method.request.querystring.Name": true,
+          "method.request.header.Authentication": true
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1sessionGET"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1sessionOPTIONS4FC5D1CC": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "OPTIONS",
+        "ResourceId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1session6E7B8346"
+        },
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              },
+              "StatusCode": "200"
+            }
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "RequestTemplates": {
+            "application/json": "{\"statusCode\": 200}"
+          },
+          "Type": "MOCK"
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": false,
+              "method.response.header.Access-Control-Allow-Methods": false,
+              "method.response.header.Access-Control-Allow-Headers": false
+            },
+            "StatusCode": "200"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1sessionOPTIONS"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1configAC1DA7CA": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1FA28EBAE"
+        },
+        "PathPart": "config",
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1config"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1configGET21A7EAFF": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "ResourceId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1configAC1DA7CA"
+        },
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "Credentials": {
+            "Fn::GetAtt": [
+              "IngestionConsumptionLayerFABI09042APIRoleE30F6AF2",
+              "Arn"
+            ]
+          },
+          "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              },
+              "ResponseTemplates": {
+                "application/json": "\n                                #set($inputRoot = $input.path('$'))\n                                {\n                                    \"Parameters\" : [\n                                        #foreach($elem in $inputRoot.Parameters)\n                                        {\n                                            \"Name\" : \"$elem.Name\",\n                                            \"Value\" :  \"$util.escapeJavaScript(\"$elem.Value\").replaceAll(\"'\",'\"')\"\n                                        } \n                                        #if($foreach.hasNext),#end\n                                    #end\n                                ]\n                                }"
+              },
+              "StatusCode": "200"
+            }
+          ],
+          "PassthroughBehavior": "WHEN_NO_TEMPLATES",
+          "RequestParameters": {
+            "integration.request.header.Content-Type": "'application/x-amz-json-1.1'",
+            "integration.request.header.X-Amz-Target": "'AmazonSSM.GetParameters'"
+          },
+          "RequestTemplates": {
+            "application/json": "{\"Names\" : [\"/fabi09042/userpoolid\",\"/fabi09042/userpoolurl\",\"/fabi09042/clientid\",\"/fabi09042/identitypoolid\"]}"
+          },
+          "Type": "AWS",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":ssm:path//"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true
+            },
+            "StatusCode": "200"
+          }
+        ],
+        "RequestModels": {
+          "application/json": {
+            "Ref": "IngestionConsumptionLayerFABI09042APIModelGetParametersRequest1F7D3F01"
+          }
+        },
+        "RequestParameters": {
+          "method.request.header.Content-Type": true,
+          "method.request.header.X-Amz-Target": true
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1configGET"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1configOPTIONS3CC5BA03": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "OPTIONS",
+        "ResourceId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1configAC1DA7CA"
+        },
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+              },
+              "StatusCode": "200"
+            }
+          ],
+          "PassthroughBehavior": "when_no_match",
+          "RequestTemplates": {
+            "application/json": "{\"statusCode\": 200}"
+          },
+          "Type": "MOCK"
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Headers": true
+            },
+            "StatusCode": "200"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1configOPTIONS"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1allocate08B26817": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1FA28EBAE"
+        },
+        "PathPart": "allocate",
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1allocate"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1allocatePOST82A4F7DA": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "ResourceId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1allocate08B26817"
+        },
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "AuthorizationType": "COGNITO_USER_POOLS",
+        "AuthorizerId": {
+          "Ref": "IngestionConsumptionLayerFABI09042Authorizer982EE784"
+        },
+        "Integration": {
+          "Credentials": {
+            "Fn::GetAtt": [
+              "IngestionConsumptionLayerFABI09042APIRoleE30F6AF2",
+              "Arn"
+            ]
+          },
+          "IntegrationHttpMethod": "POST",
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ProcessingLayerFABI09042AllocateGamerFn9B1A45A4",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": [
+          {
+            "StatusCode": "200"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1allocatePOST"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1allocateOPTIONSF1B5476E": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "OPTIONS",
+        "ResourceId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1allocate08B26817"
+        },
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+              },
+              "StatusCode": "200"
+            }
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "RequestTemplates": {
+            "application/json": "{\"statusCode\": 200}"
+          },
+          "Type": "MOCK"
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Headers": true
+            },
+            "StatusCode": "200"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1allocateOPTIONS"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1deallocate3F422122": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1FA28EBAE"
+        },
+        "PathPart": "deallocate",
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1deallocate"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1deallocatePOSTC28D11A2": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "ResourceId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1deallocate3F422122"
+        },
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "AuthorizationType": "COGNITO_USER_POOLS",
+        "AuthorizerId": {
+          "Ref": "IngestionConsumptionLayerFABI09042Authorizer982EE784"
+        },
+        "Integration": {
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "Credentials": {
+            "Fn::GetAtt": [
+              "IngestionConsumptionLayerFABI09042APIRoleE30F6AF2",
+              "Arn"
+            ]
+          },
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ProcessingLayerFABI09042DeallocateGamerFn5752A49E",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": [
+          {
+            "StatusCode": "200"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1deallocatePOST"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1deallocateOPTIONS1A418389": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "OPTIONS",
+        "ResourceId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1deallocate3F422122"
+        },
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+              },
+              "StatusCode": "200"
+            }
+          ],
+          "PassthroughBehavior": "when_no_match",
+          "RequestTemplates": {
+            "application/json": "{\"statusCode\": 200}"
+          },
+          "Type": "MOCK"
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Headers": true
+            },
+            "StatusCode": "200"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1deallocateOPTIONS"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1scoreboard8273A940": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1FA28EBAE"
+        },
+        "PathPart": "scoreboard",
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1scoreboard"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1scoreboardPOST4D3AADF4": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "ResourceId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1scoreboard8273A940"
+        },
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "AuthorizationType": "COGNITO_USER_POOLS",
+        "AuthorizerId": {
+          "Ref": "IngestionConsumptionLayerFABI09042Authorizer982EE784"
+        },
+        "Integration": {
+          "Credentials": {
+            "Fn::GetAtt": [
+              "IngestionConsumptionLayerFABI09042APIRoleE30F6AF2",
+              "Arn"
+            ]
+          },
+          "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              },
+              "ResponseTemplates": {
+                "application/json": "#set($scoreboard = $input.path('$.Item.TopX.L'))\n                                        { \n                                        \"Scoreboard\" : [\n                                                #foreach($gamerScore in $scoreboard)\n                                                        {\n                                                            \"Score\" : $gamerScore.M.Score.N ,\n                                                            \"Level\" : $gamerScore.M.Level.N ,\n                                                            \"Shots\" : $gamerScore.M.Shots.N ,\n                                                            \"Nickname\" : \"$gamerScore.M.Nickname.S\" ,\n                                                            \"Lives\" : $gamerScore.M.Lives.N\n                                                        }#if($foreach.hasNext),#end\n                                                \n                                                #end\n                                            ]\n                                        }"
+              },
+              "StatusCode": "200"
+            }
+          ],
+          "PassthroughBehavior": "WHEN_NO_TEMPLATES",
+          "RequestParameters": {
+            "integration.request.querystring.sessionId": "method.request.querystring.sessionId"
+          },
+          "RequestTemplates": {
+            "application/json": {
+              "Fn::Join": [
+                "",
+                [
+                  "{\n                        \"TableName\" : \"",
+                  {
+                    "Ref": "DatabaseLayerFABI09042SessionTopXF2DF7846"
+                  },
+                  "\",\n                        \"Key\" : {\n                            \"SessionId\" : {\n                                \"S\" : \"$input.params('sessionId')\"\n                            }\n                        }\n                    }"
+                ]
+              ]
+            }
+          },
+          "Type": "AWS",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":dynamodb:action/GetItem"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": {
+                "Ref": "IngestionConsumptionLayerFABI09042APIModelScoreboardResponseModel46C0C5D9"
+              }
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true
+            },
+            "StatusCode": "200"
+          }
+        ],
+        "RequestParameters": {
+          "method.request.querystring.sessionId": true
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1scoreboardPOST"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1scoreboardOPTIONSE6DA774F": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "OPTIONS",
+        "ResourceId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1scoreboard8273A940"
+        },
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+              },
+              "StatusCode": "200"
+            }
+          ],
+          "PassthroughBehavior": "when_no_match",
+          "RequestTemplates": {
+            "application/json": "{\"statusCode\": 200}"
+          },
+          "Type": "MOCK"
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Headers": true
+            },
+            "StatusCode": "200"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1scoreboardOPTIONS"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1updatestatusF8079646": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1FA28EBAE"
+        },
+        "PathPart": "updatestatus",
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1updatestatus"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1updatestatusPOST9F417C00": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "ResourceId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1updatestatusF8079646"
+        },
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "AuthorizationType": "COGNITO_USER_POOLS",
+        "AuthorizerId": {
+          "Ref": "IngestionConsumptionLayerFABI09042Authorizer982EE784"
+        },
+        "Integration": {
+          "Credentials": {
+            "Fn::GetAtt": [
+              "IngestionConsumptionLayerFABI09042APIRoleE30F6AF2",
+              "Arn"
+            ]
+          },
+          "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              },
+              "StatusCode": "200"
+            }
+          ],
+          "PassthroughBehavior": "WHEN_NO_TEMPLATES",
+          "RequestTemplates": {
+            "application/json": {
+              "Fn::Join": [
+                "",
+                [
+                  "#set($inputRoot = $input.path('$'))\n                        {\n                            \"Data\" : \"$util.base64Encode(\"$input.json('$')\")\",\n                            \"PartitionKey\" : $input.json('$.SessionId'),\n                            \"StreamName\" : \"",
+                  {
+                    "Ref": "IngestionConsumptionLayerFABI09042InputStreamA5D5ACBE"
+                  },
+                  "\"\n                        }"
+                ]
+              ]
+            }
+          },
+          "Type": "AWS",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":kinesis:action/PutRecord"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true
+            },
+            "StatusCode": "200"
+          }
+        ],
+        "RequestParameters": {
+          "method.request.header.Authentication": true
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1updatestatusPOST"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIv1updateStatusOPTIONSBA1386F9": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "OPTIONS",
+        "ResourceId": {
+          "Ref": "IngestionConsumptionLayerFABI09042APIv1updatestatusF8079646"
+        },
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+              },
+              "StatusCode": "200"
+            }
+          ],
+          "PassthroughBehavior": "when_no_match",
+          "RequestTemplates": {
+            "application/json": "{\"statusCode\": 200}"
+          },
+          "Type": "MOCK"
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Headers": true
+            },
+            "StatusCode": "200"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIv1updateStatusOPTIONS"
+      }
+    },
+    "IngestionConsumptionLayerFABI09042APIDeployment9C8A74EC": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "IngestionConsumptionLayerFABI09042API2EFB027D"
+        },
+        "Description": "Production deployment",
+        "StageName": "prod"
+      },
+      "DependsOn": [
+        "IngestionConsumptionLayerFABI09042APIv1allocateOPTIONSF1B5476E",
+        "IngestionConsumptionLayerFABI09042APIv1allocatePOST82A4F7DA",
+        "IngestionConsumptionLayerFABI09042APIv1configGET21A7EAFF",
+        "IngestionConsumptionLayerFABI09042APIv1configOPTIONS3CC5BA03",
+        "IngestionConsumptionLayerFABI09042APIv1deallocateOPTIONS1A418389",
+        "IngestionConsumptionLayerFABI09042APIv1deallocatePOSTC28D11A2",
+        "IngestionConsumptionLayerFABI09042APIv1scoreboardOPTIONSE6DA774F",
+        "IngestionConsumptionLayerFABI09042APIv1scoreboardPOST4D3AADF4",
+        "IngestionConsumptionLayerFABI09042APIv1sessionGET10F0FAF1",
+        "IngestionConsumptionLayerFABI09042APIv1sessionOPTIONS4FC5D1CC",
+        "IngestionConsumptionLayerFABI09042APIv1updateStatusOPTIONSBA1386F9",
+        "IngestionConsumptionLayerFABI09042APIv1updatestatusPOST9F417C00"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "FABI09042/IngestionConsumptionLayer/FABI09042APIDeployment"
+      }
+    }
+  },
+  "Parameters": {
+    "SecurityLayerFABI09042PostRegistrationCodeS3BucketCE5A2BB4": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"FABI09042/SecurityLayer/FABI09042PostRegistration/Code\""
+    },
+    "SecurityLayerFABI09042PostRegistrationCodeS3VersionKey0265DB60": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"FABI09042/SecurityLayer/FABI09042PostRegistration/Code\""
+    },
+    "SecurityLayerFABI09042PostRegistrationCodeArtifactHashF7BC00D1": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"FABI09042/SecurityLayer/FABI09042PostRegistration/Code\""
+    },
+    "SingletonLambda2ef0f630941232199d0b7f4928e34907CodeS3Bucket85097470": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"FABI09042/SingletonLambda2ef0f630941232199d0b7f4928e34907/Code\""
+    },
+    "SingletonLambda2ef0f630941232199d0b7f4928e34907CodeS3VersionKey31EFDABA": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"FABI09042/SingletonLambda2ef0f630941232199d0b7f4928e34907/Code\""
+    },
+    "SingletonLambda2ef0f630941232199d0b7f4928e34907CodeArtifactHash48BB5149": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"FABI09042/SingletonLambda2ef0f630941232199d0b7f4928e34907/Code\""
+    },
+    "ProcessingLayerFABI09042AllocateGamerFnCodeS3BucketEE25B92A": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"FABI09042/ProcessingLayer/FABI09042AllocateGamerFn/Code\""
+    },
+    "ProcessingLayerFABI09042AllocateGamerFnCodeS3VersionKeyD93640C0": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"FABI09042/ProcessingLayer/FABI09042AllocateGamerFn/Code\""
+    },
+    "ProcessingLayerFABI09042AllocateGamerFnCodeArtifactHash6377A271": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"FABI09042/ProcessingLayer/FABI09042AllocateGamerFn/Code\""
+    },
+    "ProcessingLayerFABI09042DeallocateGamerFnCodeS3Bucket56D55FE8": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"FABI09042/ProcessingLayer/FABI09042DeallocateGamerFn/Code\""
+    },
+    "ProcessingLayerFABI09042DeallocateGamerFnCodeS3VersionKeyEEBAD357": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"FABI09042/ProcessingLayer/FABI09042DeallocateGamerFn/Code\""
+    },
+    "ProcessingLayerFABI09042DeallocateGamerFnCodeArtifactHash1D479CBF": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"FABI09042/ProcessingLayer/FABI09042DeallocateGamerFn/Code\""
+    },
+    "ProcessingLayerFABI09042ScoreboardFnCodeS3Bucket84A53926": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"FABI09042/ProcessingLayer/FABI09042ScoreboardFn/Code\""
+    },
+    "ProcessingLayerFABI09042ScoreboardFnCodeS3VersionKeyBCD177B0": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"FABI09042/ProcessingLayer/FABI09042ScoreboardFn/Code\""
+    },
+    "ProcessingLayerFABI09042ScoreboardFnCodeArtifactHashF7645CA4": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"FABI09042/ProcessingLayer/FABI09042ScoreboardFn/Code\""
+    }
+  }
+}

@@ -3,7 +3,7 @@
 
 const AWS = require('aws-sdk');
 const CognitoISP = new AWS.CognitoIdentityServiceProvider();
-const response = require('./response.js');
+const response = require('response');
 
 
 /**

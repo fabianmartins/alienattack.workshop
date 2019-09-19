@@ -21,7 +21,7 @@ AWS Alien Attack runs very close at zero-cost for one user, but there is cost. C
 * At the *programming* side, we are using [AWS SDK for Javascript in the Browser](https://aws.amazon.com/sdk-for-browser/) and [AWS SDK for node](https://aws.amazon.com/sdk-for-node-js/). Alien Attack was not developed using the best practices, exaclty because one of the workshops is about fixing it and applying the best practices for programming and DevSecOps.
 </details>
 
-These are the regions that cover all the services required for this workshop.
+Considering that we are using Cloud9, these are the regions that, at the time of writing this document, cover all the services required for this workshop. If you are not using Cloud9, other regions can be considered.
 
 ~~~
 [ { Name: 'Northern Virginia',   Continent: 'Americas', Id: 'us-east-1' },
@@ -60,8 +60,8 @@ We hope that your skills may help us with the challenge of *MAKING THE APPLICATI
 ### prepACTIVITY 1 - Cloud9 - Create your environment
 
 #### STEP 1 - Access your account
-1. Login to your account
-2. Select a region (take note of the region) - We recommend us-east-1 (Virginia) or us-east-2 (Ohio)
+1. Login to your account.
+2. Select a region (take note of the region).
 
 **IMPORTANT:** Be sure that you have permissions to create resources on your account. For the purpose of this workshop, having administrative privileges is the best option.
 
@@ -75,93 +75,86 @@ We hope that your skills may help us with the challenge of *MAKING THE APPLICATI
 		* For "Instance type" choose `t2.micro (1 GiB RAM + 1 vCPU)*`
 		* Leave the other configuration settings at their default values and click **Next step**, and then **Create environment**
 
-In a few seconds your environment will be available. You can close the Welcome tab.
+In a few seconds your environment will be available. You can close the Welcome tab, and also the *Immediate* tab that you can see at the bottom of your screen.
 
-#### <a name="config-cloneapprep"></a>STEP 3 - Clone this repository
+#### <a name="config-cloneapprep"></a>STEP 3 - Clone the back-end repository
 
 Down on your Cloud9 console, a terminal is available. Go to the terminal and clone this repository. This repository contains the back-end.
 
 ~~~
-~/environment $ git clone https://github.com/fabianmartins/alienattack.workshop
+$ git clone https://github.com/fabianmartins/alienattack.workshop
 ~~~
 
-#### STEP 4 - Clone the application repository - ON YOUR COMPUTER
+#### STEP 4 - Clone the front-end repository
 
-**This is supposed to be done on your local computer**. You can clone it at your Cloud9 environment, but for having a better experience, using your favorite browser, clone it in your own computer.
+This is the repository for the Alien Attack front-end.
 
-This is the repository with the Alien Attack front end.
-
-**IMPORTANT:** Disregard any instructions at that repository (but you can always read the comments).
+**IMPORTANT:** Disregard any instructions at that repository (but you can always read the comments if you want).
 
 ~~~
 $ git clone https://github.com/fabianmartins/alienattack.application.git
 ~~~
+
+At this point, if you look at the left hand side of your Cloud9 console, your folder tree must be showing two main folders: one for `alienattack.workshop` and one for `alienattack.application`.
+
 
 **IMPORTANT:** The frond-end DOES NOT WORK YET on mobile devices, and in some versions of Windows, especially those with touch screen.
 
 
 #### STEP 5 - Update the environment - at Cloud9
 
-Getting back to your **Cloud9 environment**, run the script `config.sh` following the instructions below.
+Getting back to your **Cloud9 environment**, let's update the current instance.
 
-Running this script will update your environment. This script changes your bash_profile. So, if your intend to run it on your own machine, be sure about the side effects of this action.
+1. Input the command below to get into the alienattack.workshop folder
 
-~~~
-cd alienattack.workshop
-~~~
-Make sure that your screen shows:
+    ~~~
+    cd alienattack.workshop/cdk
+    ~~~
+    Make sure that your screen shows:
 
-~~~
-~/environment/alienattack.workshop/cdk
-~~~
+    ~~~
+    ~/environment/alienattack.workshop
+    ~~~
 
-Then run the following command to configure your environment.
+2. Run the following command to update and configure your environment.
 
-~~~
-source config.sh
-~~~
+    ~~~
+    source config.sh
+    ~~~
 
 Don't worry if some *warning* messages appear, especially if it's about python.
 
-To check if everything is ok, you can run the following commands:
-
-~~~
-node --version
-~~~
-This will show you the latest version, which you can compare to the results of  
-
-~~~
-nvm ls-remote --lts | grep Latest
-~~~
-which will give you the list of long-term supported (lts) versions.
-
-And by running 
-
-~~~
-cdk
-~~~
-
-and getting a non-error response, you will be sure that CDK (Cloud Development Kit) is working.
 
 #### STEP 6 - Start background compilation for CDK
 
+<details><summary>Click here to expand the comments and understand what we are doing here</summary>
 There are two ways of building the environment: *continuously*, and *on demand*. 
 
 *On demand* is done by running `npm run build` from inside the cdk folder at each time you change a .ts (typescript) file. This is not very operational, so we will stick to *continuous compilation*.
 
 *Continuous compilation*, the recommended approach, means that the environment will be automatically compiled at every file change, so you can check possible errors right away.
 
-One way of configuring continuous compilation is by having 2 terminals open. One you will be using to issue commands. The other one, you will be using to monitor the progress of the development and corresponding compilation.
-
-*Do this:*
+One way of configuring continuous compilation is by having 2 terminals open. One of those terminals you will be using to issue commands. The other one, you will be using to monitor the progress of the development and corresponding compilation.
+</details>
 
 1. At the bottom of the page of your Cloud9 IDE, click the **`(+)`** icon, and then `New Terminal` to add a second terminal.
-2. On the new terminal, get into the cdk folder and run `npm run watch`:
+2. Considering that you are at `~/environment` on the new terminal, get into the cdk folder 
 
-~~~ 
-~/environment $ cd alienattack.workshop/cdk/
-~/environment/alienattack.workshop/cdk (master) $ npm run watch
-~~~ 
+    ~~~ 
+    cd alienattack.workshop/cdk/
+    ~~~
+    
+    After issuing the command above, your prompt line will look like this:
+    
+    ~~~
+    ~/environment/alienattack.workshop/cdk (master) $
+    ~~~
+
+3. Kick off the continuous backgorund compilation by issuing the following command:
+
+    ~~~ 
+    npm run watch
+    ~~~ 
 
 This will kick off the continuous compilation of the environment. It may take a few seconds until you get the results. 
 
@@ -178,27 +171,28 @@ A totally successful compilation will be something like the output below:
 [0:00:00 AM] Found 0 errors. Watching for file changes.
 ~~~  
 
-**IMPORTANT:** If you decide for not using the continuous compilation, you must remember to run `npm run build` every time you save a file.
+**IMPORTANT:** If you decide for not using the continuous compilation, you must remember to run `npm run build` every time you edit and save a file.
 
 
-#### STEP 7 - Synthesize the cloudformation for your environment
+#### STEP 7 - Deploy the back-end
 
 You will need to decide for an **"Environment name"** that will be used to configure and deploy your environment. 
 
 **My suggestions for you:**  
  
 * **DON'T** use special characters, dashes, spaces in the environment name.
-* **DON'T** use long names like *ThisIsMyEnvironmentName*, or *ThisIsAnUnecessaryVeryLongAndName*. Keep it simple. User something like Env01.
+* **DON'T** use long names like *ThisIsAnUnecessaryVeryLongAndName*. Keep it simple. Use something like Env01.
 * Also, **DON'T** use very short names, like *fm*. Try to use at least 5 characters to avoid name collisions.
 * If you're alone in the account/region, pick a small word for envname, like your initials, and add the month and day just to avoid collisions (ex: fabi0405).
 * The environment name will be used to create new S3 buckets. S3 bucket names are global. So, if you use very common words (like test, dev, prod, system, app) almost surely you will get a name collision. Be sure of chosing something that will avoid this kind of issue.
 * Avoid using potentially reserved words. Possible reserved words are AWS, S3, and so on.
 
-The configuration was designed like this for the case when different individuals are sharing the same account (due their company's requirements) and sharing the same region (due the need of specific features of the AWS services, only available in such regions).
+<details><summary>*Click here to expand and understand why you are doing this step*</summary>
+We are running the synthesizing step to give you the opportunity of reading the generated Cloudformation template. Also, the configuration was designed like this for the case when different individuals are sharing the same account (due their company's requirements) and sharing the same region (due the need of specific features of the AWS services, only available in such regions).
 
 Yet, the value chosen for **"envname"** is used to create the buckets required by the application, so chose them in a way that most likely will avoid collision to S3 bucket names (which are global).
 
-Let's suppose that you selected envname=r2d2. Then, if the deployment is successful, at the end something like this will appear
+For instance, let's suppose that you have selected envname=r2d2. Then, if the deployment is successful, at the end something like this will appear
 
 ***
 
@@ -238,16 +232,17 @@ Environment name: TEST
 Unable to find output file /tmp/cdkF6Q2pM/cdk.out; are you calling app.run()?
 ~~~
 
+</details>
+
 ***
 
 #### Step 7.1 - Synthetizing your environment
 
-1. Go to the other available terminal at your Cloud9 environment and be sure of being at the CDK folder
+1. Go to the other available terminal at your Cloud9 environment and be sure of being at the CDK folder. You prompt should look like `~/environment/alienattack.workshop/cdk (master) $`
 2. Use the synth command for CDK to synthetize your enviroment.
 
 ~~~
-~/environment/alienattack.workshop/cdk (master) $
-~/environment/alienattack.workshop/cdk (master) $ cdk synth -c envname=<envname>
+cdk synth -c envname=<envname>
 ~~~
 
 This will generate an output for the corresponding Cloudformation template. You can save it by redirecting the result to some folder, so you can read it through.
@@ -258,34 +253,52 @@ This will generate an output for the corresponding Cloudformation template. You 
 Being at your cdk folder, and having decided for an *envname*, run the following command:
 
 ~~~
-~/environment/alienattack.workshop/cdk (master) $ cdk deploy -c envname=<envname>
+cdk deploy -c envname=<envname>
 ~~~
 
-CDK will first to show you what changes will be applied to the environment. After that, it will ask if you really want to deploy.
+CDK will first show you what changes will be applied to the environment. After that, it will ask if you really want to deploy.
 
-Answer with **y**, and wait for environment to be deployed.
+Answer with **y**, and wait for environment to be deployed. If everything is ok, at the end you are going to see something like this:
 
-Wait for the environment finishing deploying.
-
-***
+ `✅  <envname>`
+ 
+Below that line, you will see a section named *Outputs*, with some additinal lines. Take note of those. You are going to need it.
 
 
 ## Fix the application
 
 Here is where we start fixing the environment.
 
-The system is comprised of two applications: the Game, and the Scoreboard.
+The system is comprised of two applications: the Game, and the Scoreboard. We've been said that these applications are needing a facelift. However, let's leave the cosmetics for another opportunity.
 
 We know that the system is not running properly because we tried to run each one of the applications, and while having the browser console opened, we could see a lot of errors, and it's clear that the application is broken.
 
 As you will need to run the application after fixing it (or now, just to check if it's really broken), here is the guidance for opening each one of the applications. 
 
-For this part, you will use the environment that you cloned **into your local computer** on the step ["Clone the application repository - ON YOUR COMPUTER"](#config-cloneapprep).
+For this part, you will visit the `alienattack.application` folder in your environment. Let's access both applications:
 
-* **Manager console**: using your browser, visit the folder where you installed the application, and open **`./scoreboard/index.html`**.
-* **Game console**: using your browser, visit the folder where you installed the application, and open **`./game/index.html`**.
+### Accessing the Game application
+1. Select the file **`alienattack.application/game/index.html`**
+2. Right-click the file to open the menu, and select **Preview**. A browser will be opened on Cloud9. You are expected to see a screen similar to the one below. 
 
-As it is not running, let's try to fix it using the following instructions.
+    ![](./images/alienattack.cloud9.browser.game.png) 
+    
+3. See that at the right hand side of the line where is the URL for the file we have highlighted a box with an arrow within (we will call it the *window-expanding icon* ) that will open the application on a tab on your browser. This is the best way for us to track what's happening on the application. Click on that box.
+
+If you visit the console of your browser, you will see some 404 errors, and the message `ERROR LOADING CONFIG`. That is expected, as the application is broken.
+
+The process for opening the Manager application is analogous. Follow the steps below:
+
+### Accessing the Manager application
+1. Select the file **`alienattack.application/scoreboard/index.html`**
+2. Right-click the file to open the menu, and select **Preview**. A browser will be opened on Cloud9. See that at the top. You are expected to see a screen similar to the one below. 
+
+      ![](./images/alienattack.cloud9.browser.manager.png) 
+
+3. As we did for the Game Application, click on the *window-expanding box* to open the application in another browser tab.
+   
+The applications are still not working. We need you to work on the architecture to make it work properly.
+
 
 ### fixACTIVITY 1 - Application - Fix the application configuration
 
@@ -295,7 +308,7 @@ We got a tip from one of the developers that remained at the company that a conf
 The config file for the downloaded application is invalid.
 
 ##### [Solution guidance]
-On your **local machine**, where you cloned the application, open the file `resources/js/awsconfig.js` and change it to have the following format
+On Cloud9, open the file where you cloned the application, open the file `alienattack.application/resources/js/awsconfig.js`. It is going to have the following format:
 
 ~~~
 const DEBUG = true;
@@ -306,16 +319,20 @@ const AWS_CONFIG = {
 }
 ~~~
 
-Here is how to do it:
+You need to replace the fields with the values related to the environment that you have just deployed using CDK. Here is how you get the required values:
 
-1. **region**: To find the region is easy. Probably you still remember it, or you can get it from the last message of the CDK deployment. Optionally, you can go to your console and check the URL. It will be like `https://<region>.console.aws.amazon.com`. 
-2. **API_ENDPOINT**
-  * Go to the AWS console, in the region that you deployed the environment, and then go to the service *API Gateway*. You will find an API with the name beginning with the name that you provided at the time of the deployment. Click on it.  
-  		* From Cloud9, to open another window for the AWS console, just go to the meny and click on *AWS Cloud9* --> *Go To Your Dashboard*, and then *Services* --> *API Gateway*. You will find your API there.
+1. **API_ENDPOINT**
+  * From Cloud9, to open another window for the AWS console, just go to the menu and click on *AWS Cloud9* --> *Go To Your Dashboard*, and then *Services* --> *API Gateway*. You will find your API there.
+  * Click on the API named as **`<envname>`** (the name
   * Click on **Stages**.
   * Click on **prod**.
   * At the top of the screen, on the right, you will see the **INVOKE URL**. It has the format `https://<API Id>.execute-api.<region>.amazonaws.com/prod`. When copying it to the required field in the awsconfig.js, don't forget to add the */v1/* at the end.
-3. **APPNAME**: This one is easy. Just copy the values that you selected for *envName*, **BUT MAKE SURE TO USE UPPERCASE**. So, for instance, if you selected *r2d2* for envName, then the value for this field will be *R2D2*.
+
+
+2. **region**: You can extract the region from the API_ENDPOINT, from the last message of the CDK deployment, or you can even go to your console and check the URL. It will be like `https://<region>.console.aws.amazon.com`. 
+
+
+3. **APPNAME**: This one is easy. Just copy the value that you have selected for *envName*, **BUT MAKE SURE TO USE UPPERCASE**. So, for instance, if you selected *r2d2* for envName, then the value for this field will be *R2D2*.
 
 If you did everything correclty, your aws_config.js file will be similar to this:
 
@@ -328,11 +345,14 @@ const AWS_CONFIG = {
 }
 ~~~ 
 
+**-- FastFix --**  
+Use the results that you have got from the deployment. They will help you to fill the gaps on that file.
+
 **IMPORTANT**  
 
-* Be sure of saving the file using UTF-8 (pure text). Avoid editors that save the files with special characters
+* In the future, when doing this on your own computer, be sure of saving the file using UTF-8 (pure text). Avoid editors that save the files with special characters
 * Don't forget to maintain the quotes that are on those fields. 
-  * For example, if you are in us-east-1, the line for the region will be `"region" : "us-east-1"`. See, the quotes are there
+  * For example, if you are in us-east-1, the line for the region will be `"region" : "us-east-1"`. See, the quotes are there.
 * Be sure of using **uppercase** for the value of the field APPNAME. So, for example, if your environment name is r2d2, the line for appName will become `"APPNAME" : "R2D2"`. 
 * Again, check if the quotes are there!
 * Save the file!
@@ -340,16 +360,13 @@ const AWS_CONFIG = {
 
 ### fixACTIVITY 2 - Test the registration process
 
-Now, probably the application must be running, at least in part. Let's try to create an user.
+Now, the application might be running, at least in part. Let's try to create an user. Confirm that you executed the Fix Activity 1. The file `./resources/js/aws_config.js` must be properly configured.  
 
-These steps are going to be executed using the respository that you cloned **to your local computer**.
-
-1. Confirm that you executed the Fix Activity 1. The file `./resources/js/aws_config.js` must be properly configured.
-2. Open a privacy/incognito page for your browser. This will guarantee that you will have the cookies cleared after use.
-3. Open this file that is on your application deployment: `./game/index.html`
-4. If everything was ok, and the application was able to retrieve the configurations, you will see a page with the buttons `Register` and `Login`. Choose **Register**.
-5. Register yourself filling the fields properly
-	* **Username**: Define a username. Use only lowercase letters and don't use symbols.
+1. Go to the Game tab that you have just opened using the process described in the section ["Accessing the Game Application"](#accessing-the-game-application). Reload it (This is important!). If it's not opened, please reopen it.
+2. If everything was ok, you are going to see on the console window of your browser that the 404 errors are not there anymore, and that the message `CONFIG LOADED` is shown, meaning that the application was able to retrieve the configurations.  
+3. You will see a page with the buttons `Register` and `Login`. Choose **Register**.
+4. Register yourself filling the fields properly
+	* **Username**: Define a username. Use only lowercase letters and don't use symbols. Don't use your email here also, as this is a PII information.
 	* **e-mail**: You will need a valid and accessible email. Cognito needs to send you a confirmation email and you will need to click on it to confirm. We recommend using a personal email to not get into anti-spam controls.
 	* **Password**: For testing purposes, use a simple password (like `abc123`). This password is managed by Cognito. So, it's not stored on any application database.
 	* **Confirm (and memorize, or take note) your password**: Repeat your password.
@@ -359,31 +376,26 @@ These steps are going to be executed using the respository that you cloned **to 
 
 ### fixACTIVITY 3 - Test the login process
 
-1. Get back to the application on your browser (the one that you opened from `./game/index.html`), and now choose **Login** (or skip to step 2 if you're already there).
+1. Get back to the Game application on your browser, and now choose **Login** (or skip to step 2 if you're already there).
 2. Enter your credentials, and click on **Login**.
 3. If you entered your credentials right, you will see a pop-up message `Login successful to user <username>`.
 4. If you get to a page where the indicating status is WAITING and a countdown stopped at 10, then the login is ok, but something else is wrong (you can check the browser console, if you want).
-5. Close the window, to be sure that the cookies were deleted, so we can proceed with the test.
+
 
 ### fixACTIVITY 4 - Test the Alien Attack manager console
 
 The manager console is where the manager creates a game session, and starts the game so the other participants can join it.
 
-We've been said that these applications are needing a face lifting. However, let's leave the cosmetics for another opportunity.
-
-**These steps are going to be executed using the respository that you cloned to your local computer.**
-
-1. Open a privacy/incognito page for your browser. This will guarantee that you will have the cookies cleared after use.
-2. Open this file that is on your application deployment: `./scoreboard/index.html`.
-3. The page will show some fields for you to enter the username and password that you defined earlier. Do it.
-4. If the application indicates `AccessDeniedException`, then we have an access problem. Proceed to the next fixActivity to keep on fixing the system.
+1. Go to the Manager application, that you have opened using the steps described in the section ["Accessing the Manager application](#accessing-the-manager-application). The same way that we did with the Game application, if you already have it opened on a tab, reload it.
+2. The page will show some fields for you to enter the username and password that you defined earlier. Do it.
+3. If the application indicates `AccessDeniedException`, then we have an access problem. Proceed to the next fixActivity to keep on fixing the system.
 
 
 ### fixACTIVITY 5 - Cognito - Fix the permissions on the groups for RBAC
 
 The people from the Security Team that joined our task force to solve the issues said that is essential to have RBAC (Role-Based Access Control) properly configured on the system. They also said that the version of the CDK used here doesn't allow us to solve that by code, unless we create a Custom Resource as it was done for the creation of the User Pool. Nobody on the team knows how to do it, and we don't have time to dive deep on it now. 
 
-But one of the SysAdmins said to have the playbook for that, and send us the guidance. Let's try to leverage it.
+However, one of the SysAdmins said to have the playbook for that, and send us the guidance. Let's try to leverage it.
 
 ##### [Problem] 
 The Identity Pool configuration is missing the configuration of the roles for each one of the groups (Managers and Players). We need to attach the proper roles to the user when the user signs in to the application.
@@ -393,7 +405,8 @@ The Identity Pool configuration is missing the configuration of the roles for ea
 This is the playbook that we've got from
 
 1. On your AWS Console, visit the Cognito service page.
-2. If you got to the landing page of the service, you will click on the button **Manage Identity Pools**.
+2. If you got to the landing page of the service, you will click on the button **Manage Identity Pools**. 
+    * If by any reason you have landed on the User Pools configuration page, look at the top of the window and click on *Federated Identities*.
 3. You will see an Identity Pool named as `<envName>`. Click on it.
 4. On the top right, there is a very discreet label entitled `Edit Identity Pool`. Click on it.
 5. Open the section `Authentication Providers`.
@@ -404,6 +417,7 @@ This is the playbook that we've got from
 	* For the drop down box at the right side of the field, select the value **Contains**.
 	* For the input box at the right of the `Contains` box, input the value **`<envName>ManagersRole`**. Be careful with typos, and use uppercase for the *`<envName>`* part.
 	* For the drop down box on the right, select **`<envName>ManagersRole`**.
+9 Click on the button `Add another rule`.
 9. Second rule - **PLAYERS**
 	* For the field `Claim`, input the value **cognito:preferred_role**.
 	* For the drop down box at the right side of the field, leave the value **Contains** selected.
@@ -416,7 +430,7 @@ This is the playbook that we've got from
 **-- FastFix --**  
 The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixcognito.sh`
 
-1. Go to the folder `alienattack.workshop` by:
+1. On your Clou9 environment, go to the folder `alienattack.workshop` by issuing:
 
 ~~~
 cd ~/environment/alienattack.workshop
@@ -436,12 +450,12 @@ Execute again the ***fixACTIVITY 3***. We've been said that it still will not wo
 #### Step 2 - Testing again the login to the manager console
 Execute again the ***fixACTIVITY 4***. We've been said that we are getting an AccessDeniedException. 
 
-Let's proceed to the next activity and check if we can solve it.
+Let's proceed to the next activity and check if we can fix the login page.
 
 
 ### fixACTIVITY 7 - Cognito - Configure yourself as a manager
 
-We have found some notes in the desk of the solutions architect. There is a piece of paper where is written *"use AWS CLI to make yourself an application admin"*. The following steps were found that paper. Hopefully they will help you to solve the issue.
+We have found some notes on the desk of the solutions architect. There is a post-it note where is written *"use AWS CLI to make yourself an application admin"*. The following steps were found that note. Hopefully they will help you to solve the issue.
 
 **Task 1.** Take note of the USER POOL ID  
 
@@ -518,16 +532,18 @@ We need to connect the Lambda function to Kinesis.
 1. Go to your AWS Console, and visit the Lambda service page.
 2. Search for a function named **`<envName>ScoreboardFn`**.  
 3. Click on the name of the function. You will be taken to the configuration of the lambda function.
-4. Check if the information sent from the rebel is correct. On the section named *Designer* if you see a message *"Add triggers from the list on the left"*, then the rebel is right. The trigger is missing. Let's create it.
-5. On the left, on the section 'Add triggers', click on **Kinesis**. A section named *Configure triggers* will appear below.
+4. Check if the information sent from the rebel is correct. On the section named *Designer* if you see the message *"Add trigger"*, then the rebel is right. The trigger is missing. Let's create it.
+5. On the left, click on 'Add trigger'
+6. On the Trigger Configuration, click on the drop down list and type **Kinesis**. A section for you to configure the trigger will show up.
 6. Configure the fields:
    * **Kinesis stream**: Select the Kinesis Data Stream attached to your environment. The name must be in the form `<envName>_InputStream`
    * **Consumer**: select *No consumer*
    * **Batch size**: insert the value *700*.
+   * **Batch window**: Input *1*.
    * **Starting position**: select *Latest*.
    * Check box **Enable trigger**: leave it marked for now.
    * Click on the button **Add** at the right.
-   * On the top, click on the button **Save**.
+   * If everything went well you will get a message confirming that you have added the trigger.
 
 **-- FastFix --**  
 If you want to skip this activity: 
@@ -539,7 +555,7 @@ If you want to skip this activity:
 
 ### fixACTIVITY 10 - Kinesis Firehose - Create the missing Kinesis Firehose
 
-The Analytics Team has complained that no data is going to their data lake staging area. They have said that Kinesis Streams drops the data to a Kinesis Firehose, and then Kinesis Firehose moves the data to a S3 bucket named with the suffix "raw" (you can check if the bucket exists).
+The Analytics Team has complained that when the application is running no data is going to their data lake's staging area. They have said that Kinesis Streams drops the data onto a Kinesis Firehose, and then Kinesis Firehose moves the data to a S3 bucket named with the suffix "raw" (you can check if the bucket exists).
 
 They said *"This is pretty simple! It is just to connect the Kinesis Firehose to the Kinesis Streams. If the Kinesis Firehose doesn't exists, create one! Give us access and we can help. Or, call us if you need"*.
 
@@ -550,7 +566,7 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
 
 ##### [Solution guidance]
 1. Go to your AWS Console, and visit the page of Kinesis (don't confuse it with Kinesis Video).
-2. On the service page you are expected to see the Kinesis Streams on the left, and a missing Kinesis Firehose for the application. Let's create it.
+2. On the service page you are expected to see the Kinesis Streams on the left, and on the right hand side a Kinesis Firehose section where there is nothing for your application. Let's create it.
 3. Under the section *'Kinesis Firehose Delivery Streams*', or by clicking on *'Data Firehose*' at the left hand side, click on the button **Create Delivery Stream**.
 4. On the section *New delivery stream*, configure the fields as follows:
    * **Delivery stream name**: `<envName>Firehose`.
@@ -572,7 +588,7 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
    * **Error logging**: Select *Enabled*
    * **IAM Role**: Click on the button `Create new or choose`. An IAM configuration page will open.
    		* *IAMRole*: Leave the option *Create a new IAM Role* selected.
-   		* *Role Name*: `<envName>FirehoseRole`
+   		* *Role Name*: `<envName>_FirehoseRole`
    		* Click on the button **Allow**. You will be taken to the previous page.
    	* Click **Next**.
    	* Check the presented configuration.
@@ -590,14 +606,14 @@ If you want to skip this activity:
 
 ### fixACTIVITY 11 - Create a session for the game
 
-Get back to the manager console ('scoreboard/index.html' on your local computer), and follow the steps below to create a gaming session.
-
+Get back to the manager console ('scoreboard/index.html'), and follow the steps below to create a gaming session. At this moment it would be interesting to have the Game and Scoreboard windows opened side by side.
+ 
 1. Reload the Scoreboard console, and login again. This is just to guarantee that your token will be refreshed.
 2. On the field `Session Name` input **TEST**
 3. On the section `Game Type`, select **Multiple trials**
 4. Click on the button **Start game**
 5. If the page updates with a table containing a header with the words `Nickname`, `Score`, `Shots`, `Level`, `Lives`, then we are good.
-6. Open a second browser window, and execute again the steps to login into the game. For a better experience, leave the windows opened side by side. This time, if everything went well, you will see a button labeled **JOIN session**. Click on it 
+6. Get back to the game tab (or open another one). For a better experience, leave the windows opened side by side. This time, if everything went well, you will see a button labeled **JOIN session**. Click on it.
 
 If you are able to play, **you have fixed it!**
 
@@ -613,7 +629,8 @@ So, you are going to need to implement the API from scratch, following the requi
 
 1. The resource to be added on API Gateway must have the name `topxstatistics`.
 2. The resource will execute a HTTP GET, passing the querystring sessionId, which will hold the session id provided by the consumer of the API.
-3. The API Gateway will be integrated to the Lambda Function that you are going to create, and that is going to compute the player's performance. The excerpt of code that we have is the one below:
+   * Something likke `<api>/topxstatistics?sessionId=<session id>`
+3. The API Gateway request will be integrated to the Lambda Function that you are going to create, that going to compute the player's performance. The excerpt of code that we have is the one below:
 
 ~~~
 const computeStatisticsForSession = function(sessionId,callback) { 
@@ -652,7 +669,7 @@ const computeStatisticsForSession = function(sessionId,callback) {
 The API must be accessible only by the Manager.
 
 **-- FastFix --**  
-We heard that something can be learned from this [link](http://partnerfactoryprogram.s3-website-us-east-1.amazonaws.com/labpack/fullmicroservice/fullmicroservice.html). 
+We heard that something can be learned from this [link](http://partnerfactoryprogram.s3-website-us-east-1.amazonaws.com/labpack/fullmicroservice/fullmicroservice.html). Be sure of double checking your environment. It seems that you might already have the required table created. You might just need to populate the data.
 
 ### fixACTIVITY 13 - Deploying the WebSocket for APIGateway 
 
@@ -672,76 +689,66 @@ We have learned that this is implemeted via “websockets”, and we have the fo
        *Note: If you want to learn more about routes and what they do click on the **Learn More** button next to the input box*
     4. For Description enter, **WebSocket for Alien Attack**.
     5. Click **Create API**
-3. Navigate to the **Routes** page.
-4. Follow the instructions below for each Route.
-<details> <summary>Instructions for setting up the Connect Route </summary>
+3. Navigate to the **Routes** page (possibly you are going to be there already).
+4. Follow the instructions below for each Route:
 
-1. Click on the **$connect** route.
-1. Make sure **Lambda Function** is pressed for **Integration Type**
-2. Make sure **Lambda Proxy Integration** is clicked.
-3. Enter `<envName>WebSocketConnect` for **Lambda Function**
-4. For Execution Role enter the ARN for the IAM Role `<envName>API` (See instructions below)
-<details><summary>Instructions to find the IAM Role</summary>
+    1. For the **connect** route:
+      1. Click on the **$connect** route.
+	   2. Make sure **Lambda Function** is pressed for **Integration Type**
+	   3. Make sure **Lambda Proxy Integration** is clicked.
+	   4. Enter `<envName>WebSocketConnect` for **Lambda Function**
+	   5. For Execution Role enter the ARN for the IAM Role `<envName>API` (See instructions below)
+	<details><summary>Instructions to find the IAM Role</summary>
+		  1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
+		  2. Click on the **Roles** sidebard on the left side of the window.
+		  3. Search through the Roles to find the `<envName>API` Role.
+		  4. Click on the Role, then copy the **Role ARN**
+		  5. *Note: You will need this role for the other two roles; it will be beneficial to copy this ARN to a local clipboard*
+	</details>
+		  6. Click **Default Timeout** 
+		  7. Press **Save**
+		  8. Press **Ok** for any pop-ups
+	</details>
+	 
+	 2. For the **start-game** route:
+	     1. Enter `start-game` in, **New Route Key** and click the check box to the right. 
+		  2. Make sure **Lambda Function** is pressed for **Integration Type**
+		  3. Make sure **Lambda Proxy Integration** is clicked.
+		  4. Enter `<envName>WebSocketSynchronizeStart` for **Lambda Function**
+		  5. For Execution Role enter the ARN for the IAM Role `<envName>API` (See instructions below)
+			     <details><summary>Instructions to find the IAM Role</summary>
+					   1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
+						2. Click on the **Roles** sidebard on the left side of the window.
+						3. Search through the Roles to find the `<envName>API` Role.
+						4. Click on the Role, then copy the **Role ARN**
+						</details>
+	      6. Click **Default Timeout** 
+		   7. Press **Save**
+		   8. Press **Ok** for any pop-ups
 
-1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
-2. Click on the **Roles** sidebard on the left side of the window.
-3. Search through the Roles to find the `<envName>API` Role.
-4. Click on the Role, then copy the **Role ARN**
-5. *Note: You will need this role for the other two roles; it will be beneficial to copy this ARN to a local clipboard*
-</details>
-
-5. Click **Default Timeout** 
-6. Press **Save**
-7. Press **Ok** for any pop-ups
-</details>
-
-<details> <summary>Instructions for creating a start-game Route </summary>
-
-1. Enter `start-game` in, **New Route Key** and click the check box to the right. 
-1. Make sure **Lambda Function** is pressed for **Integration Type**
-2. Make sure **Lambda Proxy Integration** is clicked.
-3. Enter `<envName>WebSocketSynchronizeStart` for **Lambda Function**
-4. For Execution Role enter the ARN for the IAM Role `<envName>API`.
-<details><summary>Instructions to find the IAM Role</summary>
-
-1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
-2. Click on the **Roles** sidebard on the left side of the window.
-3. Search through the Roles to find the `<envName>API` Role.
-4. Click on the Role, then copy the **Role ARN**
-</details>
-
-5. Click **Default Timeout** 
-6. Press **Save**
-7. Press **Ok** for any pop-ups
-</details>
-
-<details> <summary>Instructions for setting up the Disconnect Route </summary>
-
-1. Click on the **$disconnect** route.
-1. Make sure **Lambda Function** is pressed for **Integration Type**
-2. Make sure **Lambda Proxy Integration** is clicked.
-3. Enter `<envName>WebSocketDisconnect` for **Lambda Function**
-4. For Execution Role enter the ARN for the IAM Role `<envName>API`.
-<details><summary>Instructions to find the IAM Role</summary>
-
-1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
-2. Click on the **Roles** sidebard on the left side of the window.
-3. Search through the Roles to find the `<envName>API` Role.
-4. Click on the Role, then copy the **Role ARN**
-</details>
-
-5. Click **Default Timeout** 
-6. Press **Save**
-7. Press **Ok** for any pop-ups
-</details>
-
-5. Once all the routes are deployed press the dropdown menu, **Actions**.
-6. Click **Deploy API**
-    1. For **Deployment Stage** enter, **[New Stage]**
-    2. For **Stage Name** enter, **Production**
-    3. Press **Deploy**
-7. There is now a page that has the **WebSocket URL** and **Connection URL**
-8. Copy the **WebSocket URL**.
+     3. For the **Disconnect** route:
+         1. Click on the $disconnect route.
+         2. Make sure Lambda Function is pressed for Integration Type
+         3. Make sure Lambda Proxy Integration is clicked.
+         4. Enter `<envName>WebSocketDisconnect` for Lambda Function
+         5. For Execution Role enter the ARN for the IAM Role `<envName>API`  (See instructions below)
+			     <details><summary>Instructions to find the IAM Role</summary>
+					   1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
+						2. Click on the **Roles** sidebard on the left side of the window.
+						3. Search through the Roles to find the `<envName>API` Role.
+						4. Click on the Role, then copy the **Role ARN**
+						</details>
+	      6. Click **Default Timeout** 
+		   7. Press **Save**
+		   8. Press **Ok** for any pop-ups
+			   
+    5. Once all the routes are deployed press the dropdown menu, **Actions**.
+    6. Click **Deploy API**
+	     1. For **Deployment Stage** enter, **[New Stage]**
+	     2. For **Stage Name** enter, **Production**
+	     3. Press **Deploy**
+	7. There is now a page that has the **WebSocket URL** and **Connection URL**
+	8. Copy the **WebSocket URL**.
 
 #### **Task 2:** Store WebSocket URL in Parameter Store
 1. Navigate to the Systems Manager console 

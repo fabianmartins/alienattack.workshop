@@ -1,4 +1,4 @@
-import { Construct } from '@aws-cdk/cdk';
+import { Construct, RemovalPolicy } from '@aws-cdk/core';
 import { ResourceAwareConstruct, IParameterAwareProps } from './../resourceawarestack'
 
 import DynamoDB = require('@aws-cdk/aws-dynamodb');
@@ -14,9 +14,10 @@ export class DatabaseLayer extends ResourceAwareConstruct {
             tableName : props.getApplicationName()+'Session',
             partitionKey : {
                 name : 'SessionId',
-                type : DynamoDB.AttributeType.String
+                type : DynamoDB.AttributeType.STRING
             },
-            billingMode : DynamoDB.BillingMode.PayPerRequest      
+            billingMode : DynamoDB.BillingMode.PAY_PER_REQUEST   ,
+            removalPolicy : RemovalPolicy.DESTROY   
         });
         this.addResource('table.session',sessionTable);
 
@@ -24,9 +25,10 @@ export class DatabaseLayer extends ResourceAwareConstruct {
             tableName : props.getApplicationName()+'SessionControl',
             partitionKey : {
                 name : 'SessionId',
-                type : DynamoDB.AttributeType.String
+                type : DynamoDB.AttributeType.STRING
             },
-            billingMode : DynamoDB.BillingMode.PayPerRequest
+            billingMode : DynamoDB.BillingMode.PAY_PER_REQUEST,
+            removalPolicy : RemovalPolicy.DESTROY   
         });
         this.addResource('table.sessioncontrol',sessionControlTable);
 
@@ -34,9 +36,10 @@ export class DatabaseLayer extends ResourceAwareConstruct {
             tableName : props.getApplicationName()+'SessionTopX',
             partitionKey : {
                 name : 'SessionId',
-                type : DynamoDB.AttributeType.String
+                type : DynamoDB.AttributeType.STRING
             },
-            billingMode : DynamoDB.BillingMode.PayPerRequest
+            billingMode : DynamoDB.BillingMode.PAY_PER_REQUEST,
+            removalPolicy : RemovalPolicy.DESTROY
         });
         this.addResource('table.sessiontopx',sessionTopXTable);
     }
