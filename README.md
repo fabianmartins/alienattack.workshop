@@ -261,6 +261,8 @@ CDK will first show you what changes will be applied to the environment. After t
 Answer with **y**, and wait for environment to be deployed. If everything is ok, at the end you are going to see something like this:
 
  `✅  <envname>`
+ 
+Below that line, you will see a section named *Outputs*, with some additinal lines. Take note of those. You are going to need it.
 
 
 ## Fix the application
@@ -277,11 +279,11 @@ For this part, you will visit the `alienattack.application` folder in your envir
 
 ### Accessing the Game application
 1. Select the file **`alienattack.application/game/index.html`**
-2. Right-click the file to open the menu, and select **Preview**. A browser will be opened on Cloud9. See that at the top. You are expected to see a screen similar to the one below. 
+2. Right-click the file to open the menu, and select **Preview**. A browser will be opened on Cloud9. You are expected to see a screen similar to the one below. 
 
     ![](./images/alienattack.cloud9.browser.game.png) 
     
-3. See that at the right of the line where is the URL for the file we have highlighted an arrow-box that will open the application on a tab on your browser. This is the best way for us to track what's happening on the application. Click on that arrow-box.
+3. See that at the right hand side of the line where is the URL for the file we have highlighted a box with an arrow within (we will call it the *window-expanding icon* ) that will open the application on a tab on your browser. This is the best way for us to track what's happening on the application. Click on that box.
 
 If you visit the console of your browser, you will see some 404 errors, and the message `ERROR LOADING CONFIG`. That is expected, as the application is broken.
 
@@ -293,7 +295,7 @@ The process for opening the Manager application is analogous. Follow the steps b
 
       ![](./images/alienattack.cloud9.browser.manager.png) 
 
-3. As we did for the Game Application, click on the arrow-box to open the application in another browser tab.
+3. As we did for the Game Application, click on the *window-expanding box* to open the application in another browser tab.
    
 The applications are still not working. We need you to work on the architecture to make it work properly.
 
@@ -343,6 +345,9 @@ const AWS_CONFIG = {
 }
 ~~~ 
 
+**-- FastFix --**  
+Use the results that you have got from the deployment. They will help you to fill the gaps on that file.
+
 **IMPORTANT**  
 
 * In the future, when doing this on your own computer, be sure of saving the file using UTF-8 (pure text). Avoid editors that save the files with special characters
@@ -355,9 +360,9 @@ const AWS_CONFIG = {
 
 ### fixACTIVITY 2 - Test the registration process
 
-Now, probably the application must be running, at least in part. Let's try to create an user. Confirm that you executed the Fix Activity 1. The file `./resources/js/aws_config.js` must be properly configured.  
+Now, the application might be running, at least in part. Let's try to create an user. Confirm that you executed the Fix Activity 1. The file `./resources/js/aws_config.js` must be properly configured.  
 
-1. Go to the Game tab that you have just opened using the process described in the section ["Accessing the Game Application"](#accessing-the-game-application). If it's already open, reload it.
+1. Go to the Game tab that you have just opened using the process described in the section ["Accessing the Game Application"](#accessing-the-game-application). Reload it (This is important!). If it's not opened, please reopen it.
 2. If everything was ok, you are going to see on the console window of your browser that the 404 errors are not there anymore, and that the message `CONFIG LOADED` is shown, meaning that the application was able to retrieve the configurations.  
 3. You will see a page with the buttons `Register` and `Login`. Choose **Register**.
 4. Register yourself filling the fields properly
@@ -601,14 +606,14 @@ If you want to skip this activity:
 
 ### fixACTIVITY 11 - Create a session for the game
 
-Get back to the manager console ('scoreboard/index.html'), and follow the steps below to create a gaming session.
-
+Get back to the manager console ('scoreboard/index.html'), and follow the steps below to create a gaming session. At this moment it would be interesting to have the Game and Scoreboard windows opened side by side.
+ 
 1. Reload the Scoreboard console, and login again. This is just to guarantee that your token will be refreshed.
 2. On the field `Session Name` input **TEST**
 3. On the section `Game Type`, select **Multiple trials**
 4. Click on the button **Start game**
 5. If the page updates with a table containing a header with the words `Nickname`, `Score`, `Shots`, `Level`, `Lives`, then we are good.
-6. Get back to the game tab (or open another one). For a better experience, leave the windows opened side by side. This time, if everything went well, you will see a button labeled **JOIN session**. Click on it 
+6. Get back to the game tab (or open another one). For a better experience, leave the windows opened side by side. This time, if everything went well, you will see a button labeled **JOIN session**. Click on it.
 
 If you are able to play, **you have fixed it!**
 
