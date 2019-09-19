@@ -108,7 +108,7 @@ Getting back to your **Cloud9 environment**, let's update the current instance.
 1. Input the command below to get into the alienattack.workshop folder
 
     ~~~
-    cd alienattack.workshop/cdk
+    cd alienattack.workshop
     ~~~
     Make sure that your screen shows:
 
