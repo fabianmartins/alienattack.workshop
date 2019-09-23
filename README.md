@@ -693,18 +693,24 @@ We have learned that this is implemeted via “websockets”, and we have the fo
 4. Follow the instructions below for each Route:
 
     1. For the **connect** route:
-      1. Click on the **$connect** route.
-	   2. Make sure **Lambda Function** is pressed for **Integration Type**
-	   3. Make sure **Lambda Proxy Integration** is clicked.
-	   4. Enter `<envName>WebSocketConnect` for **Lambda Function**
-	   5. For Execution Role enter the ARN for the IAM Role `<envName>API` (See instructions below)
-	<details><summary>Instructions to find the IAM Role</summary>
-		  1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
-		  2. Click on the **Roles** sidebard on the left side of the window.
-		  3. Search through the Roles to find the `<envName>API` Role.
-		  4. Click on the Role, then copy the **Role ARN**
-		  5. *Note: You will need this role for the other two roles; it will be beneficial to copy this ARN to a local clipboard*
-	</details>
+       1. Click on the **$connect** route.
+	     2. Make sure **Lambda Function** is pressed for **Integration Type**
+	     3. Make sure **Lambda Proxy Integration** is clicked.
+	     4. Enter `<envName>WebSocketConnect` for **Lambda Function**
+	     5. For Execution Role enter the ARN for the IAM Role `<envName>API` (to see the instructions expand the section below)
+	        <details><summary>Instructions to find the IAM Role</summary>
+		              
+            1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.  
+
+            2. Click on the **Roles** sidebard on the left side of the window.
+		        
+            3. Search through the Roles to find the `<envName>API` Role.
+		            
+            4. Click on the Role, then copy the **Role ARN**
+		            
+            5. *Note: You will need this role for the other two roles; it will be beneficial to copy this ARN to a local clipboard*
+	        </details>
+
 		  6. Click **Default Timeout** 
 		  7. Press **Save**
 		  8. Press **Ok** for any pop-ups
@@ -715,40 +721,27 @@ We have learned that this is implemeted via “websockets”, and we have the fo
 		  2. Make sure **Lambda Function** is pressed for **Integration Type**
 		  3. Make sure **Lambda Proxy Integration** is clicked.
 		  4. Enter `<envName>WebSocketSynchronizeStart` for **Lambda Function**
-		  5. For Execution Role enter the ARN for the IAM Role `<envName>API` (See instructions below)
-			     <details><summary>Instructions to find the IAM Role</summary>
-					   1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
-						2. Click on the **Roles** sidebard on the left side of the window.
-						3. Search through the Roles to find the `<envName>API` Role.
-						4. Click on the Role, then copy the **Role ARN**
-						</details>
-	      6. Click **Default Timeout** 
-		   7. Press **Save**
-		   8. Press **Ok** for any pop-ups
+		  5. For Execution Role enter the ARN for the IAM Role `<envName>API` (to find it follow the instructions that we have given before)
+        6. Click **Default Timeout** 
+		  7. Press **Save**
+		  8. Press **Ok** for any pop-ups
 
-     3. For the **Disconnect** route:
-         1. Click on the $disconnect route.
-         2. Make sure Lambda Function is pressed for Integration Type
-         3. Make sure Lambda Proxy Integration is clicked.
-         4. Enter `<envName>WebSocketDisconnect` for Lambda Function
-         5. For Execution Role enter the ARN for the IAM Role `<envName>API`  (See instructions below)
-			     <details><summary>Instructions to find the IAM Role</summary>
-					   1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
-						2. Click on the **Roles** sidebard on the left side of the window.
-						3. Search through the Roles to find the `<envName>API` Role.
-						4. Click on the Role, then copy the **Role ARN**
-						</details>
-	      6. Click **Default Timeout** 
-		   7. Press **Save**
-		   8. Press **Ok** for any pop-ups
-			   
-    5. Once all the routes are deployed press the dropdown menu, **Actions**.
-    6. Click **Deploy API**
-	     1. For **Deployment Stage** enter, **[New Stage]**
-	     2. For **Stage Name** enter, **Production**
-	     3. Press **Deploy**
-	7. There is now a page that has the **WebSocket URL** and **Connection URL**
-	8. Copy the **WebSocket URL**.
+   3. For the **Disconnect** route:
+        1. Click on the $disconnect route.
+        2. Make sure Lambda Function is pressed for Integration Type
+        3. Make sure Lambda Proxy Integration is clicked.
+        4. Enter `<envName>WebSocketDisconnect` for Lambda Function
+        5. For Execution Role enter the ARN for the IAM Role `<envName>API` (to find it follow the instructions that we have given before)
+	    6. Click **Default Timeout** 
+		7. Press **Save**
+		8. Press **Ok** for any pop-ups
+  5. Once all the routes are deployed press the dropdown menu, **Actions**.
+  6. Click **Deploy API**
+	    1. For **Deployment Stage** enter, **[New Stage]**
+	    2. For **Stage Name** enter, **Production**
+	    3. Press **Deploy**
+  7. There is now a page that has the **WebSocket URL** and **Connection URL**
+  8. Copy the **WebSocket URL**.
 
 #### **Task 2:** Store WebSocket URL in Parameter Store
 1. Navigate to the Systems Manager console 
@@ -804,9 +797,9 @@ source fixwebsocket.sh <envname>
 
 There should be a line that is outputted by the script which says `Websocket ARN: <Your WebSokcet ARN>` use this ARN to complete Task 3 above.
 
-#### Creating a Synchrnous Game
+#### Creating a Synchronous Game
 1. Visit `./scoreboard/index.html` in your browser, and log in.
-2. Press **Single Trial** and check the box **Synchrnized**
+2. Press **Single Trial** and check the box **Synchronized**
 3. Press **Start Game**
 4. The **Sync Button** should be enabled as of right now. 
 
