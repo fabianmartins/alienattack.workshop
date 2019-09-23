@@ -9,5 +9,6 @@ cdk/cdk.out
 cdk/cdk.out/*
 *.d.ts
 *.yaml
+cdk/package-lock.json
 node_modules
 output
