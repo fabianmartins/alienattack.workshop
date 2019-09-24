@@ -59,7 +59,7 @@ export class WebSocketLayer extends ResourceAwareConstruct {
      * DynamoDB Tables
      *      process.env.SESSION_CONTROL_TABLENAME = getAppRefName+'SessionControl' 
      */
-        let sessionParameter = { parameterName: '/'+this.properties.getApplicationName().toLocaleLowerCase()+'/session' };
+        let sessionParameter = { name: '/'+this.properties.getApplicationName().toLocaleLowerCase()+'/session' };
         let sessionControlTable : Table = <Table> this.properties.getParameter('table.sessioncontrol');
         if (sessionParameter && sessionControlTable) {
             let createdFunction: Lambda.Function = 
@@ -69,7 +69,7 @@ export class WebSocketLayer extends ResourceAwareConstruct {
                     code: Lambda.Code.asset(path.join(lambdasLocation, 'websocketConnect')),
                     environment: {
                         'SESSION_CONTROL_TABLENAME': sessionControlTable.tableName,
-                        'SESSION_PARAMETER': sessionParameter.parameterName
+                        'SESSION_PARAMETER': sessionParameter.name
                     },
                     functionName: this.properties.getApplicationName() + 'WebSocketConnect',
                     description: 'This function stores the connectionID to DynamoDB',
@@ -93,7 +93,7 @@ export class WebSocketLayer extends ResourceAwareConstruct {
                                 new IAM.PolicyDocument({
                                     statements: [
                                         new IAM.PolicyStatement({
-                                            resources : ['arn:aws:ssm:'+this.properties.region+':'+this.properties.accountId+':parameter'+sessionParameter.parameterName ] ,
+                                            resources : ['arn:aws:ssm:'+this.properties.region+':'+this.properties.accountId+':parameter'+sessionParameter.name ] ,
                                             actions : ['ssm:GetParameter' , 'ssm:GetParameters' ]
                                         })
                                     ]
@@ -115,7 +115,7 @@ export class WebSocketLayer extends ResourceAwareConstruct {
      * DynamoDB Tables
      *      process.env.SESSION_CONTROL_TABLENAME = getAppRefName+'SessionControl' 
      */
-        let sessionParameter = { parameterName: '/'+this.properties.getApplicationName().toLocaleLowerCase()+'/session' };
+        let sessionParameter = { name: '/'+this.properties.getApplicationName().toLocaleLowerCase()+'/session' };
         let sessionControlTable : Table = <Table> this.properties.getParameter('table.sessioncontrol');
         if (sessionParameter && sessionControlTable) {
             let createdFunction: Lambda.Function = 
@@ -125,7 +125,7 @@ export class WebSocketLayer extends ResourceAwareConstruct {
                     code: Lambda.Code.asset(path.join(lambdasLocation, 'synchronousStart')),
                     environment: {
                         'SESSION_CONTROL_TABLENAME': sessionControlTable.tableName,
-                        'SESSION_PARAMETER': sessionParameter.parameterName
+                        'SESSION_PARAMETER': sessionParameter.name
                     },
                     functionName: this.properties.getApplicationName() + 'WebSocketSynchronizeStart',
                     description: 'This function invokes the WebSocket to start the AAA Game',
@@ -149,7 +149,7 @@ export class WebSocketLayer extends ResourceAwareConstruct {
                                     new IAM.PolicyDocument({
                                         statements : [ 
                                             new IAM.PolicyStatement({
-                                                resources : [ 'arn:aws:ssm:'+this.properties.region+':'+this.properties.accountId+':parameter'+sessionParameter.parameterName ], 
+                                                resources : [ 'arn:aws:ssm:'+this.properties.region+':'+this.properties.accountId+':parameter'+sessionParameter.name ], 
                                                 actions : [ 'ssm:GetParameter', 'ssm:GetParameters', 'ssm:PutParameter']
                                             })
                                         ]
@@ -171,7 +171,7 @@ export class WebSocketLayer extends ResourceAwareConstruct {
      * DynamoDB Tables
      *      process.env.SESSION_CONTROL_TABLENAME = getAppRefName+'SessionControl' 
      */
-        let sessionParameter = { parameterName: '/'+this.properties.getApplicationName().toLocaleLowerCase()+'/session' };
+        let sessionParameter = { name: '/'+this.properties.getApplicationName().toLocaleLowerCase()+'/session' };
         let sessionControlTable : Table = <Table> this.properties.getParameter('table.sessioncontrol');
         if (sessionParameter && sessionControlTable) {
             let createdFunction: Lambda.Function = 
@@ -181,7 +181,7 @@ export class WebSocketLayer extends ResourceAwareConstruct {
                     code: Lambda.Code.asset(path.join(lambdasLocation, 'websocketDisconnect')),
                     environment: {
                         'SESSION_CONTROL_TABLENAME': sessionControlTable.tableName,
-                        'SESSION_PARAMETER': sessionParameter.parameterName
+                        'SESSION_PARAMETER': sessionParameter.name
                     },
                     functionName: this.properties.getApplicationName() + 'WebSocketDisconnect',
                     description: 'This function deletes the connectionID to DynamoDB',
@@ -205,7 +205,7 @@ export class WebSocketLayer extends ResourceAwareConstruct {
                                     new IAM.PolicyDocument({
                                         statements : [
                                             new IAM.PolicyStatement({
-                                                resources: [ 'arn:aws:ssm:'+this.properties.region+':'+this.properties.accountId+':parameter'+sessionParameter.parameterName ],
+                                                resources: [ 'arn:aws:ssm:'+this.properties.region+':'+this.properties.accountId+':parameter'+sessionParameter.name ],
                                                 actions : [ 'ssm:GetParameter' , 'ssm:GetParameters' ]
                                             })
                                         ]

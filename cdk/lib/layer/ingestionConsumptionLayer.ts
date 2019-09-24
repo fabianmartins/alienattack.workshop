@@ -11,9 +11,10 @@ import Lambda = require('@aws-cdk/aws-lambda');
 
 /**
  * MISSING KINESIS INTEGRATION - side effect
- * Uncomment the following line to solve it
+ * Uncomment the following lines to solve it
  */
-//import { KinesisEventSource, ApiEventSource } from '@aws-cdk/aws-lambda-event-sources';
+//import Logs = require('@aws-cdk/aws-logs');
+//import { KinesisEventSource } from '@aws-cdk/aws-lambda-event-sources';
 
 export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
@@ -49,90 +50,119 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
         /**
          * MISSING KINESIS INTEGRATION
-         * Uncomment the following lines to solve it
+         * Uncomment the following section to solve it
          */
+        //section starts here
         /*
-        (<Lambda.Function> props.getParameter('lambda.scoreboard')).addEventSource(
-               new KinesisEventSource(this.kinesisStreams, {
-                batchSize : 700,
-                startingPosition : Lambda.StartingPosition.Latest
-               })
-        );
+        new KinesisEventSource( this.kinesisStreams , {
+            batchSize: 700,
+            startingPosition : Lambda.StartingPosition.LATEST
+        }).bind(<Lambda.Function> props.getParameter('lambda.scoreboard'));
         */
+       //section finish here
 
         /**
          * MISSING KINESIS FIREHOSE
          * Uncomment the following section to solve it
          */
+        //section starts here
         /*
-                let firehoseLogGroup = '/aws/kinesisfirehose/' + ((props.getAppRefName() + 'firehose').toLowerCase());
-                let self = this;
-                let firehoseRole = new IAM.Role(this, props.getAppRefName() + 'FirehoseToStreamsRole', {
-                    roleName: props.getAppRefName() + 'FirehoseToStreamsRole',
-                    assumedBy: new IAM.ServicePrincipal('firehose.amazonaws.com'),
-                    inlinePolicies: {
-                        'S3RawDataPermission': new PolicyDocument()
-                            .addStatement(new IAM.PolicyStatement()
-                                .allow()
-                                .addAction('s3:AbortMultipartUpload')
-                                .addAction('s3:GetBucketLocation')
-                                .addAction('s3:GetObject')
-                                .addAction('s3:ListBucket')
-                                .addAction('s3:ListBucketMultipartUploads')
-                                .addAction('s3:PutObject')
-                                .addResource(self.rawbucketarn)
-                                .addResource(self.rawbucketarn + '/*')
-                            )
-                        ,
-                        'InputStreamReadPermissions': new PolicyDocument()
-                            .addStatement(new IAM.PolicyStatement()
-                                .allow()
-                                .addAction('kinesis:DescribeStream')
-                                .addAction('kinesis:GetShardIterator')
-                                .addAction('kinesis:GetRecords')
-                                .addResource(this.kinesisStreams.streamArn)
-                            )
-                        ,
-                        'GluePermissions': new PolicyDocument()
-                            .addStatement(new IAM.PolicyStatement()
-                                .allow()
-                                .addAllResources()
-                                .addAction('glue:GetTableVersions')
-                            )
-                        ,
-                        'CloudWatchLogsPermissions': new PolicyDocument()
-                            .addStatement(new IAM.PolicyStatement()
-                                .allow()
-                                .addAction('logs:PutLogEvents')
-                                .addResource('arn:aws:logs:' + props.region + ':' + props.accountId + ':log-group:' + firehoseLogGroup + ':*:*')
-                                .addResource('arn:aws:logs:' + props.region + ':' + props.accountId + ':log-group:' + firehoseLogGroup)
-                            )
-                    }
-                });
-        
-                this.kinesisFirehose = new KDF.CfnDeliveryStream(this, props.getAppRefName() + 'RawData', {
-                    deliveryStreamType: 'KinesisStreamAsSource',
-                    deliveryStreamName: props.getAppRefName() + 'Firehose',
-                    kinesisStreamSourceConfiguration: {
-                        kinesisStreamArn: this.kinesisStreams.streamArn,
-                        roleArn: firehoseRole.roleArn
-                    }
-                    , s3DestinationConfiguration: {
-                        bucketArn: <string>this.rawbucketarn,
-                        bufferingHints: {
-                            intervalInSeconds: 900,
-                            sizeInMBs: 10
-                        },
-                        compressionFormat: 'GZIP',
-                        roleArn: firehoseRole.roleArn,
-                        cloudWatchLoggingOptions: {
-                            enabled: true,
-                            logGroupName: firehoseLogGroup,
-                            logStreamName: firehoseLogGroup
-                        }
-                    }
+        let firehoseLogGroup = '/aws/kinesisfirehose/' + ((props.getApplicationName()+ 'firehose').toLowerCase());
+        let fhlg = new Logs.LogGroup(this,props.getApplicationName()+'firehoseloggroup', {
+            logGroupName : firehoseLogGroup
+        });
+        new Logs.LogStream(this,props.getApplicationName()+'firehoselogstream', {
+            logGroup : fhlg,
+            logStreamName : "error"
+        });
+        let self = this;
+        let firehoseRole = new IAM.Role(this, props.getApplicationName()+ 'FirehoseToStreamsRole', {
+            roleName: props.getApplicationName() + 'FirehoseToStreamsRole',
+            assumedBy: new IAM.ServicePrincipal('firehose.amazonaws.com'),
+            inlinePolicies: {
+                'S3RawDataPermission': new IAM.PolicyDocument({
+                    statements : [
+                        new PolicyStatement(
+                            {
+                                actions : [
+                                    's3:AbortMultipartUpload',
+                                    's3:GetBucketLocation',
+                                    's3:GetObject',
+                                    's3:ListBucket',
+                                    's3:ListBucketMultipartUploads',
+                                    's3:PutObject',
+                                ],
+                                resources : [
+                                    self.rawbucketarn,
+                                    self.rawbucketarn + '/*'
+                                ]
+                            }
+                        )
+                    ]
+                }),
+                'InputStreamReadPermissions': new PolicyDocument({
+                    statements : [
+                        new PolicyStatement({
+                            actions : [
+                                'kinesis:DescribeStream',
+                                'kinesis:GetShardIterator',
+                                'kinesis:GetRecords'
+                            ],
+                            resources : [
+                                this.kinesisStreams.streamArn
+                            ]
+                        })
+                    ]
+                }),
+                'GluePermissions': new PolicyDocument({
+                    statements : [
+                        new PolicyStatement({
+                            resources : [ '*' ],
+                            actions : [
+                                'glue:GetTableVersions'
+                            ]
+                        })
+                    ]
+                }),
+                'CloudWatchLogsPermissions': new PolicyDocument({
+                    statements : [
+                        new PolicyStatement({
+                            actions : [ 'logs:PutLogEvents' ],
+                            resources : [
+                                'arn:aws:logs:' + props.region + ':' + props.accountId + ':log-group:' + firehoseLogGroup + ':*:*',
+                                'arn:aws:logs:' + props.region + ':' + props.accountId + ':log-group:' + firehoseLogGroup
+                            ]
+                        })
+                    ]
                 })
-                */
+            }
+        });
+        
+        this.kinesisFirehose = new KDF.CfnDeliveryStream(this, props.getApplicationName() + 'RawData', {
+            deliveryStreamType: 'KinesisStreamAsSource',
+            deliveryStreamName: props.getApplicationName() + '_Firehose',
+            kinesisStreamSourceConfiguration: {
+                kinesisStreamArn: this.kinesisStreams.streamArn,
+                roleArn: firehoseRole.roleArn
+            }
+            , s3DestinationConfiguration: {
+                bucketArn: <string>this.rawbucketarn,
+                bufferingHints: {
+                    intervalInSeconds: 900,
+                    sizeInMBs: 10
+                },
+                compressionFormat: 'GZIP',
+                roleArn: firehoseRole.roleArn,
+                cloudWatchLoggingOptions: {
+                    enabled: true,
+                    logGroupName: firehoseLogGroup,
+                    logStreamName: firehoseLogGroup
+                }
+            }
+        });
+        this.kinesisFirehose.node.addDependency(fhlg);
+        */
+        // section finishes here
 
     }
 

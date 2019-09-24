@@ -109,5 +109,14 @@ export class MainLayer extends ResourceAwareStack  {
       exportName : "envname"
     });
 
+// MISSING CLOUDFRONT DISTRIBUTION 
+// Uncomment the following section if you want to deploy your Cloudfront distribution. It takes 20 minutes
+/*
+    new CfnOutput(this, "url", {
+      description : "Cloudfront domain for the website (Cloudfront distribution)",
+      value : cdnLayer.getResource("cdndomain"),
+      exportName : "url"
+    }).node.addDependency(cdnLayer);
+*/
   }
 }

@@ -862,7 +862,23 @@ Tips:
 
 ## Cleaning up the environment
 
-### cleanACTIVITY 1 - Destroy the deployed environment
+### cleanACTIVITY 1 - Cleaning up the resources added by hand
+
+Everything that was created by CloudFormation/CDK is going to be deleted automatically, but the resources that you have created directly on the console were not deleted. 
+
+Some of them will not be delete by CloudFormation if we don't do this step, as they have been changed the configuration of the resources maintained by Cloudformation. 
+
+Let's fix this.
+
+1. Go to Systems Manager, then Parameter Store, and delete the parameter `<envName>/session` and `<envName>/websocket`
+2. Go to Kinesis, then Kinesis Firehose, and delete the resource that you created by hand
+3. Go to IAM, and search for `<envName>`. Delete any resource configured like that. For sure the only resource will be `<envName>FirehoseRole`
+4. Go to the IAM console, find the `<envName>WebSocketSynchronizeStartFn_Role`, and remove the **Invoke-Api-Policy** that you have created.
+5. clean up the s3 buckets with the following commands (be sure of inputting `<envName>` in lowercase):
+   *  `aws s3 rm s3://<envName>.app —-recursive`
+   *  `aws s3 rm s3://<envName>.raw —-recursive`
+
+### cleanACTIVITY 2 - Destroy the deployed environment
 
 Go to the the terminal on your environment and type the following command. Be sure to be at your cdk folder.
 
@@ -875,38 +891,12 @@ If everything went well, you will receive a message like the following one:
 ```
 ✅  <envName>: destroyed
 ```
-
-If you receive an error that looks something like this: 
-
-```
-<envName>: destroy failed Error: The stack named <envName> is in a failed state: DELETE_FAILED (The following resource(s) failed to delete: [WebSocketLayer<envName>WebSocketSynchronizeStartFnRole]. )
-```
-
-That's ok we have worked with CDK at Unicorn Games before and can solve this!
-1. Go to to the CloudFormation console.
-2. Click on `<envName>`
-3. Click **Delete**. A window should pop up.
-  * Scroll all the way to the bottom and find the role that was giving an issue earlier. Should look like `WebSocketLayer<envName>WebSocketSynchronizeStartFnRole`
-  * Check the box to left of it.
-  * Press **Delete Stack**
-4. We just have to remember to make sure that we delete this role manually. We can do this easily by just searching for it while we are in the IAM page when we do cleanACTIVITY 2 step three.
-
 If by any reason you don't have access anymore to the Cloud9 environment, or is unable to destroy the environment using CDK, go to CloudFormation on your AWS console, and delete the stack with "Stack Name" corresponding to your `<envName>`. Then move to the next activity.
 
-### cleanACTIVITY 2 - Cleaning up the last resources
-
-Everything that was created by CloudFormation was deleted, with the exception of the buckets. Additionaly, the resources that you created directly on the console were not deleted. 
-
-Let's fix this.
-
-1. Go to Systems Manager, then Parameter Store, and delete the parameter `<envName>/session` and `<envName>/websocket`
-2. Go to Kinesis, then Kinesis Firehose, and delete the resource that you created by hand
-3. Go to IAM, and search for `<envName>`. Delete any resource configured like that. For sure the only resource will be `<envName>FirehoseRole`
-4. Delete the S3 buckets `<envName>.app` and `<envName>.raw`
-5. Delete your Cloud9 environment if you created it just for this workshop.
 
 ## Final activity
 
+Delete your Cloud9 environment if you created it just for this workshop.
 Celebrate! You deserve it!
 
 
