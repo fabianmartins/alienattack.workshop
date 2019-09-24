@@ -38,19 +38,18 @@ export class ContentDeliveryLayer extends ResourceAwareConstruct {
             })
         );
 
-
-
-        new CloudFrontWebDistribution(this, props.getApplicationName(), {
+        let distribution = new CloudFrontWebDistribution(this, props.getApplicationName(), {
             originConfigs: [
                 {
                     s3OriginSource: {
-                         s3BucketSource: appBucket
+                         s3BucketSource: appBucket,
+                         originAccessIdentityId : cloudFrontAccessIdentity.ref
                     },
                     behaviors : [ {isDefaultBehavior: true}]
                 }
             ]
          });
 
-
+         this.addResource("cdndomain",distribution.domainName);
     }
 }
