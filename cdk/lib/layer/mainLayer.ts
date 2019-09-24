@@ -94,19 +94,19 @@ export class MainLayer extends ResourceAwareStack  {
     new CfnOutput(this, "apigtw", {
       description : "API Gateway URL",
       value : icl.getResource("apigtw.url"),
-      exportName : "apigtw"
+      exportName : this.properties.getApplicationName().toLocaleLowerCase()+":apigtw"
     });
 
     new CfnOutput(this, "region", {
       description : "region",
       value : this.region,
-      exportName : "region"
+      exportName : this.properties.getApplicationName().toLocaleLowerCase()+":region"
     });
 
     new CfnOutput(this, "envname", {
-      description : "region",
+      description : "Environment name",
       value : this.properties.getApplicationName(),
-      exportName : "envname"
+      exportName : this.properties.getApplicationName().toLocaleLowerCase()+":envname"
     });
 
 // MISSING CLOUDFRONT DISTRIBUTION 

@@ -874,7 +874,8 @@ Let's fix this.
 2. Go to Kinesis, then Kinesis Firehose, and delete the resource that you created by hand
 3. Go to IAM, and search for `<envName>`. Delete any resource configured like that. For sure the only resource will be `<envName>FirehoseRole`
 4. Go to the IAM console, find the `<envName>WebSocketSynchronizeStartFn_Role`, and remove the **Invoke-Api-Policy** that you have created.
-5. clean up the s3 buckets with the following commands (be sure of inputting `<envName>` in lowercase):
+5. Go to API Gateway, and delete the `<envName>Websocket` API that you have created.
+6. Clean up the s3 buckets with the following commands (be sure of inputting `<envName>` in lowercase):
    *  `aws s3 rm s3://<envName>.app —-recursive`
    *  `aws s3 rm s3://<envName>.raw —-recursive`
 
