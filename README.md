@@ -308,7 +308,7 @@ We got a tip from one of the developers that remained at the company that a conf
 The config file for the downloaded application is invalid.
 
 ##### [Solution guidance]
-On Cloud9, open the file where you cloned the application, open the file `alienattack.application/resources/js/awsconfig.js`. It is going to have the following format:
+On Cloud9, go to the folder where you have cloned the application and open the file `alienattack.application/resources/js/awsconfig.js`. It is going to have the following format:
 
 ~~~
 const DEBUG = true;
@@ -319,17 +319,17 @@ const AWS_CONFIG = {
 }
 ~~~
 
-You need to replace the fields with the values related to the environment that you have just deployed using CDK. Here is how you get the required values:
+You need to replace the fields with the values related to the environment that you have just deployed using CDK. Follow the steps below to find the required input and to get familiarized with the services' console at AWS:
 
 1. **API_ENDPOINT**
   * From Cloud9, to open another window for the AWS console, just go to the menu and click on *AWS Cloud9* --> *Go To Your Dashboard*, and then *Services* --> *API Gateway*. You will find your API there.
-  * Click on the API named as **`<envname>`** (the name
+  * Click on the API named as **`<envname>`** (the name that you have chosen for your deployment).
   * Click on **Stages**.
   * Click on **prod**.
   * At the top of the screen, on the right, you will see the **INVOKE URL**. It has the format `https://<API Id>.execute-api.<region>.amazonaws.com/prod`. When copying it to the required field in the awsconfig.js, don't forget to add the */v1/* at the end.
 
 
-2. **region**: You can extract the region from the API_ENDPOINT, from the last message of the CDK deployment, or you can even go to your console and check the URL. It will be like `https://<region>.console.aws.amazon.com`. 
+2. **region**: You can extract the region from the API_ENDPOINT, or you can even go to your console and check the URL. It will be like `https://<region>.console.aws.amazon.com`. Write it as is, using lowercase.
 
 
 3. **APPNAME**: This one is easy. Just copy the value that you have selected for *envName*, **BUT MAKE SURE TO USE UPPERCASE**. So, for instance, if you selected *r2d2* for envName, then the value for this field will be *R2D2*.
@@ -345,6 +345,8 @@ const AWS_CONFIG = {
 }
 ~~~ 
 
+**Save the file** (On Cloud9, go to the menu option `File`, and then click on `Save`).
+
 **-- FastFix --**  
 Use the results that you have got from the deployment. They will help you to fill the gaps on that file.
 
@@ -355,7 +357,7 @@ Use the results that you have got from the deployment. They will help you to fil
   * For example, if you are in us-east-1, the line for the region will be `"region" : "us-east-1"`. See, the quotes are there.
 * Be sure of using **uppercase** for the value of the field APPNAME. So, for example, if your environment name is r2d2, the line for appName will become `"APPNAME" : "R2D2"`. 
 * Again, check if the quotes are there!
-* Save the file!
+* `Save the file!`
 
 
 ### fixACTIVITY 2 - Test the registration process
@@ -379,7 +381,7 @@ Now, the application might be running, at least in part. Let's try to create an 
 1. Get back to the Game application on your browser, and now choose **Login** (or skip to step 2 if you're already there).
 2. Enter your credentials, and click on **Login**.
 3. If you entered your credentials right, you will see a pop-up message `Login successful to user <username>`.
-4. If you get to a page where the indicating status is WAITING and a countdown stopped at 10, then the login is ok, but something else is wrong (you can check the browser console, if you want).
+4. If you get to a page where the indicating status is WAITING and a countdown stuck at 10, then the login is ok, but something else is wrong (you can check the browser console, if you want).
 
 
 ### fixACTIVITY 4 - Test the Alien Attack manager console
@@ -413,17 +415,17 @@ This is the playbook that we've got from
 6. Click on the tab `Cognito` just to be sure that you have it selected.
 7.  On the section `Authenticated role selection` there is a select button labeled as `Use default role`. Click on this button and select **Choose role with rules**. We will create two rules.
 8. First rule - **MANAGERS**
-	* For the field `Claim`, input the value **cognito:preferred_role**.
-	* For the drop down box at the right side of the field, select the value **Contains**.
-	* For the input box at the right of the `Contains` box, input the value **`<envName>ManagersRole`**. Be careful with typos, and use uppercase for the *`<envName>`* part.
-	* For the drop down box on the right, select **`<envName>ManagersRole`**.
-9 Click on the button `Add another rule`.
+  * For the field `Claim`, input the value **cognito:preferred_role**.
+  * For the drop down box at the right side of the field, select the value **Contains**.
+  * For the input box at the right of the `Contains` box, input the value **`<envName>ManagersRole`**. Be careful with typos, and use uppercase for the *`<envName>`* part.
+  * For the drop down box on the right, select **`<envName>ManagersRole`**.
+  * Click on the button `Add another rule`.  
 9. Second rule - **PLAYERS**
 	* For the field `Claim`, input the value **cognito:preferred_role**.
 	* For the drop down box at the right side of the field, leave the value **Contains** selected.
 	* For the input box at the right of the `Contains` box, input the value **`<envName>PlayersRole`**. Be careful with typos, and use uppercase for the *`<envName>`* part.
 	* For the drop down box on the right, select **`<envName>PlayersRole`**.
-10. **Role resolution**: Select **`Deny`**
+10. On the drop down box **Role resolution**: Select **`Deny`**
 11. Double check everything for typos, especially the fields *"Claim"* and *"Role"*
 11. Leave everything else as it is and click on **`Save changes`**
 
@@ -480,7 +482,7 @@ There is another way of solving this at the AWS Console. Go to Cognito, visit Us
 
 **IMPORTANT**: This is another action that we DON'T WANT to be executed by hand. How to fix this? How to make the deployment of the environment to create an admin user automatically? Think about it. We will need it in another fixing workshop.
 
-After fixing this, try to login to the manager console again (*fixActivity 4*). If you get a **ParameterNotFound: null**, then proceed to the next activity. It will solve it, we believe.
+After fixing this, try to login to the manager console again (*fixActivity 4*). If you get a **ParameterNotFound: null**, then that means that we are progressing in our journey to rebuild the environment. Proceed to the next activity. It will help us to solve the issue, we hope.
 
 
 ### fixACTIVITY 8 - Systems Manager - Create the missing parameter
@@ -521,7 +523,7 @@ In accordance to some notes found, there are other pieces to be fixed.
 
 ### fixACTIVITY 9 - Kinesis Streams/Lambda Integration - Integrate Lambda to Kinesis
 
-The people from the Monitoring Team said that they have identified a failure in getting the scoreboard computed and stored on DynamoDb. Our SysAdmin is friend of one of the rebels, and he got this tip from his friend: *"Check if the Lambda Function with the name Scoreboard is integrated to Kinesis. If there is no trigger configured for the lambda function, that's the issue"*.
+The people from the Monitoring Team said that they have identified a failure in getting the scoreboard computed and stored on DynamoDb. Our SysAdmin is a friend of one of the rebels, and he got this tip from his friend: *"Check if the Lambda Function with the name Scoreboard is integrated to Kinesis. If there is no trigger configured for the lambda function, that's the issue"*.
 
 ##### [Problem] 
 The game data is ingested to the Kinesis Streams. Then, Lambda (the service) triggers a Lambda function every second, to make it consume the data from the Kinesis Streams. What happens to the consumed records depends on what is coded on the Lambda function.
@@ -531,7 +533,7 @@ We need to connect the Lambda function to Kinesis.
 ##### [Solution guidance]
 1. Go to your AWS Console, and visit the Lambda service page.
 2. Search for a function named **`<envName>ScoreboardFn`**.  
-3. Click on the name of the function. You will be taken to the configuration of the lambda function.
+3. Click on the name of the function. You will be taken to the configuration page of the lambda function.
 4. Check if the information sent from the rebel is correct. On the section named *Designer* if you see the message *"Add trigger"*, then the rebel is right. The trigger is missing. Let's create it.
 5. On the left, click on 'Add trigger'
 6. On the Trigger Configuration, click on the drop down list and type **Kinesis**. A section for you to configure the trigger will show up.
@@ -543,7 +545,7 @@ We need to connect the Lambda function to Kinesis.
    * **Starting position**: select *Latest*.
    * Check box **Enable trigger**: leave it marked for now.
    * Click on the button **Add** at the right.
-   * If everything went well you will get a message confirming that you have added the trigger.
+   * If everything went well you will get a message confirming that you have added the trigger. The Designer section will be updated.
 
 **-- FastFix --**  
 If you want to skip this activity: 
@@ -557,7 +559,7 @@ If you want to skip this activity:
 
 The Analytics Team has complained that when the application is running no data is going to their data lake's staging area. They have said that Kinesis Streams drops the data onto a Kinesis Firehose, and then Kinesis Firehose moves the data to a S3 bucket named with the suffix "raw" (you can check if the bucket exists).
 
-They said *"This is pretty simple! It is just to connect the Kinesis Firehose to the Kinesis Streams. If the Kinesis Firehose doesn't exists, create one! Give us access and we can help. Or, call us if you need"*.
+They said *"This is pretty simple! It is just to connect the Kinesis Firehose to the Kinesis Streams. If the Kinesis Firehose doesn't exist, create one! Give us access and we can help, or call us if you need"*.
 
 So, follow the tip, and if you need help, call them.
 
@@ -669,7 +671,7 @@ const computeStatisticsForSession = function(sessionId,callback) {
 The API must be accessible only by the Manager.
 
 **-- FastFix --**  
-We heard that something can be learned from this [link](http://partnerfactoryprogram.s3-website-us-east-1.amazonaws.com/labpack/fullmicroservice/fullmicroservice.html). Be sure of double checking your environment. It seems that you might already have the required table created. You might just need to populate the data.
+We heard that something can be learned from this [link](http://partnerfactoryprogram.s3-website-us-east-1.amazonaws.com/labpack/fullmicroservice/fullmicroservice.html). Be sure of double checking your environment. It seems that you might already have the required table created. You might just need to populate it with data.
 
 ### fixACTIVITY 13 - Deploying the WebSocket for APIGateway 
 
@@ -697,7 +699,7 @@ We have learned that this is implemeted via “websockets”, and we have the fo
 	     2. Make sure **Lambda Function** is pressed for **Integration Type**
 	     3. Make sure **Lambda Proxy Integration** is clicked.
 	     4. Enter `<envName>WebSocketConnect` for **Lambda Function**
-	     5. For Execution Role enter the ARN for the IAM Role `<envName>API` (to see the instructions expand the section below)
+	     5. For Execution Role enter the ARN for the IAM Role `<envName>API` (to see the instructions expand the section below. Also, it is a great opportunity of reviewing the permissions of that Role)
 	        <details><summary>Instructions to find the IAM Role</summary>
 		              
             1. Navigate to the IAM dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.  
@@ -711,7 +713,7 @@ We have learned that this is implemeted via “websockets”, and we have the fo
             5. *Note: You will need this role for the other two roles; it will be beneficial to copy this ARN to a local clipboard*
 	        </details>
 
-		  6. Click **Default Timeout** 
+		  6. Click and select **Use Default Timeout** 
 		  7. Press **Save**
 		  8. Press **Ok** for any pop-ups
 	</details>
