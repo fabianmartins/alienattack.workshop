@@ -1,6 +1,6 @@
 # AWS Alien Attack Workshop
 
-Welcome to the AWS Alien Attack workshop (beta version).   
+Welcome to the AWS Alien Attack workshop  
 
 The purpose of AWS Alien Attack is to create a fun environment where you can test and think about different aspects of serverless architectures for (near) real-time ingesting and processing of data at AWS. You can use Alien Attack to think, exercise, and talk about best practices for development, about security, databases and so on.
 
@@ -57,6 +57,13 @@ We hope that your skills may help us with the challenge of *MAKING THE APPLICATI
 
 ## Preparing the environment
 
+### Minimum requirements
+* You must have a computer (For a better experience, don't use tablets or smartphones)
+* Internet access
+* A browser: **Firefox** or **Chrome**. Don't use Safari, [Internet Explorer](https://www.zdnet.com/article/microsoft-security-chief-ie-is-not-a-browser-so-stop-using-it-as-your-default/) or Microsoft Edge
+* Desire to learn
+* Attention to the instructions
+
 ### prepACTIVITY 1 - Cloud9 - Create your environment
 
 #### STEP 1 - Access your account
@@ -79,11 +86,13 @@ In a few seconds your environment will be available. You can close the Welcome t
 
 #### <a name="config-cloneapprep"></a>STEP 3 - Clone the back-end repository
 
-Down on your Cloud9 console, a terminal is available. Go to the terminal and clone this repository. This repository contains the back-end.
+Down on your Cloud9 console, a terminal is available. Go to the terminal run the command below to clone this repository. This repository contains the back-end.
 
 ~~~
-$ git clone https://github.com/fabianmartins/alienattack.workshop
+git clone https://github.com/fabianmartins/alienattack.workshop
 ~~~
+
+You can maximize the terminal window if you want.
 
 #### STEP 4 - Clone the front-end repository
 
@@ -92,13 +101,10 @@ This is the repository for the Alien Attack front-end.
 **IMPORTANT:** Disregard any instructions at that repository (but you can always read the comments if you want).
 
 ~~~
-$ git clone https://github.com/fabianmartins/alienattack.application.git
+git clone https://github.com/fabianmartins/alienattack.application.git
 ~~~
 
 At this point, if you look at the left hand side of your Cloud9 console, your folder tree must be showing two main folders: one for `alienattack.workshop` and one for `alienattack.application`.
-
-
-**IMPORTANT:** The frond-end DOES NOT WORK YET on mobile devices, and in some versions of Windows, especially those with touch screen.
 
 
 #### STEP 5 - Update the environment - at Cloud9
@@ -178,8 +184,10 @@ A totally successful compilation will be something like the output below:
 
 You will need to decide for an **"Environment name"** that will be used to configure and deploy your environment. 
 
+Use something unique, maybe your initials plus some additional elements, like today's date. For example, if John Doe is running this workshop on February 17th, he could use `jdoe0217` as his environment name. 
+
 **My suggestions for you:**  
- 
+
 * **DON'T** use special characters, dashes, spaces in the environment name.
 * **DON'T** use long names like *ThisIsAnUnecessaryVeryLongAndName*. Keep it simple. Use something like Env01.
 * Also, **DON'T** use very short names, like *fm*. Try to use at least 5 characters to avoid name collisions.
@@ -271,7 +279,7 @@ Here is where we start fixing the environment.
 
 The system is comprised of two applications: the Game, and the Scoreboard. We've been said that these applications are needing a facelift. However, let's leave the cosmetics for another opportunity.
 
-We know that the system is not running properly because we tried to run each one of the applications, and while having the browser console opened, we could see a lot of errors, and it's clear that the application is broken.
+We here at the Alien Attack Division know that the system is not running properly because we have tried to run each one of the applications, and while having the browser console opened, we could see lots of errors, and it's clear that the application is broken.
 
 As you will need to run the application after fixing it (or now, just to check if it's really broken), here is the guidance for opening each one of the applications. 
 
@@ -285,7 +293,9 @@ For this part, you will visit the `alienattack.application` folder in your envir
     
 3. See that at the right hand side of the line where is the URL for the file we have highlighted a box with an arrow within (we will call it the *window-expanding icon* ) that will open the application on a tab on your browser. This is the best way for us to track what's happening on the application. Click on that box.
 
-If you visit the console of your browser, you will see some 404 errors, and the message `ERROR LOADING CONFIG`. That is expected, as the application is broken.
+If you visit the console of your browser (see below how to open the browser console), you will see some 404 errors, and the message `ERROR LOADING CONFIG`. That is expected, as the application is broken.
+
+If you don't know how to open your browser console, visit [this link](https://www.wickedlysmart.com/hfjsconsole/) and find the guidance that fits your pair (operating system, browser).
 
 The process for opening the Manager application is analogous. Follow the steps below:
 
@@ -404,7 +414,7 @@ The Identity Pool configuration is missing the configuration of the roles for ea
 
 ##### [Solution guidance]
 
-This is the playbook that we've got from
+This is the playbook that we've got from the SysAdmin.
 
 1. On your AWS Console, visit the Cognito service page.
 2. If you got to the landing page of the service, you will click on the button **Manage Identity Pools**. 
@@ -473,7 +483,7 @@ We have found some notes on the desk of the solutions architect. There is a post
 3. Get back to the manager console, and try access it again
 
 ~~~
-$ aws cognito-idp admin-add-user-to-group --user-pool-id <userpoolid> --username <username that you used to register> --group-name Managers --region <region>
+aws cognito-idp admin-add-user-to-group --user-pool-id <userpoolid> --username <username that you used to register> --group-name Managers --region <region>
 ~~~
 
 **-- FastFix --**   
@@ -874,19 +884,19 @@ Let's fix this.
 
 1. Go to Systems Manager, then Parameter Store, and delete the parameter `<envName>/session` and `<envName>/websocket`
 2. Go to Kinesis, then Kinesis Firehose, and delete the resource that you created by hand
-3. Go to IAM, and search for `<envName>`. Delete any resource configured like that. For sure the only resource will be `<envName>FirehoseRole`
+3. Go to IAM, and search for `<envName>`. Delete the `<envName>FirehoseRole` that you have created by hand
 4. Go to the IAM console, find the `<envName>WebSocketSynchronizeStartFn_Role`, and remove the **Invoke-Api-Policy** that you have created.
 5. Go to API Gateway, and delete the `<envName>Websocket` API that you have created.
 6. Clean up the s3 buckets with the following commands (be sure of inputting `<envName>` in lowercase):
-   *  `aws s3 rm s3://<envName>.app —-recursive`
-   *  `aws s3 rm s3://<envName>.raw —-recursive`
+   *  `aws s3 rm s3://<envNameInLowercase>.app —-recursive`
+   *  `aws s3 rm s3://<envNameInLowercase>.raw —-recursive`
 
 ### cleanACTIVITY 2 - Destroy the deployed environment
 
-Go to the the terminal on your environment and type the following command. Be sure to be at your cdk folder.
+Go to the the terminal on your environment and type the following command. Be sure to be at your `~/environment/alienattack.workshop/cdk` folder.
 
 ```
-~/environment/alienattack.workshop/cdk (master) $ cdk destroy -c envname=<envName>
+cdk destroy -c envname=<envName>
 ```
 
 If everything went well, you will receive a message like the following one: 
