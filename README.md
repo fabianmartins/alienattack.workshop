@@ -60,7 +60,7 @@ We hope that your skills may help us with the challenge of *MAKING THE APPLICATI
 ### Minimum requirements
 * You must have a computer (For a better experience, don't use tablets or smartphones)
 * Internet access
-* A browser: **Firefox** or **Chrome**. Don't use Safari, [Internet Explorer](https://www.zdnet.com/article/microsoft-security-chief-ie-is-not-a-browser-so-stop-using-it-as-your-default/) or Microsoft Edge
+* A browser: **Firefox** or **Chrome**. **DON'T** use Safari, [Internet Explorer](https://www.zdnet.com/article/microsoft-security-chief-ie-is-not-a-browser-so-stop-using-it-as-your-default/) or Microsoft Edge
 * Desire to learn
 * Attention to the instructions
 
@@ -277,7 +277,7 @@ Below that line, you will see a section named *Outputs*, with some additinal lin
 
 Here is where we start fixing the environment.
 
-The system is comprised of two applications: the Game, and the Scoreboard. We've been said that these applications are needing a facelift. However, let's leave the cosmetics for another opportunity.
+The system is comprised of two applications: the Game, and the Scoreboard. We've been told that these applications are needing a facelift. However, let's leave the cosmetics for another opportunity.
 
 We here at the Alien Attack Division know that the system is not running properly because we have tried to run each one of the applications, and while having the browser console opened, we could see lots of errors, and it's clear that the application is broken.
 
