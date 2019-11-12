@@ -4,10 +4,18 @@ import cdk = require('@aws-cdk/core');
 import { MainLayer } from '../lib/layer/mainLayer';
 import { NRTAProps } from '../lib/nrta';
 import { Utils } from '../lib/util/utils'
+import { FileSystemCredentials } from 'aws-sdk';
 
 const app = new cdk.App();
 let envname = app.node.tryGetContext('envname');
-if (!envname) envname = "";
+if (!envname) {
+    console.log("****************************************************");
+    console.log("ERROR: your environment name is undefined.\n");
+    console.log("Please run the command like this:");
+    console.log("cdk [synth|deploy|destroy] -c envname=<your environment name>");
+    console.log("****************************************************");
+    process.exit(1);
+}
 else envname=envname.toUpperCase();
 console.log('# Environment name:',envname);
 let initProps = new NRTAProps();

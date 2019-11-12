@@ -89,17 +89,12 @@ END
     eval $putIamRole
 }
 
-if [ "$1" == "" ]; then
+if [ "$envname" == "" ]; then
     echo 
     echo "** ERROR**"
-    echo At least the environment name must be provided
-    echo 
-    echo Usage:
-    echo "fixwebsocket <envName>"
-    echo
-    echo example: fixcognito testenv
+    echo Please ensure that the variable envname is defined
 else
-    envName=$(echo $1 | tr 'a-z' 'A-Z')
+    envName=$(echo $envname | tr 'a-z' 'A-Z')
     region=$(aws configure get region)
     accountId=$(aws sts get-caller-identity --output text --query 'Account')
     apiId=$( createWebSocket $envName $region $accountId )

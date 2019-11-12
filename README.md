@@ -72,8 +72,8 @@ We hope that your skills may help us with the challenge of *MAKING THE APPLICATI
 	* Give a name to your environment. **Important:** If you are sharing the same account and region with a colleague, be sure to take note of the identification of your environment, and be careful to not to destroy your colleague environment.
 	* For the "environment settings":
 		* For "Environment type" choose `Create a new instance for environment (EC2)`
-		* For "Instance type" choose `t2.micro (1 GiB RAM + 1 vCPU)*`
-		* Leave the other configuration settings at their default values and click **Next step**, and then **Create environment**
+		* For "Instance type" choose `t2.small (2 GiB RAM + 1 vCPU)`
+		* Leave the other configuration settings as they are, and click **Next step**, and then **Create environment**
 
 In a few seconds your environment will be available. You can close the Welcome tab, and also the *Immediate* tab that you can see at the bottom of your screen.
 
@@ -122,8 +122,29 @@ Getting back to your **Cloud9 environment**, let's update the current instance.
     source config.sh
     ~~~
 
-Don't worry if some *warning* messages appear, especially if it's about python.
+    Don't worry if some *warning* messages appear, especially if it's about python.
 
+    After configuring the operating system, and installing the tools required to compile and build the source code, the script will ask you to input your initials to define the name for your enviroment. This is important to reduce the probability of naming collision for the S3 buckets that are going to be created, and to avoid resource name collisions when two or more users are sharing the same AWS account and region to run the environment.  
+
+    So, supposing that someone is going to provide `FMDS` as the initials, you might expect to see a message like the one below:
+    ~~~
+    **************************************************************
+    DEFINING YOUR EXCLUSIVE ENVIRONMENT NAME
+
+    When we define the exclusive environment name all resources
+    in your infrastructure will have their IDs prefixed by this
+    environment name.
+    This is a workaround to guarantee that this workshop can run
+    with multiple users under a single AWS account
+   **************************************************************
+
+    What are your initials? fmds
+    Your environment name was defined as fmdsd5f4d6aaa
+    ~~~
+
+    See that everything between the provided initial (in this example, `fmds`) and the suffix (`aaa`) is a random and automatically generated code.
+
+    It's unlikely, but you may incur in naming collision. If that happens, we will provide you guidance on how to solve that.
 
 #### STEP 6 - Start background compilation for CDK
 
@@ -176,34 +197,66 @@ A totally successful compilation will be something like the output below:
 
 #### STEP 7 - Deploy the back-end
 
-You will need to decide for an **"Environment name"** that will be used to configure and deploy your environment. 
+In this step we will use CDK to deploy the environment for us.
 
-**My suggestions for you:**  
- 
-* **DON'T** use special characters, dashes, spaces in the environment name.
-* **DON'T** use long names like *ThisIsAnUnecessaryVeryLongAndName*. Keep it simple. Use something like Env01.
-* Also, **DON'T** use very short names, like *fm*. Try to use at least 5 characters to avoid name collisions.
-* If you're alone in the account/region, pick a small word for envname, like your initials, and add the month and day just to avoid collisions (ex: fabi0405).
-* The environment name will be used to create new S3 buckets. S3 bucket names are global. So, if you use very common words (like test, dev, prod, system, app) almost surely you will get a name collision. Be sure of chosing something that will avoid this kind of issue.
-* Avoid using potentially reserved words. Possible reserved words are AWS, S3, and so on.
+We will begin by *Synthentizing* the environment, which means generating its corresponding Cloudformation template. This is not a required step to deploy the environment, but it's helpful for you to understand what we are building.
 
-<details><summary>*Click here to expand and understand why you are doing this step*</summary>
-We are running the synthesizing step to give you the opportunity of reading the generated Cloudformation template. Also, the configuration was designed like this for the case when different individuals are sharing the same account (due their company's requirements) and sharing the same region (due the need of specific features of the AWS services, only available in such regions).
+Then, we will *Deploy* the enviroment, which means to create on the account all the resources described on the diagram.
 
-Yet, the value chosen for **"envname"** is used to create the buckets required by the application, so chose them in a way that most likely will avoid collision to S3 bucket names (which are global).
+#### Step 7.1 - Synthetizing your environment
 
-For instance, let's suppose that you have selected envname=r2d2. Then, if the deployment is successful, at the end something like this will appear
+1. Go to the other available terminal at your Cloud9 environment and be sure of being at the CDK folder. You prompt should look like `~/environment/alienattack.workshop/cdk (master) $`
+2. Use the synth command for CDK to synthetize your enviroment.
 
-***
+~~~
+cdk synth
+~~~
 
- ✅  R2D2
+This will generate an output for the corresponding Cloudformation template. You can save it by redirecting the result to some folder, so you can read it through.
+
+For example, redirecting it to output.yaml
+
+~~~
+cdk synth > ../output.yaml
+~~~
+
+You are going to have the file output.yaml sitting on the folder `~/environment/alienattack.workshop`. Open it and explore its content.
+
+
+#### Step 7.2 - Deploy your backend
+
+Being at your cdk folder, and having decided for an *envname*, run the following command:
+
+~~~
+cdk deploy
+~~~
+
+CDK will first show you what changes will be applied to the environment. After that, it will ask if you really want to deploy.
+
+Answer with **y**, and wait for environment to be deployed. If everything is ok, at the end you are going to see something like this:
+
+~~~
+✅  YorEnvironmentName
+
+Outputs:
+<YourEnvironmentName>.apigtw = https://<api-id>.execute-api.<region>.amazonaws.com/prod/v1/
+<YourEnvironmentName>.envname = <YourEnvironmentName>
+<YourEnvironmentName>.region = <region>
 
 Stack ARN:
-arn:aws:cloudformation:<region>:<account>:stack/R2D2/bc543b91-451f-33f9-442a-02e473ddfb1a
+arn:aws:cloudformation:<region>:<account>:stack/<YourEnvironmentName>/bc543b91-451f-33f9-442a-02e473ddfb1a
+~~~
+ 
+You should see a section called Outputs. Copy those outputs and paste them into a text editor. You will need these outputs for later in the workshop.
 
-And the deployment will have created the buckets **r2d2.app** and **r2d2.raw**.
+The synthesize command will have also created two S3 buckets named YOUR_ENVIRONMENT_NAME.app and YOUR_ENVIRONMENT_NAME.raw. Visit the Amazon S3 Console to see.
 
-if the deployment WAS NOT SUCCESSFUL, then almost surely you had a S3 bucket name collision. if the message is similar to the one below, then chose another envname for your deployment. In the example below, the name TEST for the environment provokes a collision:
+You can also visit the AWS CloudFormation Console in a separate window to monitor your environment’s progress.
+
+
+If the command was not successful, this means you had an S3 bucket name collision. If the message in your terminal looks similar to the one below, please choose another environment name for your deployment and run through the above steps once more.
+
+An unsuccessful synthesize command will look something like the output below:
 
 ~~~
 Environment name: TEST
@@ -232,37 +285,8 @@ Environment name: TEST
 Unable to find output file /tmp/cdkF6Q2pM/cdk.out; are you calling app.run()?
 ~~~
 
-</details>
 
 ***
-
-#### Step 7.1 - Synthetizing your environment
-
-1. Go to the other available terminal at your Cloud9 environment and be sure of being at the CDK folder. You prompt should look like `~/environment/alienattack.workshop/cdk (master) $`
-2. Use the synth command for CDK to synthetize your enviroment.
-
-~~~
-cdk synth -c envname=<envname>
-~~~
-
-This will generate an output for the corresponding Cloudformation template. You can save it by redirecting the result to some folder, so you can read it through.
-
-
-#### Step 7.2 - Deploy your backend
-
-Being at your cdk folder, and having decided for an *envname*, run the following command:
-
-~~~
-cdk deploy -c envname=<envname>
-~~~
-
-CDK will first show you what changes will be applied to the environment. After that, it will ask if you really want to deploy.
-
-Answer with **y**, and wait for environment to be deployed. If everything is ok, at the end you are going to see something like this:
-
- `✅  <envname>`
- 
-Below that line, you will see a section named *Outputs*, with some additinal lines. Take note of those. You are going to need it.
 
 
 ## Fix the application
