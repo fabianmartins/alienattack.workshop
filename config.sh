@@ -29,5 +29,5 @@ cd cdk
 npm install
 [[ $(grep "nvm use latest" ~/.bash_profile) ]] || echo nvm use latest >> ~/.bash_profile
 ## Calling the environment configuration
-source envname.sh
+source ../envname.sh
 echo ### DONE
