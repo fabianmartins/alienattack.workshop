@@ -14,7 +14,7 @@ nvm alias default latest
 nvm use $node_version
 echo --
 echo Installing Typescript
-npm install -g typescript@3.4.5
+npm install -g typescript@3.7.2
 echo --
 echo Installing CDK
 npm install -g aws-cdk@1.10.1
