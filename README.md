@@ -124,7 +124,7 @@ Getting back to your **Cloud9 environment**, let's update the current instance.
 
     Don't worry if some *warning* messages appear, especially if it's about python.
 
-    After configuring the operating system, and installing the tools required to compile and build the source code, the script will ask you to input your initials to define the name for your enviroment. This is important to reduce the probability of naming collision for the S3 buckets that are going to be created, and to avoid resource name collisions when two or more users are sharing the same AWS account and region to run the environment.  
+    After configuring the operating system and installing the tools required to compile and build the source code, the script will ask you to input your initials to define an exclusive name for your enviroment. This is important to reduce the probability of naming collision for the S3 buckets that are going to be created, and to avoid resource name collisions when two or more users are sharing the same AWS account and region to run the environment.  
 
     So, supposing that someone is going to provide `FMDS` as the initials, you might expect to see a message like the one below:
     ~~~
@@ -139,12 +139,14 @@ Getting back to your **Cloud9 environment**, let's update the current instance.
    **************************************************************
 
     What are your initials? fmds
-    Your environment name was defined as fmdsd5f4d6aaa
+    Your environment name was defined as FMDSAAAD5F4D6
     ~~~
 
-    See that everything between the provided initial (in this example, `fmds`) and the suffix (`aaa`) is a random and automatically generated code.
+    See that the environment name is composed by the initials provided (in this example, `FMDS`), followed by the string `AAA` (from `A`WS `A`lien `A`ttack), and then a suffix which is a random code generate automatically (in this example `D5F4D6`).
 
-    It's unlikely, but you may incur in naming collision. If that happens, we will provide you guidance on how to solve that.
+    It's unlikely, but you may still incur in naming collision. If that happens, we will provide you guidance on how to solve that.
+
+    Save the value of your environment name in a helping file on Cloud9. You are going to need it later. Anyway, you can still retrieve this value from your console by typing `echo $envname`.
 
 #### STEP 6 - Start background compilation for CDK
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # This Script deploys a websocket with the correct lambda routes
 # This script will also change various IAM Roles to invoke the websocket
-# source fixwebsocket.sh <envName>
+# source fixwebsocket.sh
 
 function removeQuotes() {
     retval=$1
