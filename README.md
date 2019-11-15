@@ -909,7 +909,7 @@ Let's fix this.
 Go to the the terminal on your environment and type the following command. Be sure to be at your cdk folder.
 
 ```
-~/environment/alienattack.workshop/cdk (master) $ cdk destroy -c envname=<envName>
+~/environment/alienattack.workshop/cdk (master) $ cdk destroy -c envname=$envname
 ```
 
 If everything went well, you will receive a message like the following one: 
