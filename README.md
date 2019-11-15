@@ -209,7 +209,7 @@ Then, we will *Deploy* the enviroment, which means to create on the account all 
 2. Use the synth command for CDK to synthetize your enviroment.
 
 ~~~
-cdk synth
+cdk synth -c envname=$envname
 ~~~
 
 This will generate an output for the corresponding Cloudformation template. You can save it by redirecting the result to some folder, so you can read it through.
@@ -217,7 +217,7 @@ This will generate an output for the corresponding Cloudformation template. You 
 For example, redirecting it to output.yaml
 
 ~~~
-cdk synth > ../output.yaml
+cdk synth -c envname=$envname > ../output.yaml
 ~~~
 
 You are going to have the file output.yaml sitting on the folder `~/environment/alienattack.workshop`. Open it and explore its content.
@@ -228,7 +228,7 @@ You are going to have the file output.yaml sitting on the folder `~/environment/
 Being at your cdk folder, and having decided for an *envname*, run the following command:
 
 ~~~
-cdk deploy
+cdk deploy -c envname=$envname
 ~~~
 
 CDK will first show you what changes will be applied to the environment. After that, it will ask if you really want to deploy.
