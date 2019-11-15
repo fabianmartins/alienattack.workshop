@@ -5,18 +5,19 @@ echo Updating the attached instance
 sudo yum update -y
 echo --
 echo Updating node to the latest version
-node_version=$(nvm ls-remote --lts | grep Latest | tail -1 | grep -o 'v[.0-9]*' | sed 's/\x1b\[[0-9;]*m//g')
-node_version=${node_version:1}
-nvm install --lts
+#node_version=$(nvm ls-remote --lts | grep Latest | tail -1 | grep -o 'v[.0-9]*' | sed 's/\x1b\[[0-9;]*m//g')
+#node_version=${node_version:1}
+node_version="10.15.3"
+nvm install $node_version
 nvm alias latest $node_version
 nvm alias default latest
 nvm use $node_version
 echo --
 echo Installing Typescript
-npm install -g typescript@3.4.5
+npm install -g typescript@3.7.2
 echo --
 echo Installing CDK
-npm install -g aws-cdk@1.6.1
+npm install -g aws-cdk@1.10.1
 echo --
 echo Bootstraping CDK
 account=$(aws sts get-caller-identity --output text --query 'Account')
