@@ -811,7 +811,7 @@ We have learned that this is implemeted via “websockets”, and we have the fo
 #### **Task 3:** Adjust IAM Role
 1. Navigate to the IAM Dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
 2. Click **Roles** on the left side of the window.
-3. Find `<envName>WebSocketSynchronousStart_Role` click on it.
+3. Find `<envName>WebSocketSynchronousStartFn_Role` click on it.
 4. Click **Add inline policy**
 5. Press JSON. Copy and paste the JSON below: (Note the placeholder for the WebSocket ARN)
 ```Javascript
@@ -847,7 +847,7 @@ The ARN should take the form: `arn:aws:execute-api:{region}:{account ID}:{API ID
 The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixwebsocket.sh` which is inside the folder `~/environment/alienattack.workshop`. Go to that folder, and run the following command:
 
 ~~~
-source fixwebsocket.sh <envname>
+source fixwebsocket.sh
 ~~~
 
 There should be a line that is outputted by the script which says `Websocket ARN: <Your WebSokcet ARN>` use this ARN to complete Task 3 above.
