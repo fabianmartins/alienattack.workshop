@@ -93,5 +93,5 @@ if [ "$envname" == "" ]; then
     echo Please ensure that the variable envname is defined
 else
     envName=$(echo $envname | tr 'a-z' 'A-Z')
-    setRoleMappings $envName $2
+    setRoleMappings $envName
 fi

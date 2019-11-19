@@ -430,7 +430,7 @@ The Identity Pool configuration is missing the configuration of the roles for ea
 
 ##### [Solution guidance]
 
-This is the playbook that we've got from
+This is the playbook that we've got from the security team
 
 1. On your AWS Console, visit the Cognito service page.
 2. If you got to the landing page of the service, you will click on the button **Manage Identity Pools**. 
@@ -456,6 +456,23 @@ This is the playbook that we've got from
 11. Leave everything else as it is and click on **`Save changes`**
 
 **-- FastFix --**  
+For this case we have 2 fast fixes:
+
+(1) Alternative configuration - getting the roles from the token
+
+Everything that was described at the Solution Guidance is a configuration to guide Cognito to read a certain "claim" from the ID token, and considering the configuration, to define the appropriate role for the user. You can read more about it [here](https://docs.aws.amazon.com/cognito/latest/developerguide/role-based-access-control.html).
+
+So, here there is a shortcut for the configuration, as Cognito can automatically search for the 'cognito:preferred_role' claim. So, we can replace the steps from 7 and on from the previous list, with this configuration:
+
+7.  On the section `Authenticated role selection` there is a select button labeled as `Use default role`. Click on this button and select **Choose role from token**. The interface will show up another button, so you can define the Role Resolution.
+8. For **Role resolution**, click on the button where it is indicated `Use default Authenticated role`, and change it to `DENY`. Here we are saying that *"If there is any conflict, just deny the access"* .
+9. Scroll down and click `Save Changes`.
+
+And that's it. You can skip all the other steps.
+
+
+(2) Using a fixing script
+
 The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixcognito.sh`
 
 1. On your Clou9 environment, go to the folder `alienattack.workshop` by issuing:
@@ -467,7 +484,7 @@ cd ~/environment/alienattack.workshop
 2. Run the following command:
 
 ~~~
-source fixcognito.sh <envname>
+source fixcognito.sh
 ~~~
 
 ### fixACTIVITY 6 - Testing the accesses again
@@ -597,9 +614,9 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
 2. On the service page you are expected to see the Kinesis Streams on the left, and on the right hand side a Kinesis Firehose section where there is nothing for your application. Let's create it.
 3. Under the section *'Kinesis Firehose Delivery Streams*', or by clicking on *'Data Firehose*' at the left hand side, click on the button **Create Delivery Stream**.
 4. On the section *New delivery stream*, configure the fields as follows:
-   * **Delivery stream name**: `<envName>Firehose`.
-   * **Source**: Select the radio button *'Kinesis stream'*. 
-   * Drop-down **Choose Kinesis stream**: select the stream attached to your deployment (the same one we connected to the Lambda function). Its name starts with `<envName>`.
+   * **Delivery stream name**: `<envName>_Firehose`. To get the name of your environment in uppercase, run the following command `echo $envname | tr 'a-z' 'A-Z'`
+   * **Source**: Select the radio button *'Kinesis data stream'*. 
+   * Drop-down **Kinesis data stream**: select the stream attached to your deployment (the same one we connected to the Lambda function). Its name starts with `<envName>`.
    * Click **Next**.
    * **Record transformation**: Select *'Disabled'*.
    * **Record format conversion**: Select *'Disabled'*.
@@ -657,7 +674,7 @@ So, you are going to need to implement the API from scratch, following the requi
 
 1. The resource to be added on API Gateway must have the name `topxstatistics`.
 2. The resource will execute a HTTP GET, passing the querystring sessionId, which will hold the session id provided by the consumer of the API.
-   * Something likke `<api>/topxstatistics?sessionId=<session id>`
+   * Something like `<api>/topxstatistics?sessionId=<session id>`
 3. The API Gateway request will be integrated to the Lambda Function that you are going to create, that going to compute the player's performance. The excerpt of code that we have is the one below:
 
 ~~~
@@ -694,10 +711,20 @@ const computeStatisticsForSession = function(sessionId,callback) {
 };
 ~~~
 
-The API must be accessible only by the Manager.
+4. The API must be accessible only by the Manager.
+5. You need to test the API using the JWToken.   
+   a. We heard that you can get some insights by reading [this file](./diverse/howtotestyourapi.txt), but you should use it as a last resource. 
 
 **-- FastFix --**  
-We heard that something can be learned from this [link](http://partnerfactoryprogram.s3-website-us-east-1.amazonaws.com/labpack/fullmicroservice/fullmicroservice.html). Be sure of double checking your environment. It seems that you might already have the required table created. You might just need to populate it with data.
+We heard that something can be learned from this [link](http://partnerfactoryprogram.s3-website-us-east-1.amazonaws.com/labpack/fullmicroservice/fullmicroservice.html).
+
+We also learned that someone left this file on our 
+
+
+**IMPORTANT:**
+* Be sure of double checking your environment. It seems that you might already have the required table created. You might just need to populate it with data.
+* It seems that the instructions will guide you in creating a new API. Remember that we want to add a new resource to the existing API (under the v1 resource), not to create a new one!
+* After deploying the new microservice, if you set the security
 
 ### fixACTIVITY 13 - Deploying the WebSocket for APIGateway 
 
