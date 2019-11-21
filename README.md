@@ -713,12 +713,10 @@ const computeStatisticsForSession = function(sessionId,callback) {
 
 4. The API must be accessible only by the Manager.
 5. You need to test the API using the JWToken.   
-   a. We heard that you can get some insights by reading [this file](./diverse/howtotestyourapi.txt), but you should use it as a last resource. 
+   a. We heard that you can get some insights by reading [this file](./diverse/howtotestyourapi.txt), but you should use it only as a last resource. 
 
 **-- FastFix --**  
 We heard that something can be learned from this [link](http://partnerfactoryprogram.s3-website-us-east-1.amazonaws.com/labpack/fullmicroservice/fullmicroservice.html).
-
-We also learned that someone left this file on our 
 
 
 **IMPORTANT:**
