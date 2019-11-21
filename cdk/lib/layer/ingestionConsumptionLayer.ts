@@ -12,19 +12,23 @@ import Lambda = require('@aws-cdk/aws-lambda');
 /**
  * MISSING KINESIS INTEGRATION - side effect
  * Uncomment the following lines to solve it
+ * (ps: You need to run 'npm install @aws-cdk/aws-lambda-event-sources' on the terminal )
  */
 //import Logs = require('@aws-cdk/aws-logs');
 //import { KinesisEventSource } from '@aws-cdk/aws-lambda-event-sources';
+import { PolicyDocument, PolicyStatement } from '@aws-cdk/aws-iam';
 
 export class IngestionConsumptionLayer extends ResourceAwareConstruct {
 
-    kinesisStreams: KDS.Stream;
+    kinesisStreams: KDS.IStream;
     kinesisFirehose: KDF.CfnDeliveryStream;
+
     /**
      * MISSING KINESIS FIREHOSE - side effect
-     * Uncomment the following section to solve it
+     * Uncomment the following line to solve it
      */
     //private rawbucketarn: string;
+
     private userpool: string;
     private api: APIGTW.CfnRestApi;
 
@@ -32,9 +36,10 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
         super(parent, name, props);
         /**
          * MISSING KINESIS FIREHOSE - side effect
-         * Uncomment the following section to solve it
+         * Uncomment the following line to solve it
          */
         //this.rawbucketarn = props.getParameter('rawbucketarn');
+        
         this.userpool = props.getParameter('userpool');
         this.createKinesis(props);
         this.createAPIGateway(props);
@@ -47,6 +52,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             streamName: props.getApplicationName() + '_InputStream',
             shardCount: 1
         });
+    
 
         /**
          * MISSING KINESIS INTEGRATION
@@ -59,7 +65,8 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             startingPosition : Lambda.StartingPosition.LATEST
         }).bind(<Lambda.Function> props.getParameter('lambda.scoreboard'));
         */
-       //section finish here
+        //section finish here
+    
 
         /**
          * MISSING KINESIS FIREHOSE
@@ -67,12 +74,13 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
          */
         //section starts here
         /*
-        let firehoseLogGroup = '/aws/kinesisfirehose/' + ((props.getApplicationName()+ 'firehose').toLowerCase());
-        let fhlg = new Logs.LogGroup(this,props.getApplicationName()+'firehoseloggroup', {
-            logGroupName : firehoseLogGroup
+        let firehoseName = props.getApplicationName() + '_Firehose';
+        let firehoseLogGroupName = '/aws/kinesisfirehose/' + firehoseName;
+        let firehoseLogGroup = new Logs.LogGroup(this,props.getApplicationName()+'firehoseloggroup', {
+            logGroupName : firehoseLogGroupName
         });
         new Logs.LogStream(this,props.getApplicationName()+'firehoselogstream', {
-            logGroup : fhlg,
+            logGroup : firehoseLogGroup,
             logStreamName : "error"
         });
         let self = this;
@@ -80,6 +88,16 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             roleName: props.getApplicationName() + 'FirehoseToStreamsRole',
             assumedBy: new IAM.ServicePrincipal('firehose.amazonaws.com'),
             inlinePolicies: {
+                'GluePermissions' : new IAM.PolicyDocument({
+                    statements : [
+                        new PolicyStatement({
+                            actions : [
+                              "glue:GetTableVersions"
+                            ],
+                            resources : ["*"]
+                        })
+                    ]
+                }),
                 'S3RawDataPermission': new IAM.PolicyDocument({
                     statements : [
                         new PolicyStatement(
@@ -100,6 +118,19 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                         )
                     ]
                 }),
+                'DefaultFirehoseLambda' : new IAM.PolicyDocument({
+                    statements : [
+                        new PolicyStatement({
+                            actions: [
+                                "lambda:InvokeFunction",
+                                "lambda:GetFunctionConfiguration"
+                            ],
+                            resources : [
+                                "arn:aws:lambda:"+props.region+":"+props.accountId+":function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%"
+                            ] 
+                        })
+                    ]
+                }),
                 'InputStreamReadPermissions': new PolicyDocument({
                     statements : [
                         new PolicyStatement({
@@ -114,23 +145,12 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
                         })
                     ]
                 }),
-                'GluePermissions': new PolicyDocument({
-                    statements : [
-                        new PolicyStatement({
-                            resources : [ '*' ],
-                            actions : [
-                                'glue:GetTableVersions'
-                            ]
-                        })
-                    ]
-                }),
                 'CloudWatchLogsPermissions': new PolicyDocument({
                     statements : [
                         new PolicyStatement({
                             actions : [ 'logs:PutLogEvents' ],
                             resources : [
-                                'arn:aws:logs:' + props.region + ':' + props.accountId + ':log-group:' + firehoseLogGroup + ':*:*',
-                                'arn:aws:logs:' + props.region + ':' + props.accountId + ':log-group:' + firehoseLogGroup
+                                'arn:aws:logs:' + props.region + ':' + props.accountId + ':log-group:/'+firehoseLogGroupName+':log-stream:*'
                             ]
                         })
                     ]
@@ -140,7 +160,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
         
         this.kinesisFirehose = new KDF.CfnDeliveryStream(this, props.getApplicationName() + 'RawData', {
             deliveryStreamType: 'KinesisStreamAsSource',
-            deliveryStreamName: props.getApplicationName() + '_Firehose',
+            deliveryStreamName: firehoseName,
             kinesisStreamSourceConfiguration: {
                 kinesisStreamArn: this.kinesisStreams.streamArn,
                 roleArn: firehoseRole.roleArn
@@ -148,22 +168,21 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             , s3DestinationConfiguration: {
                 bucketArn: <string>this.rawbucketarn,
                 bufferingHints: {
-                    intervalInSeconds: 900,
-                    sizeInMBs: 10
+                    intervalInSeconds: 300,
+                    sizeInMBs: 1
                 },
                 compressionFormat: 'GZIP',
                 roleArn: firehoseRole.roleArn,
                 cloudWatchLoggingOptions: {
                     enabled: true,
-                    logGroupName: firehoseLogGroup,
-                    logStreamName: firehoseLogGroup
+                    logGroupName: firehoseLogGroupName,
+                    logStreamName: firehoseLogGroupName
                 }
             }
         });
-        this.kinesisFirehose.node.addDependency(fhlg);
+        this.kinesisFirehose.node.addDependency(firehoseLogGroup);
         */
         // section finishes here
-
     }
 
     createAPIGateway(props: IParameterAwareProps) {
@@ -385,94 +404,94 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
          * GET {no parameter} - returns websocketURL data from ssm.parameter /ssm/websocket
          * 
          */
-        let websocket = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1websocket", {
-              parentId:  v1.ref
-            , pathPart: 'websocket'
-            , restApiId: this.api.ref
-        });
+      let websocketResourceOnRESTAPI = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1websocket", {
+            parentId:  v1.ref
+          , pathPart: 'websocket'
+          , restApiId: this.api.ref
+      });
 
-        let websocketGetMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1websocketGET", {
-              restApiId: this.api.ref
-            , resourceId: websocket.ref
-            , authorizationType: APIGTW.AuthorizationType.COGNITO
-            , authorizerId: authorizer.ref
-            , httpMethod: 'GET'
-            , requestParameters: {
-                  'method.request.querystring.Name': true
-                , 'method.request.header.Authentication': true
-            }
-            , requestModels : undefined
-            , integration: {
-                passthroughBehavior: 'WHEN_NO_MATCH'
-                , integrationHttpMethod: 'POST'
-                , type: 'AWS'
-                , uri: 'arn:aws:apigateway:' + props.region + ':ssm:action/GetParameter'
-                , credentials: apirole.roleArn
-                , requestParameters: {
-                      'integration.request.querystring.Name': "'/" + props.getApplicationName().toLowerCase() + "/websocket'"
-                    , 'integration.request.header.Authentication': 'method.request.header.Authentication'
-                }
-                , requestTemplates : undefined
-                , integrationResponses: [
-                    {
-                        statusCode: '200'
-                        , responseParameters: {
-                            'method.response.header.Access-Control-Allow-Origin': "'*'"
-                        }
-                        , responseTemplates: {
-                            'application/json': `"$util.escapeJavaScript("$input.path('$').GetParameterResponse.GetParameterResult.Parameter.Value").replaceAll("\'",'"')"`
-                        }
-                    }]
-            }
-            , methodResponses: [
-                {
-                    statusCode: '200'
-                    , responseParameters: {
-                        'method.response.header.Access-Control-Allow-Origin': false
-                    }
-                    , responseModels: {
-                           'application/json': 'Empty'
-                    }
-                }
-            ]
-        });
-
-        // OPTIONS
-        let websocketOptionsMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1websocketOPTIONS", {
+      let websocketGetMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1websocketGET", {
             restApiId: this.api.ref
-            , resourceId: websocket.ref
-            , authorizationType: APIGTW.AuthorizationType.NONE
-            , httpMethod: 'OPTIONS'
-            , integration: {
-                passthroughBehavior: 'WHEN_NO_MATCH'
-                , type: 'MOCK'
-                , requestTemplates: {
-                    'application/json': '{\"statusCode\": 200}'
-                }
-                , integrationResponses: [
-                    {
-                        statusCode: '200'
-                        , responseParameters: {
-                            'method.response.header.Access-Control-Allow-Headers' : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-                            ,'method.response.header.Access-Control-Allow-Methods' : "'*'"
-                            ,'method.response.header.Access-Control-Allow-Origin' : "'*'"
-                        }
-                    }]
-            }
-            , methodResponses: [
-                {
-                    statusCode: '200'
-                    , responseParameters: {
-                          'method.response.header.Access-Control-Allow-Origin': false
-                        , 'method.response.header.Access-Control-Allow-Methods': false
-                        , 'method.response.header.Access-Control-Allow-Headers': false
-                    }
-                    , responseModels: {
-                        "application/json": 'Empty'
-                    }
-                }
-            ]
-        });
+          , resourceId: websocketResourceOnRESTAPI.ref
+          , authorizationType: APIGTW.AuthorizationType.COGNITO
+          , authorizerId: authorizer.ref
+          , httpMethod: 'GET'
+          , requestParameters: {
+                'method.request.querystring.Name': true
+              , 'method.request.header.Authentication': true
+          }
+          , requestModels : undefined
+          , integration: {
+              passthroughBehavior: 'WHEN_NO_MATCH'
+              , integrationHttpMethod: 'POST'
+              , type: 'AWS'
+              , uri: 'arn:aws:apigateway:' + props.region + ':ssm:action/GetParameter'
+              , credentials: apirole.roleArn
+              , requestParameters: {
+                    'integration.request.querystring.Name': "'/" + props.getApplicationName().toLowerCase() + "/websocket'"
+                  , 'integration.request.header.Authentication': 'method.request.header.Authentication'
+              }
+              , requestTemplates : undefined
+              , integrationResponses: [
+                  {
+                      statusCode: '200'
+                      , responseParameters: {
+                          'method.response.header.Access-Control-Allow-Origin': "'*'"
+                      }
+                      , responseTemplates: {
+                          'application/json': `"$util.escapeJavaScript("$input.path('$').GetParameterResponse.GetParameterResult.Parameter.Value").replaceAll("\'",'"')"`
+                      }
+                  }]
+          }
+          , methodResponses: [
+              {
+                  statusCode: '200'
+                  , responseParameters: {
+                      'method.response.header.Access-Control-Allow-Origin': false
+                  }
+                  , responseModels: {
+                         'application/json': 'Empty'
+                  }
+              }
+          ]
+      });
+
+      // OPTIONS
+      let websocketOptionsMethod = new APIGTW.CfnMethod(this, props.getApplicationName() + "APIv1websocketOPTIONS", {
+          restApiId: this.api.ref
+          , resourceId: websocketResourceOnRESTAPI.ref
+          , authorizationType: APIGTW.AuthorizationType.NONE
+          , httpMethod: 'OPTIONS'
+          , integration: {
+              passthroughBehavior: 'WHEN_NO_MATCH'
+              , type: 'MOCK'
+              , requestTemplates: {
+                  'application/json': '{\"statusCode\": 200}'
+              }
+              , integrationResponses: [
+                  {
+                      statusCode: '200'
+                      , responseParameters: {
+                          'method.response.header.Access-Control-Allow-Headers' : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+                          ,'method.response.header.Access-Control-Allow-Methods' : "'*'"
+                          ,'method.response.header.Access-Control-Allow-Origin' : "'*'"
+                      }
+                  }]
+          }
+          , methodResponses: [
+              {
+                  statusCode: '200'
+                  , responseParameters: {
+                        'method.response.header.Access-Control-Allow-Origin': false
+                      , 'method.response.header.Access-Control-Allow-Methods': false
+                      , 'method.response.header.Access-Control-Allow-Headers': false
+                  }
+                  , responseModels: {
+                      "application/json": 'Empty'
+                  }
+              }
+          ]
+      });
 
         /**
          * CONFIG 
@@ -502,7 +521,7 @@ export class IngestionConsumptionLayer extends ResourceAwareConstruct {
             }
          */
         let config = new APIGTW.CfnResource(this, props.getApplicationName() + "APIv1config", {
-              parentId: v1.ref
+            parentId: v1.ref
             , pathPart: 'config'
             , restApiId: this.api.ref
         });
