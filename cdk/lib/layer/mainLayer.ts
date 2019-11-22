@@ -1,5 +1,5 @@
 import { App, CfnOutput } from '@aws-cdk/core';
-import { IParameterAwareProps, ParameterAwareProps, ResourceAwareStack} from '../resourceawarestack';
+import { IParameterAwareProps, ParameterAwareProps, ResourceAwareStack } from '../resourceawarestack';
 
 import { SecurityLayer } from './securityLayer';
 import { ConfigurationLayer } from './configurationLayer';
@@ -8,15 +8,17 @@ import { DatabaseLayer } from './databaseLayer';
 import { IngestionConsumptionLayer } from './ingestionConsumptionLayer';
 import { ProcessingLayer } from './processingLayer';
 import { WebSocketLayer } from './websocketLayer';
-// MISSING CLOUDFRONT DISTRIBUTION - side effect
-// Uncomment the following line if you want to deploy your Cloudfront distribution. It takes 20 mminutes
-//import { ContentDeliveryLayer } from './contentDeliveryLayer';
+
+import { ContentDeliveryLayer } from './contentDeliveryLayer';
+
+var DEPLOY_CDN : boolean = false;
 
 
-export class MainLayer extends ResourceAwareStack  {
+export class MainLayer extends ResourceAwareStack {
 
   constructor(scope: App, id: string, props?: IParameterAwareProps) {
     super(scope, id, props);
+    if (props && props.getParameter("deploycdn")) DEPLOY_CDN = true;
     this.buildResources();
   }
 
@@ -25,36 +27,34 @@ export class MainLayer extends ResourceAwareStack  {
     // security layer
     let securityLayer =
       new SecurityLayer(this, 'SecurityLayer', this.properties);
-    
+
     // configuration layer
-    
     let configLayerProps = new ParameterAwareProps(this.properties);
-    
-    let ssmProperties = new Map<string,string>();
+
+    let ssmProperties = new Map<string, string>();
     ssmProperties.set("Region", this.region);
     ssmProperties.set("ClientId", securityLayer.getUserPoolClientId());
     ssmProperties.set("UserpoolId", securityLayer.getUserPoolId());
     ssmProperties.set("UserPoolURL", securityLayer.getUserPoolUrl());
     ssmProperties.set("IdentityPoolId", securityLayer.getIdentityPoolId());
-    
+
     // MISSING PARAMETER - Uncomment the next line to create the parameter
-    // ssmProperties.set("Session", "null");
-    configLayerProps.addParameter('ssmParameters',ssmProperties);
-    // MISSING PARAMETER  - side effect - uncomment the next line to fix it
-   // let configLayer =
-       new ConfigurationLayer(this, 'ConfigurationLayer', configLayerProps);
+    ssmProperties.set("Session", "null");
+    configLayerProps.addParameter('ssmParameters', ssmProperties);
+
+    let configLayer =
+      new ConfigurationLayer(this, 'ConfigurationLayer', configLayerProps);
 
     // storage layer
     let storageLayer =
       new StorageLayer(this, 'StorageStorage', this.properties);
 
-    // MISSING CLOUDFRONT DISTRIBUTION 
-    // Uncomment the following section if you want to deploy your Cloudfront distribution. It takes 20 mminutes
-    /*
-    let cdnLayerProps = new ParameterAwareProps(this.properties);
-    cdnLayerProps.addParameter('appbucket',storageLayer.getResource('appbucket'));
-      new ContentDeliveryLayer(this,'ContentDeliveryLayer',cdnLayerProps);
-    */
+    let cdnLayer = null;
+    if (DEPLOY_CDN) {
+      let cdnLayerProps = new ParameterAwareProps(this.properties);
+      cdnLayerProps.addParameter('appbucket', storageLayer.getResource('appbucket'));
+      cdnLayer = new ContentDeliveryLayer(this, 'ContentDeliveryLayer', cdnLayerProps);
+    }
 
 
     // database layer
@@ -109,14 +109,12 @@ export class MainLayer extends ResourceAwareStack  {
       exportName : "envname"
     });
 
-// MISSING CLOUDFRONT DISTRIBUTION 
-// Uncomment the following section if you want to deploy your Cloudfront distribution. It takes 20 minutes
-/*
-    new CfnOutput(this, "url", {
-      description : "Cloudfront domain for the website (Cloudfront distribution)",
-      value : cdnLayer.getResource("cdndomain"),
-      exportName : "url"
-    }).node.addDependency(cdnLayer);
-*/
+    if (cdnLayer) {
+      new CfnOutput(this, "url", {
+        description : "Cloudfront domain for the website (Cloudfront distribution)",
+        value : cdnLayer.getResource("cdndomain"),
+        exportName : "url"
+      }).node.addDependency(cdnLayer);
+    }  
   }
 }
