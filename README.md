@@ -556,7 +556,7 @@ If everything went well, you will get the message *Create parameter request succ
 If you want to skip this activity: 
 
 1. Go your CDK project (the one that it's at Cloud9), search for *MISSING PARAMETER* on all .ts (typescript) files, and follow the guidances to adjust the code.
-2. Save everything and run **`cdk diff -c envname=<envName>`** at the terminal. This will show you what will be changed on your environment
+2. Save everything and run **`cdk deploy -c envname=$envname`** at the terminal. This will show you what will be changed on your environment
 3. If you agree with the changes, run **`cdk deploy -c envname=$envname`** to deploy the changes
 
 After fixing this, try to login to the manager console again (*fixActivity 4*). You will be forwarded to the configuration page. The access seems to be ok. 
@@ -596,7 +596,7 @@ We need to connect the Lambda function to Kinesis.
 If you want to skip this activity: 
 
 1. Go your CDK project, search for *MISSING KINESIS INTEGRATION* on all .ts files, and follow the guidances to adjust the code.
-2. Save everything and run **`cdk diff -c envname=<envName>`** at the terminal. This will show you what will be changed on your environment
+2. Save everything and run **`cdk deploy -c envname=$envname`** at the terminal. This will show you what will be changed on your environment
 3. If you agree with the changes, run **`cdk deploy -c envname=$envname`** to deploy the changes
 
 
@@ -647,7 +647,7 @@ If everything went well, you will see that the delivery stream was created.
 If you want to skip this activity: 
 
 1. Go your CDK project, search for *MISSING KINESIS FIREHOSE* on all .ts files, and follow the guidances to adjust the code.
-2. Save everything and run **`cdk diff -c envname=<envName>`** at the terminal. This will show you what will be changed on your environment
+2. Save everything and run **`cdk deploy -c envname=$envname`** at the terminal. This will show you what will be changed on your environment
 3. If you agree with the changes, run **`cdk deploy -c envname=$envname`** to deploy the changes
 
 
