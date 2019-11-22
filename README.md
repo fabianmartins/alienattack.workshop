@@ -238,7 +238,7 @@ CDK will first show you what changes will be applied to the environment. After t
 Answer with **y**, and wait for environment to be deployed. If everything is ok, at the end you are going to see something like this:
 
 ~~~
-✅  YorEnvironmentName
+✅  YourEnvironmentName
 
 Outputs:
 <YourEnvironmentName>.apigtw = https://<api-id>.execute-api.<region>.amazonaws.com/prod/v1/
@@ -249,7 +249,7 @@ Stack ARN:
 arn:aws:cloudformation:<region>:<account>:stack/<YourEnvironmentName>/bc543b91-451f-33f9-442a-02e473ddfb1a
 ~~~
  
-You should see a section called Outputs. Copy those outputs and paste them into a text editor. You will need these outputs for later in the workshop.
+You should see a section called Outputs. Copy those outputs and paste them into a text editor. You will need it later in the workshop.
 
 The synthesize command will have also created two S3 buckets named YOUR_ENVIRONMENT_NAME.app and YOUR_ENVIRONMENT_NAME.raw. Visit the Amazon S3 Console to see.
 

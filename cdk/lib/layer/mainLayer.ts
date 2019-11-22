@@ -39,7 +39,7 @@ export class MainLayer extends ResourceAwareStack {
     ssmProperties.set("IdentityPoolId", securityLayer.getIdentityPoolId());
 
     // MISSING PARAMETER - Uncomment the next line to create the parameter
-    ssmProperties.set("Session", "null");
+    // ssmProperties.set("Session", "null");
     configLayerProps.addParameter('ssmParameters', ssmProperties);
 
     let configLayer =

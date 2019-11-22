@@ -21,5 +21,6 @@ initials=$(echo $initials | tr -cd "[a-zA-Z0-9]\n" | tr 'A-Z' 'a-z'  )
 randomcode=$(openssl rand -hex 3)
 ### Defining envname
 envname=$(echo $initials"aaa"$randomcode | tr 'A-Z' 'a-z')
+envnameuppercase=$(echo $envname | tr 'a-z' 'A-Z')
 echo export envname=$envname >> ~/.bash_profile
-echo "Your environment name was defined as"$setColor $envname $resetColor
+echo "Your environment name was defined as"$setColor $envnameuppercase $resetColor
