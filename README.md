@@ -557,7 +557,7 @@ If you want to skip this activity:
 
 1. Go your CDK project (the one that it's at Cloud9), search for *MISSING PARAMETER* on all .ts (typescript) files, and follow the guidances to adjust the code.
 2. Save everything and run **`cdk diff -c envname=<envName>`** at the terminal. This will show you what will be changed on your environment
-3. If you agree with the changes, run **`cdk deploy -c envname=<envName>`** to deploy the changes
+3. If you agree with the changes, run **`cdk deploy -c envname=$envname`** to deploy the changes
 
 After fixing this, try to login to the manager console again (*fixActivity 4*). You will be forwarded to the configuration page. The access seems to be ok. 
 
@@ -597,7 +597,7 @@ If you want to skip this activity:
 
 1. Go your CDK project, search for *MISSING KINESIS INTEGRATION* on all .ts files, and follow the guidances to adjust the code.
 2. Save everything and run **`cdk diff -c envname=<envName>`** at the terminal. This will show you what will be changed on your environment
-3. If you agree with the changes, run **`cdk deploy -c envname=<envName>`** to deploy the changes
+3. If you agree with the changes, run **`cdk deploy -c envname=$envname`** to deploy the changes
 
 
 ### fixACTIVITY 10 - Kinesis Firehose - Create the missing Kinesis Firehose
@@ -648,7 +648,7 @@ If you want to skip this activity:
 
 1. Go your CDK project, search for *MISSING KINESIS FIREHOSE* on all .ts files, and follow the guidances to adjust the code.
 2. Save everything and run **`cdk diff -c envname=<envName>`** at the terminal. This will show you what will be changed on your environment
-3. If you agree with the changes, run **`cdk deploy -c envname=<envName>`** to deploy the changes
+3. If you agree with the changes, run **`cdk deploy -c envname=$envname`** to deploy the changes
 
 
 ### fixACTIVITY 11 - Create a session for the game
@@ -724,7 +724,7 @@ We heard that something can be learned from this [link](http://partnerfactorypro
 **IMPORTANT:**
 * Be sure of double checking your environment. It seems that you might already have the required table created. You might just need to populate it with data. However, it seems that the name of the table in those recovery instructions is a bit different from what we have. Be sure of configuring the things accordingly.
 * It seems that the instructions will guide you in creating a new API. Remember that we want to add a new resource to the existing API (under the v1 resource), not to create a new one!
-* After testing the functionality of your websocket, be sure of adding security to it, so only the manager can access it.
+* After testing the functionality of your microservice, be sure of adding security to it, so only the manager can access it.
 
 ### fixACTIVITY 13 - Deploying the WebSocket for APIGateway 
 

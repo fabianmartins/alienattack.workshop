@@ -81,15 +81,20 @@ function destroyFirehoseIAM() {
     firehoseRoleNameLC=$(eval $getFirehoseRoleNameLC)
     if [ "$firehoseRoleNameLC" == "null" ] && [ "$firehoseRoleNameUC" == "null" ]; then
         echo We could not find FIREHOSE ROLES containing the names $envNameLowercase or $envNameUppercase
-        export FIREHOSEROLE=false
+        export FIREHOSEROLE=""
     else
-        export FIREHOSEROLE=true
         if [ "$C9_HOSTNAME" != "" ]; then
            ## Cloud9 doesn't have permissions to change roles configurations.
            echo "It seems that you are running the workshop on Cloud9"
            echo "You are going to need to fix some things by hand."
            echo " Go to IAM and delete the following role: "
-           [ "$firehoseRoleNameLC" != "null" ] echo $firehoseRoleNameLC || echo $firehoseRoleNameUC
+           if [ "$firehoseRoleNameLC" != "null" ]; then 
+                 echo $firehoseRoleNameLC
+                 export FIREHOSEROLE=$firehoseRoleNameLC
+           else 
+                 echo $firehoseRoleNameUC
+                 export FIREHOSEROLE=$firehoseRoleNameUC
+           fi
         else 
             if [ "$firehoseRoleNameLC" != "null" ]; then       
                     echo The Role $firehoseRoleNameLC still exists in the environment. You need to remove it manually
@@ -100,7 +105,7 @@ function destroyFirehoseIAM() {
                     echo Deleting the role $firehoseRoleNameUC
                     EXECUTE aws iam delete-role --role-name $firehoseRoleNameUC
             fi
-            export FIREHOSEROLE=false
+            export FIREHOSEROLE=""
         fi
     fi
 }
@@ -144,8 +149,9 @@ function destroyWebsocketInlinePolicy() {
     if [ "$websocketPolicyName" == "" ]; then
         echo
         echo "We could not find an Invoke-Api-Policy attached. If you have used a different naming standard, please remove it manually."
+        export WEBSOCKETROLE=""
     else
-        export FIREHOSEROLE=true
+        export WEBSOCKETROLE=$envname"WebSocketSynchronizeStartFn_Role
         if [ "$C9_HOSTNAME" != "" ]; then
            ## Cloud9 doesn't have permissions to change roles configurations.
            echo "It seems that you are running the workshop on Cloud9"
@@ -153,9 +159,10 @@ function destroyWebsocketInlinePolicy() {
            echo " Go to IAM and remove the policy $websocketPolicyName from the role $envname"WebSocketSynchronizeStartFn_Role"
         else 
             if [ "$websocketPolicyName" != "null" ]; then
-            removeWebsocketPolicy=$(echo "aws iam delete-role-policy --role-name "$envname"WebSocketSynchronizeStartFn_Role --policy-name "$websocketPolicyName)
-            EXECUTE eval $removeWebsocketPolicy
-            echo "Policy "$websocketPolicyName" removed from "$envname"WebSocketSynchronizeStartFn_Role"
+                removeWebsocketPolicy=$(echo "aws iam delete-role-policy --role-name "$envname"WebSocketSynchronizeStartFn_Role --policy-name "$websocketPolicyName)
+                EXECUTE eval $removeWebsocketPolicy
+                echo "Policy "$websocketPolicyName" removed from "$envname"WebSocketSynchronizeStartFn_Role"
+                export WEBSOCKETROLE=""
             fi
         fi
     fi
@@ -219,17 +226,27 @@ function destroyS3buckets() {
 }
 
 function destroyCDKEnvironment() {
+    canrun=false
     showHeader "CALLING CDK"
-    _curDir=$PWD
-    cd cdk
-    envnameUppercase=$(echo $1 | tr 'a-z' 'A-Z')
-    url=$(eval $(echo "aws cloudformation list-exports --query 'Exports[?contains(ExportingStackId,\`$envnameUppercase\`) && Name==\`url\`].Value | [0]' | xargs -I {} echo {}"))
-    if [ "$url" == null ]; then
-        EXECUTE "cdk destroy -c envname=$envnameUppercase"
-    else
-        EXECUTE "cdk destroy -c envname=$envnameUppercase -c deploycdn=true"
+    if [ "$FIREHOSEROLE" != "" ]; then
+       echo "You need to delete this role manually: $FIREHOSEROLE"
     fi
-    cd $_curDir
+    if [ "$WEBSOCKETROLE" != "" ]; then
+       echo "You need to remove the policy added manually to the role: $WEBSOCKETROLE"
+    fi  
+    [ "$FIREHOSEROLE" == "" && "$WEBSOCKETROLE" == ""  ] canrun=true || canrun=false
+    if [ "$canrun" == "true" ]; then
+        _curDir=$PWD
+        cd cdk
+        envnameUppercase=$(echo $1 | tr 'a-z' 'A-Z')
+        url=$(eval $(echo "aws cloudformation list-exports --query 'Exports[?contains(ExportingStackId,\`$envnameUppercase\`) && Name==\`url\`].Value | [0]' | xargs -I {} echo {}"))
+        if [ "$url" == null ]; then
+            EXECUTE "cdk destroy -c envname=$envnameUppercase"
+        else
+            EXECUTE "cdk destroy -c envname=$envnameUppercase -c deploycdn=true"
+        fi
+        cd $_curDir
+    fi
 }
 
 function destroy() {
