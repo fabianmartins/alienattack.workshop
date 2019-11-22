@@ -92,6 +92,7 @@ if [ "$envname" == "" ]; then
     echo "** ERROR**"
     echo Please ensure that the variable envname is defined
 else
+## Just making sure that the environment name is going to be in uppercase
     envName=$(echo $envname | tr 'a-z' 'A-Z')
     setRoleMappings $envName
 fi

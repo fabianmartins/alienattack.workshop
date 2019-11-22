@@ -470,6 +470,8 @@ So, here there is a shortcut for the configuration, as Cognito can automatically
 
 And that's it. You can skip all the other steps.
 
+When using Cognito UserPools, this is the preferred (and easier) way of configuring RBAC. If you have custom claims on your JWT token, then use the first approach.
+
 
 (2) Using a fixing script
 
@@ -542,7 +544,7 @@ This parameter holds the game session configuration. Every time when the Manager
 2. Scroll down to the section *Shared Resources*, and click on `Parameter Store`. You will see some parameters starting with `/<envName>/`, but there is no parameter `/<envName>/session`. Let's create it.
 3. On the top right of the page, click on **Create parameter**
 4. On the section *Parameter details*, enter the following values:  
-  * Name: `/<envName>/session`
+  * Name: `/<envName>/session` (be sure of using <envName> in lowercase)
   * Description: `Existing session (opened or closed)`
   * Type: `String`
   * Value:  `null` (insert the word *null* and be sure of the casing, *Null* will not work).
@@ -720,9 +722,9 @@ We heard that something can be learned from this [link](http://partnerfactorypro
 
 
 **IMPORTANT:**
-* Be sure of double checking your environment. It seems that you might already have the required table created. You might just need to populate it with data.
+* Be sure of double checking your environment. It seems that you might already have the required table created. You might just need to populate it with data. However, it seems that the name of the table in those recovery instructions is a bit different from what we have. Be sure of configuring the things accordingly.
 * It seems that the instructions will guide you in creating a new API. Remember that we want to add a new resource to the existing API (under the v1 resource), not to create a new one!
-* After deploying the new microservice, if you set the security
+* After testing the functionality of your websocket, be sure of adding security to it, so only the manager can access it.
 
 ### fixACTIVITY 13 - Deploying the WebSocket for APIGateway 
 
@@ -809,7 +811,7 @@ We have learned that this is implemeted via “websockets”, and we have the fo
 #### **Task 3:** Adjust IAM Role
 1. Navigate to the IAM Dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
 2. Click **Roles** on the left side of the window.
-3. Find `<envName>WebSocketSynchronousStartFn_Role` click on it.
+3. Find `<envName>WebSocketSynchronizeStartFn_Role` click on it.
 4. Click **Add inline policy**
 5. Press JSON. Copy and paste the JSON below: (Note the placeholder for the WebSocket ARN)
 ```Javascript
