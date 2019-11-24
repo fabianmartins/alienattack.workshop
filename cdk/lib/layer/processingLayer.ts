@@ -66,10 +66,10 @@ export class ProcessingLayer extends ResourceAwareConstruct {
     *      process.env.SESSION_CONTROL_TABLENAME = getAppRefName+'SessionControl'
     */
         let sessionParameter : any;
-        let parameterNameForLambda : string | undefined;
+        let parameterNameForLambda : string;
         if (SESSION_PARAMETER) {
             sessionParameter = <CfnParameter> this.properties.getParameter('parameter.session');
-            parameterNameForLambda = ( <CfnParameter> sessionParameter).name;
+            parameterNameForLambda =  <string> ( <CfnParameter> sessionParameter).name;
         }
         else {
             sessionParameter = { parameterName : '/'+this.properties.getApplicationName().toLocaleLowerCase()+'/session'};
@@ -312,4 +312,3 @@ export class ProcessingLayer extends ResourceAwareConstruct {
         else return undefined;
     }
 }
-
