@@ -553,11 +553,11 @@ This parameter holds the game session configuration. Every time when the Manager
 If everything went well, you will get the message *Create parameter request succeeded*. Check if the parameter exists on the list of parameters.
 
 **-- FastFix --**  
-If you want to skip this activity: 
+If you want to skip this activity, run the following command on your console, being inside the `~/envname/alienattack.workshop/cdk` folder:
 
-1. Go your CDK project (the one that it's at Cloud9), search for *MISSING PARAMETER* on all .ts (typescript) files, and follow the guidances to adjust the code.
-2. Save everything and run **`cdk deploy -c envname=$envname`** at the terminal. This will show you what will be changed on your environment
-3. If you agree with the changes, run **`cdk deploy -c envname=$envname`** to deploy the changes
+~~~
+cdk deploy -c envname=$envname -c sessionparameter=true
+~~~
 
 After fixing this, try to login to the manager console again (*fixActivity 4*). You will be forwarded to the configuration page. The access seems to be ok. 
 
@@ -593,11 +593,11 @@ We need to connect the Lambda function to Kinesis.
    * If everything went well you will get a message confirming that you have added the trigger. The Designer section will be updated.
 
 **-- FastFix --**  
-If you want to skip this activity: 
+If you want to skip this activity, run the following command on your console, being inside the `~/envname/alienattack.workshop/cdk` folder:
 
-1. Go your CDK project, search for *MISSING KINESIS INTEGRATION* on all .ts files, and follow the guidances to adjust the code.
-2. Save everything and run **`cdk deploy -c envname=$envname`** at the terminal. This will show you what will be changed on your environment
-3. If you agree with the changes, run **`cdk deploy -c envname=$envname`** to deploy the changes
+~~~
+cdk deploy -c envname=$envname -c sessionparameter=true -c kinesisintegration=true
+~~~
 
 
 ### fixACTIVITY 10 - Kinesis Firehose - Create the missing Kinesis Firehose
@@ -644,11 +644,11 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
 If everything went well, you will see that the delivery stream was created.
 
 **-- FastFix --**  
-If you want to skip this activity: 
+If you want to skip this activity, run the following command on your console, being inside the `~/envname/alienattack.workshop/cdk` folder:
 
-1. Go your CDK project, search for *MISSING KINESIS FIREHOSE* on all .ts files, and follow the guidances to adjust the code.
-2. Save everything and run **`cdk deploy -c envname=$envname`** at the terminal. This will show you what will be changed on your environment
-3. If you agree with the changes, run **`cdk deploy -c envname=$envname`** to deploy the changes
+~~~
+cdk deploy -c envname=$envname -c sessionparameter=true -c kinesisintegration=true -c firehose=true
+~~~
 
 
 ### fixACTIVITY 11 - Create a session for the game
@@ -873,7 +873,26 @@ It was said that for a full deployment, we will need to install the application 
 For this last part, we got intel from the rebels that, to solve this, two actions are necessary:
 
 1. Copy the content of the front-end to the app bucket.
-2. Go to the file `mainLayer.ts` which is on the deployment at Cloud9, search for *MISSING CLOUDFRONT DISTRIBUTION* and uncomment it at that file. The deployment it will take something around 20 minutes. Same time it will be required for the undeployment. But we are not expecting to solve this part today. We at the company believe that it was a big win to have reached to this point. Let's leave other adjustments for another sprints.
+2. Visit the `mainLayer.ts` which is on the deployment at Cloud9. It seens that there is some configuration there that will help you to deploy the Cloudfront distribution. Can you figure out what is it? If you are able to solve it, the deployment will take something around 20 minutes to be available. The same amount time it will be required for the undeployment. But we are not expecting to solve this part today. We at the company believe that it was a big win to have reached to this point. Let's leave other adjustments for another sprints.
+
+**-- FastFix --**  
+
+
+1. To deploy the Cloudfront distribution:
+
+   If you want to skip this activity, run the following command on your console, being inside the `~/envname/alienattack.workshop/cdk` folder:
+
+   ~~~
+   cdk deploy -c envname=$envname -c sessionparameter=true -c kinesisintegration=true -c firehose=true -c deploycdn=true
+   ~~~
+
+2. To deploy the front-end, get back to the folder `~/envname/alienattack.workshop/` and run the following command:
+
+   ~~~
+   source deploy.frontend.sh
+   ~~~
+
+Be sure that you have properly configured 
 
 ## PRICING AND LIMITS
 
