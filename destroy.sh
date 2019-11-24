@@ -11,24 +11,6 @@ txtcyn=$(tput setaf 6) # Cyan
 txtwht=$(tput setaf 7) # White
 txtrst=$(tput sgr0) # Text reset
 
-_DEBUG="dryrun"
-
-[ "$_DEBUG"=="dryrun" ] && echo "EXECUTING DRY RUN"
-function EXECUTE() {
-  case "$_DEBUG" in 
-  "on")
-      echo $@
-      $@
-      ;;
-  "dryrun")
-      echo $@
-      ;;
-  *)
-      $@
-      ;;
-  esac
-}
-
 function title() {
     tput rev 
     showHeader $@
@@ -50,6 +32,25 @@ function showSectionTitle() {
     echo ---  ${txtblu} $@ ${txtrst}  
     echo 
 }
+
+_DEBUG="dryrun"
+
+[ "$_DEBUG"=="dryrun" ] && title "EXECUTING DRY RUN"
+function EXECUTE() {
+  case "$_DEBUG" in 
+  "on")
+      echo $@
+      $@
+      ;;
+  "dryrun")
+      echo $@
+      ;;
+  *)
+      $@
+      ;;
+  esac
+}
+
 
 function destroySSMParameters() {
     showHeader "DESTROYING SSM PARAMETERS NOT HANDLED BY CDK"
@@ -151,18 +152,18 @@ function destroyWebsocketInlinePolicy() {
         echo "We could not find an Invoke-Api-Policy attached. If you have used a different naming standard, please remove it manually."
         export WEBSOCKETROLE=""
     else
-        export WEBSOCKETROLE=$envname"WebSocketSynchronizeStartFn_Role
+        export WEBSOCKETROLE=$envname"WebSocketSynchronizeStartFn_Role"
         if [ "$C9_HOSTNAME" != "" ]; then
            ## Cloud9 doesn't have permissions to change roles configurations.
            echo "It seems that you are running the workshop on Cloud9"
            echo "You are going to need to fix some things by hand."
-           echo " Go to IAM and remove the policy $websocketPolicyName from the role $envname"WebSocketSynchronizeStartFn_Role"
+           echo  Go to IAM and remove the policy $websocketPolicyName from the role $envname"WebSocketSynchronizeStartFn_Role"
         else 
             if [ "$websocketPolicyName" != "null" ]; then
-                removeWebsocketPolicy=$(echo "aws iam delete-role-policy --role-name "$envname"WebSocketSynchronizeStartFn_Role --policy-name "$websocketPolicyName)
+                removeWebsocketPolicy=$(echo "aws iam delete-role-policy --role-name " $envname"WebSocketSynchronizeStartFn_Role --policy-name "$websocketPolicyName)
                 EXECUTE eval $removeWebsocketPolicy
-                echo "Policy "$websocketPolicyName" removed from "$envname"WebSocketSynchronizeStartFn_Role"
-                export WEBSOCKETROLE=""
+                echo "Policy $websocketPolicyName removed from $envname WebSocketSynchronizeStartFn_Role"
+                export WEBSOCKETROLE=
             fi
         fi
     fi
@@ -226,7 +227,7 @@ function destroyS3buckets() {
 }
 
 function destroyCDKEnvironment() {
-    canrun=false
+    canrun="false"
     showHeader "CALLING CDK"
     if [ "$FIREHOSEROLE" != "" ]; then
        echo "You need to delete this role manually: $FIREHOSEROLE"
@@ -234,7 +235,7 @@ function destroyCDKEnvironment() {
     if [ "$WEBSOCKETROLE" != "" ]; then
        echo "You need to remove the policy added manually to the role: $WEBSOCKETROLE"
     fi  
-    [ "$FIREHOSEROLE" == "" && "$WEBSOCKETROLE" == ""  ] canrun=true || canrun=false
+    [[  "$FIREHOSEROLE" == ""  &&   "$WEBSOCKETROLE" == ""  ]] && canrun="true" || canrun="false"
     if [ "$canrun" == "true" ]; then
         _curDir=$PWD
         cd cdk
@@ -255,16 +256,16 @@ function destroy() {
     envnameUppercase=$(echo $envname | tr 'a-z' 'A-Z')
     envnameLowercase=$(echo $envname | tr 'A-Z' 'a-z')
     echo The environment to be destroyed is ${txtylw}$1${txtrst}
-    echo "All resources (IAM, Cognito, Firehose etc) having their names starting with "$envnameLowercase or $envnameUppercase" will be destroyed."
-    read -p ${txtylw}"Do you confirm (Y/N)? "${txtrst}  answer
+    echo "All resources (IAM, Cognito, Firehose etc) having their names starting with $envnameLowercase or $envnameUppercase will be destroyed."
+    read -p "${txtylw} Do you confirm (Y/N)? ${txtrst}"  answer
     answer=$(echo ${answer:0:1} | tr 'a-z' 'A-Z')
-    if [ $answer != Y ]; then
+    if [ "$answer" != "Y" ]; then
        echo 
        echo Exiting
        echo
     else
-       read -p "Do you want the BUCKETS $envnameLowercase.app and$ $envnameLowercase.raw ${txtylw}to be deleted (Y/N)? "${txtrst} bucketAnswer
-       echo ${txtylw}Beginning destruction...${txtrst} 
+       read -p "Do you want the BUCKETS $envnameLowercase.app and $envnameLowercase.raw ${txtylw}to be deleted (Y/N)? ${txtrst}" bucketAnswer
+       echo "${txtylw}Beginning destruction...${txtrst}"
        bucketAnswer=$(echo ${bucketAnswer:0:1} | tr 'a-z' 'A-Z')
        destroySSMParameters $envnameLowercase
        destroyFirehose  $envnameLowercase $envnameUppercase
@@ -278,7 +279,6 @@ function destroy() {
        fi
     fi
 }
-
 
 if [ "$envname" == "" ]; then
     echo 
