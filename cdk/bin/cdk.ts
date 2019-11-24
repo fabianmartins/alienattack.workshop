@@ -34,51 +34,19 @@ let setApplicationProperty = (propName : string, description: string) => {
 // Getting other possible context names
 // FOR THE CDN DEPLOYMENT
 setApplicationProperty("deploycdn","Cloudfront");
-/*
-let deploycdn = app.node.tryGetContext('deploycdn');
-if (deploycdn) {
-    console.log('# Cloudfront is going to be deployed: YES');
-    initProps.addParameter("deploycdn",true);
-} else {
-    console.log('# Cloudfront is going to be deployed: NO');
-};
-*/
 
+// Getting other possible context names
 // FOR SSM PARAMETER
 setApplicationProperty("sessionparameter","SSM Parameter Session");
-/*
-let sessionparameter = app.node.tryGetContext('sessionparameter');
-if (sessionparameter) {
-    console.log('# SSM Parameter Sessionn will be deployed: YES');
-    initProps.addParameter("sessionparameter",true);
-} else {
-    console.log('# SSM Parameter Sessionn will be deployed: NO');
-};
-*/
 
+// Getting other possible context names
 // FOR KINESIS DATA STREAMS INTEGRATION
 setApplicationProperty("kinesisintegration","Kinesis Data Streams integration");
-/*
-let kinesisintegration = app.node.tryGetContext('kinesisintegration');
-if (kinesisintegration) {
-    console.log('# Kinesis Data Streams integration will be deployed : YES');
-    initProps.addParameter("kinesisintegration",true);
-} else {
-    console.log('# Kinesis Data Streams integration will be deployed : NO');
-};
-*/
 
+// Getting other possible context names
 // FOR KINESIS FIREHOSE
 setApplicationProperty("firehose","Kinesis Firehose");
-/*
-let firehose = app.node.tryGetContext('firehose');
-if (firehose) {
-    console.log('# Kinesis Firehose  will be deployed : YES');
-    initProps.addParameter("firehose",true);
-} else {
-    console.log('# Kinesis Firehose  will be deployed : NO');
-};
-*/
+
 
 Utils.checkforExistingBuckets(initProps.getBucketNames())
     .then((listOfExistingBuckets) => {
