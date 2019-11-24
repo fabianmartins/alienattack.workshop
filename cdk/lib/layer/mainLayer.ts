@@ -12,6 +12,7 @@ import { WebSocketLayer } from './websocketLayer';
 import { ContentDeliveryLayer } from './contentDeliveryLayer';
 
 var DEPLOY_CDN : boolean = false;
+var SESSION_PARAMETER : boolean = false;
 
 
 export class MainLayer extends ResourceAwareStack {
@@ -19,6 +20,7 @@ export class MainLayer extends ResourceAwareStack {
   constructor(scope: App, id: string, props?: IParameterAwareProps) {
     super(scope, id, props);
     if (props && props.getParameter("deploycdn")) DEPLOY_CDN = true;
+    if (props && props.getParameter("sessionparameter")) SESSION_PARAMETER=true;
     this.buildResources();
   }
 
@@ -38,8 +40,7 @@ export class MainLayer extends ResourceAwareStack {
     ssmProperties.set("UserPoolURL", securityLayer.getUserPoolUrl());
     ssmProperties.set("IdentityPoolId", securityLayer.getIdentityPoolId());
 
-    // MISSING PARAMETER - Uncomment the next line to create the parameter
-    // ssmProperties.set("Session", "null");
+    if (SESSION_PARAMETER) ssmProperties.set("Session", "null");
     configLayerProps.addParameter('ssmParameters', ssmProperties);
 
     let configLayer =
@@ -64,8 +65,7 @@ export class MainLayer extends ResourceAwareStack {
 
     // processing layer
     let processingLayerProps = new ParameterAwareProps(this.properties);
-    // MISSING PARAMETER - side effect - uncomment the next line
-      //processingLayerProps.addParameter('parameter.session', configLayer.getResource('parameter.session'));
+    if (SESSION_PARAMETER) processingLayerProps.addParameter('parameter.session', configLayer.getResource('parameter.session'));
    
       processingLayerProps.addParameter('table.sessionControl', databaseLayer.getResource('table.sessionControl'));
       processingLayerProps.addParameter('table.sessionTopX', databaseLayer.getResource('table.sessionTopX'));
