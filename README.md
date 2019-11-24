@@ -866,7 +866,7 @@ Note: as of right now anyone in the session can't play they are waiting for you 
 8. Press **Sync Game**.
 9. You should now be able to play the game on `./game/index.html`
 
-### Additional (and optional) task for deploying the front-end on the account
+## Deploying the front-end (additional and optional task)
 
 It was said that for a full deployment, we will need to install the application at the S3 bucket with the `<appNames>.app`. We will also need to deploy the CloudFront distribution because the S3 buckets are not public.
 
@@ -892,7 +892,9 @@ For this last part, we got intel from the rebels that, to solve this, two action
    source deploy.frontend.sh
    ~~~
 
-Be sure that you have properly configured 
+IMPORTANT:
+* Be sure of having configured the permissions properly.
+* Be sure of adding an user to the Cognito Managers group.
 
 ## PRICING AND LIMITS
 
