@@ -7,13 +7,15 @@ import { Table } from '@aws-cdk/aws-dynamodb';
 import { ManagedPolicy } from '@aws-cdk/aws-iam';
 
 import SQS = require('@aws-cdk/aws-sqs');
-// MISSING PARAMETER  - side effect - uncomment the next line to fix it
-// import { CfnParameter } from '@aws-cdk/aws-ssm';
+
+import { CfnParameter } from '@aws-cdk/aws-ssm';
 
 
 const path = require('path');
 
 const lambdasLocation = path.join(__dirname,'..','..','lambdas');
+
+var SESSION_PARAMETER : boolean = false;
 
 export class ProcessingLayer extends ResourceAwareConstruct {
 
@@ -50,6 +52,8 @@ export class ProcessingLayer extends ResourceAwareConstruct {
 
         createdFunction = this.getScoreboardFunction();
         if (createdFunction) this.scoreboardFunction = createdFunction;
+
+        if (props && props.getParameter("sessionparameter")) SESSION_PARAMETER=true;
         
     }
 
@@ -61,19 +65,26 @@ export class ProcessingLayer extends ResourceAwareConstruct {
     * DynamoDB Tables
     *      process.env.SESSION_CONTROL_TABLENAME = getAppRefName+'SessionControl'
     */
-        // MISSING PARAMETER - side effect - remove the next line, uncomment the next one.
-        let sessionParameter = { parameterName : '/'+this.properties.getApplicationName().toLocaleLowerCase()+'/session'};
-        //let sessionParameter : CfnParameter = <CfnParameter> this.properties.getParameter('parameter.session');
+        let sessionParameter : any;
+        let parameterNameForLambda : string;
+        if (SESSION_PARAMETER) {
+            sessionParameter = <CfnParameter> this.properties.getParameter('parameter.session');
+            parameterNameForLambda =  <string> ( <CfnParameter> sessionParameter).name;
+        }
+        else {
+            sessionParameter = { parameterName : '/'+this.properties.getApplicationName().toLocaleLowerCase()+'/session'};
+            parameterNameForLambda = sessionParameter.parameterName;
+        }
         let sessionControlTable : Table = <Table> this.properties.getParameter('table.sessioncontrol');
         if (sessionParameter && sessionControlTable) {
             let createdFunction: Lambda.Function =
                 new Lambda.Function(this, this.properties.getApplicationName() + 'AllocateGamerFn', {
-                    runtime: Lambda.Runtime.NODEJS_8_10,
+                    runtime:Lambda.Runtime.NODEJS_10_X,
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation,'allocateGamer')),
                     environment: {
                         'SESSION_CONTROL_TABLENAME': sessionControlTable.tableName,
-                        'SESSION_PARAMETER': sessionParameter.parameterName
+                        'SESSION_PARAMETER': parameterNameForLambda
                     }
                     , functionName: this.properties.getApplicationName() + 'AllocateGamerFn'
                     , description: 'This function supports the allocation of gamers when the game is to start'
@@ -124,19 +135,27 @@ export class ProcessingLayer extends ResourceAwareConstruct {
          * DynamoDB Tables
          *      process.env.SESSION_CONTROL_TABLENAME = getAppRefName+'SessionControl'
          */
-        // MISSING PARAMETER - side effect - remove the next line, uncomment the next one.
-        let sessionParameter = { parameterName : '/'+this.properties.getApplicationName().toLocaleLowerCase()+'/session'};
-        //let sessionParameter: CfnParameter = <CfnParameter>  this.properties.getParameter('parameter.session');
+
+        let sessionParameter : any;
+        let parameterName : string;
+        if (SESSION_PARAMETER) {
+            sessionParameter = <CfnParameter>  this.properties.getParameter('parameter.session');
+            parameterName = (<CfnParameter> sessionParameter).ref;
+        }
+        else  {
+            sessionParameter = { parameterName : '/'+this.properties.getApplicationName().toLocaleLowerCase()+'/session'};
+            parameterName = sessionParameter.parameterName;
+        }
         let sessionControlTable: Table | undefined = <Table> this.properties.getParameter('table.sessionControl');
         if (sessionParameter && sessionControlTable) {
             let createdFunction: Lambda.Function =
                 new Lambda.Function(this, this.properties.getApplicationName() + 'DeallocateGamerFn', {
-                    runtime: Lambda.Runtime.NODEJS_8_10,
+                    runtime:Lambda.Runtime.NODEJS_10_X,
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation,'deallocateGamer')),
                     environment: {
                         'SESSION_CONTROL_TABLENAME': sessionControlTable.tableName,
-                        'SESSION_PARAMETER': sessionParameter.parameterName
+                        'SESSION_PARAMETER': parameterName
                     }
                     , functionName: this.properties.getApplicationName() + 'DeallocateGamerFn'
                     , description: 'This function deallocates the gamer when a relevant event is identified (sign out, close window etc)'
@@ -198,21 +217,27 @@ export class ProcessingLayer extends ResourceAwareConstruct {
          *      process.env.SESSION_CONTROL_TABLENAME = getAppRefName+'SessionControl'
          *      process.env.SESSIONTOPX_TABLENAME = getAppRefName+'SessionTopX'
          */
-        // MISSING PARAMETER - side effect - remove the next line, uncomment the next one.
-        let sessionParameter = { parameterName : '/'+this.properties.getApplicationName().toLocaleLowerCase()+'/session'};
-        //let sessionParameter: CfnParameter | undefined = <CfnParameter> this.properties.getParameter('parameter.session');
+        let sessionParameter : any;
+        let parameterName : string;
+        if (SESSION_PARAMETER) {
+            sessionParameter = <CfnParameter> this.properties.getParameter('parameter.session');
+            parameterName = (<CfnParameter> sessionParameter).ref;
+        } else {
+            sessionParameter = { parameterName : '/'+this.properties.getApplicationName().toLocaleLowerCase()+'/session'};
+            parameterName = sessionParameter.parameterName;
+        }
         let sessionControlTable: Table | undefined = <Table> this.properties.getParameter('table.sessionControl');
         let sessionTopX: Table | undefined = <Table> this.properties.getParameter('table.sessionTopX');
         let sessionTable: Table | undefined = <Table> this.properties.getParameter('table.session');
         if (sessionParameter && sessionControlTable && sessionTopX && sessionTable) {
             let createdFunction: Lambda.Function =
                 new Lambda.Function(this, this.properties.getApplicationName() + 'ScoreboardFn', {
-                    runtime: Lambda.Runtime.NODEJS_8_10,
+                    runtime:Lambda.Runtime.NODEJS_10_X,
                     handler: 'index.handler',
                     code: Lambda.Code.asset(path.join(lambdasLocation,'scoreboard')),
                     environment: {
                         'DLQ_URL': dlq.queueUrl,
-                        'SESSION_PARAMETER': sessionParameter.parameterName,
+                        'SESSION_PARAMETER': parameterName,
                         'SESSION_TABLENAME': sessionTable.tableName,
                         'SESSION_CONTROL_TABLENAME': sessionControlTable.tableName,
                         'SESSION_TOPX_TABLENAME': sessionTopX.tableName,
@@ -287,4 +312,3 @@ export class ProcessingLayer extends ResourceAwareConstruct {
         else return undefined;
     }
 }
-

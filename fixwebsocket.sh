@@ -1,7 +1,7 @@
 #!/bin/bash
 # This Script deploys a websocket with the correct lambda routes
 # This script will also change various IAM Roles to invoke the websocket
-# source fixwebsocket.sh <envName>
+# source fixwebsocket.sh
 
 function removeQuotes() {
     retval=$1
@@ -14,6 +14,7 @@ function createWebSocket() {
     envName=$1
     region=$2
     accountId=$3
+    echo "### Creating the WebSocket API"
 
     websocketCreateCommand=$(echo aws apigatewayv2 --region "$region" create-api --name "$envName"WebSocket --protocol-type WEBSOCKET --route-selection-expression '\$request.body.action' --query ApiId --output text)
     websocketApiId=$(removeQuotes $( eval $websocketCreateCommand ))
@@ -51,6 +52,7 @@ function createWebSocket() {
 }
 
 function createUrlParam() {
+    echo "#### Creating the SSM Parameter /"$(echo $envName | tr 'A-Z' 'a-z')"/websocket API"
     URL=$2
     envName=$(echo $1 | tr 'A-Z' 'a-z')
     success=$(aws ssm put-parameter --name /"$envName"/websocket --value $URL --type String --overwrite)
@@ -61,6 +63,9 @@ function adjustLambdaIamRole() {
     accountId=$3
     apiId=$4
     roleName="$1"WebSocketSynchronizeStartFn_Role
+    echo "**********************************************************"
+    echo "Adjusting the Role $roleName"
+    echo "**********************************************************"
     # Create JSON variable that stores in-line policy
     apiArn="arn:aws:execute-api:"$region":"$accountId":"$apiId"/*"
     inlinePolicy=$(cat <<-EOF
@@ -79,34 +84,37 @@ function adjustLambdaIamRole() {
 }
 EOF
     )
-    putIamRole=$(cat <<-END 
-    aws iam put-role-policy --role-name '$roleName'\
-    --policy-name Invoke-Api\
-    --policy-document '$inlinePolicy'
+    if [ "$C9_HOSTNAME" != "" ]; then
+        echo "*******************************************"
+        echo "***********     IMPORTANT       ***********"
+        echo "*******************************************"
+        echo "You are running the workshop under Cloud9."
+        echo "By default, Cloud9 can't do the adjustment to the $roleName"
+        echo "Please go to IAM, find that role and add the following policy, naming it as Invoke-Api-Policy"
+        echo $inlinePolicy
+    else
+        putIamRole=$(cat <<-END 
+        aws iam put-role-policy --role-name '$roleName'\
+        --policy-name Invoke-Api-Policy\
+        --policy-document '$inlinePolicy'
 END
-    )
-    echo $putIamRole
-    eval $putIamRole
+        )
+        echo $putIamRole
+        eval $putIamRole
+    fi
 }
 
-if [ "$1" == "" ]; then
+if [ "$envname" == "" ]; then
     echo 
     echo "** ERROR**"
-    echo At least the environment name must be provided
-    echo 
-    echo Usage:
-    echo "fixwebsocket <envName>"
-    echo
-    echo example: fixcognito testenv
+    echo Please ensure that the variable envname is defined
 else
-    envName=$(echo $1 | tr 'a-z' 'A-Z')
+    envName=$(echo $envname | tr 'a-z' 'A-Z')
     region=$(aws configure get region)
     accountId=$(aws sts get-caller-identity --output text --query 'Account')
     apiId=$( createWebSocket $envName $region $accountId )
     URL="wss://${apiId}.execute-api.${region}.amazonaws.com/production"
     createUrlParam $envName $URL
-    # Uncomment the line below if you are running this command outside of Cloud 9
-    #adjustLambdaIamRole $envName $region $accountId $apiId
+    adjustLambdaIamRole $envName $region $accountId $apiId
     echo WebSocket ARN: "arn:aws:execute-api:"$region":"$accountId":"$apiId"/*"
-
 fi

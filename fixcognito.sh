@@ -87,16 +87,12 @@ END
     eval $setIdentityPoolRoles
 }
 
-if [ "$1" == "" ]; then
+if [ "$envname" == "" ]; then
     echo 
     echo "** ERROR**"
-    echo At least the environment name must be provided
-    echo 
-    echo Usage:
-    echo "fixcognito <envName>"
-    echo
-    echo example: fixcognito testenv
+    echo Please ensure that the variable envname is defined
 else
-    envname=$(echo $1 | tr 'a-z' 'A-Z')
-    setRoleMappings $envname $2
+## Just making sure that the environment name is going to be in uppercase
+    envName=$(echo $envname | tr 'a-z' 'A-Z')
+    setRoleMappings $envName
 fi

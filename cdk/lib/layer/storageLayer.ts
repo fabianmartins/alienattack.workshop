@@ -96,7 +96,7 @@ export class StorageLayer extends ResourceAwareConstruct {
              bucketName : appBucketName
             ,isWeb : true
             ,alreadyExists : this.properties.getParameter('existingbuckets').includes(appBucketName)
-            ,retain : false
+            ,retain : true
         });
         this.addResource('appBucket',appBucket);
 
@@ -104,7 +104,7 @@ export class StorageLayer extends ResourceAwareConstruct {
         let rawDataBucket = this.createBucket({
              bucketName : rawDataBucketName
             ,alreadyExists : this.properties.getParameter('existingbuckets').includes(rawDataBucketName)
-            ,retain : false
+            ,retain : true
         });
         this.addResource('rawDataBucket',rawDataBucket);
     }

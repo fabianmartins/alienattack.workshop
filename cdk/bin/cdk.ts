@@ -5,13 +5,48 @@ import { MainLayer } from '../lib/layer/mainLayer';
 import { NRTAProps } from '../lib/nrta';
 import { Utils } from '../lib/util/utils'
 
+
 const app = new cdk.App();
 let envname = app.node.tryGetContext('envname');
-if (!envname) envname = "";
+if (!envname) {
+    console.log("****************************************************");
+    console.log("ERROR: your environment name is undefined.\n");
+    console.log("Please run the command like this:");
+    console.log("cdk [synth|deploy|destroy] -c envname=<your environment name>");
+    console.log("****************************************************");
+    process.exit(1);
+}
 else envname=envname.toUpperCase();
 console.log('# Environment name:',envname);
-let initProps = new NRTAProps();
+var initProps = new NRTAProps();
 initProps.setApplicationName(envname);
+
+let setApplicationProperty = (propName : string, description: string) => {
+    let envproperty = app.node.tryGetContext(propName);
+    if (envproperty) {
+        console.log('# '+description+' is going to be deployed: YES');
+        initProps.addParameter(propName,true);
+    } else {
+        console.log('# '+description+' is going to be deployed: NO');
+    };
+}
+
+// Getting other possible context names
+// FOR THE CDN DEPLOYMENT
+setApplicationProperty("deploycdn","Cloudfront");
+
+// Getting other possible context names
+// FOR SSM PARAMETER
+setApplicationProperty("sessionparameter","SSM Parameter Session");
+
+// Getting other possible context names
+// FOR KINESIS DATA STREAMS INTEGRATION
+setApplicationProperty("kinesisintegration","Kinesis Data Streams integration");
+
+// Getting other possible context names
+// FOR KINESIS FIREHOSE
+setApplicationProperty("firehose","Kinesis Firehose");
+
 
 Utils.checkforExistingBuckets(initProps.getBucketNames())
     .then((listOfExistingBuckets) => {

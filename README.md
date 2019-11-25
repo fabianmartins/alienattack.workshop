@@ -1,6 +1,6 @@
 # AWS Alien Attack Workshop
 
-Welcome to the AWS Alien Attack workshop  
+Welcome to the AWS Alien Attack workshop (beta version).   
 
 The purpose of AWS Alien Attack is to create a fun environment where you can test and think about different aspects of serverless architectures for (near) real-time ingesting and processing of data at AWS. You can use Alien Attack to think, exercise, and talk about best practices for development, about security, databases and so on.
 
@@ -57,13 +57,6 @@ We hope that your skills may help us with the challenge of *MAKING THE APPLICATI
 
 ## Preparing the environment
 
-### Minimum requirements
-* You must have a computer (For a better experience, don't use tablets or smartphones)
-* Internet access
-* A browser: **Firefox** or **Chrome**. **DON'T** use Safari, [Internet Explorer](https://www.zdnet.com/article/microsoft-security-chief-ie-is-not-a-browser-so-stop-using-it-as-your-default/) or Microsoft Edge
-* Desire to learn
-* Attention to the instructions
-
 ### prepACTIVITY 1 - Cloud9 - Create your environment
 
 #### STEP 1 - Access your account
@@ -79,20 +72,18 @@ We hope that your skills may help us with the challenge of *MAKING THE APPLICATI
 	* Give a name to your environment. **Important:** If you are sharing the same account and region with a colleague, be sure to take note of the identification of your environment, and be careful to not to destroy your colleague environment.
 	* For the "environment settings":
 		* For "Environment type" choose `Create a new instance for environment (EC2)`
-		* For "Instance type" choose `t2.micro (1 GiB RAM + 1 vCPU)*`
-		* Leave the other configuration settings at their default values and click **Next step**, and then **Create environment**
+		* For "Instance type" choose `t2.small (2 GiB RAM + 1 vCPU)`
+		* Leave the other configuration settings as they are, and click **Next step**, and then **Create environment**
 
 In a few seconds your environment will be available. You can close the Welcome tab, and also the *Immediate* tab that you can see at the bottom of your screen.
 
 #### <a name="config-cloneapprep"></a>STEP 3 - Clone the back-end repository
 
-Down on your Cloud9 console, a terminal is available. Go to the terminal run the command below to clone this repository. This repository contains the back-end.
+Down on your Cloud9 console, a terminal is available. Go to the terminal and clone this repository. This repository contains the back-end.
 
 ~~~
-git clone https://github.com/fabianmartins/alienattack.workshop
+$ git clone https://github.com/fabianmartins/alienattack.workshop
 ~~~
-
-You can maximize the terminal window if you want.
 
 #### STEP 4 - Clone the front-end repository
 
@@ -101,10 +92,13 @@ This is the repository for the Alien Attack front-end.
 **IMPORTANT:** Disregard any instructions at that repository (but you can always read the comments if you want).
 
 ~~~
-git clone https://github.com/fabianmartins/alienattack.application.git
+$ git clone https://github.com/fabianmartins/alienattack.application.git
 ~~~
 
 At this point, if you look at the left hand side of your Cloud9 console, your folder tree must be showing two main folders: one for `alienattack.workshop` and one for `alienattack.application`.
+
+
+**IMPORTANT:** The frond-end DOES NOT WORK YET on mobile devices, and in some versions of Windows, especially those with touch screen.
 
 
 #### STEP 5 - Update the environment - at Cloud9
@@ -128,8 +122,31 @@ Getting back to your **Cloud9 environment**, let's update the current instance.
     source config.sh
     ~~~
 
-Don't worry if some *warning* messages appear, especially if it's about python.
+    Don't worry if some *warning* messages appear, especially if it's about python.
 
+    After configuring the operating system and installing the tools required to compile and build the source code, the script will ask you to input your initials to define an exclusive name for your enviroment. This is important to reduce the probability of naming collision for the S3 buckets that are going to be created, and to avoid resource name collisions when two or more users are sharing the same AWS account and region to run the environment.  
+
+    So, supposing that someone is going to provide `FMDS` as the initials, you might expect to see a message like the one below:
+    ~~~
+    **************************************************************
+    DEFINING YOUR EXCLUSIVE ENVIRONMENT NAME
+
+    When we define the exclusive environment name all resources
+    in your infrastructure will have their IDs prefixed by this
+    environment name.
+    This is a workaround to guarantee that this workshop can run
+    with multiple users under a single AWS account
+   **************************************************************
+
+    What are your initials? fmds
+    Your environment name was defined as FMDSAAAD5F4D6
+    ~~~
+
+    See that the environment name is composed by the initials provided (in this example, `FMDS`), followed by the string `AAA` (from `A`WS `A`lien `A`ttack), and then a suffix which is a random code generate automatically (in this example `D5F4D6`).
+
+    It's unlikely, but you may still incur in naming collision. If that happens, we will provide you guidance on how to solve that.
+
+    Save the value of your environment name in a helping file on Cloud9. You are going to need it later. Anyway, you can still retrieve this value from your console by typing `echo $envname`.
 
 #### STEP 6 - Start background compilation for CDK
 
@@ -182,36 +199,66 @@ A totally successful compilation will be something like the output below:
 
 #### STEP 7 - Deploy the back-end
 
-You will need to decide for an **"Environment name"** that will be used to configure and deploy your environment. 
+In this step we will use CDK to deploy the environment for us.
 
-Use something unique, maybe your initials plus some additional elements, like today's date. For example, if John Doe is running this workshop on February 17th, he could use `jdoe0217` as his environment name. 
+We will begin by *Synthentizing* the environment, which means generating its corresponding Cloudformation template. This is not a required step to deploy the environment, but it's helpful for you to understand what we are building.
 
-**My suggestions for you:**  
+Then, we will *Deploy* the enviroment, which means to create on the account all the resources described on the diagram.
 
-* **DON'T** use special characters, dashes, spaces in the environment name.
-* **DON'T** use long names like *ThisIsAnUnecessaryVeryLongAndName*. Keep it simple. Use something like Env01.
-* Also, **DON'T** use very short names, like *fm*. Try to use at least 5 characters to avoid name collisions.
-* If you're alone in the account/region, pick a small word for envname, like your initials, and add the month and day just to avoid collisions (ex: fabi0405).
-* The environment name will be used to create new S3 buckets. S3 bucket names are global. So, if you use very common words (like test, dev, prod, system, app) almost surely you will get a name collision. Be sure of chosing something that will avoid this kind of issue.
-* Avoid using potentially reserved words. Possible reserved words are AWS, S3, and so on.
+#### Step 7.1 - Synthetizing your environment
 
-<details><summary>*Click here to expand and understand why you are doing this step*</summary>
-We are running the synthesizing step to give you the opportunity of reading the generated Cloudformation template. Also, the configuration was designed like this for the case when different individuals are sharing the same account (due their company's requirements) and sharing the same region (due the need of specific features of the AWS services, only available in such regions).
+1. Go to the other available terminal at your Cloud9 environment and be sure of being at the CDK folder. You prompt should look like `~/environment/alienattack.workshop/cdk (master) $`
+2. Use the synth command for CDK to synthetize your enviroment.
 
-Yet, the value chosen for **"envname"** is used to create the buckets required by the application, so chose them in a way that most likely will avoid collision to S3 bucket names (which are global).
+~~~
+cdk synth -c envname=$envname
+~~~
 
-For instance, let's suppose that you have selected envname=r2d2. Then, if the deployment is successful, at the end something like this will appear
+This will generate an output for the corresponding Cloudformation template. You can save it by redirecting the result to some folder, so you can read it through.
 
-***
+For example, redirecting it to output.yaml
 
- ✅  R2D2
+~~~
+cdk synth -c envname=$envname > ../output.yaml
+~~~
+
+You are going to have the file output.yaml sitting on the folder `~/environment/alienattack.workshop`. Open it and explore its content.
+
+
+#### Step 7.2 - Deploy your backend
+
+Being at your cdk folder, and having decided for an *envname*, run the following command:
+
+~~~
+cdk deploy -c envname=$envname
+~~~
+
+CDK will first show you what changes will be applied to the environment. After that, it will ask if you really want to deploy.
+
+Answer with **y**, and wait for environment to be deployed. If everything is ok, at the end you are going to see something like this:
+
+~~~
+✅  YourEnvironmentName
+
+Outputs:
+<YourEnvironmentName>.apigtw = https://<api-id>.execute-api.<region>.amazonaws.com/prod/v1/
+<YourEnvironmentName>.envname = <YourEnvironmentName>
+<YourEnvironmentName>.region = <region>
 
 Stack ARN:
-arn:aws:cloudformation:<region>:<account>:stack/R2D2/bc543b91-451f-33f9-442a-02e473ddfb1a
+arn:aws:cloudformation:<region>:<account>:stack/<YourEnvironmentName>/bc543b91-451f-33f9-442a-02e473ddfb1a
+~~~
+ 
+You should see a section called Outputs. Copy those outputs and paste them into a text editor. You will need it later in the workshop.
 
-And the deployment will have created the buckets **r2d2.app** and **r2d2.raw**.
+The synthesize command will have also created two S3 buckets named YOUR_ENVIRONMENT_NAME.app and YOUR_ENVIRONMENT_NAME.raw. Visit the Amazon S3 Console to see.
 
-if the deployment WAS NOT SUCCESSFUL, then almost surely you had a S3 bucket name collision. if the message is similar to the one below, then chose another envname for your deployment. In the example below, the name TEST for the environment provokes a collision:
+You can also visit the AWS CloudFormation Console in a separate window to monitor your environment’s progress.
+
+
+If the command was not successful, this means you had an S3 bucket name collision. If the message in your terminal looks similar to the one below, please choose another environment name for your deployment and run through the above steps once more.
+
+An unsuccessful synthesize command will look something like the output below:
 
 ~~~
 Environment name: TEST
@@ -240,46 +287,17 @@ Environment name: TEST
 Unable to find output file /tmp/cdkF6Q2pM/cdk.out; are you calling app.run()?
 ~~~
 
-</details>
 
 ***
-
-#### Step 7.1 - Synthetizing your environment
-
-1. Go to the other available terminal at your Cloud9 environment and be sure of being at the CDK folder. You prompt should look like `~/environment/alienattack.workshop/cdk (master) $`
-2. Use the synth command for CDK to synthetize your enviroment.
-
-~~~
-cdk synth -c envname=<envname>
-~~~
-
-This will generate an output for the corresponding Cloudformation template. You can save it by redirecting the result to some folder, so you can read it through.
-
-
-#### Step 7.2 - Deploy your backend
-
-Being at your cdk folder, and having decided for an *envname*, run the following command:
-
-~~~
-cdk deploy -c envname=<envname>
-~~~
-
-CDK will first show you what changes will be applied to the environment. After that, it will ask if you really want to deploy.
-
-Answer with **y**, and wait for environment to be deployed. If everything is ok, at the end you are going to see something like this:
-
- `✅  <envname>`
- 
-Below that line, you will see a section named *Outputs*, with some additinal lines. Take note of those. You are going to need it.
 
 
 ## Fix the application
 
 Here is where we start fixing the environment.
 
-The system is comprised of two applications: the Game, and the Scoreboard. We've been told that these applications are needing a facelift. However, let's leave the cosmetics for another opportunity.
+The system is comprised of two applications: the Game, and the Scoreboard. We've been said that these applications are needing a facelift. However, let's leave the cosmetics for another opportunity.
 
-We here at the Alien Attack Division know that the system is not running properly because we have tried to run each one of the applications, and while having the browser console opened, we could see lots of errors, and it's clear that the application is broken.
+We know that the system is not running properly because we tried to run each one of the applications, and while having the browser console opened, we could see a lot of errors, and it's clear that the application is broken.
 
 As you will need to run the application after fixing it (or now, just to check if it's really broken), here is the guidance for opening each one of the applications. 
 
@@ -293,9 +311,7 @@ For this part, you will visit the `alienattack.application` folder in your envir
     
 3. See that at the right hand side of the line where is the URL for the file we have highlighted a box with an arrow within (we will call it the *window-expanding icon* ) that will open the application on a tab on your browser. This is the best way for us to track what's happening on the application. Click on that box.
 
-If you visit the console of your browser (see below how to open the browser console), you will see some 404 errors, and the message `ERROR LOADING CONFIG`. That is expected, as the application is broken.
-
-If you don't know how to open your browser console, visit [this link](https://www.wickedlysmart.com/hfjsconsole/) and find the guidance that fits your pair (operating system, browser).
+If you visit the console of your browser, you will see some 404 errors, and the message `ERROR LOADING CONFIG`. That is expected, as the application is broken.
 
 The process for opening the Manager application is analogous. Follow the steps below:
 
@@ -414,7 +430,7 @@ The Identity Pool configuration is missing the configuration of the roles for ea
 
 ##### [Solution guidance]
 
-This is the playbook that we've got from the SysAdmin.
+This is the playbook that we've got from the security team
 
 1. On your AWS Console, visit the Cognito service page.
 2. If you got to the landing page of the service, you will click on the button **Manage Identity Pools**. 
@@ -440,6 +456,25 @@ This is the playbook that we've got from the SysAdmin.
 11. Leave everything else as it is and click on **`Save changes`**
 
 **-- FastFix --**  
+For this case we have 2 fast fixes:
+
+(1) Alternative configuration - getting the roles from the token
+
+Everything that was described at the Solution Guidance is a configuration to guide Cognito to read a certain "claim" from the ID token, and considering the configuration, to define the appropriate role for the user. You can read more about it [here](https://docs.aws.amazon.com/cognito/latest/developerguide/role-based-access-control.html).
+
+So, here there is a shortcut for the configuration, as Cognito can automatically search for the 'cognito:preferred_role' claim. So, we can replace the steps from 7 and on from the previous list, with this configuration:
+
+7.  On the section `Authenticated role selection` there is a select button labeled as `Use default role`. Click on this button and select **Choose role from token**. The interface will show up another button, so you can define the Role Resolution.
+8. For **Role resolution**, click on the button where it is indicated `Use default Authenticated role`, and change it to `DENY`. Here we are saying that *"If there is any conflict, just deny the access"* .
+9. Scroll down and click `Save Changes`.
+
+And that's it. You can skip all the other steps.
+
+When using Cognito UserPools, this is the preferred (and easier) way of configuring RBAC. If you have custom claims on your JWT token, then use the first approach.
+
+
+(2) Using a fixing script
+
 The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixcognito.sh`
 
 1. On your Clou9 environment, go to the folder `alienattack.workshop` by issuing:
@@ -451,7 +486,7 @@ cd ~/environment/alienattack.workshop
 2. Run the following command:
 
 ~~~
-source fixcognito.sh <envname>
+source fixcognito.sh
 ~~~
 
 ### fixACTIVITY 6 - Testing the accesses again
@@ -483,7 +518,7 @@ We have found some notes on the desk of the solutions architect. There is a post
 3. Get back to the manager console, and try access it again
 
 ~~~
-aws cognito-idp admin-add-user-to-group --user-pool-id <userpoolid> --username <username that you used to register> --group-name Managers --region <region>
+$ aws cognito-idp admin-add-user-to-group --user-pool-id <userpoolid> --username <username that you used to register> --group-name Managers --region <region>
 ~~~
 
 **-- FastFix --**   
@@ -509,7 +544,7 @@ This parameter holds the game session configuration. Every time when the Manager
 2. Scroll down to the section *Shared Resources*, and click on `Parameter Store`. You will see some parameters starting with `/<envName>/`, but there is no parameter `/<envName>/session`. Let's create it.
 3. On the top right of the page, click on **Create parameter**
 4. On the section *Parameter details*, enter the following values:  
-  * Name: `/<envName>/session`
+  * Name: `/<envName>/session` (be sure of using <envName> in lowercase)
   * Description: `Existing session (opened or closed)`
   * Type: `String`
   * Value:  `null` (insert the word *null* and be sure of the casing, *Null* will not work).
@@ -518,11 +553,11 @@ This parameter holds the game session configuration. Every time when the Manager
 If everything went well, you will get the message *Create parameter request succeeded*. Check if the parameter exists on the list of parameters.
 
 **-- FastFix --**  
-If you want to skip this activity: 
+If you want to skip this activity, run the following command on your console, being inside the `~/envname/alienattack.workshop/cdk` folder:
 
-1. Go your CDK project (the one that it's at Cloud9), search for *MISSING PARAMETER* on all .ts (typescript) files, and follow the guidances to adjust the code.
-2. Save everything and run **`cdk diff -c envname=<envName>`** at the terminal. This will show you what will be changed on your environment
-3. If you agree with the changes, run **`cdk deploy -c envname=<envName>`** to deploy the changes
+~~~
+cdk deploy -c envname=$envname -c sessionparameter=true
+~~~
 
 After fixing this, try to login to the manager console again (*fixActivity 4*). You will be forwarded to the configuration page. The access seems to be ok. 
 
@@ -558,11 +593,11 @@ We need to connect the Lambda function to Kinesis.
    * If everything went well you will get a message confirming that you have added the trigger. The Designer section will be updated.
 
 **-- FastFix --**  
-If you want to skip this activity: 
+If you want to skip this activity, run the following command on your console, being inside the `~/envname/alienattack.workshop/cdk` folder:
 
-1. Go your CDK project, search for *MISSING KINESIS INTEGRATION* on all .ts files, and follow the guidances to adjust the code.
-2. Save everything and run **`cdk diff -c envname=<envName>`** at the terminal. This will show you what will be changed on your environment
-3. If you agree with the changes, run **`cdk deploy -c envname=<envName>`** to deploy the changes
+~~~
+cdk deploy -c envname=$envname -c sessionparameter=true -c kinesisintegration=true
+~~~
 
 
 ### fixACTIVITY 10 - Kinesis Firehose - Create the missing Kinesis Firehose
@@ -581,9 +616,9 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
 2. On the service page you are expected to see the Kinesis Streams on the left, and on the right hand side a Kinesis Firehose section where there is nothing for your application. Let's create it.
 3. Under the section *'Kinesis Firehose Delivery Streams*', or by clicking on *'Data Firehose*' at the left hand side, click on the button **Create Delivery Stream**.
 4. On the section *New delivery stream*, configure the fields as follows:
-   * **Delivery stream name**: `<envName>Firehose`.
-   * **Source**: Select the radio button *'Kinesis stream'*. 
-   * Drop-down **Choose Kinesis stream**: select the stream attached to your deployment (the same one we connected to the Lambda function). Its name starts with `<envName>`.
+   * **Delivery stream name**: `<envName>_Firehose`. To get the name of your environment in uppercase, run the following command `echo $envname | tr 'a-z' 'A-Z'`
+   * **Source**: Select the radio button *'Kinesis data stream'*. 
+   * Drop-down **Kinesis data stream**: select the stream attached to your deployment (the same one we connected to the Lambda function). Its name starts with `<envName>`.
    * Click **Next**.
    * **Record transformation**: Select *'Disabled'*.
    * **Record format conversion**: Select *'Disabled'*.
@@ -609,11 +644,11 @@ Check if there is a Kinesis Firehose attached to the Kinesis Streams, and point 
 If everything went well, you will see that the delivery stream was created.
 
 **-- FastFix --**  
-If you want to skip this activity: 
+If you want to skip this activity, run the following command on your console, being inside the `~/envname/alienattack.workshop/cdk` folder:
 
-1. Go your CDK project, search for *MISSING KINESIS FIREHOSE* on all .ts files, and follow the guidances to adjust the code.
-2. Save everything and run **`cdk diff -c envname=<envName>`** at the terminal. This will show you what will be changed on your environment
-3. If you agree with the changes, run **`cdk deploy -c envname=<envName>`** to deploy the changes
+~~~
+cdk deploy -c envname=$envname -c sessionparameter=true -c kinesisintegration=true -c firehose=true
+~~~
 
 
 ### fixACTIVITY 11 - Create a session for the game
@@ -641,7 +676,7 @@ So, you are going to need to implement the API from scratch, following the requi
 
 1. The resource to be added on API Gateway must have the name `topxstatistics`.
 2. The resource will execute a HTTP GET, passing the querystring sessionId, which will hold the session id provided by the consumer of the API.
-   * Something likke `<api>/topxstatistics?sessionId=<session id>`
+   * Something like `<api>/topxstatistics?sessionId=<session id>`
 3. The API Gateway request will be integrated to the Lambda Function that you are going to create, that going to compute the player's performance. The excerpt of code that we have is the one below:
 
 ~~~
@@ -678,10 +713,18 @@ const computeStatisticsForSession = function(sessionId,callback) {
 };
 ~~~
 
-The API must be accessible only by the Manager.
+4. The API must be accessible only by the Manager.
+5. You need to test the API using the JWToken.   
+   a. We heard that you can get some insights by reading [this file](./diverse/howtotestyourapi.txt), but you should use it only as a last resource. 
 
 **-- FastFix --**  
-We heard that something can be learned from this [link](http://partnerfactoryprogram.s3-website-us-east-1.amazonaws.com/labpack/fullmicroservice/fullmicroservice.html). Be sure of double checking your environment. It seems that you might already have the required table created. You might just need to populate it with data.
+We heard that something can be learned from this [link](http://partnerfactoryprogram.s3-website-us-east-1.amazonaws.com/labpack/fullmicroservice/fullmicroservice.html).
+
+
+**IMPORTANT:**
+* Be sure of double checking your environment. It seems that you might already have the required table created. You might just need to populate it with data. However, it seems that the name of the table in those recovery instructions is a bit different from what we have. Be sure of configuring the things accordingly.
+* It seems that the instructions will guide you in creating a new API. Remember that we want to add a new resource to the existing API (under the v1 resource), not to create a new one!
+* After testing the functionality of your microservice, be sure of adding security to it, so only the manager can access it.
 
 ### fixACTIVITY 13 - Deploying the WebSocket for APIGateway 
 
@@ -768,7 +811,7 @@ We have learned that this is implemeted via “websockets”, and we have the fo
 #### **Task 3:** Adjust IAM Role
 1. Navigate to the IAM Dashboard <a href="https://console.aws.amazon.com/iam" target="_blank">here</a>.
 2. Click **Roles** on the left side of the window.
-3. Find `<envName>WebSocketSynchronousStart_Role` click on it.
+3. Find `<envName>WebSocketSynchronizeStartFn_Role` click on it.
 4. Click **Add inline policy**
 5. Press JSON. Copy and paste the JSON below: (Note the placeholder for the WebSocket ARN)
 ```Javascript
@@ -804,7 +847,7 @@ The ARN should take the form: `arn:aws:execute-api:{region}:{account ID}:{API ID
 The fast fix for this step requires a series of steps. All of these steps where condensed into the file `fixwebsocket.sh` which is inside the folder `~/environment/alienattack.workshop`. Go to that folder, and run the following command:
 
 ~~~
-source fixwebsocket.sh <envname>
+source fixwebsocket.sh
 ~~~
 
 There should be a line that is outputted by the script which says `Websocket ARN: <Your WebSokcet ARN>` use this ARN to complete Task 3 above.
@@ -823,14 +866,35 @@ Note: as of right now anyone in the session can't play they are waiting for you 
 8. Press **Sync Game**.
 9. You should now be able to play the game on `./game/index.html`
 
-### Additional (and optional) task for deploying the front-end on the account
+## Deploying the front-end (additional and optional task)
 
 It was said that for a full deployment, we will need to install the application at the S3 bucket with the `<appNames>.app`. We will also need to deploy the CloudFront distribution because the S3 buckets are not public.
 
 For this last part, we got intel from the rebels that, to solve this, two actions are necessary:
 
 1. Copy the content of the front-end to the app bucket.
-2. Go to the file `mainLayer.ts` which is on the deployment at Cloud9, search for *MISSING CLOUDFRONT DISTRIBUTION* and uncomment it at that file. The deployment it will take something around 20 minutes. Same time it will be required for the undeployment. But we are not expecting to solve this part today. We at the company believe that it was a big win to have reached to this point. Let's leave other adjustments for another sprints.
+2. Visit the `mainLayer.ts` which is on the deployment at Cloud9. It seens that there is some configuration there that will help you to deploy the Cloudfront distribution. Can you figure out what is it? If you are able to solve it, the deployment will take something around 20 minutes to be available. The same amount time it will be required for the undeployment. But we are not expecting to solve this part today. We at the company believe that it was a big win to have reached to this point. Let's leave other adjustments for another sprints.
+
+**-- FastFix --**  
+
+
+1. To deploy the Cloudfront distribution:
+
+   If you want to skip this activity, run the following command on your console, being inside the `~/envname/alienattack.workshop/cdk` folder:
+
+   ~~~
+   cdk deploy -c envname=$envname -c sessionparameter=true -c kinesisintegration=true -c firehose=true -c deploycdn=true
+   ~~~
+
+2. To deploy the front-end, get back to the folder `~/envname/alienattack.workshop/` and run the following command:
+
+   ~~~
+   source deploy.frontend.sh
+   ~~~
+
+IMPORTANT:
+* Be sure of having configured the permissions properly.
+* Be sure of adding an user to the Cognito Managers group.
 
 ## PRICING AND LIMITS
 
@@ -884,19 +948,18 @@ Let's fix this.
 
 1. Go to Systems Manager, then Parameter Store, and delete the parameter `<envName>/session` and `<envName>/websocket`
 2. Go to Kinesis, then Kinesis Firehose, and delete the resource that you created by hand
-3. Go to IAM, and search for `<envName>`. Delete the `<envName>FirehoseRole` that you have created by hand
+3. Go to IAM, and search for `<envName>`. Delete any resource configured like that. For sure the only resource will be `<envName>FirehoseRole`
 4. Go to the IAM console, find the `<envName>WebSocketSynchronizeStartFn_Role`, and remove the **Invoke-Api-Policy** that you have created.
-5. Go to API Gateway, and delete the `<envName>Websocket` API that you have created.
-6. Clean up the s3 buckets with the following commands (be sure of inputting `<envName>` in lowercase):
-   *  `aws s3 rm s3://<envNameInLowercase>.app —-recursive`
-   *  `aws s3 rm s3://<envNameInLowercase>.raw —-recursive`
+5. clean up the s3 buckets with the following commands (be sure of inputting `<envName>` in lowercase):
+   *  `aws s3 rm s3://<envName>.app —-recursive`
+   *  `aws s3 rm s3://<envName>.raw —-recursive`
 
 ### cleanACTIVITY 2 - Destroy the deployed environment
 
-Go to the the terminal on your environment and type the following command. Be sure to be at your `~/environment/alienattack.workshop/cdk` folder.
+ Go to the the terminal on your environment and type the following command. Be sure to be at your cdk folder (~/environment/alienattack.workshop/cdk).
 
 ```
-cdk destroy -c envname=<envName>
+cdk destroy -c envname=$envname
 ```
 
 If everything went well, you will receive a message like the following one: 
