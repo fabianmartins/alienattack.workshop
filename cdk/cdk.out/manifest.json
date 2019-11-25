@@ -1,0 +1,1778 @@
+{
+  "version": "0.36.0",
+  "artifacts": {
+    "FABI09234": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "FABI09234.template.json"
+      },
+      "metadata": {
+        "/FABI09234/SecurityLayer/FABI09234PostRegistrationFn_Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234PostRegistrationFnRoleCADBA982",
+            "trace": [
+              "new Role (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:35:22)",
+              "SecurityLayer.creatPostRegistrationLambdaTrigger (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:207:52)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:22:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234PostRegistration/Code": [
+          {
+            "type": "aws:cdk:asset",
+            "data": {
+              "path": "asset.e6f369750e57d23358dd07d1e3121aae813f75525f4f45d3a915307bef8cc81a",
+              "id": "FABI09234SecurityLayerFABI09234PostRegistrationCode3DF548F3",
+              "packaging": "zip",
+              "sourceHash": "e6f369750e57d23358dd07d1e3121aae813f75525f4f45d3a915307bef8cc81a",
+              "s3BucketParameter": "SecurityLayerFABI09234PostRegistrationCodeS3Bucket704F44C5",
+              "s3KeyParameter": "SecurityLayerFABI09234PostRegistrationCodeS3VersionKeyA802B82C",
+              "artifactHashParameter": "SecurityLayerFABI09234PostRegistrationCodeArtifactHashA2E65D3B"
+            },
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:65:19)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "SecurityLayer.creatPostRegistrationLambdaTrigger (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:215:13)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:22:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234PostRegistration/Code/S3Bucket": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234PostRegistrationCodeS3Bucket704F44C5",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:32:29)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "SecurityLayer.creatPostRegistrationLambdaTrigger (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:215:13)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:22:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234PostRegistration/Code/S3VersionKey": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234PostRegistrationCodeS3VersionKeyA802B82C",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:36:26)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "SecurityLayer.creatPostRegistrationLambdaTrigger (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:215:13)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:22:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234PostRegistration/Code/ArtifactHash": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234PostRegistrationCodeArtifactHashA2E65D3B",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:40:27)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "SecurityLayer.creatPostRegistrationLambdaTrigger (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:215:13)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:22:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234PostRegistration/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234PostRegistration10C976CD",
+            "trace": [
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:75:26)",
+              "SecurityLayer.creatPostRegistrationLambdaTrigger (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:215:13)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:22:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234SimpleUserPoolCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234SimpleUserPoolCustomResource3BC58114",
+            "trace": [
+              "new CustomResource (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-cloudformation/lib/custom-resource.js:32:25)",
+              "SecurityLayer.createUserPool (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:71:31)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234UserPoolPerm": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234UserPoolPerm0312042C",
+            "trace": [
+              "SecurityLayer.createUserPool (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:84:9)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234TriggerFunctionPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234TriggerFunctionPolicy7BF0CB70",
+            "trace": [
+              "new Policy (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/policy.js:29:26)",
+              "SecurityLayer.createUserPool (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:90:22)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234App": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234AppC007F3AE",
+            "trace": [
+              "SecurityLayer.createUserPoolClientApp (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:101:31)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:24:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234IdentityPool": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234IdentityPool077FD249",
+            "trace": [
+              "SecurityLayer.createIdentityPool (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:110:29)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:25:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234PlayersRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234PlayersRole4F5F658B",
+            "trace": [
+              "new Role (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:35:22)",
+              "SecurityLayer.createUserPoolGroups (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:126:28)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:26:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234PlayersRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234PlayersRoleDefaultPolicy0B2FC01C",
+            "trace": [
+              "new Policy (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/policy.js:29:26)",
+              "Role.addToPolicy (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:124:34)",
+              "SecurityLayer.createUserPoolGroups (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:135:26)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:26:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234Players": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234PlayersB7E1104F",
+            "trace": [
+              "SecurityLayer.createUserPoolGroups (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:137:9)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:26:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234ManagersRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234ManagersRoleFB09434B",
+            "trace": [
+              "new Role (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:35:22)",
+              "SecurityLayer.createUserPoolGroups (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:145:29)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:26:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234ManagersRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234ManagersRoleDefaultPolicy94A1AE72",
+            "trace": [
+              "new Policy (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/policy.js:29:26)",
+              "Role.addToPolicy (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:124:34)",
+              "SecurityLayer.createUserPoolGroups (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:155:27)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:26:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234Managers": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234Managers914F9CF1",
+            "trace": [
+              "SecurityLayer.createUserPoolGroups (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:157:9)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:26:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234UnauthRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234UnauthRoleBA195684",
+            "trace": [
+              "new Role (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:35:22)",
+              "SecurityLayer.configureIdentityPoolRoles (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:166:36)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:27:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234UnauthRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234UnauthRoleDefaultPolicy70E2FD29",
+            "trace": [
+              "new Policy (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/policy.js:29:26)",
+              "Role.addToPolicy (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:124:34)",
+              "SecurityLayer.configureIdentityPoolRoles (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:175:34)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:27:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SecurityLayer/FABI09234IDPRoles": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecurityLayerFABI09234IDPRoles8778435B",
+            "trace": [
+              "SecurityLayer.configureIdentityPoolRoles (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:176:9)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:27:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SingletonLambda1b34917696ed3150839573a373172005/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SingletonLambda1b34917696ed3150839573a373172005ServiceRole893083AA",
+            "trace": [
+              "new Role (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:35:22)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:59:35)",
+              "SingletonFunction.ensureLambda (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:35:16)",
+              "new SingletonFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:17:36)",
+              "SecurityLayer.createUserPool (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:54:36)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SingletonLambda1b34917696ed3150839573a373172005/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SingletonLambda1b34917696ed3150839573a373172005ServiceRoleDefaultPolicy46C1718B",
+            "trace": [
+              "new Policy (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/policy.js:29:26)",
+              "Role.addToPolicy (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:124:34)",
+              "SingletonFunction.addToRolePolicy (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function-base.js:32:19)",
+              "SecurityLayer.createUserPool (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:70:28)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SingletonLambda1b34917696ed3150839573a373172005/Code": [
+          {
+            "type": "aws:cdk:asset",
+            "data": {
+              "path": "asset.e39118d11f89ede71cfaa874b9ff60359469d187f4ce6d2e7dfed4c5ee9466d6",
+              "id": "FABI09234SingletonLambda1b34917696ed3150839573a373172005CodeBCECDE4B",
+              "packaging": "zip",
+              "sourceHash": "e39118d11f89ede71cfaa874b9ff60359469d187f4ce6d2e7dfed4c5ee9466d6",
+              "s3BucketParameter": "SingletonLambda1b34917696ed3150839573a373172005CodeS3Bucket61DBC235",
+              "s3KeyParameter": "SingletonLambda1b34917696ed3150839573a373172005CodeS3VersionKey46F3E0BC",
+              "artifactHashParameter": "SingletonLambda1b34917696ed3150839573a373172005CodeArtifactHash23B8B568"
+            },
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:65:19)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "SingletonFunction.ensureLambda (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:35:16)",
+              "new SingletonFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:17:36)",
+              "SecurityLayer.createUserPool (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:54:36)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SingletonLambda1b34917696ed3150839573a373172005/Code/S3Bucket": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SingletonLambda1b34917696ed3150839573a373172005CodeS3Bucket61DBC235",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:32:29)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "SingletonFunction.ensureLambda (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:35:16)",
+              "new SingletonFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:17:36)",
+              "SecurityLayer.createUserPool (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:54:36)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SingletonLambda1b34917696ed3150839573a373172005/Code/S3VersionKey": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SingletonLambda1b34917696ed3150839573a373172005CodeS3VersionKey46F3E0BC",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:36:26)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "SingletonFunction.ensureLambda (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:35:16)",
+              "new SingletonFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:17:36)",
+              "SecurityLayer.createUserPool (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:54:36)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SingletonLambda1b34917696ed3150839573a373172005/Code/ArtifactHash": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SingletonLambda1b34917696ed3150839573a373172005CodeArtifactHash23B8B568",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:40:27)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "SingletonFunction.ensureLambda (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:35:16)",
+              "new SingletonFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:17:36)",
+              "SecurityLayer.createUserPool (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:54:36)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/SingletonLambda1b34917696ed3150839573a373172005/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SingletonLambda1b34917696ed3150839573a373172005D4A92029",
+            "trace": [
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:75:26)",
+              "SingletonFunction.ensureLambda (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:35:16)",
+              "new SingletonFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:17:36)",
+              "SecurityLayer.createUserPool (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:54:36)",
+              "new SecurityLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/securityLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:22:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ConfigurationLayer/SSMParameterFABI09234Region": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ConfigurationLayerSSMParameterFABI09234Region99738A2F",
+            "trace": [
+              "ConfigurationLayer.createParameter (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/configurationLayer.js:24:25)",
+              "ConfigurationLayer.parametersToBeCreated.forEach (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/configurationLayer.js:16:42)",
+              "Map.forEach (<anonymous>)",
+              "new ConfigurationLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/configurationLayer.js:15:39)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:36:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ConfigurationLayer/SSMParameterFABI09234ClientId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ConfigurationLayerSSMParameterFABI09234ClientIdD3678952",
+            "trace": [
+              "ConfigurationLayer.createParameter (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/configurationLayer.js:24:25)",
+              "ConfigurationLayer.parametersToBeCreated.forEach (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/configurationLayer.js:16:42)",
+              "Map.forEach (<anonymous>)",
+              "new ConfigurationLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/configurationLayer.js:15:39)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:36:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ConfigurationLayer/SSMParameterFABI09234UserpoolId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ConfigurationLayerSSMParameterFABI09234UserpoolId72CF6C4F",
+            "trace": [
+              "ConfigurationLayer.createParameter (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/configurationLayer.js:24:25)",
+              "ConfigurationLayer.parametersToBeCreated.forEach (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/configurationLayer.js:16:42)",
+              "Map.forEach (<anonymous>)",
+              "new ConfigurationLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/configurationLayer.js:15:39)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:36:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ConfigurationLayer/SSMParameterFABI09234UserPoolURL": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ConfigurationLayerSSMParameterFABI09234UserPoolURL9BC4CD84",
+            "trace": [
+              "ConfigurationLayer.createParameter (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/configurationLayer.js:24:25)",
+              "ConfigurationLayer.parametersToBeCreated.forEach (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/configurationLayer.js:16:42)",
+              "Map.forEach (<anonymous>)",
+              "new ConfigurationLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/configurationLayer.js:15:39)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:36:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ConfigurationLayer/SSMParameterFABI09234IdentityPoolId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ConfigurationLayerSSMParameterFABI09234IdentityPoolIdA7DFEBBC",
+            "trace": [
+              "ConfigurationLayer.createParameter (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/configurationLayer.js:24:25)",
+              "ConfigurationLayer.parametersToBeCreated.forEach (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/configurationLayer.js:16:42)",
+              "Map.forEach (<anonymous>)",
+              "new ConfigurationLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/configurationLayer.js:15:39)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:36:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/DatabaseLayer/FABI09234Session": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": "FABI09234Session",
+            "trace": [
+              "new Table (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-dynamodb/lib/table.js:67:23)",
+              "new DatabaseLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/databaseLayer.js:10:28)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:47:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/DatabaseLayer/FABI09234Session/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DatabaseLayerFABI09234Session551CA45F",
+            "trace": [
+              "new Table (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-dynamodb/lib/table.js:49:22)",
+              "new DatabaseLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/databaseLayer.js:10:28)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:47:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/DatabaseLayer/FABI09234SessionControl": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": "FABI09234SessionControl",
+            "trace": [
+              "new Table (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-dynamodb/lib/table.js:67:23)",
+              "new DatabaseLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/databaseLayer.js:20:35)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:47:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/DatabaseLayer/FABI09234SessionControl/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DatabaseLayerFABI09234SessionControl4B0EFEEC",
+            "trace": [
+              "new Table (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-dynamodb/lib/table.js:49:22)",
+              "new DatabaseLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/databaseLayer.js:20:35)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:47:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/DatabaseLayer/FABI09234SessionTopX": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": "FABI09234SessionTopX",
+            "trace": [
+              "new Table (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-dynamodb/lib/table.js:67:23)",
+              "new DatabaseLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/databaseLayer.js:30:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:47:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/DatabaseLayer/FABI09234SessionTopX/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DatabaseLayerFABI09234SessionTopX356A476E",
+            "trace": [
+              "new Table (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-dynamodb/lib/table.js:49:22)",
+              "new DatabaseLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/databaseLayer.js:30:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:47:29)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234AllocateGamerFn_Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessingLayerFABI09234AllocateGamerFnRole6CD4DDAF",
+            "trace": [
+              "new Role (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:35:22)",
+              "ProcessingLayer.getAllocateGamerFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:68:23)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:17:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234AllocateGamerFn/Code": [
+          {
+            "type": "aws:cdk:asset",
+            "data": {
+              "path": "asset.5fbbde35634d5de13314b5da90dcda3b8db607c2163706500121b1ebd51b6a5e",
+              "id": "FABI09234ProcessingLayerFABI09234AllocateGamerFnCode25912B88",
+              "packaging": "zip",
+              "sourceHash": "5fbbde35634d5de13314b5da90dcda3b8db607c2163706500121b1ebd51b6a5e",
+              "s3BucketParameter": "ProcessingLayerFABI09234AllocateGamerFnCodeS3Bucket6AAAB46C",
+              "s3KeyParameter": "ProcessingLayerFABI09234AllocateGamerFnCodeS3VersionKeyE2C65C3A",
+              "artifactHashParameter": "ProcessingLayerFABI09234AllocateGamerFnCodeArtifactHashAC883CA1"
+            },
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:65:19)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "ProcessingLayer.getAllocateGamerFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:56:35)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:17:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234AllocateGamerFn/Code/S3Bucket": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessingLayerFABI09234AllocateGamerFnCodeS3Bucket6AAAB46C",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:32:29)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "ProcessingLayer.getAllocateGamerFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:56:35)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:17:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234AllocateGamerFn/Code/S3VersionKey": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessingLayerFABI09234AllocateGamerFnCodeS3VersionKeyE2C65C3A",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:36:26)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "ProcessingLayer.getAllocateGamerFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:56:35)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:17:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234AllocateGamerFn/Code/ArtifactHash": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessingLayerFABI09234AllocateGamerFnCodeArtifactHashAC883CA1",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:40:27)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "ProcessingLayer.getAllocateGamerFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:56:35)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:17:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234AllocateGamerFn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessingLayerFABI09234AllocateGamerFnF4C11069",
+            "trace": [
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:75:26)",
+              "ProcessingLayer.getAllocateGamerFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:56:35)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:17:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234DeallocateGamerFn_Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessingLayerFABI09234DeallocateGamerFnRoleA9474E38",
+            "trace": [
+              "new Role (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:35:22)",
+              "ProcessingLayer.getDeallocateGamerFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:127:23)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:20:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234DeallocateGamerFn/Code": [
+          {
+            "type": "aws:cdk:asset",
+            "data": {
+              "path": "asset.528e7d9d6b52bad0f2d0b0aa4cec2ba3eb502637197cd918333ed586cf87c4b9",
+              "id": "FABI09234ProcessingLayerFABI09234DeallocateGamerFnCodeCB4693B2",
+              "packaging": "zip",
+              "sourceHash": "528e7d9d6b52bad0f2d0b0aa4cec2ba3eb502637197cd918333ed586cf87c4b9",
+              "s3BucketParameter": "ProcessingLayerFABI09234DeallocateGamerFnCodeS3Bucket44015F9B",
+              "s3KeyParameter": "ProcessingLayerFABI09234DeallocateGamerFnCodeS3VersionKey45B6F9D6",
+              "artifactHashParameter": "ProcessingLayerFABI09234DeallocateGamerFnCodeArtifactHashC619FB4B"
+            },
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:65:19)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "ProcessingLayer.getDeallocateGamerFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:115:35)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:20:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234DeallocateGamerFn/Code/S3Bucket": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessingLayerFABI09234DeallocateGamerFnCodeS3Bucket44015F9B",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:32:29)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "ProcessingLayer.getDeallocateGamerFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:115:35)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:20:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234DeallocateGamerFn/Code/S3VersionKey": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessingLayerFABI09234DeallocateGamerFnCodeS3VersionKey45B6F9D6",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:36:26)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "ProcessingLayer.getDeallocateGamerFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:115:35)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:20:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234DeallocateGamerFn/Code/ArtifactHash": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessingLayerFABI09234DeallocateGamerFnCodeArtifactHashC619FB4B",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:40:27)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "ProcessingLayer.getDeallocateGamerFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:115:35)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:20:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234DeallocateGamerFn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessingLayerFABI09234DeallocateGamerFnF47E2FDE",
+            "trace": [
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:75:26)",
+              "ProcessingLayer.getDeallocateGamerFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:115:35)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:20:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234DLQ/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessingLayerFABI09234DLQ03DA4FDB",
+            "trace": [
+              "new Queue (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-sqs/lib/queue.js:45:23)",
+              "ProcessingLayer.getScoreboardFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:165:19)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:23:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234ScoreboardFn_Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessingLayerFABI09234ScoreboardFnRole5B85EA5C",
+            "trace": [
+              "new Role (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:35:22)",
+              "ProcessingLayer.getScoreboardFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:202:23)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:23:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234ScoreboardFn/Code": [
+          {
+            "type": "aws:cdk:asset",
+            "data": {
+              "path": "asset.167a1cca886516d4c19847697df5b1c021e6595589c2e8d34e846ac75d92c10d",
+              "id": "FABI09234ProcessingLayerFABI09234ScoreboardFnCode30373A32",
+              "packaging": "zip",
+              "sourceHash": "167a1cca886516d4c19847697df5b1c021e6595589c2e8d34e846ac75d92c10d",
+              "s3BucketParameter": "ProcessingLayerFABI09234ScoreboardFnCodeS3Bucket6C2DBFCC",
+              "s3KeyParameter": "ProcessingLayerFABI09234ScoreboardFnCodeS3VersionKeyB1208406",
+              "artifactHashParameter": "ProcessingLayerFABI09234ScoreboardFnCodeArtifactHash2A0D5357"
+            },
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:65:19)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "ProcessingLayer.getScoreboardFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:186:35)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:23:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234ScoreboardFn/Code/S3Bucket": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessingLayerFABI09234ScoreboardFnCodeS3Bucket6C2DBFCC",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:32:29)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "ProcessingLayer.getScoreboardFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:186:35)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:23:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234ScoreboardFn/Code/S3VersionKey": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessingLayerFABI09234ScoreboardFnCodeS3VersionKeyB1208406",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:36:26)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "ProcessingLayer.getScoreboardFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:186:35)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:23:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234ScoreboardFn/Code/ArtifactHash": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessingLayerFABI09234ScoreboardFnCodeArtifactHash2A0D5357",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:40:27)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "ProcessingLayer.getScoreboardFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:186:35)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:23:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/ProcessingLayer/FABI09234ScoreboardFn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessingLayerFABI09234ScoreboardFn4F7C6783",
+            "trace": [
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:75:26)",
+              "ProcessingLayer.getScoreboardFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:186:35)",
+              "new ProcessingLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/processingLayer.js:23:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:55:31)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketConnectFn_Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebSocketLayerFABI09234WebSocketConnectFnRole2DAD73E2",
+            "trace": [
+              "new Role (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:35:22)",
+              "WebSocketLayer.getWebSocketConnectFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:65:23)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:14:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketConnect/Code": [
+          {
+            "type": "aws:cdk:asset",
+            "data": {
+              "path": "asset.31e1f8f785ea842eaa17564953462cef6360dd91a2f6849d4a8186dee369c389",
+              "id": "FABI09234WebSocketLayerFABI09234WebSocketConnectCode6A90F2C1",
+              "packaging": "zip",
+              "sourceHash": "31e1f8f785ea842eaa17564953462cef6360dd91a2f6849d4a8186dee369c389",
+              "s3BucketParameter": "WebSocketLayerFABI09234WebSocketConnectCodeS3Bucket75409097",
+              "s3KeyParameter": "WebSocketLayerFABI09234WebSocketConnectCodeS3VersionKey6244A200",
+              "artifactHashParameter": "WebSocketLayerFABI09234WebSocketConnectCodeArtifactHash65BF8C98"
+            },
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:65:19)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "WebSocketLayer.getWebSocketConnectFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:53:35)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:14:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketConnect/Code/S3Bucket": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebSocketLayerFABI09234WebSocketConnectCodeS3Bucket75409097",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:32:29)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "WebSocketLayer.getWebSocketConnectFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:53:35)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:14:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketConnect/Code/S3VersionKey": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebSocketLayerFABI09234WebSocketConnectCodeS3VersionKey6244A200",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:36:26)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "WebSocketLayer.getWebSocketConnectFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:53:35)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:14:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketConnect/Code/ArtifactHash": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebSocketLayerFABI09234WebSocketConnectCodeArtifactHash65BF8C98",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:40:27)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "WebSocketLayer.getWebSocketConnectFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:53:35)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:14:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketConnect/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebSocketLayerFABI09234WebSocketConnect2C53E7BC",
+            "trace": [
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:75:26)",
+              "WebSocketLayer.getWebSocketConnectFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:53:35)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:14:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketSynchronizeStartFn_Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebSocketLayerFABI09234WebSocketSynchronizeStartFnRole51BC7E3C",
+            "trace": [
+              "new Role (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:35:22)",
+              "WebSocketLayer.getWebSocketSynchronizeFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:117:23)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:17:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketSynchronizeStart/Code": [
+          {
+            "type": "aws:cdk:asset",
+            "data": {
+              "path": "asset.fc23c381fbc23598ac0f15c151dfcffbd7a19f8ca89d261199bc618be7cf2055",
+              "id": "FABI09234WebSocketLayerFABI09234WebSocketSynchronizeStartCodeFD04ED04",
+              "packaging": "zip",
+              "sourceHash": "fc23c381fbc23598ac0f15c151dfcffbd7a19f8ca89d261199bc618be7cf2055",
+              "s3BucketParameter": "WebSocketLayerFABI09234WebSocketSynchronizeStartCodeS3Bucket4B9EDDDA",
+              "s3KeyParameter": "WebSocketLayerFABI09234WebSocketSynchronizeStartCodeS3VersionKey6036467F",
+              "artifactHashParameter": "WebSocketLayerFABI09234WebSocketSynchronizeStartCodeArtifactHash27BE4614"
+            },
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:65:19)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "WebSocketLayer.getWebSocketSynchronizeFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:105:35)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:17:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketSynchronizeStart/Code/S3Bucket": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebSocketLayerFABI09234WebSocketSynchronizeStartCodeS3Bucket4B9EDDDA",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:32:29)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "WebSocketLayer.getWebSocketSynchronizeFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:105:35)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:17:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketSynchronizeStart/Code/S3VersionKey": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebSocketLayerFABI09234WebSocketSynchronizeStartCodeS3VersionKey6036467F",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:36:26)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "WebSocketLayer.getWebSocketSynchronizeFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:105:35)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:17:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketSynchronizeStart/Code/ArtifactHash": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebSocketLayerFABI09234WebSocketSynchronizeStartCodeArtifactHash27BE4614",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:40:27)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "WebSocketLayer.getWebSocketSynchronizeFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:105:35)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:17:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketSynchronizeStart/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebSocketLayerFABI09234WebSocketSynchronizeStart1551C7E6",
+            "trace": [
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:75:26)",
+              "WebSocketLayer.getWebSocketSynchronizeFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:105:35)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:17:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketDisconnectFn_Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebSocketLayerFABI09234WebSocketDisconnectFnRoleB8DFDD44",
+            "trace": [
+              "new Role (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:35:22)",
+              "WebSocketLayer.getWebSocketDisconnectFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:169:23)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:20:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketDisconnect/Code": [
+          {
+            "type": "aws:cdk:asset",
+            "data": {
+              "path": "asset.351e20baf8632926399486c601bd0c8b9c096d9184194f5af256ea1644bd7ad3",
+              "id": "FABI09234WebSocketLayerFABI09234WebSocketDisconnectCode1897A20B",
+              "packaging": "zip",
+              "sourceHash": "351e20baf8632926399486c601bd0c8b9c096d9184194f5af256ea1644bd7ad3",
+              "s3BucketParameter": "WebSocketLayerFABI09234WebSocketDisconnectCodeS3Bucket9688FF53",
+              "s3KeyParameter": "WebSocketLayerFABI09234WebSocketDisconnectCodeS3VersionKey15DE8535",
+              "artifactHashParameter": "WebSocketLayerFABI09234WebSocketDisconnectCodeArtifactHash75F691DE"
+            },
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:65:19)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "WebSocketLayer.getWebSocketDisconnectFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:157:35)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:20:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketDisconnect/Code/S3Bucket": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebSocketLayerFABI09234WebSocketDisconnectCodeS3Bucket9688FF53",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:32:29)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "WebSocketLayer.getWebSocketDisconnectFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:157:35)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:20:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketDisconnect/Code/S3VersionKey": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebSocketLayerFABI09234WebSocketDisconnectCodeS3VersionKey15DE8535",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:36:26)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "WebSocketLayer.getWebSocketDisconnectFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:157:35)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:20:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketDisconnect/Code/ArtifactHash": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebSocketLayerFABI09234WebSocketDisconnectCodeArtifactHash75F691DE",
+            "trace": [
+              "new Asset (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:40:27)",
+              "AssetCode.bind (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/code.js:134:26)",
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:73:33)",
+              "WebSocketLayer.getWebSocketDisconnectFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:157:35)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:20:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/WebSocketLayer/FABI09234WebSocketDisconnect/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebSocketLayerFABI09234WebSocketDisconnectFA62E3E8",
+            "trace": [
+              "new Function (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-lambda/lib/function.js:75:26)",
+              "WebSocketLayer.getWebSocketDisconnectFunction (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:157:35)",
+              "new WebSocketLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/websocketLayer.js:20:32)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:59:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234InputStream/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234InputStreamE7EC8B30",
+            "trace": [
+              "new Stream (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-kinesis/lib/stream.js:111:23)",
+              "IngestionConsumptionLayer.createKinesis (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:27:31)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:22:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIRole2C93E7A1",
+            "trace": [
+              "new Role (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:35:22)",
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:147:23)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIRoleDefaultPolicy3CE783A0",
+            "trace": [
+              "new Policy (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/policy.js:29:26)",
+              "Role.addToPolicy (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/node_modules/@aws-cdk/aws-iam/lib/role.js:124:34)",
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:151:17)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234API": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234API0195E93E",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:176:20)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234GTWResponse": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234GTWResponse62937D4B",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:180:9)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234Authorizer": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234AuthorizerE4E7ED2B",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:192:26)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIModelScoreboardResponseModel": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIModelScoreboardResponseModel2F807F67",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:201:42)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIModelGetParametersRequest": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIModelGetParametersRequest1EC9D0F1",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:233:44)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv15107138A",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:248:18)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1session": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1session34988727",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:258:23)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1sessionGET": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1sessionGET17BE47BD",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:263:32)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1sessionOPTIONS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1sessionOPTIONSA71BC037",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:310:36)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1websocket": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1websocketEAA359E3",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:351:25)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1websocketGET": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1websocketGET34DB5901",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:356:34)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1websocketOPTIONS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1websocketOPTIONSB788EE43",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:403:38)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1config": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1config034DA0E5",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:466:22)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1configGET": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1configGET067CF492",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:472:31)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1configOPTIONS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1configOPTIONSA913612F",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:539:35)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1allocate": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1allocate2C071F4C",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:581:24)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1allocatePOST": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1allocatePOST91B514F9",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:588:34)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1allocateOPTIONS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1allocateOPTIONSA4D91B81",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:617:37)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1deallocate": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1deallocate15AEC784",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:659:26)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1deallocatePOST": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1deallocatePOSTC3696A89",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:665:36)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1deallocateOPTIONS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1deallocateOPTIONS12F2F396",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:685:39)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1scoreboard": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1scoreboard7E548620",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:740:26)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1scoreboardPOST": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1scoreboardPOSTF859B7AA",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:746:36)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1scoreboardOPTIONS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1scoreboardOPTIONS00A7137B",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:814:39)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1updatestatus": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1updatestatus59A2FC32",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:865:28)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1updatestatusPOST": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1updatestatusPOSTF7B44733",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:871:38)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIv1updateStatusOPTIONS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIv1updateStatusOPTIONS81FA1192",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:916:41)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/IngestionConsumptionLayer/FABI09234APIDeployment": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IngestionConsumptionLayerFABI09234APIDeployment06BFFD6A",
+            "trace": [
+              "IngestionConsumptionLayer.createAPIGateway (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:952:26)",
+              "new IngestionConsumptionLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/ingestionConsumptionLayer.js:23:14)",
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:72:19)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/apigtw": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apigtw",
+            "trace": [
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:73:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/region": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "region",
+            "trace": [
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:78:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ],
+        "/FABI09234/envname": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "envname",
+            "trace": [
+              "MainLayer.buildResources (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:83:9)",
+              "new MainLayer (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/lib/layer/mainLayer.js:18:14)",
+              "utils_1.Utils.checkforExistingBuckets.then (/Users/fabisilv/Documents/Documents/aws-bootcamp/alienattack/alienattack.workshop/cdk/bin/cdk.js:22:5)",
+              "process._tickCallback (internal/process/next_tick.js:68:7)"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "runtime": {
+    "libraries": {
+      "@aws-cdk/core": "1.6.1",
+      "@aws-cdk/cx-api": "1.6.1",
+      "@aws-cdk/aws-lambda": "1.6.1",
+      "@aws-cdk/aws-iam": "1.6.1",
+      "@aws-cdk/region-info": "1.6.1",
+      "@aws-cdk/aws-cloudwatch": "1.6.1",
+      "@aws-cdk/aws-ec2": "1.6.1",
+      "@aws-cdk/aws-ssm": "1.6.1",
+      "@aws-cdk/aws-sqs": "1.6.1",
+      "@aws-cdk/aws-kms": "1.6.1",
+      "@aws-cdk/aws-s3-assets": "1.6.1",
+      "@aws-cdk/assets": "1.6.1",
+      "@aws-cdk/aws-s3": "1.6.1",
+      "@aws-cdk/aws-events": "1.6.1",
+      "@aws-cdk/aws-cognito": "1.6.1",
+      "@aws-cdk/aws-cloudformation": "1.6.1",
+      "@aws-cdk/aws-dynamodb": "1.6.1",
+      "@aws-cdk/aws-applicationautoscaling": "1.6.1",
+      "@aws-cdk/aws-autoscaling-common": "1.6.1",
+      "@aws-cdk/aws-kinesis": "1.6.1",
+      "@aws-cdk/aws-apigateway": "1.6.1",
+      "jsii-runtime": "node.js/v10.15.3"
+    }
+  }
+}
