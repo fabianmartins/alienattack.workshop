@@ -555,6 +555,11 @@ If everything went well, you will get the message *Create parameter request succ
 **-- FastFix --**  
 If you want to skip this activity, run the following command on your console, being inside the `~/envname/alienattack.workshop/cdk` folder:
 
+To check the changes:
+~~~
+cdk diff -c envname=$envname -c sessionparameter=true
+~~~
+To deploy the changes:
 ~~~
 cdk deploy -c envname=$envname -c sessionparameter=true
 ~~~
@@ -595,6 +600,11 @@ We need to connect the Lambda function to Kinesis.
 **-- FastFix --**  
 If you want to skip this activity, run the following command on your console, being inside the `~/envname/alienattack.workshop/cdk` folder:
 
+To check the changes:
+~~~
+cdk diff -c envname=$envname -c sessionparameter=true -c kinesisintegration=true
+~~~
+To deploy the changes:
 ~~~
 cdk deploy -c envname=$envname -c sessionparameter=true -c kinesisintegration=true
 ~~~
@@ -646,6 +656,11 @@ If everything went well, you will see that the delivery stream was created.
 **-- FastFix --**  
 If you want to skip this activity, run the following command on your console, being inside the `~/envname/alienattack.workshop/cdk` folder:
 
+To check the changes:
+~~~
+cdk diff -c envname=$envname -c sessionparameter=true -c kinesisintegration=true -c firehose=true
+~~~
+To deploy the changes:
 ~~~
 cdk deploy -c envname=$envname -c sessionparameter=true -c kinesisintegration=true -c firehose=true
 ~~~
@@ -878,10 +893,15 @@ For this last part, we got intel from the rebels that, to solve this, two action
 **-- FastFix --**  
 
 
-1. To deploy the Cloudfront distribution:
+1. To deploy the Cloudfront distribution (this will take approximately 20 minutes):
 
    If you want to skip this activity, run the following command on your console, being inside the `~/envname/alienattack.workshop/cdk` folder:
 
+   To check the changes:
+   ~~~
+   cdk diff -c envname=$envname -c sessionparameter=true -c kinesisintegration=true -c firehose=true -c deploycdn=true
+   ~~~
+   To deploy the changes:
    ~~~
    cdk deploy -c envname=$envname -c sessionparameter=true -c kinesisintegration=true -c firehose=true -c deploycdn=true
    ~~~

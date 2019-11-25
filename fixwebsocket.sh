@@ -14,7 +14,6 @@ function createWebSocket() {
     envName=$1
     region=$2
     accountId=$3
-    echo "### Creating the WebSocket API"
 
     websocketCreateCommand=$(echo aws apigatewayv2 --region "$region" create-api --name "$envName"WebSocket --protocol-type WEBSOCKET --route-selection-expression '\$request.body.action' --query ApiId --output text)
     websocketApiId=$(removeQuotes $( eval $websocketCreateCommand ))
@@ -52,7 +51,9 @@ function createWebSocket() {
 }
 
 function createUrlParam() {
+    echo ""
     echo "#### Creating the SSM Parameter /"$(echo $envName | tr 'A-Z' 'a-z')"/websocket API"
+    echo ""
     URL=$2
     envName=$(echo $1 | tr 'A-Z' 'a-z')
     success=$(aws ssm put-parameter --name /"$envName"/websocket --value $URL --type String --overwrite)
@@ -63,9 +64,9 @@ function adjustLambdaIamRole() {
     accountId=$3
     apiId=$4
     roleName="$1"WebSocketSynchronizeStartFn_Role
-    echo "**********************************************************"
-    echo "Adjusting the Role $roleName"
-    echo "**********************************************************"
+    echo ""
+    echo "### Adjusting the Role "$(echo $1 | tr 'a-z' 'A-Z')"WebSocketSynchronizeStartFn_Role"
+    echo ""
     # Create JSON variable that stores in-line policy
     apiArn="arn:aws:execute-api:"$region":"$accountId":"$apiId"/*"
     inlinePolicy=$(cat <<-EOF
@@ -109,12 +110,21 @@ if [ "$envname" == "" ]; then
     echo "** ERROR**"
     echo Please ensure that the variable envname is defined
 else
+    echo "*******************************************"
+    echo " Initiating Websocket configuration..."
+    echo "*******************************************"
     envName=$(echo $envname | tr 'a-z' 'A-Z')
     region=$(aws configure get region)
     accountId=$(aws sts get-caller-identity --output text --query 'Account')
+    echo ""
+    echo "### Creating the WebSocket API"
+    echo ""
     apiId=$( createWebSocket $envName $region $accountId )
     URL="wss://${apiId}.execute-api.${region}.amazonaws.com/production"
     createUrlParam $envName $URL
     adjustLambdaIamRole $envName $region $accountId $apiId
+    echo "*******************************************"
+    echo " finishing..."
     echo WebSocket ARN: "arn:aws:execute-api:"$region":"$accountId":"$apiId"/*"
+    echo "*******************************************"
 fi
