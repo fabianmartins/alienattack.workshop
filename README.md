@@ -956,7 +956,7 @@ Let's fix this.
 
 ### cleanACTIVITY 2 - Destroy the deployed environment
 
-Go to the the terminal on your environment and type the following command. Be sure to be at your cdk folder (~/environment/alienattack.workshop/cdk).
+ Go to the the terminal on your environment and type the following command. Be sure to be at your cdk folder (~/environment/alienattack.workshop/cdk).
 
 ```
 cdk destroy -c envname=$envname
