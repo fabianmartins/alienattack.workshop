@@ -374,7 +374,14 @@ const AWS_CONFIG = {
 **Save the file** (On Cloud9, go to the menu option `File`, and then click on `Save`).
 
 **-- FastFix --**  
-Use the results that you have got from the deployment. They will help you to fill the gaps on that file.
+Run the following commands to copy the values programmatically:
+~~~
+cd ~/environment/alienattack.workshop/cdk
+cdk deploy -c envname=$envname &> ../cdkOutputs.txt
+cd ..
+node parseCdkOutputs.js
+~~~
+This redeploys the stack and saves the output to a text file. Then the node script takes those outputs and saves them to your front-end's config file.
 
 **IMPORTANT**  
 
