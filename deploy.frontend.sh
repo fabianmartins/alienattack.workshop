@@ -51,9 +51,9 @@ title "DEPLOYING THE FRONT-END FOR THE ENVIRONMENT $envnameuppercase"
 #-------------------------------------------
 # Retrieving parameters from CloudFormation
 #-------------------------------------------
-apigtw=$(eval $(echo "aws cloudformation list-exports --query 'Exports[?contains(ExportingStackId,\`$envnameuppercase\`) && Name==\`apigtw\`].Value | [0]' | xargs -I {} echo {}"))
-region=$(eval $(echo "aws cloudformation list-exports --query 'Exports[?contains(ExportingStackId,\`$envnameuppercase\`) && Name==\`region\`].Value | [0]' | xargs -I {} echo {}"))
-url=$(eval $(echo "aws cloudformation list-exports --query 'Exports[?contains(ExportingStackId,\`$envnameuppercase\`) && Name==\`url\`].Value | [0]' | xargs -I {} echo {}"))
+apigtw=$(eval $(echo "aws cloudformation list-exports --query 'Exports[?contains(ExportingStackId,\`$envname\`) && contains(Name,\`apigtw\`)].Value | [0]' | xargs -I {} echo {}"))
+region=$(eval $(echo "aws cloudformation list-exports --query 'Exports[?contains(ExportingStackId,\`$envname\`) && contains(Name,\`region\`)].Value | [0]' | xargs -I {} echo {}"))
+url=$(eval $(echo "aws cloudformation list-exports --query 'Exports[?contains(ExportingStackId,\`$envname\`) && contains(Name,\`url\`)].Value | [0]' | xargs -I {} echo {}"))
 #-------------------------------------------
 # Cloning the front end
 #-------------------------------------------

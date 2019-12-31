@@ -1,6 +1,6 @@
 import { Construct } from '@aws-cdk/core';
 import { ResourceAwareConstruct, IParameterAwareProps } from './../resourceawarestack'
-import { CloudFrontWebDistribution, CfnCloudFrontOriginAccessIdentity, OriginAccessIdentity } from '@aws-cdk/aws-cloudfront';
+import { CloudFrontWebDistribution, OriginAccessIdentity } from '@aws-cdk/aws-cloudfront';
 import { Bucket, BucketPolicy} from '@aws-cdk/aws-s3';
 import { PolicyStatement, ArnPrincipal } from '@aws-cdk/aws-iam';
 
@@ -20,8 +20,7 @@ export class ContentDeliveryLayer extends ResourceAwareConstruct {
         let cloudFrontAccessIdentity = new OriginAccessIdentity(this,this.properties.getApplicationName()+'CDNAccessId', {
             comment : "Alien Attack OAI for "+s3BucketOrCnfBucket.bucketName
         });
-        s3BucketOrCnfBucket.grantRead(cloudFrontAccessIdentity);
-            
+        appBucket.grantRead(cloudFrontAccessIdentity);
         
         let distribution = new CloudFrontWebDistribution(this, props.getApplicationName(),{
             originConfigs : [
