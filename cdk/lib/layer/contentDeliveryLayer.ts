@@ -17,7 +17,9 @@ export class ContentDeliveryLayer extends ResourceAwareConstruct {
         let s3BucketOrCnfBucket = props.getParameter('appBucket');
         let appBucket = <Bucket> Bucket.fromBucketName(this, props.getApplicationName()+'ImportedBucket', s3BucketOrCnfBucket.bucketName);
         
-        let cloudFrontAccessIdentity = new OriginAccessIdentity(this,this.properties.getApplicationName()+'CDNAccessId');
+        let cloudFrontAccessIdentity = new OriginAccessIdentity(this,this.properties.getApplicationName()+'CDNAccessId', {
+            comment : "Alien Attack OAI for "+s3BucketOrCnfBucket.bucketName
+        });
         s3BucketOrCnfBucket.grantRead(cloudFrontAccessIdentity);
             
         
