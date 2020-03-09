@@ -1,10 +1,13 @@
 # AWS Alien Attack Workshop
 
-Welcome to the AWS Alien Attack workshop (beta version).   
+Welcome to the AWS Alien Attack workshop.   
 
-The purpose of AWS Alien Attack is to create a fun environment where you can test and think about different aspects of serverless architectures for (near) real-time ingesting and processing of data at AWS. You can use Alien Attack to think, exercise, and talk about best practices for development, about security, databases and so on.
+The purpose of AWS Alien Attack is to create a fun environment where you can test and think about different aspects of serverless architectures for near real-time data processing pipelines at AWS. You can use Alien Attack to think, exercise, discuss, and talk about best practices for development, about security, databases, and so on.
 
-Customers and partners willing to schedule a private session (20+ attendees) should contact their respective Account Manager (AM), Partner Development Manager (PDM), AWS Solutions Architect (SA) or AWS Partner Solution Architect (PSA). The Immersion Day is delivered at no cost and it is a great opportunity to learn and discuss about real-time data processing pipelines using AWS.
+Customers and [AWS Partners](https://aws.amazon.com/partners/) willing to schedule a private session (20+ attendees) should contact their respective Account Manager (AM), Partner Development Manager (PDM), AWS Solutions Architect (SA) or AWS Partner Solution Architect (PSA). The Immersion Day is delivered at no cost.
+
+Please read the license terms inclosed.
+
 
 ![Markdown preferences pane](./images/alienattack.architecture.png)
 
