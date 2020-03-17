@@ -1,3 +1,5 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
 /**
  * Purpose of this function is to write the connectionID of users who open 
  * a websocket connection.

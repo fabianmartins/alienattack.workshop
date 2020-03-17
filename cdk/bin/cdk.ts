@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
 import cdk = require('@aws-cdk/core');
 
 import { MainLayer } from '../lib/layer/mainLayer';

@@ -1,3 +1,5 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
 const AWS = require('aws-sdk');
 
 exports.handler = (event, _, callback) => {

@@ -1,8 +1,10 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
 import { Construct } from '@aws-cdk/core';
 import { ResourceAwareConstruct, IParameterAwareProps } from './../resourceawarestack'
 import { CloudFrontWebDistribution, OriginAccessIdentity } from '@aws-cdk/aws-cloudfront';
 import { Bucket, BucketPolicy} from '@aws-cdk/aws-s3';
-import { PolicyStatement, ArnPrincipal } from '@aws-cdk/aws-iam';
+import IAM = require('@aws-cdk/aws-iam');
 
 
 export class ContentDeliveryLayer extends ResourceAwareConstruct {
@@ -22,6 +24,7 @@ export class ContentDeliveryLayer extends ResourceAwareConstruct {
         });
         appBucket.grantRead(cloudFrontAccessIdentity);
         
+        
         let distribution = new CloudFrontWebDistribution(this, props.getApplicationName(),{
             originConfigs : [
                 {
@@ -33,6 +36,19 @@ export class ContentDeliveryLayer extends ResourceAwareConstruct {
                 }
             ]
         });
+        
+                
+        new BucketPolicy(this, props.getApplicationName()+'AppBucketPolicy', {
+            bucket : appBucket,
+        }).document.addStatements(new IAM.PolicyStatement({
+            actions : [ "s3:GetObject" ],
+            effect :  IAM.Effect.ALLOW,
+            resources: [
+                appBucket.arnForObjects("*")
+            ],
+            principals : [ new IAM.ArnPrincipal("arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity "+cloudFrontAccessIdentity.originAccessIdentityName) ]
+        })
+        );
 
         this.addResource("cdndomain",distribution.domainName);
     }

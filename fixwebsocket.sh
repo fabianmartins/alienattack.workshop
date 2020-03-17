@@ -1,4 +1,7 @@
 #!/bin/bash
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+#
 # This Script deploys a websocket with the correct lambda routes
 # This script will also change various IAM Roles to invoke the websocket
 # source fixwebsocket.sh

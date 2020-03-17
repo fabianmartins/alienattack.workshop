@@ -1,3 +1,5 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
 /**
  * The purpose of this function is to retrieve session data if there are seats available for the user
  * If there is not, an error shaw be returned.
