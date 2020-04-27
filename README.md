@@ -1,5 +1,9 @@
 # AWS Alien Attack Workshop
 
+**DISCLAIMER:** AWS Alien Attack, and all complementary resources are provided without any guarantees, and you're not recommended to use it for production-grade workloads. The intention is to provide content to build and learn.
+
+***
+
 Welcome to the AWS Alien Attack workshop.   
 
 The purpose of AWS Alien Attack is to create a fun environment where you can test and think about different aspects of serverless architectures for near real-time data processing pipelines at AWS. You can use Alien Attack to think, exercise, discuss, and talk about best practices for development, about security, databases, and so on.
