@@ -1,3 +1,5 @@
+`IMPORTANT` : this repository is being archived, and replaced by https://github.com/aws-samples/aws-alien-attack
+
 # AWS Alien Attack Workshop
 
 **DISCLAIMER:** AWS Alien Attack, and all complementary resources are provided without any guarantees, and you're not recommended to use it for production-grade workloads. The intention is to provide content to build and learn.
